@@ -17,6 +17,7 @@
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{multirow}
 \usepackage{caption}
+\usepackage{float}
 \usepackage{indentfirst} 
 \usepackage{subfig}
 \usepackage{listings}
@@ -71,6 +72,29 @@ compilazione e completamento;
 
 \section{Analisi e progettazione}
 \subsection{Glossario}
+
+\begin{table}[H]
+\begin{adjustbox}{max width=1.1\textwidth,center}
+\begingroup
+\setlength{\tabcolsep}{10pt} 
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{llll}
+\multicolumn{3}{c}{\textbf{Glossario}}                                                                                                                                                                                                                                                                                                                                     \\ \hline
+\rowcolor[HTML]{3531FF} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{ID}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Termine}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Definizione}}}                                                                                                         \\ \hline
+\multicolumn{1}{|l|}{1}                                                          & \multicolumn{1}{l|}{Utente}                                                          & \multicolumn{1}{l|}{Un qualsiasi utente che utilizza il sistema.}                                                                                                                                \\ \hline
+\multicolumn{1}{|l|}{2}                                                          & \multicolumn{1}{l|}{Utente registrato}                                               & \multicolumn{1}{l|}{Un utente che possiede un account.}                                                                                                                                          \\ \hline
+\multicolumn{1}{|l|}{3}                                                          & \multicolumn{1}{l|}{Utente non registrato}                                           & \multicolumn{1}{l|}{Un utente che non possiede un account.}                                                                                                                                      \\ \hline
+\multicolumn{1}{|l|}{4}                                                          & \multicolumn{1}{l|}{Servizio email}                                                  & \multicolumn{1}{l|}{Il sottosistema che permette l'effettivo invio di email.}                                                                                                                    \\ \hline
+\multicolumn{1}{|l|}{5}                                                          & \multicolumn{1}{l|}{Domanda}                                                         & \multicolumn{1}{l|}{Un elemento testuale o multimediale (immagine) contenente delle risposte.}                                                                                                   \\ \hline
+\multicolumn{1}{|l|}{6}                                                          & \multicolumn{1}{l|}{Riposta}                                                         & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Associata ad una domanda può essere:\\ - Aperta con eventuale numero massimo e/o minimo di caratteri\\ - Chiuse con scelte multiple\end{tabular}} \\ \hline
+\multicolumn{1}{|l|}{7}                                                          & \multicolumn{1}{l|}{Questionario}                                                    & \multicolumn{1}{l|}{minimo e massimo di caratteri, chiusa con scelte multiple}                                                                                                                   \\ \hline
+\end{tabular}
+\endgroup
+\end{adjustbox}
+\end{table}
+
+
 \subsection{Casi d'uso}
 In questa sezione sono presentati gli attori del sistema ed i relativi casi d'uso. Per alcuni di essi sono riportate anche le loro descrizioni dettagliate.
 
@@ -90,7 +114,7 @@ In questa sezione sono presentati gli attori del sistema ed i relativi casi d'us
 \end{table}
 
 
-\begin{table}[]
+\begin{table}[H]
 \begin{adjustbox}{max width=1.1\textwidth,center}
 \begingroup
 \setlength{\tabcolsep}{10pt} 
@@ -120,6 +144,26 @@ In questa sezione sono presentati gli attori del sistema ed i relativi casi d'us
 \end{table}
 
 \subsection{Requisiti non funzionali}
+
+
+\begin{table}[H]
+\begin{adjustbox}{max width=1.1\textwidth,center}
+\begingroup
+\setlength{\tabcolsep}{10pt} 
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{lllll}     
+\multicolumn{5}{c}{\textbf{{\LARGE Tabella dei fattori e promemoria tecnici}}}                                                                                                                                                                                                                                                                                                                                                                         \\ \hline
+\rowcolor[HTML]{3531FF} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{ID}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Descrizione}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Tipo}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Misura}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Approccio}}} \\ \hline
+\multicolumn{1}{|l|}{1}                                                          & \multicolumn{1}{l|}{Il sistema deve essere sempre accessibile.}                          & \multicolumn{1}{l|}{Di prodotto}                                                  & \multicolumn{1}{l|}{Disponibilità}                                                  & \multicolumn{1}{l|}{Istanze multiple}                                                  \\ \hline
+\multicolumn{1}{|l|}{2}                                                          & \multicolumn{1}{l|}{Il sistema deve riuscire a gestire molte connessioni contemporanee.} & \multicolumn{1}{l|}{Di prodotto}                                                  & \multicolumn{1}{l|}{Efficienza}                                                     & \multicolumn{1}{l|}{Load balancing}                                                    \\ \hline
+\multicolumn{1}{|l|}{3}                                                          & \multicolumn{1}{l|}{Il sistema deve garantire la persistenza dei dati.}                  & \multicolumn{1}{l|}{Di prodotto}                                                  & \multicolumn{1}{l|}{Affidabilità}                                                   & \multicolumn{1}{l|}{Replica sets}                                                      \\ \hline
+\multicolumn{1}{|l|}{4}                                                          & \multicolumn{1}{l|}{Il sistema deve garantire la protezione dei dati.}                   & \multicolumn{1}{l|}{Di prodotto}                                                  & \multicolumn{1}{l|}{Sicurezza}                                                      & \multicolumn{1}{l|}{Utilizzo di protocolli di rete sicuri (HTTPS)}                     \\ \hline
+\end{tabular}
+\endgroup
+\end{adjustbox}
+\end{table}
+
 \subsection{SSD}
 \subsection{Modello di dominio}
 \subsection{SSD}
@@ -131,8 +175,18 @@ In questa sezione sono presentati gli attori del sistema ed i relativi casi d'us
 \subsection{Diagramma di deployment}
 \subsection{Modello E-R}
 \section{Sviluppo}
-\subsection{Piano dell'iterazione}
+\subsection{Piano dello sprint}
+\`{E} adottato un metodo di processo di sviluppo Agile seguendo le direttive dell' Unified Process. Il Product backlog contiene i task, normalmente associati ad un caso d'uso,  da sviluppare nei vari sprint. Ogni sprint prevede le seguenti fasi:
+\begin{itemize}
+\item {\textbf {Sprint meeting}} per la composizione dello sprint backlog;
+\item {\textbf {Analisi e progettazione}}  per aggiornare o creare componenti UML utili al task;
+\item {\textbf {Bulding e testing}}  per sviluppare il task con la tecnica dell'extreme programming (coppia tester-developer);
+\item {\textbf {Review e refactoring}} per la revisione generale del lavoro effettuato e della qualità del codice (architectural smell, code smell ecc...);
+\item {\textbf {Retrospective meeting}} per chiudere con il team lo sprint presentando problemi, modifiche ecc...
 
+\end{itemize}
+
+\subsection{Workflow per la Continuos Integration}
 
 
 %----------------------------------------------------------------------------------------
