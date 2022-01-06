@@ -37,10 +37,4 @@ public interface QuestionDAO extends CrudRepository<Question, Integer> {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	@Override
-	default void deleteAll() {
-		// TODO Auto-generated method stub
-		
-	}
 }

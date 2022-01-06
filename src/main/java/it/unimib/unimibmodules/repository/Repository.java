@@ -1,6 +1,7 @@
 package it.unimib.unimibmodules.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Repository <T>{
 	
@@ -8,7 +9,7 @@ public interface Repository <T>{
 	
 	public void addall(List<T> entities);
 	
-	public T get(int id);
+	public Optional<T> get(int id);
 	
 	public List<T> getAll();
 	
