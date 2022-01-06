@@ -3,15 +3,15 @@ package it.unimib.unimibmodules.model;
 public class Question {
 	
 	private int id;
-	private String urlImmagine;
-	private String testo;
+	private String urlImage;
+	private String text;
 	private Answer answer;
 	private Category category;
 	
-	public Question(int id, String urlImmagine, String testo, Answer answer, Category category) {
+	public Question(int id, String urlImage, String testo, Answer answer, Category category) {
 		this.id = id;
-		this.urlImmagine = urlImmagine;
-		this.testo = testo;
+		this.urlImage = urlImage;
+		this.text = testo;
 		this.answer = answer;
 		this.category = category;
 	}
@@ -24,20 +24,20 @@ public class Question {
 		this.id = id;
 	}
 
-	public String getUrlImmagine() {
-		return urlImmagine;
+	public String getUrlImage() {
+		return urlImage;
 	}
 
-	public void setUrlImmagine(String urlImmagine) {
-		this.urlImmagine = urlImmagine;
+	public void setUrlImage(String urlImage) {
+		this.urlImage = urlImage;
 	}
 
-	public String getTesto() {
-		return testo;
+	public String getText() {
+		return text;
 	}
 
-	public void setTesto(String testo) {
-		this.testo = testo;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public Answer getAnswer() {
@@ -55,6 +55,7 @@ public class Question {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
+
 	
 	
 	
