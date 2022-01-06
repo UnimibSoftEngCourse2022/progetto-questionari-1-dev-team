@@ -1,6 +1,6 @@
 package it.unimib.unimibmodules.dto;
 
-public class QuestionDTO extends DTO {
+public class QuestionDTO{
 	
 	private String category;
 	private String urlImage;
