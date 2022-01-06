@@ -1,0 +1,106 @@
+name: CI/CD Pipeline
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  sonar:
+    name: sonar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=UnimibSoftEngCourse2022_progetto-questionari-1-dev-team
+  #Build's job
+  build:
+    #Depends on sonar's job
+    needs: sonar
+    name: build
+    #Run on Ubuntu using the latest version
+    runs-on: ubuntu-latest
+    steps:
+      #Check-out your repository under $GITHUB_WORKSPACE, so your workflow can access it
+      - uses: actions/checkout@v1
+      #Set up JDK 11
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      #Set up Maven cache
+      - name: Cache Maven packages
+        #This action allows caching dependencies and build outputs to improve workflow execution time.
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      #Setting Environment properties
+      - name: Setting Environment properties
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          perl -pi -e 's/DB_URL/$ENV{DB_URL}/' src/main/resources/application.properties
+          perl -pi -e 's/DB_USERNAME/$ENV{DB_USERNAME}/' src/main/resources/application.properties
+          perl -pi -e 's/DB_PASSWORD/$ENV{DB_PASSWORD}/' src/main/resources/application.properties
+      #Build the application using Maven
+      - name: Build with Maven
+        run: mvn -B package -DskipTests --file pom.xml
+      #Build the application using Maven
+      - name: Upload JAR
+        #This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete.
+        uses: actions/upload-artifact@v2
+        with:
+          #Set artifact name
+          name: artifact
+          #From this path
+          path: target/unimibmodules-0.0.1-SNAPSHOT.jar
+  #Deploy's job
+  deploy:
+    #Depends on build's job
+    needs: build
+    name: Deploy AWS Beanstalk
+    #Run on Ubuntu using the latest version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download JAR
+        #Download the artifact which was uploaded in the build's job
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+      #Deploy the artifact (JAR) into AWS Beanstalk
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v13
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID  }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          use_existing_version_if_available: false
+          application_name: unimib-questionari
+          environment_name: Unimibquestionari-env
+          version_label: ${{github.SHA}}
+          region: eu-central-1
+          deployment_package: unimibmodules-0.0.1-SNAPSHOT.jar        
