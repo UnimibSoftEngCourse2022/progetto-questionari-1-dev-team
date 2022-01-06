@@ -57,6 +57,16 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      #Setting Environment properties
+      - name: Setting Environment properties
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          perl -pi -e 's/DB_URL/$ENV{DB_URL}/' src/main/resources/application.properties
+          perl -pi -e 's/DB_USERNAME/$ENV{DB_USERNAME}/' src/main/resources/application.properties
+          perl -pi -e 's/DB_PASSWORD/$ENV{DB_PASSWORD}/' src/main/resources/application.properties
       #Build the application using Maven
       - name: Build with Maven
         run: mvn -B package -DskipTests --file pom.xml
