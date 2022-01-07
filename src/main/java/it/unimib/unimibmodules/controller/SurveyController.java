@@ -1,5 +1,8 @@
 package it.unimib.unimibmodules.controller;
 
+import java.text.ParseException;
+import java.util.TimeZone;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +27,7 @@ import it.unimib.unimibmodules.repository.SurveyRepository;
 public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	
 	/**
-	 * Instance of SurveyRepository that will be used to access the db.
+	 * Instance of SurveyRepository that will be used to access Repository layer.
 	 */
 	private final SurveyRepository surveyRepository;
 
@@ -58,7 +61,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * Creates a survey, with the given name and request's date-time, that is associated to the given user id
 	 * @param	name	the name of the survey
 	 * @param	userId
-	 * @return			an HTTP response with status 200 if the survey has been modified, 500 otherwise
+	 * @return			an HTTP response with status 200 if the survey has been added, 500 otherwise
 	 */
 	@PostMapping(path = "/postSurvey")
 	public ResponseEntity<Survey> postSurvey(@RequestParam String name, @RequestParam int userId) {
@@ -84,10 +87,10 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	/**
 	 * Deletes the survey associated with the given id.
 	 * @param   id	the id of the survey that will be deleted
-	 * @return		an HTTP Response with status 200 if the answer has been deleted, 500 otherwise
+	 * @return		an HTTP Response with status 200 if the survey has been deleted, 500 otherwise
 	 */
 	@DeleteMapping(path = "/deleteSurvey/{id}")
-	public ResponseEntity<Survey> deleteAnswer(@PathVariable int id) {
+	public ResponseEntity<Survey> deleteSurvey(@PathVariable int id) {
 
 		// TODO Auto-generated method stub
 		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
@@ -100,21 +103,25 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @see DTOMapping#convertToDTO
 	 */
 	@Override
-	public SurveyDTO convertToDTO(Survey surey) {
-
-		return modelMapper.map(surey, SurveyDTO.class);
+	public SurveyDTO convertToDTO(Survey survey) {
+		SurveyDTO surveyDTO = modelMapper.map(survey, SurveyDTO.class);
+		surveyDTO.setCreationDate(survey.getCreationDate(), TimeZone.getDefault().toString());
+	    return surveyDTO;
 	}
 
 	/**
 	 * Converts an instance of SurveyDTO to an instance of Survey
 	 * @param   surveyDTO	an instance of SurveyDTO
 	 * @return				an instance of Survey, containing the deserialized data of surveyDTO
+	 * @throws ParseException 
 	 * @see DTOMapping#convertToEntity
 	 */
 	@Override
-	public Survey convertToEntity(SurveyDTO surveyDTO) {
+	public Survey convertToEntity(SurveyDTO surveyDTO) throws ParseException {
 
-		return modelMapper.map(surveyDTO, Survey.class);
+		Survey survey = modelMapper.map(surveyDTO, Survey.class);
+		survey.setCreationDate(surveyDTO.getCreationDateConverted(TimeZone.getDefault().toString()));
+	    return survey;
 	}
 
 }

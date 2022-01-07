@@ -6,6 +6,6 @@ import it.unimib.unimibmodules.model.Survey;
  * DAO for the Survey class.
  * @author Luca
  */
-public interface SurveryDAO extends CrudRepository<Survey, Integer>{
+public interface SurveyDAO extends CrudRepository<Survey, Integer>{
 
 }
