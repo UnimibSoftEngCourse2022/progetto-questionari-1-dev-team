@@ -6,6 +6,11 @@ import java.util.Optional;
 import it.unimib.unimibmodules.dao.QuestionDAO;
 import it.unimib.unimibmodules.model.Question;
 
+/**
+ * Repository for the Question class.
+ * @author Davide
+ */
+
 public class QuestionRepository implements Repository <Question> {
 	private QuestionDAO questionDAO;
 

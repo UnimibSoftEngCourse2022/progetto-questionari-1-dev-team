@@ -8,10 +8,10 @@ public class Question {
 	private Answer answer;
 	private Category category;
 	
-	public Question(int id, String urlImage, String testo, Answer answer, Category category) {
+	public Question(int id, String urlImage, String text, Answer answer, Category category) {
 		this.id = id;
 		this.urlImage = urlImage;
-		this.text = testo;
+		this.text = text;
 		this.answer = answer;
 		this.category = category;
 	}
