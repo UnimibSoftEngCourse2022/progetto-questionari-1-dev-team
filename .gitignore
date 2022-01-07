@@ -7,3 +7,4 @@ target/
 .project
 bfg-1.14.0.jar
 secrets.txt
+bin/
