@@ -7,3 +7,5 @@ target/
 .project
 bfg-1.14.0.jar
 secrets.txt
+src/main/java/it/unimib/unimibmodules/controller/DTOMapping.java
+src/main/java/it/unimib/unimibmodules/unitofwork/
