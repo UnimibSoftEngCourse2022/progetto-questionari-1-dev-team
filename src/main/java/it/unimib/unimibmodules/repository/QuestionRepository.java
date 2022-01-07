@@ -69,9 +69,9 @@ public class QuestionRepository implements Repository <Question> {
      * @return  a list of Questions
      */
 	@Override
-	public List<Question> getAll() {
+	public Iterable<Question> getAll() {
 		// TODO Auto-generated method stub
-		return (List<Question>) questionDAO.findAll();
+		return questionDAO.findAll();
 	}
 	
 	

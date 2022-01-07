@@ -11,7 +11,7 @@ public interface Repository <T>{
 	
 	public Optional<T> get(int id);
 	
-	public List<T> getAll();
+	public Iterable<T> getAll();
 	
 	public void remove(int id);
 	
