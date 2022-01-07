@@ -1,5 +1,7 @@
 package it.unimib.unimibmodules.module;
 
+import it.unimib.unimibmodules.exception.EmptyAnswerException;
+
 import javax.persistence.*;
 
 /**
@@ -26,7 +28,7 @@ public class Answer {
      * The user who created the answer.
      */
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+//    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     /**
@@ -68,8 +70,10 @@ public class Answer {
      * Modifies the text of the answer, setting <code>text</code> as the new value.
      * @param   text    the new text value
      */
-    public void setText(String text) {
+    public void setText(String text) throws EmptyAnswerException {
 
+        if (text == null || text.isBlank())
+            throw new EmptyAnswerException();
         this.text = text;
     }
 
