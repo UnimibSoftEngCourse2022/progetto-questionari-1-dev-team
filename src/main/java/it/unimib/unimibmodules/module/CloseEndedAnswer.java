@@ -9,7 +9,7 @@ public class CloseEndedAnswer extends Answer {
 	/**
 	 * Represents whether the user selected or not this closed-ended answer.
 	 */
-	private boolean chosen;
+	private boolean chosen = false;
 
 	public CloseEndedAnswer() {
 
