@@ -1,7 +1,7 @@
 package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.AnswerDTO;
-import it.unimib.unimibmodules.module.Answer;
+import it.unimib.unimibmodules.model.Answer;
 import it.unimib.unimibmodules.repository.AnswerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Controller handling HTTP requests related to Answer, OpenEndedAnswer, and ClosedEndedAnswer.
- * @author Davide
+ * Controller handling HTTP requests related to Answer and ClosedEndedAnswer.
+ * @author Davide Costantini
  */
 @RestController
 public class AnswerController extends DTOMapping<Answer, AnswerDTO> {

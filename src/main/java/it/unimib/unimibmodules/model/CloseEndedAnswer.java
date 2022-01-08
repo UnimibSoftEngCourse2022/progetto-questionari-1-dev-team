@@ -1,4 +1,4 @@
-package it.unimib.unimibmodules.module;
+package it.unimib.unimibmodules.model;
 
 /**
  * Represents a closed-ended answer.

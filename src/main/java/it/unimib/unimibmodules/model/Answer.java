@@ -1,4 +1,4 @@
-package it.unimib.unimibmodules.module;
+package it.unimib.unimibmodules.model;
 
 import it.unimib.unimibmodules.exception.EmptyAnswerException;
 
@@ -68,12 +68,13 @@ public class Answer {
 
     /**
      * Modifies the text of the answer, setting <code>text</code> as the new value.
-     * @param   text    the new text value
+     * @param   text                    the new text value
+     * @throws 	EmptyAnswerException	if the answer is empty
      */
     public void setText(String text) throws EmptyAnswerException {
 
         if (text == null || text.isBlank())
-            throw new EmptyAnswerException();
+            throw new EmptyAnswerException("Answers must not be empty.");
         this.text = text;
     }
 

@@ -2,7 +2,7 @@ package it.unimib.unimibmodules.repository;
 
 
 import it.unimib.unimibmodules.dao.AnswerDAO;
-import it.unimib.unimibmodules.module.Answer;
+import it.unimib.unimibmodules.model.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Repository for the Answer, OpenEndedAnswer, and CloseEndedAnswer. Adds business logic to Answer instances before
- * accessing the database via DAO.
+ * Repository for the Answer and CloseEndedAnswer. Adds business logic to Answer instances before actually accessing
+ * the database via DAO.
  * @author Davide Costantini
  */
 @Component("answerRepository")
