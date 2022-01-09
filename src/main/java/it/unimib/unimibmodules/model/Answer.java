@@ -3,13 +3,15 @@ package it.unimib.unimibmodules.model;
 import it.unimib.unimibmodules.exception.EmptyAnswerException;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Represents an open-ended answer.
  * @author Davide Costantini
  */
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Table(name = "answer")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Answer {
 
     /**
@@ -28,8 +30,28 @@ public class Answer {
      * The user who created the answer.
      */
     @ManyToOne
-//    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    /**
+     * The survey to which this answer belongs.
+     */
+    @ManyToOne
+    @JoinColumn(name = "survey_id", nullable = false)
+    private Survey survey;
+
+    /**
+     * The question to which this answer belongs.
+     */
+    @ManyToOne
+    @JoinColumn(name = "question_id", nullable = false)
+    private Question question;
+
+    /**
+     * The list of close-ended answers related to this answer.
+     */
+    @OneToMany
+    private Set<CloseEndedAnswer> closeEndedAnswerSet;
 
     /**
      * Creates an empty answer.
@@ -80,7 +102,7 @@ public class Answer {
 
     /**
      * Returns the user who created the answer.
-     * @return  user    an instance of User containing the user who created the answer
+     * @return    an instance of User containing the user who created the answer
      */
     public User getUser() {
 

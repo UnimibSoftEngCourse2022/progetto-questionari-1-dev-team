@@ -1,9 +1,16 @@
 package it.unimib.unimibmodules.model;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 /**
  * Represents a closed-ended answer.
  * @author Davide Costantini
  */
+@Entity
+@Table(name = "closeendedanswer")
 public class CloseEndedAnswer extends Answer {
 
 	/**
@@ -11,6 +18,17 @@ public class CloseEndedAnswer extends Answer {
 	 */
 	private boolean chosen = false;
 
+	/**
+	 * The answer to which this answer belongs.
+	 */
+	@ManyToOne
+	@JoinColumn(name = "answer_id", nullable = false)
+	private Answer answer;
+
+	/**
+	 * Creates an empty close-ended answer.
+	 * @see it.unimib.unimibmodules.factory.AnswerFactory#createClosedEndedAnswer(String, boolean, User)
+	 */
 	public CloseEndedAnswer() {
 
 	}
