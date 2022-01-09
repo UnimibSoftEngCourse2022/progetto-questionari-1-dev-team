@@ -8,6 +8,7 @@ import javax.persistence.Table;
 /**
  * Represents a closed-ended answer.
  * @author Davide Costantini
+ * @version 0.0.1
  */
 @Entity
 @Table(name = "closeendedanswer")

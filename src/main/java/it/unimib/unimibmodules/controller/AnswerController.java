@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Controller handling HTTP requests related to Answer and ClosedEndedAnswer.
  * @author Davide Costantini
+ * @version 0.0.1
  */
 @RestController
+@RequestMapping("/api")
 public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 
 	/**
@@ -129,5 +131,58 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	public Answer convertToEntity(AnswerDTO answerDTO) {
 
 		return modelMapper.map(answerDTO, Answer.class);
+	}
+
+	/**
+	 * @param   answer
+	 * @param   operation
+	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
+	 */
+	private void register(Answer answer, String operation) {
+
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * @param   answer
+	 * @see UnitOfWork#registerNew
+	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
+	 */
+	@Override
+	public void registerNew(Answer answer) {
+
+		register(answer, UnitOfWork.INSERT);
+	}
+
+	/**
+	 * @param   answer
+	 * @see UnitOfWork#registerModified
+	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
+	 */
+	@Override
+	public void registerModified(Answer answer) {
+
+		register(answer, UnitOfWork.MODIFY);
+	}
+
+	/**
+	 * @param   answer
+	 * @see UnitOfWork#registerDeleted
+	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
+	 */
+	@Override
+	public void registerDeleted(Answer answer) {
+
+		register(answer, UnitOfWork.DELETE);
+	}
+
+	/**
+	 * @see UnitOfWork#commit
+	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
+	 */
+	@Override
+	public void commit() {
+
+		// TODO Auto-generated method stub
 	}
 }

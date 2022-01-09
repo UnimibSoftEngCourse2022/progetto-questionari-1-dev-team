@@ -8,6 +8,7 @@ import it.unimib.unimibmodules.model.User;
 /**
  * Factory class for Answer and CloseEndedAnswer.
  * @author Davide Costantini
+ * @version 0.0.1
  */
 public class AnswerFactory {
 

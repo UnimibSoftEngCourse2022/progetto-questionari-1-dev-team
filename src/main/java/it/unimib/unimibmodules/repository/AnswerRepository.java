@@ -13,6 +13,7 @@ import java.util.Optional;
  * Repository for the Answer and CloseEndedAnswer. Adds business logic to Answer instances before actually accessing
  * the database via DAO.
  * @author Davide Costantini
+ * @version 0.0.1
  */
 @Component("answerRepository")
 public class AnswerRepository implements Repository<Answer> {

@@ -3,6 +3,7 @@ package it.unimib.unimibmodules.dto;
 /**
  * DTO for Answer and CloseEndedAnswer.
  * @author Davide Costantini
+ * @version 0.0.1
  */
 public class AnswerDTO {
 
@@ -29,7 +30,6 @@ public class AnswerDTO {
 
 		return text;
 	}
-
 
 	/**
 	 * Modifies the text of the answer, setting <code>text</code> as the new value.
