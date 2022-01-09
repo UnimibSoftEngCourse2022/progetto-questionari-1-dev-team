@@ -51,7 +51,7 @@ public class Answer {
     /**
      * The list of close-ended answers related to this answer.
      */
-    @OneToMany
+    @OneToMany(mappedBy = "answer")
     private Set<CloseEndedAnswer> closeEndedAnswerSet;
 
     /**
