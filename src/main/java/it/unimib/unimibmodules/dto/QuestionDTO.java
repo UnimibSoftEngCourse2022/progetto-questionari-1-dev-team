@@ -3,6 +3,7 @@ package it.unimib.unimibmodules.dto;
 /**
  * DTO for Question.
  * @author Khalil
+ * @version 0.0.1
  */
 
 public class QuestionDTO{

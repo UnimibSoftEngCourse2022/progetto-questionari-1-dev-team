@@ -1,30 +1,36 @@
 package it.unimib.unimibmodules.factory;
 
+import java.util.Set;
+
 import it.unimib.unimibmodules.model.Answer;
+import it.unimib.unimibmodules.model.Asnwer;
 import it.unimib.unimibmodules.model.Category;
 import it.unimib.unimibmodules.model.Question;
 
 /**
  * Factory class for Question.
  * @author Khalil
+ * @version 0.0.1
  */
 public class QuestionFactory {
 	
 	/**
 	 * Creates a new instance of Question without image.
 	 * @param   text    	the text of the question
-	 * @param   Answer    	the instance of the answer of the question
+	 * @param   Answer    	the list of answers of the question
 	 * @param 	Category	the category of the question
 	 * @param  	User		the user who created the question
+	 * @param 	Survey		the list of surveys where the question is in
 	 * @return          the newly created instance of Question
 	 */
-	public static Question createQuestion(String text, Answer answer, Category category, User user) {
+	public static Question createQuestion(String text, Set<Answer> answer, Category category, User user, Set<Survey> survey) {
 		
 		Question question = new Question();
 		question.setAnswer(answer);
 		question.setText(text);
 		question.setCategory(category);
 		question.setUser(user);
+		question.setSurvey(survey);
 		
 		return question;
 	}
@@ -33,13 +39,14 @@ public class QuestionFactory {
 	/**
 	 * Creates a new instance of Question with image.
 	 * @param   text    	the text of the question
-	 * @param   Answer    	the instance of the answer of the question
+	 * @param   Answer    	the list of answers of the question
 	 * @param 	Category	the category of the question
 	 * @param  	User		the user who created the question
 	 * @param 	urlImage	the image's url of the question
+	 * @param 	
 	 * @return          the newly created instance of Question
 	 */
-	public static Question createQuestionWithImage(String text, Answer answer, Category category, User user, String urlImage) {
+	public static Question createQuestionWithImage(String text, Set<Answer> answer, Category category, User user, Set<Survey> survey, String urlImage) {
 		
 		Question question = createQuestion(text, answer, category, user);
 		question.setUrlImage(urlImage);

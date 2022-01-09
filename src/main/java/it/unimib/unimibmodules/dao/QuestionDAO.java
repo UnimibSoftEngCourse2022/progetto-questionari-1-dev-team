@@ -10,6 +10,7 @@ import it.unimib.unimibmodules.model.Question;
 /**
  * DAO for the Question.
  * @author Khalil
+ * @version 0.0.1
  */
 
 public interface QuestionDAO extends CrudRepository<Question, Integer> {

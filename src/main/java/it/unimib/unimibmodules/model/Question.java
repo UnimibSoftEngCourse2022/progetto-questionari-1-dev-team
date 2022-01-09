@@ -1,13 +1,17 @@
 package it.unimib.unimibmodules.model;
 
+import java.util.Set;
+
 import javax.persistence.*;
 
 /**
  * Represents a question.
  * @author Khalil
+ * @version 0.0.1
  */
+
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Table(name = "question")
 public class Question {
 	
 	 /**
@@ -28,13 +32,17 @@ public class Question {
 	private String text;
 	
 	/**
-     * The answer of the question.
+     * The answers of the question.
      */
-	private Answer answer;
+	 @OneToMany(mappedBy="answer")
+	private Set<Answer> answer;
+	
 	
 	/**
      * The category of the question.
      */
+	@ManyToOne
+    @JoinColumn(name="category_id", nullable=false)
 	private Category category;
 
 	/**
@@ -43,6 +51,16 @@ public class Question {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
 	private User user;
+    
+    /**
+     * The surveys where the question is in.
+     */
+    @ManyToMany
+    @JoinTable(
+      name = "survey_question", 
+      joinColumns = @JoinColumn(name = "question_id"), 
+      inverseJoinColumns = @JoinColumn(name = "survey_id"))
+    private Set<Survey> survey;
 
 
 	/**
@@ -108,19 +126,19 @@ public class Question {
 	
 	
 	/**
-     * Returns the answer of the question.
-     * @return  the answer of the question
+     * Returns the answers of the question.
+     * @return  the answers of the question
      */
-	public Answer getAnswer() {
+	public Set<Answer> getAnswer() {
 		return answer;
 	}
 
 	
 	/**
-     * Modifies the answer of the question, setting <code>answer</code> as the new value.
-     * @param   answer  the new answer
+     * Modifies the answers of the question, setting <code>answers</code> as the new value.
+     * @param   answer  the new answers
      */
-	public void setAnswer(Answer answer) {
+	public void setAnswer(Set<Answer> answer) {
 		this.answer = answer;
 	}
 
@@ -160,7 +178,22 @@ public class Question {
 	}
 	
 	
-	
+	/**
+	 * Returns the surveys where the question is in.
+	 * @return the survey
+	 */
+	public Set<Survey> getSurvey() {
+		return survey;
+	}
+
+
+	/**
+	 * Modifies the surveys where the question is in, setting <code>surveys</code> as the new value.
+	 * @param survey the survey to set
+	 */
+	public void setSurvey(Set<Survey> survey) {
+		this.survey = survey;
+	}
 	
 
 }

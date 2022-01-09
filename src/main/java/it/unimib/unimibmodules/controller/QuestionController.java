@@ -14,8 +14,11 @@ import it.unimib.unimibmodules.repository.QuestionRepository;
 /**
  * Controller handling HTTP requests related to Question.
  * @author Khalil
+ * @version 0.0.1
  */
 
+@RestController
+@RequestMapping("/api")
 public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	
 	/**
