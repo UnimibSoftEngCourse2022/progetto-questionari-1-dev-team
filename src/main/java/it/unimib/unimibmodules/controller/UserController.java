@@ -18,6 +18,7 @@ import it.unimib.unimibmodules.model.User;
 /**
  * Controller handling HTTP requests from User
  * @author Gianlorenzo Martini
+ * @version 0.0.1
  */
 
 @RestController
