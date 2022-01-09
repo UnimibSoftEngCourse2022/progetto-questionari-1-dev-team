@@ -3,16 +3,18 @@ import it.unimib.unimibmodules.exception.SurveyException;
 import it.unimib.unimibmodules.model.User;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
 /**
  * Represents a survey.
  * @author Luca Milazzo
+ * @version 0.0.1
  */
+
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Table(name = "survey") 
 public class Survey {
 	
 	 /**
@@ -28,6 +30,17 @@ public class Survey {
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
     private User user;
+    
+    
+    /**
+     * The users who compiled the survey.
+     */
+    @ManyToMany
+    @JoinTable(
+    		  name = "survey_user", 
+    		  joinColumns = @JoinColumn(name = "survey_id"), 
+    		  inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> users;
     
     /**
      * The creation date of the survey.
@@ -48,7 +61,15 @@ public class Survey {
     		  name = "survey_question", 
     		  joinColumns = @JoinColumn(name = "survey_id"), 
     		  inverseJoinColumns = @JoinColumn(name = "question_id"))
-    private List<Question> questions;
+    private Set<Question> questions;
+    
+    
+    /**
+     * The answer of the survey.
+     */
+    @OneToMany(mappedBy = "survey")
+    private Set<Answer>  answer;
+
     
     /**
 	 * Creates a new empty instance of Survey.
@@ -129,7 +150,7 @@ public class Survey {
      * Returns the questions of the survey.
      * @return  the questions of the survey
      */
-    public List<Question> getQuestions() {
+    public Set<Question> getQuestions() {
 
         return questions;
     }
@@ -138,7 +159,7 @@ public class Survey {
      * Modifies the questions of the survey, setting questions as the new value.
      * @param   questions  the new questions value
      */
-    public void setQuestions(List<Question> questions) {
+    public void setQuestions(Set<Question> questions) {
 
         this.questions = questions;
     }

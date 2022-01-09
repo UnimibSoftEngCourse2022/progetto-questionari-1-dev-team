@@ -4,7 +4,8 @@ import java.text.SimpleDateFormat;
 //package it.unimib.unimibmodules.dto.UserDTO;
 //package it.unimib.unimibmodules.dto.QuestionDTO;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.persistence.GeneratedValue;
@@ -13,7 +14,11 @@ import javax.persistence.Id;
 
 import it.unimib.unimibmodules.model.Question;
 
-
+/**
+ * DTO for the Survey class.
+ * @author Luca
+ * @version 0.0.1
+ */
 public class SurveyDTO {
 	
 	 /**
@@ -39,12 +44,17 @@ public class SurveyDTO {
 	/**
 	 * Serialization of the id of the user who created the survey.
 	 */
-	private UserDTO userDTO;
+	private UserDTO user_creator_DTO;
+	
+	/**
+	 * Serialization of the id of the users who compiled the survey.
+	 */
+	private Set<UserDTO> user_compiler_DTO;
 	
 	/**
 	 * Serialization of the questions of the survey.
 	 */
-	private List<QuestionDTO> questionsDTO;
+	private Set<QuestionDTO> questionsDTO;
 	
 	
 	/**
@@ -104,23 +114,23 @@ public class SurveyDTO {
      * Returns the userDTO who created the survey.
      * @return  the userDTO who created the survey
      */
-	public UserDTO getUserDTO() {
-		return userDTO;
+	public UserDTO getUser_creator_DTO() {
+		return user_creator_DTO;
 	}
 	
 	/**
      * Modifies the userDTO of the survey, setting userDTO as the new value.
      * @param   userDTO  the new userDTO value
      */
-	public void setUserDTO(UserDTO userDTO) {
-		this.userDTO = userDTO;
+	public void setUser_creator_DTO(UserDTO user_creator_DTO) {
+		this.user_creator_DTO = user_creator_DTO;
 	}
 
 	 /**
      * Returns the questionsDTO related to the survey.
      * @return  the questionsDTO related to the survey
      */
-	public List<QuestionDTO> getQuestions() {
+	public Set<QuestionDTO> getQuestions() {
 		return questionsDTO;
 	}
 
@@ -128,9 +138,28 @@ public class SurveyDTO {
      * Modifies the questionsDTO related to the survey, setting questionsDTO as the new value.
      * @param   questionsDTO  the new questionsDTO value
      */
-	public void setQuestions(List<QuestionDTO> questionsDTO) {
+	public void setQuestions(Set<QuestionDTO> questionsDTO) {
 		this.questionsDTO = questionsDTO;
 	}
+	
+	
+	
+	 /**
+     * Returns the questionsDTO related to the survey.
+     * @return  the questionsDTO related to the survey
+     */
+	public Set<UserDTO> getUser_compiler_DTO() {
+		return user_compiler_DTO;
+	}
+
+	/**
+     * Modifies the questionsDTO related to the survey, setting questionsDTO as the new value.
+     * @param   questionsDTO  the new questionsDTO value
+     */
+	public void setUser_compiler_DTO(Set<UserDTO> user_compiler_DTO) {
+		this.user_compiler_DTO = user_compiler_DTO;
+	}
+	 
 
 
     

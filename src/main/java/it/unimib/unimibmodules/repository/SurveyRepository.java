@@ -1,19 +1,21 @@
 package it.unimib.unimibmodules.repository;
 
-import java.util.List;
+
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.unimib.unimibmodules.dao.SurveyDAO;
 import it.unimib.unimibmodules.model.Survey;
-import it.unimib.unimibmodules.unitofwork.UnitOfWork;
+
 
 /**
  * Repository for the Survey. Adds business logic to Survey instances before
  * accessing the database via DAO.
  * @author Luca Milazzo
+ * @version 0.0.1
  */
 @Component("surveyRepository")
 public class SurveyRepository implements Repository<Survey>{
@@ -41,14 +43,14 @@ public class SurveyRepository implements Repository<Survey>{
 	}
 	
 	/**
-     * Inserts a list of surveys in the database
-     * @param   surveyList  a list of Survey
+     * Inserts a Set of surveys in the database
+     * @param   surveySet  a Set of Survey
      * @see Repository#addall
      */
 	@Override
-	public void addall(List<Survey> surveyList) {
+	public void addall(Set<Survey> surveySet) {
 		// TODO Auto-generated method stub
-		surveyDAO.saveAll(surveyList);
+		surveyDAO.saveAll(surveySet);
 	}
 
 	 /**
@@ -65,7 +67,7 @@ public class SurveyRepository implements Repository<Survey>{
     /**
      * Returns all surveys in the database.
      * @see Repository#getAll()
-     * @return  a list of Surveys
+     * @return  a Set of Surveys
      */
     public Iterable<Survey> getAll() {
 
