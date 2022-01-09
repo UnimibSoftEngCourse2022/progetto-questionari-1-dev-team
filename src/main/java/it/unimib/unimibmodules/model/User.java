@@ -33,7 +33,7 @@ public class User {
     private Set<Survey> surveysCompiled;
     
     @OneToMany(mappedBy = "user")
-    private Set<Question> questions;
+    private Set<Question> questionsCreated;
 
     @OneToMany(mappedBy = "user")
     private Set<Answer> answers;
@@ -104,11 +104,11 @@ public class User {
         this.surveysCompiled = surveysCompiled;
     }
 
-    public Set<Question> getQuestions() {
-        return questions;
+    public Set<Question> getQuestionsCreated() {
+        return questionsCreated;
     }
 
-    public void setQuestions(Set<Question> questions) {
-        this.questions = questions;
+    public void setQuestionsCreated(Set<Question> questionsCreated) {
+        this.questionsCreated = questionsCreated;
     }
 }

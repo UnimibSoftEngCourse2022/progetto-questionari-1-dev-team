@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * A DTO representing a user
  * @author Gianlorenzo Martini
+ * @version 0.0.1
  */
 
 public class UserDTO {
@@ -54,10 +55,10 @@ public class UserDTO {
     private List<SurveyDTO> surveysCreated;
 
     /**
-     * Serialization of the surveys replied by the user
+     * Serialization of the surveys compiled by the user
      */
 
-    private List<SurveyDTO> surveysReplied;
+    private List<SurveyDTO> surveysCompiled;
 
 
     public int getId() {
