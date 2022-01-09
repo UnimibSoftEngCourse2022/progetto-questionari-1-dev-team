@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * A DTO representing a user
+ * @author Gianlorenzo Martini
  */
 
 public class UserDTO {
