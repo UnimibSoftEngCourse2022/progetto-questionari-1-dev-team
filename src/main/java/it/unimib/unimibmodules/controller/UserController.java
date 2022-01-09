@@ -21,6 +21,7 @@ import it.unimib.unimibmodules.model.User;
  */
 
 @RestController
+@RequestMapping("/api")
 public class UserController extends DTOMapping<User, UserDTO> {
     
     /**
