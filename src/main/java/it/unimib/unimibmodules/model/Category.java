@@ -1,9 +1,9 @@
 package it.unimib.unimibmodules.model;
 
 import it.unimib.unimibmodules.exception.EmptyCategoryException;
-import it.unimib.unimibmodules.model.Question;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Represents a category for a question.

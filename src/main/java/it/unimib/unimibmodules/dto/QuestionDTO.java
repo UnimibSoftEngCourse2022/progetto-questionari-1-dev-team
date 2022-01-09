@@ -2,8 +2,6 @@ package it.unimib.unimibmodules.dto;
 
 import java.util.Set;
 
-import it.unimib.unimibmodules.model.Answer;
-
 /**
  * DTO for Question.
  * @author Khalil
@@ -15,7 +13,7 @@ public class QuestionDTO{
 	/**
 	 * Serialization of the category of the question.
 	 */
-	private CategoryDTO categoryDTO;
+	private String categoryName;
 	
 	/**
 	 * Serialization of the image's url of the question.

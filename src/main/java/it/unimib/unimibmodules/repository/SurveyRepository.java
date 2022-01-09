@@ -1,14 +1,13 @@
 package it.unimib.unimibmodules.repository;
 
 
-import java.util.Optional;
-import java.util.Set;
-
+import it.unimib.unimibmodules.dao.SurveyDAO;
+import it.unimib.unimibmodules.model.Survey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import it.unimib.unimibmodules.dao.SurveyDAO;
-import it.unimib.unimibmodules.model.Survey;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -48,7 +47,7 @@ public class SurveyRepository implements Repository<Survey>{
      * @see Repository#addall
      */
 	@Override
-	public void addall(Set<Survey> surveySet) {
+	public void addall(List<Survey> surveySet) {
 		// TODO Auto-generated method stub
 		surveyDAO.saveAll(surveySet);
 	}

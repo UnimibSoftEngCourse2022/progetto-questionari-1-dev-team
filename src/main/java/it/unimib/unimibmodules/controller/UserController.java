@@ -1,19 +1,15 @@
 package it.unimib.unimibmodules.controller;
 
-import java.util.Map;
-
-import org.apache.catalina.connector.Response;
+import it.unimib.unimibmodules.dto.UserDTO;
+import it.unimib.unimibmodules.model.User;
+import it.unimib.unimibmodules.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import it.unimib.unimibmodules.dto.UserDTO;
-import it.unimib.unimibmodules.model.User;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * Controller handling HTTP requests from User
@@ -97,7 +93,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
 
 	/**
 	 * Converts an instance of UserDTO to an instance of User
-	 * @param       UserDTO	    an instance of UserDTO
+	 * @param       userDTO	    an instance of UserDTO
 	 * @return				    an instance of User, containing the deserialized data of UserDTO
 	 * @see DTOMapping#convertToEntity
 	 */

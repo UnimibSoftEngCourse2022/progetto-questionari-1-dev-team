@@ -117,11 +117,11 @@ public class UserDTO {
         this.surveysCreated = surveysCreated;
     }
 
-    public List<SurveyDTO> getSurveysReplied() {
-        return surveysReplied;
+    public List<SurveyDTO> getSurveysCompiled() {
+        return surveysCompiled;
     }
 
-    public void setSurveysReplied(List<SurveyDTO> surveysReplied) {
-        this.surveysReplied = surveysReplied;
+    public void setSurveysReplied(List<SurveyDTO> surveysCompiled) {
+        this.surveysCompiled = surveysCompiled;
     }
 }
