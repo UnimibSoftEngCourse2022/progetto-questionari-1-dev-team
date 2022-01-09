@@ -34,7 +34,7 @@ public class Question {
 	/**
      * The answers of the question.
      */
-	 @OneToMany(mappedBy="answer")
+	 @OneToMany(mappedBy="question")
 	private Set<Answer> answer;
 	
 	
