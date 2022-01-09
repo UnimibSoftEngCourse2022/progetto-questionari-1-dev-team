@@ -3,6 +3,7 @@ package it.unimib.unimibmodules.repository;
 import it.unimib.unimibmodules.dao.CategoryDAO;
 import it.unimib.unimibmodules.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,7 @@ import java.util.Optional;
  * @author Lorenzo Occhipinti
  * @version 0.0.1
  */
-
+@Component("categoryRepository")
 public class CategoryRepository implements Repository<Category> {
 
     /**

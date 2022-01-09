@@ -7,12 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import it.unimib.unimibmodules.dao.QuestionDAO;
 import it.unimib.unimibmodules.model.Question;
+import org.springframework.stereotype.Component;
 
 /**
  * Repository for the Question class.
  * @author Khalil
  */
-
+@Component("questionRepository")
 public class QuestionRepository implements Repository <Question> {
 	
 	/**
