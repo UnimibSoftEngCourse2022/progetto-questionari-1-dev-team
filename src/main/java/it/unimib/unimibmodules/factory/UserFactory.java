@@ -5,6 +5,7 @@ import it.unimib.unimibmodules.model.User;
 /**
  * Factory class for User.
  * @author Gianlorenzo Martini
+ * @version 0.0.1
  */
 
 public class UserFactory {
