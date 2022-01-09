@@ -5,6 +5,7 @@ import java.text.ParseException;
 /**
  * Defines the method that will be used by controllers to convert an instance of M (the model) to an instance of T (the
  * DTO) and vice versa.
+ * @author Davide Costantini
  * @author Luca Milazzo
  * @version 0.0.1
  */
@@ -21,7 +22,6 @@ public abstract class DTOMapping<M, T> {
 	 * Converts an instance of T to an instance of M
 	 * @param   dto	an instance of T
 	 * @return		an instance of M, containing the deserialized data of T
-	 * @throws ParseException 
 	 */
 	public abstract M convertToEntity(T dto) throws ParseException;
 }
