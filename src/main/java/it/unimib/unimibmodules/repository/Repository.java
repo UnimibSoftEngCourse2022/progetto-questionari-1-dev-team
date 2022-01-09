@@ -5,17 +5,17 @@ import java.util.Optional;
 
 public interface Repository <T>{
 	
-	public  void add(T entity);
+	void add(T entity);
 	
-	public void addall(List<T> entities);
+	void addall(List<T> entities);
 	
-	public Optional<T> get(int id);
+	Optional<T> get(int id);
 	
-	public Iterable<T> getAll();
+	Iterable<T> getAll();
 	
-	public void remove(int id);
+	void remove(int id);
 	
-	public void removeAll();
+	void removeAll();
 	
-	public void modify(T entity);
+	void modify(T entity);
 }
