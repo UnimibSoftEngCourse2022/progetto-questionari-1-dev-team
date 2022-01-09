@@ -3,6 +3,7 @@ package it.unimib.unimibmodules.controller;
 import it.unimib.unimibmodules.dto.AnswerDTO;
 import it.unimib.unimibmodules.model.Answer;
 import it.unimib.unimibmodules.repository.AnswerRepository;
+import it.unimib.unimibmodules.unitofwork.UnitOfWork;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api")
-public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
+public class AnswerController extends DTOMapping<Answer, AnswerDTO> implements UnitOfWork<Answer> {
 
 	/**
 	 * Instance of AnswerRepository that will be used to access the db.
