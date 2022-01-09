@@ -1,17 +1,17 @@
 package it.unimib.unimibmodules.model;
 
 import it.unimib.unimibmodules.exception.EmptyCategoryException;
+import it.unimib.unimibmodules.model.Question;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Represents a category for a question.
  * @author Lorenzo Occhipinti
+ * @version 0.0.1
  */
 @Entity
+@Table(name = "category")
 public class Category {
     /**
      * The id of the Category.
@@ -24,6 +24,12 @@ public class Category {
      * The name of the Category.
      */
     private String name;
+
+    /**
+     * Questions that are in this category
+     */
+    @OneToMany(mappedBy="category")
+    private Set<Question> questions;
 
     /**
      * Creates an empty Category.
