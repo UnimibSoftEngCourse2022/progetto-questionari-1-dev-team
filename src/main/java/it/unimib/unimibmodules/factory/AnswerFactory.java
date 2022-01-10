@@ -39,8 +39,6 @@ public class AnswerFactory {
 
 		CloseEndedAnswer closeEndedAnswer = new CloseEndedAnswer();
 		closeEndedAnswer.setText(text);
-		closeEndedAnswer.setChosen(chosen);
-		closeEndedAnswer.setUser(user);
 		return closeEndedAnswer;
 	}
 }

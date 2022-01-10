@@ -1,11 +1,14 @@
 package it.unimib.unimibmodules.model;
 
+import it.unimib.unimibmodules.exception.EmptyAnswerException;
+
 import javax.persistence.*;
 import java.util.Set;
 
 /**
  * Represents a closed-ended answer.
  * @author Davide Costantini
+ * @author Lorenzo Occhipinti
  * @version 0.0.1
  */
 @Entity
@@ -20,9 +23,9 @@ public class CloseEndedAnswer{
 	private int id;
 
 	/**
-	 * Represents whether the user selected or not this closed-ended answer.
+	 * The text of the close-ended answer.
 	 */
-	private boolean chosen = false;
+	private String text;
 
 	/**
 	 * The answer to which this answer belongs.
@@ -66,20 +69,23 @@ public class CloseEndedAnswer{
 	}
 
 	/**
-	 * Returns the value of chosen.
-	 * @return  true if this answer has been chosen by the user, false otherwise
+	 * Returns the text of the close-ended answer.
+	 * @return  the text of the close-ended answer
 	 */
-	public boolean isChosen() {
+	public String getText() {
 
-		return chosen;
+		return text;
 	}
 
 	/**
-	 * Modifies the value of chosen, setting <code>chosen</code> as the new value.
-	 * @param   chosen  the new chosen value
+	 * Modifies the text of the close-ended answer, setting <code>text</code> as the new value.
+	 * @param   text                    the new text value
+	 * @throws EmptyAnswerException    if the answer is empty
 	 */
-	public void setChosen(boolean chosen) {
+	public void setText(String text) throws EmptyAnswerException {
 
-		this.chosen = chosen;
+		if (text == null || text.isBlank())
+			throw new EmptyAnswerException("Close-ended answers must not be empty.");
+		this.text = text;
 	}
 }
