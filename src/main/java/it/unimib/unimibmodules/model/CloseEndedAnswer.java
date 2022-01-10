@@ -1,9 +1,7 @@
 package it.unimib.unimibmodules.model;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Represents a closed-ended answer.
@@ -12,7 +10,14 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "closeendedanswer")
-public class CloseEndedAnswer extends Answer {
+public class CloseEndedAnswer{
+
+	/**
+	 * The id of the close-ended answer.
+	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
 
 	/**
 	 * Represents whether the user selected or not this closed-ended answer.
@@ -27,11 +32,37 @@ public class CloseEndedAnswer extends Answer {
 	private Answer answer;
 
 	/**
+	 * Answers where this close-ended answer has been selected
+	 */
+	@ManyToMany
+	@JoinTable(
+			name = "answer_closeendedanswer",
+			joinColumns = @JoinColumn(name = "closeendedanswer_id"),
+			inverseJoinColumns = @JoinColumn(name = "answer_id"))
+	private Set<Answer> answers;
+
+	/**
 	 * Creates an empty close-ended answer.
 	 * @see it.unimib.unimibmodules.factory.AnswerFactory#createClosedEndedAnswer(String, boolean, User)
 	 */
 	public CloseEndedAnswer() {
 
+	}
+
+	/**
+	 * Returns the id of the close-ended answer.
+	 * @return  the id of the close-ended answer
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * Modifies the id of the close-ended answer, setting <code>id</code> as the new value.
+	 * @param   id  the new id value
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**

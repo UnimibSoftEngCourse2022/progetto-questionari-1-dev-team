@@ -12,7 +12,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "answer")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Answer {
 
     /**
@@ -51,8 +50,12 @@ public class Answer {
     /**
      * The list of close-ended answers related to this answer.
      */
-    @OneToMany(mappedBy = "answer")
-    private Set<CloseEndedAnswer> closeEndedAnswerSet;
+    @ManyToMany
+    @JoinTable(
+            name = "answer_closeendedanswer",
+            joinColumns = @JoinColumn(name = "answer_id"),
+            inverseJoinColumns = @JoinColumn(name = "closeendedanswer_id"))
+    private Set<CloseEndedAnswer> closeEndedAnswers;
 
     /**
      * Creates an empty answer.
