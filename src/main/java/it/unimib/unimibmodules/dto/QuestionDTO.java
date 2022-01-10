@@ -5,6 +5,7 @@ import java.util.Set;
 /**
  * DTO for Question.
  * @author Khalil
+ * @author Lorenzo Occhipinti
  * @version 0.0.1
  */
 
@@ -29,7 +30,12 @@ public class QuestionDTO{
 	 * Serialization of the list of the answers.
 	 */
 	private Set<AnswerDTO> answerDTO;
-	
+
+	/**
+	 * Serialization of the list of the answers.
+	 */
+	private Set<String> closeEndedAnswerText;
+
 	/**
 	 * Serialization of the id of the user who created the question.
 	 */
