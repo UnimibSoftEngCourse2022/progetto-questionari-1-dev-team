@@ -32,18 +32,11 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * Instance of SurveyRepository that will be used to access Repository layer.
 	 */
 	private final SurveyRepository surveyRepository;
-
-	/**
-	 * The instance of modelMapper that will be used to convert Survey to SurveyDTO and vice versa.
-	 */
-	private final ModelMapper modelMapper;
-	
 	
 	@Autowired
 	public SurveyController(SurveyRepository surveyRepository, ModelMapper modelMapper) {
-
+		super(modelMapper);
 		this.surveyRepository = surveyRepository;
-		this.modelMapper = modelMapper;
 	}
 	
 	

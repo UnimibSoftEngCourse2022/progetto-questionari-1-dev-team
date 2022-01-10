@@ -26,15 +26,10 @@ public class UserController extends DTOMapping<User, UserDTO> {
      */
     private final UserRepository userRepository;
 
-    /**
-     * The istance of modelMapper that will be used to convert User to UserDTO and vice versa.
-     */
-    private final ModelMapper modelMapper;
-
     @Autowired
     public UserController(UserRepository userRepository, ModelMapper modelMapper) {
+    	super(modelMapper);
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
     }
 
     /**

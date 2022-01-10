@@ -2,6 +2,9 @@ package it.unimib.unimibmodules.controller;
 
 import java.text.ParseException;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * Defines the method that will be used by controllers to convert an instance of M (the model) to an instance of T (the
  * DTO) and vice versa.
@@ -10,6 +13,16 @@ import java.text.ParseException;
  * @version 0.0.1
  */
 public abstract class DTOMapping<M, T> {
+	
+	/**
+	 * The instance of modelMapper that will be used to convert Question to QuestionDTO and vice versa.
+	 */
+	protected final ModelMapper modelMapper;
+	
+	@Autowired
+	public DTOMapping(ModelMapper modelMapper) {
+		this.modelMapper = modelMapper;
+	}
 
 	/**
 	 * Converts an instance of M to an instance of T

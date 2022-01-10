@@ -26,15 +26,10 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 */
 	private final QuestionRepository questionRepository;
 	
-	/**
-	 * The instance of modelMapper that will be used to convert Question to QuestionDTO and vice versa.
-	 */
-	private final ModelMapper modelMapper;
-	
 	@Autowired
 	public QuestionController(QuestionRepository questionRepository, ModelMapper modelMapper) {
+		super(modelMapper);
 		this.questionRepository = questionRepository;
-		this.modelMapper = modelMapper;
 	}
 	
 	/**

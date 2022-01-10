@@ -24,16 +24,10 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> implements U
 	 */
 	private final AnswerRepository answerRepository;
 
-	/**
-	 * The instance of modelMapper that will be used to convert Answer to AnswerDTO and vice versa.
-	 */
-	private final ModelMapper modelMapper;
-
 	@Autowired
 	public AnswerController(AnswerRepository answerRepository, ModelMapper modelMapper) {
-
+		super(modelMapper);
 		this.answerRepository = answerRepository;
-		this.modelMapper = modelMapper;
 	}
 
 	/**
