@@ -14,13 +14,16 @@
 \usepackage{natbib} % Required to change bibliography style to APA 
 \usepackage{tabularx,booktabs,tabulary,array,graphicx,url}
 \usepackage{graphicx}
+\graphicspath{ {./images/} }
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{multirow}
 \usepackage{caption}
+\usepackage[export]{adjustbox}
 \usepackage{float}
 \usepackage{indentfirst} 
 \usepackage{subfig}
 \usepackage{listings}
+\renewcommand{\figurename}{Fig.}
 \usepackage{adjustbox}
 \usepackage{pifont}
 \usepackage{hyperref} % \usepackage[hidelinks]{hyperref} use the 'hidelinks' option to remove red boxes from links
@@ -143,6 +146,11 @@ In questa sezione sono presentati gli attori del sistema ed i relativi casi d'us
 \end{adjustbox}
 \end{table}
 
+\begin{figure}[H]
+\includegraphics[scale=0.45, left]{fig_usecase_diagram.png}
+\caption{Diagramma dei casi d'uso}
+\end{figure}
+
 \subsection{Requisiti non funzionali}
 
 
@@ -165,8 +173,25 @@ In questa sezione sono presentati gli attori del sistema ed i relativi casi d'us
 \end{table}
 
 \subsection{SSD}
+Qui di seguit sono presenti gli SSD riguardanti i seguenti scenari:
+\begin{itemize}
+\item Creazione del questionario
+\end{itemize}
+
+\begin{figure}[H]
+\includegraphics[scale=0.5, left]{UNIMIBModule_CreazionequestionarioSequenceDiagram.png}
+\caption{SSD - Creazione del questionario}
+\end{figure}
+
+
+
 \subsection{Modello di dominio}
-\subsection{SSD}
+\begin{figure}[H]
+\includegraphics[scale=0.5, left]{UNIMIBModule_UniMiBModuleDomainLayer.png}
+\caption{Modello di dominio}
+\end{figure}
+
+
 \subsection{Diagramma delle classi di progettazione}
 \subsection{Diagrammi di sequenza}
 \subsection{Diagrammi di stato}
