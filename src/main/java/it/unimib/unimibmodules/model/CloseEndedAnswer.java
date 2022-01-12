@@ -28,11 +28,11 @@ public class CloseEndedAnswer{
 	private String text;
 
 	/**
-	 * The answer to which this answer belongs.
+	 * The question to which this answer belongs.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "answer_id", nullable = false)
-	private Answer answer;
+	@JoinColumn(name = "question_id", nullable = false)
+	private Question question;
 
 	/**
 	 * Answers where this close-ended answer has been selected
@@ -87,5 +87,23 @@ public class CloseEndedAnswer{
 		if (text == null || text.isBlank())
 			throw new EmptyAnswerException("Close-ended answers must not be empty.");
 		this.text = text;
+	}
+
+	/**
+	 * Returns the question to which this answer belongs.
+	 * @return	the question to which this answer belongs
+	 */
+	public Question getQuestion() {
+
+		return question;
+	}
+
+	/**
+	 * Modifies the question to which this answer belongs, setting <code>question</code> as the new value.
+	 * @param	question	the new question
+	 */
+	public void setQuestion(Question question) {
+
+		this.question = question;
 	}
 }
