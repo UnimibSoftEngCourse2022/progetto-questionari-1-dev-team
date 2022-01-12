@@ -107,7 +107,7 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	 * @param   id					the id of the close-ended answer that will be deleted
 	 * @return						an HTTP Response with status 200 if the close-ended answer has been deleted,
 	 * 								500 otherwise
-	 * @throws	NotFoundException	if no close-ended answer with identified by <code>id</code> has been found
+	 * @throws	NotFoundException	if no close-ended answer identified by <code>id</code> has been found
 	 */
 	@DeleteMapping(path = "/deleteCloseEndedAnswer/{id}")
 	public ResponseEntity<String> deleteAnswer(@PathVariable int id) throws NotFoundException {
