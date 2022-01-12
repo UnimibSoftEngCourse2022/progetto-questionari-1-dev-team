@@ -3,15 +3,13 @@ package it.unimib.unimibmodules.repository;
 import java.util.List;
 import java.util.Optional;
 
-import it.unimib.unimibmodules.exception.NotFoundException;
-
 public interface Repository <T>{
 	
 	void add(T entity);
 	
 	void addall(List<T> entities);
 	
-	T get(int id) throws NotFoundException;
+	Optional<T> get(int id);
 	
 	Iterable<T> getAll();
 	

@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.model.Question;
 
 /**
@@ -94,21 +93,10 @@ public class SurveyDTO {
      * Returns the creationDate of the surveyDTO in Date type using the given time zone.
      * @param  timezone the time zone to use to parse the creationDate of the surveyDTO in Date type
      * @return   the creationDate of the surveyDTO in Date type
-	 * @throws DateConversionSurveyException 
      */
-	public Date getCreationDateConverted(String timezone) throws FormatException{
-		
+	public Date getCreationDateConverted(String timezone) throws ParseException {
 		dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
-		
-        try {
-        	
-			return dateFormat.parse(this.creationDate);
-			
-		} catch (ParseException ex) {
-			
-			 throw new FormatException("Error while converting creationDate to Date.", ex);
-			    
-		}
+        return dateFormat.parse(this.creationDate);
     }
 	
 	/**

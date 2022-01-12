@@ -11,7 +11,6 @@ public class UnimibModulesApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(UnimibModulesApplication.class, args);
-		
 	}
 
 	@Bean
