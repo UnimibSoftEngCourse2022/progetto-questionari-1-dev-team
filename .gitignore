@@ -8,3 +8,4 @@ target/
 bfg-1.14.0.jar
 secrets.txt
 bin/
+src/main/resources/

@@ -5,6 +5,8 @@ import java.text.ParseException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import it.unimib.unimibmodules.exception.FormatException;
+
 /**
  * Defines the method that will be used by controllers to convert an instance of M (the model) to an instance of T (the
  * DTO) and vice versa.
@@ -35,6 +37,7 @@ public abstract class DTOMapping<M, T> {
 	 * Converts an instance of T to an instance of M
 	 * @param   dto	an instance of T
 	 * @return		an instance of M, containing the deserialized data of T
+	 * @throws FormatException 
 	 */
-	public abstract M convertToEntity(T dto) throws ParseException;
+	public abstract M convertToEntity(T dto) throws FormatException;
 }

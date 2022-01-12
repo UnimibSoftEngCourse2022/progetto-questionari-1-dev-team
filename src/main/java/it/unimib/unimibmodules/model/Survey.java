@@ -1,5 +1,4 @@
 package it.unimib.unimibmodules.model;
-import it.unimib.unimibmodules.exception.SurveyException;
 import it.unimib.unimibmodules.model.User;
 
 import java.util.Date;

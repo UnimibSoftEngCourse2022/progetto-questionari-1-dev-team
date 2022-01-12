@@ -2,11 +2,13 @@ package it.unimib.unimibmodules.repository;
 
 
 import it.unimib.unimibmodules.dao.SurveyDAO;
+import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Survey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -22,13 +24,8 @@ public class SurveyRepository implements Repository<Survey>{
 	/**
 	 * The instance of SurveyDAO that will be used to perform actions to the DB
 	 */
-	private final SurveyDAO surveyDAO;
-	
 	@Autowired
-	public SurveyRepository(SurveyDAO surveyDAO) {
-
-        this.surveyDAO = surveyDAO;
-    }
+	private SurveyDAO surveyDAO;
 	
 	/**
 	 * Inserts an instance of Survey in the database
@@ -56,11 +53,16 @@ public class SurveyRepository implements Repository<Survey>{
      * Finds the survey identified by id in the database
      * @param   id  the id of the survey to be found
      * @return      an instance of Survey if there is a survey identified by id, null otherwise
-     * @see Repository#get(int id)
+	 * @throws NotFoundException
      */
-    public Optional<Survey> get(int id) {
-
-        return surveyDAO.findById(id);
+    public Survey get(int id) throws NotFoundException{
+    	
+        Optional<Survey> survey =  surveyDAO.findById(id);
+        try {
+        	return survey.orElseThrow();
+        }catch(NoSuchElementException ex) {
+        	throw new NotFoundException("The survey with id = " + id + " has not been found.", ex); 
+        }
     }
     
     /**
