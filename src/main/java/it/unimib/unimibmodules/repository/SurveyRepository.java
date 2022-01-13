@@ -1,20 +1,19 @@
 package it.unimib.unimibmodules.repository;
 
-
 import it.unimib.unimibmodules.dao.SurveyDAO;
+import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Survey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-
 /**
- * Repository for the Survey. Adds business logic to Survey instances before
- * accessing the database via DAO.
+ * Repository for the Survey. It adds business logic to Survey instances before
+ * accessing the database trough DAO.
  * @author Luca Milazzo
- * @version 0.0.1
+ * @version 0.1.0
  */
 @Component("surveyRepository")
 public class SurveyRepository implements Repository<Survey>{
@@ -22,13 +21,8 @@ public class SurveyRepository implements Repository<Survey>{
 	/**
 	 * The instance of SurveyDAO that will be used to perform actions to the DB
 	 */
-	private final SurveyDAO surveyDAO;
-	
 	@Autowired
-	public SurveyRepository(SurveyDAO surveyDAO) {
-
-        this.surveyDAO = surveyDAO;
-    }
+	private SurveyDAO surveyDAO;
 	
 	/**
 	 * Inserts an instance of Survey in the database
@@ -37,7 +31,6 @@ public class SurveyRepository implements Repository<Survey>{
 	 */
 	@Override
 	public void add(Survey survey) {
-		// TODO Auto-generated method stub
 		surveyDAO.save(survey);
 	}
 	
@@ -47,8 +40,7 @@ public class SurveyRepository implements Repository<Survey>{
      * @see Repository#addall
      */
 	@Override
-	public void addall(List<Survey> surveySet) {
-		// TODO Auto-generated method stub
+	public void addAll(List<Survey> surveySet) {
 		surveyDAO.saveAll(surveySet);
 	}
 
@@ -56,11 +48,15 @@ public class SurveyRepository implements Repository<Survey>{
      * Finds the survey identified by id in the database
      * @param   id  the id of the survey to be found
      * @return      an instance of Survey if there is a survey identified by id, null otherwise
-     * @see Repository#get(int id)
+	 * @throws NotFoundException
      */
-    public Optional<Survey> get(int id) {
-
-        return surveyDAO.findById(id);
+    public Survey get(int id) throws NotFoundException{
+        Optional<Survey> survey =  surveyDAO.findById(id);
+        try {
+        	return survey.orElseThrow();
+        }catch(NoSuchElementException ex) {
+        	throw new NotFoundException("The survey with id = " + id + " has not been found.", ex); 
+        }
     }
     
     /**
@@ -69,7 +65,6 @@ public class SurveyRepository implements Repository<Survey>{
      * @return  a Set of Surveys
      */
     public Iterable<Survey> getAll() {
-
         return surveyDAO.findAll();
     }
     
@@ -79,7 +74,6 @@ public class SurveyRepository implements Repository<Survey>{
      * @see Repository#remove(int id)
      */
     public void remove(int id) {
-
     	surveyDAO.deleteById(id);
     }
     
@@ -89,7 +83,6 @@ public class SurveyRepository implements Repository<Survey>{
      */
     
     public void removeAll() {
-
         surveyDAO.deleteAll();
     }
     
@@ -99,10 +92,6 @@ public class SurveyRepository implements Repository<Survey>{
      * @see Repository#modify
      */
     public void modify(Survey survey) {
-
     	surveyDAO.save(survey);
     }
-
-
-
 }
