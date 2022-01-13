@@ -1,6 +1,6 @@
 package it.unimib.unimibmodules.model;
 
-import it.unimib.unimibmodules.exception.EmptyAnswerException;
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.factory.AnswerFactory;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,9 +16,9 @@ public class AnswerTest {
 	public void testEmptyAnswer() {
 
 		try {
-			Answer answer = AnswerFactory.createAnswer("", new User());
+			AnswerFactory.createAnswer("", new User());
 			Assert.fail();
-		} catch (EmptyAnswerException e) {
+		} catch (EmptyFieldException e) {
 			e.printStackTrace();
 		}
 	}
