@@ -211,16 +211,17 @@ Qui di seguit sono presenti gli SSD riguardanti i seguenti scenari:
 Design Patterns utilizzati durante la creazione del progetto.
 \subsubsection{Architectural Patterns}
 	\begin{itemize}
-		\item \textbf{Unit of Work}:
-		\item \textbf{Data Mapper}:
-		\item \textbf{Front Controller}:
+		\item \textbf{Unit of Work}: Classe che si occupa di tenere traccia di ciò che possa modificare il database durante una transazione business e quando è terminata si occupa di applicare tutte le modifiche.
+		\item \textbf{Data Mapper}: Classe che si occupa della conversione dei dati tra database e dominio
+		\item \textbf{Front Controller}: Oggetto che fornisce un punto centralizzato per la gestione delle richieste
 	\end{itemize}
 \subsubsection{Data Patterns}
 	\begin{itemize}
-		\item \textbf{Data Transfer Object}:
-		\item \textbf{Data Access Object}:
-		\item \textbf{Repository}:
-		\item \textbf{Façade}:
+		\item \textbf{Data Transfer Object}: Oggetto che trasporta data tra i processi per poter ridurre il numero di chiamate ai metodi
+		\item \textbf{Data Access Object}: Oggetto che rappresenta un'entità di una tabella di un database usato per stratificare e isolare l'accesso ad una tabella
+		\item \textbf{Repository}: Interfaccia che si occupa di mediare tra la logica di accesso dati e il resto dell'applicazione
+		\item \textbf{Abstract factory}: Interfaccia che permette di creare famiglie di oggetti connessi o dipendenti tra loro
+		\item \textbf{Façade}: Interfaccia più semplice che permette l'accesso a sottosistemi con Interfacce complesse
 	\end{itemize}
 \subsection{Diagramma di deployment}
 \subsection{Modello E-R}
