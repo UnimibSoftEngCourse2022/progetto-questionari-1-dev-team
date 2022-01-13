@@ -83,9 +83,10 @@ public class QuestionRepository implements Repository <Question> {
 	}
 	
 	
-	  /**
+	/**
      * Deletes from the database the question identified by id.
      * @param   id  the id of the question to be deleted
+	 * @throws  NotFoundException	if no question identified by <code>id</code> has been found
      * @see Repository#remove(int id)
      */
 	@Override
@@ -105,7 +106,6 @@ public class QuestionRepository implements Repository <Question> {
      */
 	@Override
 	public void removeAll() {
-		// TODO Auto-generated method stub
 		questionDAO.deleteAll();
 	}
 	
@@ -117,7 +117,6 @@ public class QuestionRepository implements Repository <Question> {
      */
 	@Override
 	public void modify(Question entity) {
-		// TODO Auto-generated method stub
 		questionDAO.save(entity);
 	}
 	

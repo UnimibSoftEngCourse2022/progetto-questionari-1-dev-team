@@ -1,5 +1,6 @@
 package it.unimib.unimibmodules.controller;
 
+import it.unimib.unimibmodules.model.Category;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import it.unimib.unimibmodules.dto.QuestionDTO;
-import it.unimib.unimibmodules.factory.QuestionFactory;
 import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.repository.QuestionRepository;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
@@ -42,25 +42,28 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 * Gets the Question associated with the given id.
 	 * @param	id	the id of the question
 	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
+	 * @throws  NotFoundException	if 404 no question with identified by <code>id</code> has been found
 	 */
 	@GetMapping(path = "/getQuestion/{id}")
-	public ResponseEntity<Question> getQuestion(@PathVariable int id) throws NotFoundException{
-        Question question = questionRepository.get(id);
+	public ResponseEntity<QuestionDTO> getQuestion(@PathVariable int id) throws NotFoundException{
 
-		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+        Question question = questionRepository.get(id);
+		logger.debug("Retrieved Question with id "+ id + ".");
+		return new ResponseEntity<>(convertToDTO(question), HttpStatus.OK);
 	}
 	
 	/**
 	 * Creates a question, with the given text and id
-	 * @param	text		the text of the question
-	 * @param	questionId
+	 * @param	questionDTO the serialized object of the question
 	 * @return				an HTTP response with status 200 if the question has been modified, 500 otherwise
 	 */
-	@PostMapping(path = "/postQuestion")
-	public ResponseEntity<Question> postQuestion(@RequestParam String text, @RequestParam int questionId) {
+	@PostMapping(path = "/addQuestion")
+	public ResponseEntity<String> addQuestion(@RequestBody QuestionDTO questionDTO) {
 
-		// TODO Auto-generated method stub
-		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+		Question question = convertToEntity(questionDTO);
+		questionRepository.add(question);
+		logger.debug("Added Question with id +" + question.getId() + ".");
+		return new ResponseEntity<>("Question created.", HttpStatus.CREATED);
 	}
 	
 	/**
@@ -68,24 +71,34 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 * @param	id		the id of the question
 	 * @param	text	the new text of the question
 	 * @return			an HTTP response with status 200 if the question has been modified, 500 otherwise
+	 * @throws  NotFoundException    if no question with identified by <code>id</code> has been found
+	 * @throws	EmptyFieldException	if <code>text</code> or <code>urlImage</code> or <code>category</code> are empty
 	 */
-	@PatchMapping(path = "/patchQuestion")
-	public ResponseEntity<Question> patchQuestion(@RequestParam int id, @RequestParam String text) {
-
-		// TODO Auto-generated method stub
-		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+	@PatchMapping(path = "/modifyQuestion")
+	public ResponseEntity<String> modifyQuestion(@RequestParam int id, @RequestParam String text,
+												 @RequestParam String urlImage, @RequestParam Category category)
+			throws NotFoundException, EmptyFieldException{
+		Question question = questionRepository.get(id);
+		question.setText(text);
+		question.setUrlImage(urlImage);
+		question.setCategory(category);
+		questionRepository.modify(question);
+		logger.debug("Modified Question with id " + id + ".");
+		return new ResponseEntity<>("Question modified.", HttpStatus.OK);
 	}
 	
 	/**
 	 * Deletes the question associated with the given id.
 	 * @param   id	the id of the question that will be deleted
 	 * @return		an HTTP Response with status 200 if the question has been deleted, 500 otherwise
+	 * @throws	NotFoundException	if no question identified by <code>id</code> has been found
 	 */
 	@DeleteMapping(path = "/deleteQuestion/{id}")
-	public ResponseEntity<Question> deleteQuestion(@PathVariable int id) {
+	public ResponseEntity<String> deleteQuestion(@PathVariable int id) {
 
-		// TODO Auto-generated method stub
-		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+		questionRepository.remove(id);
+		logger.debug("Removed Question with id " + id + ".");
+		return new ResponseEntity<>("Question deleted", HttpStatus.OK);
 	}
 	
 	/**
