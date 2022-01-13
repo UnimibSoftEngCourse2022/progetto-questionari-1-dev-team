@@ -1,7 +1,6 @@
 package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.CloseEndedAnswerDTO;
-import it.unimib.unimibmodules.dto.QuestionDTO;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.CloseEndedAnswer;
@@ -10,7 +9,6 @@ import it.unimib.unimibmodules.repository.CloseEndedAnswerRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,18 +36,8 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 		super(modelMapper);
 		this.closeEndedAnswerRepository = closeEndedAnswerRepository;
 
-		modelMapper.addMappings(new PropertyMap<Question, QuestionDTO>() {
-
-			@Override
-			protected void configure() {
-
-				skip(destination.getCategory());
-				skip(destination.getAnswer());
-				skip(destination.getCloseEndedAnswerSet());
-				skip(destination.getUser());
-				skip(destination.getSurvey());
-			}
-		});
+		modelMapper.createTypeMap(Question.class, CloseEndedAnswerDTO.class)
+				.addMapping(Question::getId, (closeEndedAnswerDTO, id) -> closeEndedAnswerDTO.getQuestionDTO().setId(id));
 	}
 
 	/**
@@ -57,7 +45,7 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	 * @param	id					the id of the close-ended answer
 	 * @return						an HTTP response with status 200 and the CloseEndedAnswerDTO if the close-ended
 	 * 								answer has been found, 500 otherwise
-	 * @throws	NotFoundException	if 404 no close-ended answer with identified by <code>id</code> has been found
+	 * @throws	NotFoundException	if no close-ended answer with identified by <code>id</code> has been found
 	 */
 	@GetMapping(path = "/getCloseEndedAnswer/{id}")
 	public ResponseEntity<CloseEndedAnswerDTO> getAnswer(@PathVariable int id) throws NotFoundException {
@@ -70,7 +58,7 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	/**
 	 * Creates an answer to a close-ended question.
 	 * @param	closeEndedAnswerDTO	the serialized object of the close-ended answer
-	 * @return						an HTTP response with status 200 if the new close-ended answer has been created,
+	 * @return						an HTTP response with status 201 if the new close-ended answer has been created,
 	 * 								500 otherwise
 	 */
 	@PostMapping(path = "/addCloseEndedAnswer")
@@ -114,7 +102,7 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 
 		closeEndedAnswerRepository.remove(id);
 		logger.debug("Removed CloseEndedAnswer with id " + id + ".");
-		return new ResponseEntity<>("CloseEndedAnswer deleted", HttpStatus.I_AM_A_TEAPOT);
+		return new ResponseEntity<>("CloseEndedAnswer deleted.", HttpStatus.OK);
 	}
 
 	/**
@@ -127,7 +115,8 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	public CloseEndedAnswerDTO convertToDTO(CloseEndedAnswer closeEndedAnswer) {
 
 		CloseEndedAnswerDTO closeEndedAnswerDTO = modelMapper.map(closeEndedAnswer, CloseEndedAnswerDTO.class);
-		closeEndedAnswerDTO.setQuestionDTO(modelMapper.map(closeEndedAnswer.getQuestion(), QuestionDTO.class));
+		modelMapper.getTypeMap(Question.class, CloseEndedAnswerDTO.class)
+				.map(closeEndedAnswer.getQuestion(), closeEndedAnswerDTO);
 		return closeEndedAnswerDTO;
 	}
 
