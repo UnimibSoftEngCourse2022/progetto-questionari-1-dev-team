@@ -12,6 +12,11 @@ import it.unimib.unimibmodules.model.User;
  */
 public class AnswerFactory {
 
+	private AnswerFactory() {
+
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * Creates a new instance of Answer.
 	 * @param	text				the text of the answer
