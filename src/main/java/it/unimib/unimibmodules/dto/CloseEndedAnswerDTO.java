@@ -36,6 +36,15 @@ public class CloseEndedAnswerDTO {
 	}
 
 	/**
+	 * Modifies the id of the close-ended answer, setting <code>id</code> as the new value.
+	 * @param	id	the new id value
+	 */
+	public void setId(Object id) {
+
+		this.id = (int) id;
+	}
+
+	/**
 	 * Returns the text of the answer.
 	 * @return	the text of the answer
 	 */
