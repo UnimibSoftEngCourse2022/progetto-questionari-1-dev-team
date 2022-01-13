@@ -19,27 +19,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class CategoryController{
 
-        /**
-         * Instance of AnswerRepository that will be used to access the db.
-         */
-        private final CategoryRepository categoryRepository;
+    /**
+     * Instance of AnswerRepository that will be used to access the db.
+     */
+    private final CategoryRepository categoryRepository;
 
 
-        @Autowired
-        public CategoryController(CategoryRepository categoryRepository) {
+    @Autowired
+    public CategoryController(CategoryRepository categoryRepository) {
 
-            this.categoryRepository = categoryRepository;
-        }
+        this.categoryRepository = categoryRepository;
+    }
 
-        /**
-         * Gets the Category associated with the given id.
-         * @param	id	the id of the category
-         * @return		an HTTP response with status 200, 500 otherwise
-         */
-        @GetMapping(path = "/getCategory/{id}")
-        public ResponseEntity<Category> getCategory(@PathVariable int id) {
-
-            // TODO Auto-generated method stub
-            return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
-        }
+    /**
+     * Gets the Category associated with the given id.
+     * @param	id	the id of the category
+     * @return		an HTTP response with status 200, 500 otherwise
+     */
+    @GetMapping(path = "/getCategory/{id}")
+    public ResponseEntity<Category> getCategory(@PathVariable int id) {
+        Category category = categoryRepository.get(id);
+        return new ResponseEntity<>(category, HttpStatus.OK);
+    }
 }
