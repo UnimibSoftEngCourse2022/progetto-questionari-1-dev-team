@@ -50,6 +50,7 @@ public class CloseEndedAnswer{
 	 */
 	public CloseEndedAnswer() {
 
+		// Empty constructor; use Answerfactory.createClosedEndedAnswer.
 	}
 
 	/**

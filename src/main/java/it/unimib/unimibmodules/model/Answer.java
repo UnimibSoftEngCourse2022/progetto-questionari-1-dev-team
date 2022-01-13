@@ -63,6 +63,7 @@ public class Answer {
      */
     public Answer() {
 
+        // Empty constructor; use Answerfactory.createAnswer.
     }
 
     /**
