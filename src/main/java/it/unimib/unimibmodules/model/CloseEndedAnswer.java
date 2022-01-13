@@ -1,6 +1,6 @@
 package it.unimib.unimibmodules.model;
 
-import it.unimib.unimibmodules.exception.EmptyAnswerException;
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -38,15 +38,14 @@ public class CloseEndedAnswer{
 	 * Answers where this close-ended answer has been selected
 	 */
 	@ManyToMany
-	@JoinTable(
-			name = "answer_closeendedanswer",
+	@JoinTable(name = "answer_closeendedanswer",
 			joinColumns = @JoinColumn(name = "closeendedanswer_id"),
 			inverseJoinColumns = @JoinColumn(name = "answer_id"))
 	private Set<Answer> answers;
 
 	/**
 	 * Creates an empty close-ended answer.
-	 * @see it.unimib.unimibmodules.factory.AnswerFactory#createClosedEndedAnswer(String, boolean, User)
+	 * @see it.unimib.unimibmodules.factory.AnswerFactory#createClosedEndedAnswer
 	 */
 	public CloseEndedAnswer() {
 
@@ -81,12 +80,12 @@ public class CloseEndedAnswer{
 	/**
 	 * Modifies the text of the close-ended answer, setting <code>text</code> as the new value.
 	 * @param   text                    the new text value
-	 * @throws EmptyAnswerException    if the answer is empty
+	 * @throws	EmptyFieldException    if the answer is empty
 	 */
-	public void setText(String text) throws EmptyAnswerException {
+	public void setText(String text) throws EmptyFieldException {
 
 		if (text == null || text.isBlank())
-			throw new EmptyAnswerException("Close-ended answers must not be empty.");
+			throw new EmptyFieldException("Close-ended answers must not be empty.");
 		this.text = text;
 	}
 
