@@ -7,7 +7,7 @@ public interface Repository <T>{
 	
 	void add(T entity);
 	
-	void addall(List<T> entities);
+	void addAll(List<T> entities);
 	
 	Optional<T> get(int id);
 	
