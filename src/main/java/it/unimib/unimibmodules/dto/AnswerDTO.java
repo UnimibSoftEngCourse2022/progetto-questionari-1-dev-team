@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * DTO for Answer and CloseEndedAnswer.
  * @author Davide Costantini
- * @version 0.0.1
+ * @version 0.1.0
  */
 public class AnswerDTO {
 
@@ -17,7 +17,7 @@ public class AnswerDTO {
 	/**
 	 * Serialization of the text of the answer.
 	 */
-	private String text;
+	private String answerText;
 
 	/**
 	 * Serialization of the id of the user who created the answer.
@@ -37,7 +37,7 @@ public class AnswerDTO {
 	/**
 	 * Serialization of the list of close-ended answers related to this answer.
 	 */
-	private Set<CloseEndedAnswerDTO> closeEndedAnswerText;
+	private Set<CloseEndedAnswerDTO> closeEndedAnswerDTOs;
 
 	/**
 	 * Returns the id of the answer.
@@ -61,18 +61,18 @@ public class AnswerDTO {
 	 * Returns the text of the answer.
 	 * @return	the text of the answer
 	 */
-	public String getText() {
+	public String getAnswerText() {
 
-		return text;
+		return answerText;
 	}
 
 	/**
 	 * Modifies the text of the answer, setting <code>text</code> as the new value.
-	 * @param	text	the new text value
+	 * @param	answerText	the new text value
 	 */
-	public void setText(String text) {
+	public void setAnswerText(String answerText) {
 
-		this.text = text;
+		this.answerText = answerText;
 	}
 
 	/**
@@ -135,17 +135,17 @@ public class AnswerDTO {
 	 * Returns the DTO of the list of close-ended answers related to this answer.
 	 * @return	an instance of CloseEndedAnswerDTO containing the list of close-ended answers related to this answer
 	 */
-	public Set<CloseEndedAnswerDTO> getCloseEndedAnswerText() {
+	public Set<CloseEndedAnswerDTO> getCloseEndedAnswerDTOs() {
 
-		return closeEndedAnswerText;
+		return closeEndedAnswerDTOs;
 	}
 
 	/**
 	 * Modifies the DTO of the list of close-ended answers related to this answer, setting <code>closeEndedAnswerText</code> as the new CloseEndedAnswerDTO.
-	 * @param	closeEndedAnswerText	the new CloseEndedAnswerDTO
+	 * @param	closeEndedAnswerDTOs	the new CloseEndedAnswerDTO
 	 */
-	public void setCloseEndedAnswerText(Set<CloseEndedAnswerDTO> closeEndedAnswerText) {
+	public void setCloseEndedAnswerDTOSet(Set<CloseEndedAnswerDTO> closeEndedAnswerDTOs) {
 
-		this.closeEndedAnswerText = closeEndedAnswerText;
+		this.closeEndedAnswerDTOs = closeEndedAnswerDTOs;
 	}
 }
