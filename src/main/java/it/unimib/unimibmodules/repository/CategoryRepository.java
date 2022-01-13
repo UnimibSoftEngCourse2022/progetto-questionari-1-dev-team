@@ -2,10 +2,12 @@ package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.dao.CategoryDAO;
 import it.unimib.unimibmodules.model.Category;
+import it.unimib.unimibmodules.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -54,8 +56,13 @@ public class CategoryRepository implements Repository<Category> {
      * @see Repository#get(int id)
      */
     @Override
-    public Optional<Category> get(int id) {
-        return categoryDAO.findById(id);
+    public Category get(int id) throws NotFoundException {
+        Optional<Category> category = categoryDAO.findById(id);
+        try {
+            return category.orElseThrow();
+        }catch (NoSuchElementException ex){
+            throw new NotFoundException("The category with id = "+id+" has not been found.");
+        }
     }
 
     /**
