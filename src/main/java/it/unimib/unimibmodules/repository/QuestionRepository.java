@@ -1,17 +1,21 @@
 package it.unimib.unimibmodules.repository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import it.unimib.unimibmodules.dao.QuestionDAO;
 import it.unimib.unimibmodules.model.Question;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
+import it.unimib.unimibmodules.exception.NotFoundException;
 
 /**
  * Repository for the Question class.
  * @author Khalil
+ * @version 0.1.0
  */
 @Component("questionRepository")
 public class QuestionRepository implements Repository <Question> {
@@ -34,7 +38,6 @@ public class QuestionRepository implements Repository <Question> {
      */
 	@Override
 	public void add(Question entity) {
-		// TODO Auto-generated method stub
 		questionDAO.save(entity);
 	}
 	
@@ -46,7 +49,6 @@ public class QuestionRepository implements Repository <Question> {
      */
 	@Override
 	public void addall(List<Question> entities) {
-		// TODO Auto-generated method stub
 		questionDAO.saveAll(entities);
 	}
 	
@@ -55,13 +57,19 @@ public class QuestionRepository implements Repository <Question> {
      * Finds the question identified by id in the database
      * @param   id  the id of the question to be found
      * @return      an instance of Question if there is a question identified by id, null otherwise
+	 * @throws NotFoundException	if no question identified by <code>id</code> has been found
      * @see Repository#get(int id)
      */
 	@Override
-	public Optional<Question> get(int id) {
-		// TODO Auto-generated method stub
-		return questionDAO.findById(id);
-	}
+	public Question get(int id) throws NotFoundException{
+		Optional<Question> question = questionDAO.findById(id);
+
+		try {
+			return question.orElseThrow();
+		}catch (NoSuchElementException e){
+			throw new NotFoundException("No Question with id " + id + " was found.");
+		}
+ 	}
 	
 	
     /**
@@ -71,7 +79,6 @@ public class QuestionRepository implements Repository <Question> {
      */
 	@Override
 	public Iterable<Question> getAll() {
-		// TODO Auto-generated method stub
 		return questionDAO.findAll();
 	}
 	
@@ -82,9 +89,13 @@ public class QuestionRepository implements Repository <Question> {
      * @see Repository#remove(int id)
      */
 	@Override
-	public void remove(int id) {
-		// TODO Auto-generated method stub
-		questionDAO.deleteById(id);
+	public void remove(int id) throws NotFoundException{
+
+		try {
+			questionDAO.deleteById(id);
+		}catch (EmptyResultDataAccessException e){
+			throw new NotFoundException("No Question with id " + id + " was found.");
+		}
 	}
 	
 	

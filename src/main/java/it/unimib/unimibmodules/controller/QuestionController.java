@@ -10,16 +10,22 @@ import it.unimib.unimibmodules.dto.QuestionDTO;
 import it.unimib.unimibmodules.factory.QuestionFactory;
 import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.repository.QuestionRepository;
+import it.unimib.unimibmodules.exception.EmptyFieldException;
+import it.unimib.unimibmodules.exception.NotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Controller handling HTTP requests related to Question.
  * @author Khalil
- * @version 0.0.1
+ * @version 0.1.0
  */
 
 @RestController
 @RequestMapping("/api")
 public class QuestionController extends DTOMapping<Question, QuestionDTO>{
+
+    private static final Logger logger = LogManager.getLogger(Question.class);
 	
 	/**
 	 * Instance of QuestionRepository that will be used to access the db.
@@ -38,9 +44,9 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
 	 */
 	@GetMapping(path = "/getQuestion/{id}")
-	public ResponseEntity<Question> getQuestion(@PathVariable int id) {
+	public ResponseEntity<Question> getQuestion(@PathVariable int id) throws NotFoundException{
+        Question question = questionRepository.get(id);
 
-		// TODO Auto-generated method stub
 		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
 	}
 	

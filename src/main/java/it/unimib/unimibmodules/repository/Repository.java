@@ -9,7 +9,7 @@ public interface Repository <T>{
 	
 	void addall(List<T> entities);
 	
-	Optional<T> get(int id);
+	T get(int id);
 	
 	Iterable<T> getAll();
 	
