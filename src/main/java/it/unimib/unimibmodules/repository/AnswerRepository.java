@@ -2,20 +2,23 @@ package it.unimib.unimibmodules.repository;
 
 
 import it.unimib.unimibmodules.dao.AnswerDAO;
+import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Answer;
 import it.unimib.unimibmodules.unitofwork.UnitOfWork;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
- * Repository for the Answer and CloseEndedAnswer. Adds business logic to Answer instances before actually accessing
+ * Repository for the Answers. Adds business logic to Answer instances before actually accessing
  * the database via DAO.
  * @author Davide Costantini
- * @version 0.0.1
+ * @version 0.1.0
  */
 @Component("answerRepository")
 public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer>  {
@@ -53,13 +56,19 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
 
     /**
      * Finds the answer identified by id in the database
-     * @param   id  the id of the answer to be found
-     * @return      an instance of Answer if there is an answer identified by id, null otherwise
+     * @param	id					the id of the answer to be found
+     * @return						an instance of Answer if there is an answer identified by id, null otherwise
+	 * @throws	NotFoundException	if no answer identified by <code>id</code> has been found
      * @see Repository#get(int id)
      */
-    public Optional<Answer> get(int id) {
+    public Answer get(int id) throws NotFoundException {
 
-        return answerDAO.findById(id);
+		Optional<Answer> answer = answerDAO.findById(id);
+		try {
+			return answer.orElseThrow();
+		} catch (NoSuchElementException e) {
+			throw new NotFoundException("No Answer with id " + id + " was found.");
+		}
     }
 
     /**
@@ -74,12 +83,17 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
 
     /**
      * Deletes from the database the answer identified by id.
-     * @param   id  the id of the answer to be deleted
+     * @param   id					the id of the answer to be deleted
+	 * @throws	NotFoundException	if no answer identified by <code>id</code> has been found
      * @see Repository#remove(int id)
      */
-    public void remove(int id) {
+    public void remove(int id) throws NotFoundException {
 
-        answerDAO.deleteById(id);
+		try {
+			answerDAO.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new NotFoundException("No ClosedEndedAnswer with id " + id + " was found.");
+		}
     }
 
     /**
@@ -119,6 +133,7 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
 	@Override
 	public void registerNew(Answer answer) {
 
+		// TODO Auto-generated method stub
 		register(answer, UnitOfWork.INSERT);
 	}
 
@@ -130,6 +145,7 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
 	@Override
 	public void registerModified(Answer answer) {
 
+		// TODO Auto-generated method stub
 		register(answer, UnitOfWork.MODIFY);
 	}
 
@@ -141,6 +157,7 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
 	@Override
 	public void registerDeleted(Answer answer) {
 
+		// TODO Auto-generated method stub
 		register(answer, UnitOfWork.DELETE);
 	}
 

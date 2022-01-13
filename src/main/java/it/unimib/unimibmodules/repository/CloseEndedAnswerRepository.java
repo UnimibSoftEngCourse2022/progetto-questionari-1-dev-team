@@ -44,9 +44,9 @@ public class CloseEndedAnswerRepository implements Repository<CloseEndedAnswer> 
 	/**
 	 * Inserts a list of CloseEndedAnswer in the database
 	 * @param   closeEndedAnswerList	a list of CloseEndedAnswer
-	 * @see Repository#addall
+	 * @see Repository#addAll
 	 */
-	public void addall(List<CloseEndedAnswer> closeEndedAnswerList) {
+	public void addAll(List<CloseEndedAnswer> closeEndedAnswerList) {
 
 		closeEndedAnswerDAO.saveAll(closeEndedAnswerList);
 	}
