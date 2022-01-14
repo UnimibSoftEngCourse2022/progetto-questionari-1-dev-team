@@ -58,13 +58,22 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
      * @throws  NotFoundException       if no user identified by the id has been found
      * @see Repository#get(int id)
      */
-    public Optional<User> get(int id) throws NotFoundException {
+    public User get(int id) throws NotFoundException {
 
         Optional<User> user = userDAO.findById(id);
         try {
-            return Optional.of(user.orElseThrow());
+            return user.orElseThrow();
         }catch (NoSuchElementException e) {
             throw new NotFoundException("The User with the id " + id + " was not found.");
+        }
+    }
+    public User getUsername(String username) throws NotFoundException {
+
+        Optional<User> user = userDAO.findByUsername(username);
+        try {
+            return user.orElseThrow();
+        }catch (NoSuchElementException e) {
+            throw new NotFoundException("The User with the username " + username + " was not found.");
         }
     }
 
