@@ -40,7 +40,7 @@ public class SurveyRepository implements Repository<Survey>{
      * @see Repository#addall
      */
 	@Override
-	public void addAll(List<Survey> surveySet) {
+	public void addall(List<Survey> surveySet) {
 		surveyDAO.saveAll(surveySet);
 	}
 

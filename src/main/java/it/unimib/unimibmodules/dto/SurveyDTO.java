@@ -108,7 +108,7 @@ public class SurveyDTO {
      * Returns the userDTO who created the survey.
      * @return  the userDTO who created the survey
      */
-	public UserDTO getUserCreatorDTO() {
+	public UserDTO getUserDTO() {
 		return userDTO;
 	}
 	
@@ -116,7 +116,7 @@ public class SurveyDTO {
      * Modifies the userDTO of the survey, setting userDTO as the new value.
      * @param   userDTO  the new userDTO value
      */
-	public void setUserCreatorDTO(UserDTO userDTO) {
+	public void setUserDTO(UserDTO userDTO) {
 		this.userDTO = userDTO;
 	}
 

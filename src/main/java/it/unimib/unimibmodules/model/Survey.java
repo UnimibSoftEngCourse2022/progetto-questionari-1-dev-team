@@ -98,7 +98,7 @@ public class Survey {
      * Returns the user who created the survey.
      * @return  the user who created the survey
      */
-    public User getUserCreator() {
+    public User getUser() {
     	return user;
     }
     
