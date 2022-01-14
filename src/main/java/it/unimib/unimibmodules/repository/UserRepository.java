@@ -44,7 +44,7 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
     /**
      * Inserts a list of users in the database
      * @param   userList  a list of Users
-     * @see     Repository#addall
+     * @see     Repository#addAll
      */
     public void addAll(List<User> userList) {
 
@@ -58,11 +58,11 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
      * @throws  NotFoundException       if no user identified by the id has been found
      * @see Repository#get(int id)
      */
-    public User get(int id) throws NotFoundException {
+    public Optional<User> get(int id) throws NotFoundException {
 
         Optional<User> user = userDAO.findById(id);
         try {
-            return user.orElseThrow();
+            return Optional.of(user.orElseThrow());
         }catch (NoSuchElementException e) {
             throw new NotFoundException("The User with the id " + id + " was not found.");
         }
@@ -110,5 +110,25 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
     public void modify(User user) {
 
         userDAO.save(user);
+    }
+
+    @Override
+    public void registerNew(User entity) {
+
+    }
+
+    @Override
+    public void registerModified(User entity) {
+
+    }
+
+    @Override
+    public void registerDeleted(User entity) {
+
+    }
+
+    @Override
+    public void commit() {
+
     }
 }
