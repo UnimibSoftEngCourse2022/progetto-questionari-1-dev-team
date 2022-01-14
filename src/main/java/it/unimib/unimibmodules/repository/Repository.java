@@ -1,5 +1,7 @@
 package it.unimib.unimibmodules.repository;
 
+import it.unimib.unimibmodules.exception.NotFoundException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -7,13 +9,13 @@ public interface Repository <T>{
 	
 	void add(T entity);
 	
-	void addall(List<T> entities);
+	void addAll(List<T> entities);
 	
-	Optional<T> get(int id);
+	Optional<T> get(int id) throws NotFoundException;
 	
 	Iterable<T> getAll();
 	
-	void remove(int id);
+	void remove(int id) throws NotFoundException;
 	
 	void removeAll();
 	

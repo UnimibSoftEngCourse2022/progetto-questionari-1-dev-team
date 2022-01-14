@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Controller handling HTTP requests from User
@@ -41,8 +42,11 @@ public class UserController extends DTOMapping<User, UserDTO> {
     @GetMapping(path = "/getUser/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable int id) throws NotFoundException {
 
-        User user = userRepository.get(id);
-        return new ResponseEntity<>(convertToDTO(user), HttpStatus.OK);
+        Optional<User> user = userRepository.get(id);
+        if (user.isPresent()) {
+            return new ResponseEntity<>(convertToDTO(user.get()), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     /**
