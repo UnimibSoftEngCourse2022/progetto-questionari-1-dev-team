@@ -1,6 +1,7 @@
 package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.model.Category;
+import it.unimib.unimibmodules.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,8 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	public QuestionController(QuestionRepository questionRepository, ModelMapper modelMapper) {
 		super(modelMapper);
 		this.questionRepository = questionRepository;
+        modelMapper.createTypeMap(User.class, QuestionDTO.class)
+                .addMapping(User::getId, (questionDTO, id) -> questionDTO.getUser().setId(id));
 	}
 	
 	/**
