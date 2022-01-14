@@ -1,13 +1,11 @@
 package it.unimib.unimibmodules.dto;
-//package it.unimib.unimibmodules.dto.SurveyDTO;
-//package it.unimib.unimibmodules.dto.QuestionDTO;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * A DTO representing a user
  * @author Gianlorenzo Martini
- * @version 0.0.1
+ * @version 0.1.0
  */
 
 public class UserDTO {
@@ -46,29 +44,34 @@ public class UserDTO {
      * Serialization of the questions created by the user
      */
 
-    private List<QuestionDTO> questionsCreated; 
+    private Set<QuestionDTO> questionsCreatedDTO;
 
     /**
      * Serialization of the surveys created by the user
      */
 
-    private List<SurveyDTO> surveysCreated;
+    private Set<SurveyDTO> surveysCreatedDTO;
 
     /**
-     * Serialization of the surveys compiled by the user
+     * Returns the id of the user.
+     * @return	the id of the user
      */
-
-    private List<SurveyDTO> surveysCompiled;
-
-
     public int getId() {
         return id;
     }
 
+    /**
+     * Modifies the id of the user.
+     * @param id    the new id value
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Returns the email of the user.
+     * @return  the email of the user
+     */
     public void setId(Object id) {
 
         this.id = (int) id;
@@ -78,55 +81,91 @@ public class UserDTO {
         return email;
     }
 
+    /**
+     * Modifies the email of the user.
+     * @param email    the new email value
+     */
     public void setEmail(String email) {
         this.email = email;
     }
- 
+
+    /**
+     * Returns the username of the user.
+     * @return  the username of the user
+     */
     public String getUsername() {
-        return email;
+        return username;
     }
 
+    /**
+     * Modifies the username of the user.
+     * @param username    the new username value
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Returns the name of the user.
+     * @return  the name of the user
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Modifies the name of the user.
+     * @param name    the new name value
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the surname of the user.
+     * @return  the surname of the user
+     */
     public String getSurname() {
         return surname;
     }
 
+    /**
+     * Modifies the surname of the user.
+     * @param surname    the new surname value
+     */
     public void setSurname(String surname) {
         this.surname = surname;
     }
 
-    public List<QuestionDTO> getQuestionsCreated() {
-        return questionsCreated;
+    /**
+     * Returns the DTOs of the questions created by the user.
+     * @return  A list of QuestionDTO containing the questions created by the user
+     */
+    public Set<QuestionDTO> getQuestionsCreatedDTO() {
+        return questionsCreatedDTO;
     }
 
-    public void setQuestionsCreated(List<QuestionDTO> questionsCreated) {
-        this.questionsCreated = questionsCreated; 
+    /**
+     * Modifies the DTOs of the questions created by the user.
+     * @param questionsCreatedDTO   the new questionsCreatedDTO value
+     */
+    public void setQuestionsCreatedDTO(Set<QuestionDTO> questionsCreatedDTO) {
+        this.questionsCreatedDTO = questionsCreatedDTO;
     }
 
-    public List<SurveyDTO> getSurveysCreated() {
-        return surveysCreated;
+    /**
+     * Returns the DTOs of the surveys created by the user.
+     * @return  A list of SurveyDTO containing the surveys created by the user
+     */
+    public Set<SurveyDTO> getSurveysCreatedDTO() {
+        return surveysCreatedDTO;
     }
 
-    public void setSurveysCreated(List<SurveyDTO> surveysCreated) {
-        this.surveysCreated = surveysCreated;
-    }
-
-    public List<SurveyDTO> getSurveysCompiled() {
-        return surveysCompiled;
-    }
-
-    public void setSurveysReplied(List<SurveyDTO> surveysCompiled) {
-        this.surveysCompiled = surveysCompiled;
+    /**
+     * Modifies the DTOs of the surveys created by the user.
+     * @param surveysCreatedDTO   the new surveysCreatedDTO value
+     */
+    public void setSurveysCreatedDTO(Set<SurveyDTO> surveysCreatedDTO) {
+        this.surveysCreatedDTO = surveysCreatedDTO;
     }
 }
