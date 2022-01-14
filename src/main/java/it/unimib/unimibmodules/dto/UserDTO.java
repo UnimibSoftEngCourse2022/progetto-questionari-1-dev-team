@@ -69,6 +69,11 @@ public class UserDTO {
         this.id = id;
     }
 
+    public void setId(Object id) {
+
+        this.id = (int) id;
+    }
+
     public String getEmail() {
         return email;
     }

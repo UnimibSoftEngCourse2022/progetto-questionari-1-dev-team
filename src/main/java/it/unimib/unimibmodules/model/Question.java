@@ -7,7 +7,7 @@ import javax.persistence.*;
 /**
  * Represents a question.
  * @author Khalil
- * @version 0.0.1
+ * @version 0.1.0
  */
 
 @Entity
@@ -36,7 +36,12 @@ public class Question {
      */
 	 @OneToMany(mappedBy="question")
 	private Set<Answer> answer;
-	
+
+	/**
+	 * The list of close-ended answers to the question.
+	 */
+	@OneToMany(mappedBy="question")
+	private Set<CloseEndedAnswer> closeEndedAnswerSet;
 	
 	/**
      * The category of the question.
@@ -132,7 +137,6 @@ public class Question {
 	public Set<Answer> getAnswer() {
 		return answer;
 	}
-
 	
 	/**
      * Modifies the answers of the question, setting <code>answers</code> as the new value.
@@ -142,7 +146,23 @@ public class Question {
 		this.answer = answer;
 	}
 
-	
+	/**
+	 * Returns the list of close-ended answers to the question.
+	 * @return	the list of close-ended answers to the question.
+	 */
+	public Set<CloseEndedAnswer> getCloseEndedAnswerSet() {
+		return closeEndedAnswerSet;
+	}
+
+	/**
+	 * Modifies the list of close-ended answers to the question, setting <code>closeEndedAnswerSet</code> as the new value.
+	 * @param   closeEndedAnswerSet  the new list of close-ended answers
+	 */
+	public void setCloseEndedAnswerSet(Set<CloseEndedAnswer> closeEndedAnswerSet) {
+
+		this.closeEndedAnswerSet = closeEndedAnswerSet;
+	}
+
 	/**
      * Returns the category of the question.
      * @return  the category of the question
