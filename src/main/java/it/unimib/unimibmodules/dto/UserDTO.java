@@ -72,6 +72,11 @@ public class UserDTO {
      * Returns the email of the user.
      * @return  the email of the user
      */
+    public void setId(Object id) {
+
+        this.id = (int) id;
+    }
+
     public String getEmail() {
         return email;
     }

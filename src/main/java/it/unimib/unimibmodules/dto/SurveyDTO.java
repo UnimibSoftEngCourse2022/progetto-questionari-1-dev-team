@@ -1,23 +1,15 @@
 package it.unimib.unimibmodules.dto;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-//package it.unimib.unimibmodules.dto.UserDTO;
-//package it.unimib.unimibmodules.dto.QuestionDTO;
 import java.util.Date;
 import java.util.Set;
-import java.util.Set;
 import java.util.TimeZone;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-import it.unimib.unimibmodules.model.Question;
+import it.unimib.unimibmodules.exception.FormatException;
 
 /**
  * DTO for the Survey class.
- * @author Luca
- * @version 0.0.1
+ * @author Luca Milazzo
+ * @version 0.1.0
  */
 public class SurveyDTO {
 	
@@ -36,26 +28,15 @@ public class SurveyDTO {
 	 */
 	private String creationDate;
 		
-	 /**
-     * The format used for the creationDate of the survey.
-     */
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-	
 	/**
 	 * Serialization of the id of the user who created the survey.
 	 */
-	private UserDTO user_creator_DTO;
-	
-	/**
-	 * Serialization of the id of the users who compiled the survey.
-	 */
-	private Set<UserDTO> user_compiler_DTO;
+	private UserDTO userDTO;
 	
 	/**
 	 * Serialization of the questions of the survey.
 	 */
 	private Set<QuestionDTO> questionsDTO;
-	
 	
 	/**
      * Returns the id of the surveyDTO.
@@ -71,6 +52,14 @@ public class SurveyDTO {
      */
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	/**
+	 * Modifies the id of the surveyDTO, setting id as the new value.
+	 * @param   id  the new id value
+	 */
+	public void setId(Object id) {
+		this.id = (int) id;
 	}
 
 	/**
@@ -92,11 +81,23 @@ public class SurveyDTO {
 	/**
      * Returns the creationDate of the surveyDTO in Date type using the given time zone.
      * @param  timezone the time zone to use to parse the creationDate of the surveyDTO in Date type
+     * @param dateFormat the date format to use during the conversion
      * @return   the creationDate of the surveyDTO in Date type
+	 * @throws DateConversionSurveyException 
      */
-	public Date getCreationDateConverted(String timezone) throws ParseException {
+	public Date getCreationDateConverted(String timezone, SimpleDateFormat dateFormat) throws FormatException{
+		
 		dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
-        return dateFormat.parse(this.creationDate);
+		
+        try {
+        	
+			return dateFormat.parse(this.creationDate);
+			
+		} catch (ParseException ex) {
+			
+			 throw new FormatException("Error while converting creationDate to Date.", ex);
+			    
+		}
     }
 	
 	/**
@@ -104,8 +105,9 @@ public class SurveyDTO {
      * conversion to String using the given time zone.
      * @param   creationDate  the new creationDate value that has to be converted to String
      * @param    timezone the time zone to use to parse creationDate in String
+     * @param dateFormat the date format to use during the conversion
      */
-    public void setCreationDate(Date creationDate, String timezone) {
+    public void setCreationDate(Date creationDate, String timezone, SimpleDateFormat dateFormat) {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         this.creationDate = dateFormat.format(creationDate);
     }
@@ -114,16 +116,16 @@ public class SurveyDTO {
      * Returns the userDTO who created the survey.
      * @return  the userDTO who created the survey
      */
-	public UserDTO getUser_creator_DTO() {
-		return user_creator_DTO;
+	public UserDTO getUserDTO() {
+		return userDTO;
 	}
 	
 	/**
      * Modifies the userDTO of the survey, setting userDTO as the new value.
-     * @param   userDTO  the new userDTO value
+     * @param   user_creator_DTO  the new userDTO value
      */
-	public void setUser_creator_DTO(UserDTO user_creator_DTO) {
-		this.user_creator_DTO = user_creator_DTO;
+	public void setUserDTO(UserDTO userDTO) {
+		this.userDTO = userDTO;
 	}
 
 	 /**
@@ -141,9 +143,7 @@ public class SurveyDTO {
 	public void setQuestions(Set<QuestionDTO> questionsDTO) {
 		this.questionsDTO = questionsDTO;
 	}
-	
-	
-	
+
 	 /**
      * Returns the questionsDTO related to the survey.
      * @return  the questionsDTO related to the survey
@@ -154,15 +154,9 @@ public class SurveyDTO {
 
 	/**
      * Modifies the questionsDTO related to the survey, setting questionsDTO as the new value.
-     * @param   questionsDTO  the new questionsDTO value
+     * @param   user_compiler_DTO  the new questionsDTO value
      */
 	public void setUser_compiler_DTO(Set<UserDTO> user_compiler_DTO) {
 		this.user_compiler_DTO = user_compiler_DTO;
 	}
-	 
-
-
-    
-    
-
 }

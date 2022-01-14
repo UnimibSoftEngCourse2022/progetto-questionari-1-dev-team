@@ -1,6 +1,6 @@
 package it.unimib.unimibmodules.model;
 
-import it.unimib.unimibmodules.exception.EmptyAnswerException;
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -28,28 +28,28 @@ public class CloseEndedAnswer{
 	private String text;
 
 	/**
-	 * The answer to which this answer belongs.
+	 * The question to which this answer belongs.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "answer_id", nullable = false)
-	private Answer answer;
+	@JoinColumn(name = "question_id", nullable = false)
+	private Question question;
 
 	/**
 	 * Answers where this close-ended answer has been selected
 	 */
 	@ManyToMany
-	@JoinTable(
-			name = "answer_closeendedanswer",
+	@JoinTable(name = "answer_closeendedanswer",
 			joinColumns = @JoinColumn(name = "closeendedanswer_id"),
 			inverseJoinColumns = @JoinColumn(name = "answer_id"))
 	private Set<Answer> answers;
 
 	/**
 	 * Creates an empty close-ended answer.
-	 * @see it.unimib.unimibmodules.factory.AnswerFactory#createClosedEndedAnswer(String, boolean, User)
+	 * @see it.unimib.unimibmodules.factory.AnswerFactory#createClosedEndedAnswer
 	 */
 	public CloseEndedAnswer() {
 
+		// Empty constructor; use Answerfactory.createClosedEndedAnswer.
 	}
 
 	/**
@@ -80,12 +80,30 @@ public class CloseEndedAnswer{
 	/**
 	 * Modifies the text of the close-ended answer, setting <code>text</code> as the new value.
 	 * @param   text                    the new text value
-	 * @throws EmptyAnswerException    if the answer is empty
+	 * @throws	EmptyFieldException    if the answer is empty
 	 */
-	public void setText(String text) throws EmptyAnswerException {
+	public void setText(String text) throws EmptyFieldException {
 
 		if (text == null || text.isBlank())
-			throw new EmptyAnswerException("Close-ended answers must not be empty.");
+			throw new EmptyFieldException("Close-ended answers must not be empty.");
 		this.text = text;
+	}
+
+	/**
+	 * Returns the question to which this answer belongs.
+	 * @return	the question to which this answer belongs
+	 */
+	public Question getQuestion() {
+
+		return question;
+	}
+
+	/**
+	 * Modifies the question to which this answer belongs, setting <code>question</code> as the new value.
+	 * @param	question	the new question
+	 */
+	public void setQuestion(Question question) {
+
+		this.question = question;
 	}
 }

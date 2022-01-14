@@ -1,6 +1,6 @@
 package it.unimib.unimibmodules.model;
 
-import it.unimib.unimibmodules.exception.EmptyAnswerException;
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -63,6 +63,7 @@ public class Answer {
      */
     public Answer() {
 
+        // Empty constructor; use Answerfactory.createAnswer.
     }
 
     /**
@@ -94,13 +95,13 @@ public class Answer {
 
     /**
      * Modifies the text of the answer, setting <code>text</code> as the new value.
-     * @param   text                    the new text value
-     * @throws 	EmptyAnswerException	if the answer is empty
+     * @param   text                the new text value
+     * @throws  EmptyFieldException if the answer is empty
      */
-    public void setText(String text) throws EmptyAnswerException {
+    public void setText(String text) throws EmptyFieldException {
 
-        if (text == null || text.isBlank())
-            throw new EmptyAnswerException("Answers must not be empty.");
+        if (closeEndedAnswers.isEmpty() && (text == null || text.isBlank()))
+            throw new EmptyFieldException("Answers must not be empty.");
         this.text = text;
     }
 
@@ -120,5 +121,35 @@ public class Answer {
     public void setUser(User user) {
 
         this.user = user;
+    }
+
+    public Survey getSurvey() {
+
+        return survey;
+    }
+
+    public void setSurvey(Survey survey) {
+
+        this.survey = survey;
+    }
+
+    public Question getQuestion() {
+
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+
+        this.question = question;
+    }
+
+    public Set<CloseEndedAnswer> getCloseEndedAnswers() {
+
+        return closeEndedAnswers;
+    }
+
+    public void setCloseEndedAnswers(Set<CloseEndedAnswer> closeEndedAnswers) {
+
+        this.closeEndedAnswers = closeEndedAnswers;
     }
 }

@@ -7,7 +7,8 @@ import javax.persistence.*;
 /**
  * Represents a question.
  * @author Khalil
- * @version 0.0.1
+ * @author Davide Costantini
+ * @version 0.1.0
  */
 
 @Entity
@@ -36,7 +37,12 @@ public class Question {
      */
 	 @OneToMany(mappedBy="question")
 	private Set<Answer> answer;
-	
+
+	/**
+	 * The list of close-ended answers to the question.
+	 */
+	@OneToMany(mappedBy="question")
+	private Set<CloseEndedAnswer> closeEndedAnswerSet;
 	
 	/**
      * The category of the question.
@@ -62,15 +68,13 @@ public class Question {
       inverseJoinColumns = @JoinColumn(name = "survey_id"))
     private Set<Survey> survey;
 
-
 	/**
      * Creates an empty question.
      * @see it.unimib.unimibmodules.factory.QuestionFactory#createQuestion
      */
 	public Question() {
 	}
-	
-	
+
 	/**
      * Returns the id of the question.
      * @return  the id of the question
@@ -78,8 +82,7 @@ public class Question {
 	public int getId() {
 		return id;
 	}
-	
-	
+
 	/**
      * Modifies the id of the question, setting <code>id</code> as the new value.
      * @param   id  the new id value
@@ -88,7 +91,6 @@ public class Question {
 		this.id = id;
 	}
 	
-	
 	/**
      * Returns the image's url of the question.
      * @return  the image's url of the question
@@ -96,8 +98,7 @@ public class Question {
 	public String getUrlImage() {
 		return urlImage;
 	}
-	
-	
+
 	/**
      * Modifies the image's url of the question, setting <code>urlImage</code> as the new value.
      * @param   urlImage  the new image's url value
@@ -105,7 +106,6 @@ public class Question {
 	public void setUrlImage(String urlImage) {
 		this.urlImage = urlImage;
 	}
-	
 
 	/**
      * Returns the text of the question.
@@ -115,7 +115,6 @@ public class Question {
 		return text;
 	}
 
-	
 	/**
      * Modifies the text of the question, setting <code>text</code> as the new value.
      * @param   text  the new text value
@@ -123,8 +122,7 @@ public class Question {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
-	
+
 	/**
      * Returns the answers of the question.
      * @return  the answers of the question
@@ -133,7 +131,6 @@ public class Question {
 		return answer;
 	}
 
-	
 	/**
      * Modifies the answers of the question, setting <code>answers</code> as the new value.
      * @param   answer  the new answers
@@ -142,7 +139,23 @@ public class Question {
 		this.answer = answer;
 	}
 
-	
+	/**
+	 * Returns the list of close-ended answers to the question.
+	 * @return	the list of close-ended answers to the question.
+	 */
+	public Set<CloseEndedAnswer> getCloseEndedAnswerSet() {
+		return closeEndedAnswerSet;
+	}
+
+	/**
+	 * Modifies the list of close-ended answers to the question, setting <code>closeEndedAnswerSet</code> as the new value.
+	 * @param   closeEndedAnswerSet  the new list of close-ended answers
+	 */
+	public void setCloseEndedAnswerSet(Set<CloseEndedAnswer> closeEndedAnswerSet) {
+
+		this.closeEndedAnswerSet = closeEndedAnswerSet;
+	}
+
 	/**
      * Returns the category of the question.
      * @return  the category of the question
@@ -151,7 +164,6 @@ public class Question {
 		return category;
 	}
 
-	
 	/**
      * Modifies the category of the question, setting <code>category</code> as the new value.
      * @param   category  the new category
@@ -160,7 +172,6 @@ public class Question {
 		this.category = category;
 	}
 
-	
 	/**
      * Returns the user who created the question.
      * @return  the user who created the question
@@ -176,8 +187,7 @@ public class Question {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
+
 	/**
 	 * Returns the surveys where the question is in.
 	 * @return the survey
@@ -186,7 +196,6 @@ public class Question {
 		return survey;
 	}
 
-
 	/**
 	 * Modifies the surveys where the question is in, setting <code>surveys</code> as the new value.
 	 * @param survey the survey to set
@@ -194,6 +203,4 @@ public class Question {
 	public void setSurvey(Set<Survey> survey) {
 		this.survey = survey;
 	}
-	
-
 }
