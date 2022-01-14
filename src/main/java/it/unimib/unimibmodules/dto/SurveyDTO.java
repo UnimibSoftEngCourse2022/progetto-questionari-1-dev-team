@@ -83,7 +83,7 @@ public class SurveyDTO {
      * @param  timezone the time zone to use to parse the creationDate of the surveyDTO in Date type
      * @param dateFormat the date format to use during the conversion
      * @return   the creationDate of the surveyDTO in Date type
-	 * @throws DateConversionSurveyException 
+	 * @throws FormatException 
      */
 	public Date getCreationDateConverted(String timezone, SimpleDateFormat dateFormat) throws FormatException{
 		
@@ -142,21 +142,5 @@ public class SurveyDTO {
      */
 	public void setQuestions(Set<QuestionDTO> questionsDTO) {
 		this.questionsDTO = questionsDTO;
-	}
-
-	 /**
-     * Returns the questionsDTO related to the survey.
-     * @return  the questionsDTO related to the survey
-     */
-	public Set<UserDTO> getUser_compiler_DTO() {
-		return user_compiler_DTO;
-	}
-
-	/**
-     * Modifies the questionsDTO related to the survey, setting questionsDTO as the new value.
-     * @param   user_compiler_DTO  the new questionsDTO value
-     */
-	public void setUser_compiler_DTO(Set<UserDTO> user_compiler_DTO) {
-		this.user_compiler_DTO = user_compiler_DTO;
 	}
 }

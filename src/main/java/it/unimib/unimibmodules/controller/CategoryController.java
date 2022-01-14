@@ -1,9 +1,10 @@
 package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.CategoryDTO;
+import it.unimib.unimibmodules.exception.FormatException;
+import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Category;
 import it.unimib.unimibmodules.repository.CategoryRepository;
-import it.unimib.unimibmodules.controller.DTOMapping;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,9 +40,10 @@ public class CategoryController extends DTOMapping<Category, CategoryDTO>{
      * Gets the Category associated with the given id.
      * @param	id	the id of the category
      * @return		an HTTP response with status 200, 500 otherwise
+     * @throws NotFoundException 
      */
     @GetMapping(path = "/getCategory/{id}")
-    public ResponseEntity<CategoryDTO> getCategory(@PathVariable int id) {
+    public ResponseEntity<CategoryDTO> getCategory(@PathVariable int id) throws NotFoundException {
         Category category = categoryRepository.get(id);
         return new ResponseEntity<>(convertToDTO(category), HttpStatus.OK);
     }

@@ -97,7 +97,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 * @throws	NotFoundException	if no question identified by <code>id</code> has been found
 	 */
 	@DeleteMapping(path = "/deleteQuestion/{id}")
-	public ResponseEntity<String> deleteQuestion(@PathVariable int id) {
+	public ResponseEntity<String> deleteQuestion(@PathVariable int id) throws NotFoundException {
 
 		questionRepository.remove(id);
 		logger.debug("Removed Question with id " + id + ".");
