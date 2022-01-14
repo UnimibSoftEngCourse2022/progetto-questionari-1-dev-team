@@ -78,7 +78,7 @@ jobs:
           #Set artifact name
           name: artifact
           #From this path
-          path: target/unimibmodules-0.0.1-SNAPSHOT.jar
+          path: target/unimibmodules.jar
   #Deploy's job
   deploy:
     #Depends on build's job
@@ -103,4 +103,4 @@ jobs:
           environment_name: Unimibquestionari-env
           version_label: ${{github.SHA}}
           region: eu-central-1
-          deployment_package: unimibmodules-0.0.1-SNAPSHOT.jar        
+          deployment_package: unimibmodules.jar
