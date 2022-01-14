@@ -1,6 +1,7 @@
 package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.UserDTO;
+import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.User;
 import it.unimib.unimibmodules.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -14,7 +15,7 @@ import java.util.Map;
 /**
  * Controller handling HTTP requests from User
  * @author Gianlorenzo Martini
- * @version 0.0.1
+ * @version 0.1.0
  */
 
 @RestController
@@ -38,9 +39,10 @@ public class UserController extends DTOMapping<User, UserDTO> {
      * @return              an HTTP response with status 200 and the UserDTO if the user has been found, 500 otherwise
      */
     @GetMapping(path = "/getUser/{id}")
-    public ResponseEntity<User> getUser(@PathVariable int id) {
+    public ResponseEntity<UserDTO> getUser(@PathVariable int id) throws NotFoundException {
 
-        return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+        User user = userRepository.get(id);
+        return new ResponseEntity<>(convertToDTO(user), HttpStatus.OK);
     }
 
     /**
@@ -50,9 +52,9 @@ public class UserController extends DTOMapping<User, UserDTO> {
      * @return                      an HTTP response with status 200 and the UserDTO if the user has been auth, 500 otherwise
      */
     @PostMapping(path = "/logInUser")
-    public ResponseEntity<User> logInUser(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<UserDTO> logInUser(@RequestParam String username, @RequestParam String password) {
 
-        // Checking if username-password match
+
 
         return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
     }
@@ -63,15 +65,18 @@ public class UserController extends DTOMapping<User, UserDTO> {
      * @return                  an HTTP response with status 200 and the UserDTO if the user has been created, 500 otherwise
      */
     @PostMapping(path = "/signUpUser")
-    public ResponseEntity<User> signUpUser(@RequestParam Map<String,String> requestParams) {
+    public ResponseEntity<UserDTO> signUpUser(@RequestParam Map<String,String> requestParams) {
 
-        String username = requestParams.get("username");
-        String email = requestParams.get("email");
-        String password = requestParams.get("password");
-        String name = requestParams.get("name");
-        String surname = requestParams.get("surname");
+        User user = new User();
+        user.setUsername(requestParams.get("username"));
+        user.setEmail(requestParams.get("email"));
+        user.setPassword(requestParams.get("password"));
+        user.setName(requestParams.get("name"));
+        user.setSurname(requestParams.get("surname"));
 
-        return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+        userRepository.add(user);
+
+        return new ResponseEntity<>(convertToDTO(user), HttpStatus.OK);
     }
 
     /**

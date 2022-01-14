@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * DAO for the User class.
  * @author Gianlorenzo Martini
- * @version 0.0.1
+ * @version 0.1.0
  */
 public interface UserDAO extends CrudRepository<User, Integer> {
     
