@@ -1,0 +1,18 @@
+{
+  "name": "UNIMIB Modules",
+  "homepage": "https://unimibsoftengcourse2022.github.io/progetto-questionari-1-dev-team/",
+  "authors": [
+    "Davide Costantini <d.costantini6@campus.unimib.it>",
+    "Lorenzo Occhipinti <l.occhipinti1@campus.unimib.it>",
+    "Khalil Mohamed Khalil <k.mohamedkhalil@campus.unimib.it>",
+    "Gianlorenzo Martini <g.martini9@campus.unimib.it>",
+    "Luca Milazzo <l.milazzo1@campus.unimib.it>"
+  ],
+  "description": "UNIMIB Modules",
+  "main": "index.html",
+  "license": "",
+  "private": true,
+  "dependencies": {
+    "angular": "^1.8.2"
+  }
+}
