@@ -3,7 +3,7 @@ package it.unimib.unimibmodules.exception;
 /**
  * Thrown to indicate that an answer was created with an empty text.
  * @author Davide Costantini
- * @version 0.0.1
+ * @version 0.1.0
  */
 public class EmptyAnswerException extends Exception {
 

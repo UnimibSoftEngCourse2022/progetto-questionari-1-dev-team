@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Represents a category for a question.
  * @author Lorenzo Occhipinti
- * @version 0.0.1
+ * @version 0.1.0
  */
 @Entity
 @Table(name = "category")

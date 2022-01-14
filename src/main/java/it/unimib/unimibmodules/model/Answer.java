@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Represents an open-ended answer.
  * @author Davide Costantini
- * @version 0.0.1
+ * @version 0.1.0
  */
 @Entity
 @Table(name = "answer")

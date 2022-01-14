@@ -3,7 +3,7 @@ package it.unimib.unimibmodules.dto;
 import java.util.Set;
 
 /**
- * DTO for Answer and CloseEndedAnswer.
+ * DTO for Answer.
  * @author Davide Costantini
  * @version 0.1.0
  */

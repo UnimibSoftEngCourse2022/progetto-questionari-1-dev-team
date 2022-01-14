@@ -1,5 +1,10 @@
 package it.unimib.unimibmodules.dto;
 
+/**
+ * DTO for CloseEndedAnswer.
+ * @author Davide Costantini
+ * @version 0.1.0
+ */
 public class CloseEndedAnswerDTO {
 
 	/**

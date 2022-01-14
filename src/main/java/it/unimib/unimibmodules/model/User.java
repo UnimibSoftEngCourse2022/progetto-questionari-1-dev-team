@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 /**
  * Rapresentation of a user in a general website way. 
  * @author Gianlorenzo Martini
- * @version 0.0.1
+ * @version 0.1.0
  */
 
 @Entity
