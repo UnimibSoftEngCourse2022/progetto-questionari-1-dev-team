@@ -44,9 +44,9 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
     /**
      * Inserts a list of answers in the database
      * @param   answerList  a list of Answers
-     * @see Repository#addall
+     * @see Repository#addAll
      */
-    public void addall(List<Answer> answerList) {
+    public void addAll(List<Answer> answerList) {
 
         answerDAO.saveAll(answerList);
     }

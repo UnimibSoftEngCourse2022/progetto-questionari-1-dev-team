@@ -44,10 +44,10 @@ public class SurveyRepository implements Repository<Survey>{
 	/**
      * Inserts a Set of surveys in the database
      * @param   surveySet  a Set of Survey
-     * @see Repository#addall
+     * @see Repository#addAll
      */
 	@Override
-	public void addall(List<Survey> surveySet) {
+	public void addAll(List<Survey> surveySet) {
 		// TODO Auto-generated method stub
 		surveyDAO.saveAll(surveySet);
 	}
