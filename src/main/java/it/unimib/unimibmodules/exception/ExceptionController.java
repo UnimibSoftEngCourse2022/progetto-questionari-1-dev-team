@@ -23,7 +23,7 @@ public class ExceptionController {
     @ExceptionHandler(value = { FormatException.class })
     public ResponseEntity<Object> handleFormatException(FormatException ex) {
         LOGGER.error("Invalid Format: " + ex.getMessage());
-        return new ResponseEntity<Object>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
     }
     
     /**
@@ -35,8 +35,19 @@ public class ExceptionController {
     @ExceptionHandler(value = { NotFoundException.class })
     public ResponseEntity<Object> handleNotFoundException(NotFoundException ex) {
         LOGGER.error("Survey not found: " + ex.getMessage());
-        return new ResponseEntity<Object>(ex.getMessage(),HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
     }
 
+	/**
+	 * Returns a ResponseEntity to the rest client with the error message and HTTP code 404
+	 * @param	e	the object that contains the exception's data
+	 * @return		an HTTP response with status 404 and the error message
+	 * @see NotFoundException
+	 */
+	@ExceptionHandler(value = EmptyFieldException.class)
+	public ResponseEntity<Object> handleNotFoundException(EmptyFieldException e) {
 
+		LOGGER.error("EmptyFieldException: " + e.getMessage());
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	}
 }
