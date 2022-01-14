@@ -1,18 +1,15 @@
 package it.unimib.unimibmodules.model;
-import it.unimib.unimibmodules.exception.SurveyException;
-import it.unimib.unimibmodules.model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
-
 import javax.persistence.*;
 
 /**
  * Represents a survey.
  * @author Luca Milazzo
- * @version 0.0.1
+ * @version 0.1.0
  */
-
 @Entity
 @Table(name = "survey") 
 public class Survey {
@@ -30,23 +27,16 @@ public class Survey {
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
     private User user;
-    
-    
-    /**
-     * The users who compiled the survey.
-     */
-    @ManyToMany
-    @JoinTable(
-    		  name = "survey_user", 
-    		  joinColumns = @JoinColumn(name = "survey_id"), 
-    		  inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> users;
-    
+     
     /**
      * The creation date of the survey.
      */
     private Date creationDate;
     
+    /**
+     * The creationDate format.
+     */
+    private final SimpleDateFormat creationDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
   
     /**
      * The name of the survey.
@@ -69,14 +59,6 @@ public class Survey {
      */
     @OneToMany(mappedBy = "survey")
     private Set<Answer>  answer;
-
-    
-    /**
-	 * Creates a new empty instance of Survey.
-	 * @return  the newly created instance of Survey
-	 */
-    public Survey(){}
-    
     
     /**
      * Returns the id of the survey.
@@ -112,8 +94,6 @@ public class Survey {
     	this.name = name;
     }
     
-   
-    
     /**
      * Returns the user who created the survey.
      * @return  the user who created the survey
@@ -147,6 +127,14 @@ public class Survey {
     }
     
     /**
+     * Returns the creationDateFormat of the survey.
+     * @return  the creationDateFormat of the survey
+     */
+    public SimpleDateFormat getCreationDateFormat() {
+    	return creationDateFormat;
+    }
+    
+    /**
      * Returns the questions of the survey.
      * @return  the questions of the survey
      */
@@ -163,6 +151,4 @@ public class Survey {
 
         this.questions = questions;
     }
-  
-
 }
