@@ -1,7 +1,10 @@
 package it.unimib.unimibmodules.controller;
 
+import it.unimib.unimibmodules.dto.CategoryDTO;
 import it.unimib.unimibmodules.model.Category;
 import it.unimib.unimibmodules.repository.CategoryRepository;
+import it.unimib.unimibmodules.controller.DTOMapping;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,33 +16,43 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Controller handling HTTP requests related to Category.
  * @author Lorenzo Occhipinti
- * @version 0.0.1
+ * @version 0.1.0
  */
 @RestController
 @RequestMapping("/api")
-public class CategoryController{
+public class CategoryController extends DTOMapping<Category, CategoryDTO>{
 
-        /**
-         * Instance of AnswerRepository that will be used to access the db.
-         */
-        private final CategoryRepository categoryRepository;
+    /**
+     * Instance of AnswerRepository that will be used to access the db.
+     */
+    private final CategoryRepository categoryRepository;
 
 
-        @Autowired
-        public CategoryController(CategoryRepository categoryRepository) {
+    @Autowired
+    public CategoryController(CategoryRepository categoryRepository, ModelMapper modelMapper) {
 
-            this.categoryRepository = categoryRepository;
-        }
+        super(modelMapper);
+        this.categoryRepository = categoryRepository;
+    }
 
-        /**
-         * Gets the Category associated with the given id.
-         * @param	id	the id of the category
-         * @return		an HTTP response with status 200, 500 otherwise
-         */
-        @GetMapping(path = "/getCategory/{id}")
-        public ResponseEntity<Category> getCategory(@PathVariable int id) {
+    /**
+     * Gets the Category associated with the given id.
+     * @param	id	the id of the category
+     * @return		an HTTP response with status 200, 500 otherwise
+     */
+    @GetMapping(path = "/getCategory/{id}")
+    public ResponseEntity<CategoryDTO> getCategory(@PathVariable int id) {
+        Category category = categoryRepository.get(id);
+        return new ResponseEntity<>(convertToDTO(category), HttpStatus.OK);
+    }
 
-            // TODO Auto-generated method stub
-            return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
-        }
+    @Override
+    public CategoryDTO convertToDTO(Category value) {
+        return modelMapper.map(value, CategoryDTO.class);
+    }
+
+    @Override
+    public Category convertToEntity(CategoryDTO dto) throws FormatException {
+        return modelMapper.map(dto, Category.class);
+    }
 }
