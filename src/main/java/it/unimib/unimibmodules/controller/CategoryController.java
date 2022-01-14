@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Controller handling HTTP requests related to Category.
  * @author Lorenzo Occhipinti
- * @version 0.0.1
+ * @version 0.1.0
  */
 @RestController
 @RequestMapping("/api")

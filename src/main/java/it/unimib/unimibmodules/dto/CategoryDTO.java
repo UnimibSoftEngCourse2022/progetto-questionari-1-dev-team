@@ -1,5 +1,10 @@
 package it.unimib.unimibmodules.dto;
 
+/**
+ * DTO for the Category class.
+ * @author Lorenzo Occhipinti
+ * @version 0.1.0
+ */
 public class CategoryDTO {
 
     /**
