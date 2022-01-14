@@ -6,11 +6,10 @@ import java.util.Set;
  * DTO for Question.
  * @author Khalil
  * @author Lorenzo Occhipinti
- * @author Davide Costantini
- * @version 0.0.1
+ * @version 0.1.0
  */
 
-public class QuestionDTO {
+public class QuestionDTO{
 
 	/**
 	 * Serialization of the id of the question.

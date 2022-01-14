@@ -8,7 +8,7 @@ import javax.persistence.*;
  * Represents a question.
  * @author Khalil
  * @author Davide Costantini
- * @version 0.0.1
+ * @version 0.1.0
  */
 
 @Entity
@@ -43,7 +43,7 @@ public class Question {
 	 */
 	@OneToMany(mappedBy="question")
 	private Set<CloseEndedAnswer> closeEndedAnswerSet;
-
+	
 	/**
      * The category of the question.
      */
