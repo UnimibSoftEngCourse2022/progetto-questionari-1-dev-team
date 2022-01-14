@@ -15,25 +15,57 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @Table(name = "user")
 public class User {
 
+    /**
+     * The id of the user.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    /**
+     * The email of the user.
+     */
     private String email;
+
+    /**
+     * The password of the user.
+     */
     private String password;
+
+    /**
+     * The username of the user.
+     */
     private String username;
+
+    /**
+     * The name of the user.
+     */
     private String name;
+
+    /**
+     * The surname of the user.
+     */
     private String surname;
-    
+
+    /**
+     * The list of the surveys created by the user.
+     */
     @OneToMany(mappedBy = "user")
     private Set<Survey> surveysCreated;
-    
+
+    /**
+     * The list of the surveys compiled by the user.
+     */
     @ManyToMany
     @JoinTable(
         name = "survey_user", 
         joinColumns = @JoinColumn(name = "user_id"), 
         inverseJoinColumns = @JoinColumn(name = "survey_id"))
     private Set<Survey> surveysCompiled;
-    
+
+    /**
+     * The list of the questions created by the user.
+     */
     @OneToMany(mappedBy = "user")
     private Set<Question> questionsCreated;
 
