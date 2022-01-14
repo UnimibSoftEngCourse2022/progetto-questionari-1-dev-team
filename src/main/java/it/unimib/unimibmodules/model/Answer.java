@@ -100,11 +100,11 @@ public class Answer {
      */
     public void setText(String text) throws EmptyFieldException {
 
-        if (closeEndedAnswers.isEmpty() && (text == null || text.isBlank()))
+        if ((closeEndedAnswers != null && closeEndedAnswers.isEmpty()) || text == null || text.isBlank())
             throw new EmptyFieldException("Answers must not be empty.");
         this.text = text;
     }
-
+    
     /**
      * Returns the user who created the answer.
      * @return    an instance of User containing the user who created the answer
