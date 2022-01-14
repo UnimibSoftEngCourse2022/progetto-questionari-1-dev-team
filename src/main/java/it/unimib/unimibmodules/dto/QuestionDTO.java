@@ -15,7 +15,7 @@ public class QuestionDTO{
 	 * Serialization of the id of the question.
 	 */
 	private int id;
-	
+
 	/**
 	 * Serialization of the category of the question.
 	 */
@@ -67,6 +67,15 @@ public class QuestionDTO{
 	public void setId(int id) {
 
 		this.id = id;
+	}
+
+	/**
+	 * Modifies the id of the question, setting <code>id</code> as the new value.
+	 * @param	id	the new id value
+	 */
+	public void setId(Object id) {
+
+		this.id = (int) id;
 	}
 
 	/**
@@ -194,5 +203,4 @@ public class QuestionDTO{
 
 		this.surveyDTO = surveyDTOSet;
 	}
-	
 }

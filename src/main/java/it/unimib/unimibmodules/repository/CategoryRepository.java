@@ -40,10 +40,10 @@ public class CategoryRepository implements Repository<Category> {
     /**
      * Inserts a list of categories in the database
      * @param   categoryList  a list of categories
-     * @see Repository#addall
+     * @see Repository#addAll
      */
     @Override
-    public void addall(List<Category> categoryList) {
+    public void addAll(List<Category> categoryList) {
         categoryDAO.saveAll(categoryList);
     }
 

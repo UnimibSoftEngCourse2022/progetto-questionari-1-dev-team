@@ -11,7 +11,7 @@ public interface Repository <T>{
 	
 	void add(T entity);
 	
-	void addall(List<T> entities);
+	void addAll(List<T> entities);
 	
 	T get(int id) throws NotFoundException;
 	

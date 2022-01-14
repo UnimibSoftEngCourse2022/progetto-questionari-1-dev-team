@@ -39,9 +39,9 @@ public class UserRepository implements Repository<User> {
     /**
      * Inserts a list of users in the database
      * @param   userList  a list of Users
-     * @see     Repository#addall
+     * @see     Repository#addAll
      */
-    public void addall(List<User> userList) {
+    public void addAll(List<User> userList) {
 
         userDAO.saveAll(userList);
     }

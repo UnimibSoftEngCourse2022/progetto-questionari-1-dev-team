@@ -55,6 +55,14 @@ public class SurveyDTO {
 	}
 
 	/**
+	 * Modifies the id of the surveyDTO, setting id as the new value.
+	 * @param   id  the new id value
+	 */
+	public void setId(Object id) {
+		this.id = (int) id;
+	}
+
+	/**
      * Returns the name of the surveyDTO.
      * @return   the name of the surveyDTO
      */
@@ -114,7 +122,7 @@ public class SurveyDTO {
 	
 	/**
      * Modifies the userDTO of the survey, setting userDTO as the new value.
-     * @param   userDTO  the new userDTO value
+     * @param   user_creator_DTO  the new userDTO value
      */
 	public void setUserDTO(UserDTO userDTO) {
 		this.userDTO = userDTO;
@@ -134,5 +142,21 @@ public class SurveyDTO {
      */
 	public void setQuestions(Set<QuestionDTO> questionsDTO) {
 		this.questionsDTO = questionsDTO;
+	}
+
+	 /**
+     * Returns the questionsDTO related to the survey.
+     * @return  the questionsDTO related to the survey
+     */
+	public Set<UserDTO> getUser_compiler_DTO() {
+		return user_compiler_DTO;
+	}
+
+	/**
+     * Modifies the questionsDTO related to the survey, setting questionsDTO as the new value.
+     * @param   user_compiler_DTO  the new questionsDTO value
+     */
+	public void setUser_compiler_DTO(Set<UserDTO> user_compiler_DTO) {
+		this.user_compiler_DTO = user_compiler_DTO;
 	}
 }

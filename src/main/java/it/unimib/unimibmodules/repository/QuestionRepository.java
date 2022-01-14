@@ -45,10 +45,10 @@ public class QuestionRepository implements Repository <Question> {
 	/**
      * Inserts a list of questions in the database
      * @param   entities  a list of Questions
-     * @see Repository#addall
+     * @see Repository#addAll
      */
 	@Override
-	public void addall(List<Question> entities) {
+	public void addAll(List<Question> entities) {
 		questionDAO.saveAll(entities);
 	}
 	
