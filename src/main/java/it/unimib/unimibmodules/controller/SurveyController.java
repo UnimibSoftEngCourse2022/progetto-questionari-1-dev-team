@@ -122,7 +122,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
-	@PatchMapping(path = "/updateSurvey")
+	@PatchMapping(path = "/modifySurvey")
 	public ResponseEntity<String> patchSurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException {
 		
 		Survey survey = convertToEntity(surveyDTO);
