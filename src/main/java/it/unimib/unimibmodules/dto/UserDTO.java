@@ -53,12 +53,6 @@ public class UserDTO {
     private Set<SurveyDTO> surveysCreatedDTO;
 
     /**
-     * Serialization of the surveys compiled by the user
-     */
-
-    private Set<SurveyDTO> surveysCompiledDTO;
-
-    /**
      * Returns the id of the user.
      * @return	the id of the user
      */
@@ -168,21 +162,5 @@ public class UserDTO {
      */
     public void setSurveysCreatedDTO(Set<SurveyDTO> surveysCreatedDTO) {
         this.surveysCreatedDTO = surveysCreatedDTO;
-    }
-
-    /**
-     * Returns the DTOs of the surveys compiled by the user.
-     * @return  A list of SurveyDTO containing the surveys compiled by the user
-     */
-    public Set<SurveyDTO> getSurveysCompiledDTO() {
-        return surveysCompiledDTO;
-    }
-
-    /**
-     * Modifies the DTOs of the surveys compiled by the user.
-     * @param surveysCompiledDTO   the new surveysCompiledDTO value
-     */
-    public void setSurveysReplied(Set<SurveyDTO> surveysCompiledDTO) {
-        this.surveysCompiledDTO = surveysCompiledDTO;
     }
 }

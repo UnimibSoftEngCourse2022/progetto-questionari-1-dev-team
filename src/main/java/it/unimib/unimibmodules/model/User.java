@@ -54,21 +54,14 @@ public class User {
     private Set<Survey> surveysCreated;
 
     /**
-     * The list of the surveys compiled by the user.
-     */
-    @ManyToMany
-    @JoinTable(
-        name = "survey_user", 
-        joinColumns = @JoinColumn(name = "user_id"), 
-        inverseJoinColumns = @JoinColumn(name = "survey_id"))
-    private Set<Survey> surveysCompiled;
-
-    /**
      * The list of the questions created by the user.
      */
     @OneToMany(mappedBy = "user")
     private Set<Question> questionsCreated;
 
+    /**
+     * The list of the answers that the user gave in the surveys he compiled.
+     */
     @OneToMany(mappedBy = "user")
     private Set<Answer> answers;
 
@@ -130,19 +123,19 @@ public class User {
         this.surveysCreated = surveysCreated;
     }
 
-    public Set<Survey> getSurveysCompiled() {
-        return surveysCompiled;
-    }
-
-    public void setSurveysCompiled(Set<Survey> surveysCompiled) {
-        this.surveysCompiled = surveysCompiled;
-    }
-
     public Set<Question> getQuestionsCreated() {
         return questionsCreated;
     }
 
     public void setQuestionsCreated(Set<Question> questionsCreated) {
         this.questionsCreated = questionsCreated;
+    }
+
+    public Set<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(Set<Answer> answers) {
+        this.answers = answers;
     }
 }
