@@ -13,7 +13,7 @@
 	<packaging>jar</packaging>
 	<groupId>it.unimib</groupId>
 	<artifactId>unimibmodules</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<name>UNIMIB Modules</name>
 	<description>UNIMIB Modules</description>
 
