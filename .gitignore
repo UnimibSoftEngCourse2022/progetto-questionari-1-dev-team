@@ -1,10 +1,12 @@
-.idea
+.idea/
 .mvn
-*.iml
 .settings/
 target/
-.classpath
+bin/
 .project
+node_modules/
+UNIMIBModules.und/
+*.iml
+.classpath
 bfg-1.14.0.jar
 secrets.txt
-bin/
