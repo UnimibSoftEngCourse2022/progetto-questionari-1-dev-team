@@ -1,0 +1,38 @@
+{
+	"name": "UNIMIB-Modules",
+	"version": "0.1.0",
+	"description": "UNIMIB Modules",
+	"main": "index.html",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/UnimibSoftEngCourse2022/progetto-questionari-1-dev-team.git"
+	},
+	"homepage": "https://unimibsoftengcourse2022.github.io/progetto-questionari-1-dev-team/",
+	"license": "",
+	"private": true,
+	"contributors": [
+		{
+			"name": "Davide Costantini",
+			"email": "d.costantini6@campus.unimib.it"
+		},
+		{
+			"name": "Lorenzo Occhipinti",
+			"email": "l.occhipinti1@campus.unimib.it"
+		},
+		{
+			"name": "Khalil Mohamed Khalil",
+			"email": "k.mohamedkhalil@campus.unimib.it"
+		},
+		{
+			"name": "Gianlorenzo Martini",
+			"email": "g.martini9@campus.unimib.it"
+		},
+		{
+			"name": "Luca Milazzo",
+			"email": "l.milazzo1@campus.unimib.it"
+		}
+	],
+	"dependencies": {
+		"angular": "^1.8.2"
+	}
+}
