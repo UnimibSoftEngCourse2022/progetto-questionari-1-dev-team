@@ -34,7 +34,7 @@ public class ExceptionController {
      */
     @ExceptionHandler(value = { NotFoundException.class })
     public ResponseEntity<Object> handleNotFoundException(NotFoundException ex) {
-        LOGGER.error("Survey not found: " + ex.getMessage());
+    	LOGGER.error("Not Found Exception: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
     }
 
@@ -45,9 +45,9 @@ public class ExceptionController {
 	 * @see NotFoundException
 	 */
 	@ExceptionHandler(value = EmptyFieldException.class)
-	public ResponseEntity<Object> handleNotFoundException(EmptyFieldException e) {
+	public ResponseEntity<Object> handleNotFoundException(EmptyFieldException ex) {
 
-		LOGGER.error("EmptyFieldException: " + e.getMessage());
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		LOGGER.error("Empty Field Exception: " + ex.getMessage());
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 }
