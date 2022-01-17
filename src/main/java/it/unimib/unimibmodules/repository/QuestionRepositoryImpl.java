@@ -1,7 +1,6 @@
 package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.controller.QuestionRepository;
-import it.unimib.unimibmodules.dao.QuestionDAO;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,6 @@
 package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.controller.CloseEndedAnswerRepository;
-import it.unimib.unimibmodules.dao.CloseEndedAnswerDAO;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.CloseEndedAnswer;
 import org.springframework.beans.factory.annotation.Autowired;

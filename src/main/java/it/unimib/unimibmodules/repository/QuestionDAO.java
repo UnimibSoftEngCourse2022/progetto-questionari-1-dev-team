@@ -1,11 +1,7 @@
-package it.unimib.unimibmodules.dao;
-
-import java.util.Optional;
-
-
-import org.springframework.data.repository.CrudRepository;
+package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.model.Question;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * DAO for the Question.

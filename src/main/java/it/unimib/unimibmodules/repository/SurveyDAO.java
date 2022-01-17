@@ -1,6 +1,7 @@
-package it.unimib.unimibmodules.dao;
-import org.springframework.data.repository.CrudRepository;
+package it.unimib.unimibmodules.repository;
+
 import it.unimib.unimibmodules.model.Survey;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * DAO for the Survey class.

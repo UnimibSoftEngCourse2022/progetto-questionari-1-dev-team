@@ -2,10 +2,8 @@ package it.unimib.unimibmodules.repository;
 
 
 import it.unimib.unimibmodules.controller.AnswerRepository;
-import it.unimib.unimibmodules.dao.AnswerDAO;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Answer;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
