@@ -24,6 +24,7 @@ public abstract class DTOMapping<M, T> {
 	@Autowired
 	protected DTOMapping(ModelMapper modelMapper) {
 		this.modelMapper = modelMapper;
+		modelMapper.getConfiguration().setImplicitMappingEnabled(false);
 	}
 
 	/**

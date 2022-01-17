@@ -30,7 +30,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * Instance of SurveyRepository. It's used to access the Repository layer.
 	 */
 	private final SurveyRepository surveyRepository;
-	private static final Logger logger = LogManager.getLogger(Survey.class);
+	private static final Logger logger = LogManager.getLogger(SurveyController.class);
 	
 	@Autowired
 	public SurveyController(SurveyRepository surveyRepository, ModelMapper modelMapper) {
@@ -64,7 +64,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	public ResponseEntity<SurveyDTO> findSurvey(@RequestParam(name = "id") int id) throws NotFoundException {
 		
 		Survey survey = surveyRepository.get(id);
-		logger.debug("Retrieved Survey with id "+ id + ".");
+		logger.debug(String.format("Retreived Survey with id: {0}.", id));
 		return new ResponseEntity<>(convertToDTO(survey), HttpStatus.OK);
 	}
 	
@@ -80,7 +80,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	public ResponseEntity<SurveyDTO> findSurveyNoQuestions(@RequestParam(name = "id") int id) throws NotFoundException {
 		
 		Survey survey = surveyRepository.get(id);
-		logger.debug("Retrieved Survey without questions with id "+ id + ".");
+		logger.debug(String.format("Retrieved Survey without questions with id: {0}.", id));
 		return new ResponseEntity<>(convertToDTOAndSkipQuestions(survey), HttpStatus.OK);
 	}
 	
@@ -111,12 +111,12 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
-	@PostMapping("/createSurvey")
-	public ResponseEntity<String> postSurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException {
+	@PostMapping("/addSurvey")
+	public ResponseEntity<String> addSurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException {
 		
 		Survey survey = convertToEntity(surveyDTO);
 		surveyRepository.add(survey);
-		logger.debug("Added Survey with id +" + survey.getId() + ".");
+		logger.debug(String.format("Added Survey with id: {0}.", survey.getId()));
 		return new ResponseEntity<>("Survey created.", HttpStatus.CREATED);
 	}
 	
@@ -129,11 +129,11 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
 	@PatchMapping(path = "/modifySurvey")
-	public ResponseEntity<String> patchSurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException {
+	public ResponseEntity<String> modifySurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException {
 		
 		Survey survey = convertToEntity(surveyDTO);
 		surveyRepository.modify(survey);
-		logger.debug("Updated Survey with id "+ survey.getId() + ".");
+		logger.debug("Updated Survey with id: {0}."+ survey.getId());
 		return new ResponseEntity<>("Survey updated.", HttpStatus.OK);
 	}
 	
@@ -150,7 +150,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	public ResponseEntity<String> deleteSurvey(@RequestParam(name = "id") int id) throws NotFoundException{
 		
 		surveyRepository.remove(id);
-		logger.debug("Removed Survey with id +" + id+ ".");
+		logger.debug("Removed Survey with id: {0}."+ id);
 		return new ResponseEntity<>("Survey deleted", HttpStatus.OK);
 	}
 	
