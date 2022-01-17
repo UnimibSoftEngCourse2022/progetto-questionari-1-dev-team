@@ -36,6 +36,7 @@ public class Survey {
     /**
      * The creationDate format.
      */
+    @Transient
     private final SimpleDateFormat creationDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
   
     /**

@@ -69,8 +69,8 @@ public class UserDTO {
     }
 
     /**
-     * Returns the email of the user.
-     * @return  the email of the user
+     * Modifies the id of the user.
+     * @param   id  the new id value
      */
     public void setId(Object id) {
 
@@ -103,6 +103,15 @@ public class UserDTO {
      */
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    /**
+     * Modifies the username of the user.
+     * @param username    the new username value
+     */
+    public void setUsername(Object username) {
+
+        this.username = username.toString();
     }
 
     /**

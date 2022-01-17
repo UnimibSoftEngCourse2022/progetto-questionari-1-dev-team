@@ -37,6 +37,19 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 		
 		super(modelMapper);
 		this.surveyRepository = surveyRepository;
+
+		modelMapper.createTypeMap(Survey.class, SurveyDTO.class)
+				.addMappings(mapper -> {
+					mapper.map(Survey::getId, SurveyDTO::setId);
+					mapper.map(Survey::getName, SurveyDTO::setSurveyName);
+				});
+
+		modelMapper.createTypeMap(User.class, SurveyDTO.class)
+				.addMappings(mapper -> {
+					mapper.map(User::getId, (surveyDTO, id) -> surveyDTO.getUserDTO().setId(id));
+					mapper.map(User::getUsername, (surveyDTO, username) -> surveyDTO.getUserDTO().setUsername(username));
+				});
+
 	}
 	
 	/**
@@ -150,8 +163,18 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	@Override
 	public SurveyDTO convertToDTO(Survey survey) {
 		
-		SurveyDTO surveyDTO = modelMapper.map(survey, SurveyDTO.class);
+		SurveyDTO surveyDTO = modelMapper.getTypeMap(Survey.class, SurveyDTO.class).map(survey);
+		modelMapper.getTypeMap(User.class, SurveyDTO.class).map(survey.getUser(), surveyDTO);
 		surveyDTO.setCreationDate(survey.getCreationDate(), TimeZone.getDefault().toString(), survey.getCreationDateFormat());
+		Set<QuestionDTO> questionDTOSet = new HashSet<>();
+
+		// TODO: Sostituire con Lazy Loading
+		for (Question question : survey.getQuestions()) {
+			QuestionDTO questionDTO = new QuestionDTO();
+			questionDTO.setId(question.getId());
+			questionDTOSet.add(questionDTO);
+		}
+		surveyDTO.setQuestions(questionDTOSet);
 	    return surveyDTO;
 	}
 	
