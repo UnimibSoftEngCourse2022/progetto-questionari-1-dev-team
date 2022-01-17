@@ -4,7 +4,6 @@ import it.unimib.unimibmodules.dto.CategoryDTO;
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Category;
-import it.unimib.unimibmodules.repository.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,7 +53,7 @@ public class CategoryController extends DTOMapping<Category, CategoryDTO>{
     }
 
     @Override
-    public Category convertToEntity(CategoryDTO dto) throws FormatException {
+    public Category convertToEntity(CategoryDTO dto) {
         return modelMapper.map(dto, Category.class);
     }
 }

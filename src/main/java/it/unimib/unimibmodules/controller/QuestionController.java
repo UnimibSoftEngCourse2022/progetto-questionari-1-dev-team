@@ -1,20 +1,18 @@
 package it.unimib.unimibmodules.controller;
 
+import it.unimib.unimibmodules.dto.QuestionDTO;
+import it.unimib.unimibmodules.exception.EmptyFieldException;
+import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Category;
+import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import it.unimib.unimibmodules.dto.QuestionDTO;
-import it.unimib.unimibmodules.model.Question;
-import it.unimib.unimibmodules.repository.QuestionRepository;
-import it.unimib.unimibmodules.exception.EmptyFieldException;
-import it.unimib.unimibmodules.exception.NotFoundException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Controller handling HTTP requests related to Question.
@@ -75,12 +73,11 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 * @param	text	the new text of the question
 	 * @return			an HTTP response with status 200 if the question has been modified, 500 otherwise
 	 * @throws  NotFoundException    if no question with identified by <code>id</code> has been found
-	 * @throws	EmptyFieldException	if <code>text</code> or <code>urlImage</code> or <code>category</code> are empty
 	 */
 	@PatchMapping(path = "/modifyQuestion")
 	public ResponseEntity<String> modifyQuestion(@RequestParam int id, @RequestParam String text,
 												 @RequestParam String urlImage, @RequestParam Category category)
-			throws NotFoundException, EmptyFieldException{
+			throws NotFoundException {
 		Question question = questionRepository.get(id);
 		question.setText(text);
 		question.setUrlImage(urlImage);

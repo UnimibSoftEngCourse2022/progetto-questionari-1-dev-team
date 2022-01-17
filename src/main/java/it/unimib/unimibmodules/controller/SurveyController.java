@@ -1,10 +1,12 @@
 package it.unimib.unimibmodules.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TimeZone;
-
+import it.unimib.unimibmodules.dto.QuestionDTO;
+import it.unimib.unimibmodules.dto.SurveyDTO;
+import it.unimib.unimibmodules.exception.FormatException;
+import it.unimib.unimibmodules.exception.NotFoundException;
+import it.unimib.unimibmodules.model.Question;
+import it.unimib.unimibmodules.model.Survey;
+import it.unimib.unimibmodules.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -12,18 +14,9 @@ import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import it.unimib.unimibmodules.dto.SurveyDTO;
-import it.unimib.unimibmodules.exception.FormatException;
-import it.unimib.unimibmodules.exception.NotFoundException;
-import it.unimib.unimibmodules.model.Survey;
-import it.unimib.unimibmodules.repository.SurveyRepository;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 /**
  * Controller handling HTTP requests related to Survey.
@@ -90,7 +83,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 		
 		Iterable<Survey> surveys = surveyRepository.getAll();
 		logger.debug("Retrieved all Surveys.");
-		List<SurveyDTO> surveysDTO = new ArrayList<SurveyDTO>();
+		List<SurveyDTO> surveysDTO = new ArrayList<>();
 		for( Survey survey : surveys ){
 			surveysDTO.add(convertToDTO(survey));
 		}
