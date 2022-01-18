@@ -33,8 +33,19 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	
 	@Autowired
 	public QuestionController(QuestionRepository questionRepository, ModelMapper modelMapper) {
+
 		super(modelMapper);
 		this.questionRepository = questionRepository;
+
+		modelMapper.createTypeMap(Question.class, QuestionDTO.class)
+				.addMappings(mapper -> {
+					mapper.map(Question::getId, QuestionDTO::setId);
+					mapper.map(Question::getUrlImage, QuestionDTO::setUrlImage);
+					mapper.map(Question::getText, QuestionDTO::setText);
+					mapper.map(Question::getCategory, QuestionDTO::setCategory);
+					mapper.map(Question::getCloseEndedAnswerSet, QuestionDTO::setCloseEndedAnswerDTOSet);
+				});
+
         modelMapper.createTypeMap(User.class, QuestionDTO.class)
                 .addMapping(User::getId, (questionDTO, id) -> questionDTO.getUser().setId(id));
 	}
