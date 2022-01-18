@@ -69,6 +69,18 @@ public class QuestionRepositoryImpl implements QuestionRepository {
  	}
 
 
+	/**
+	 * Finds the question identified by id in the database
+	 * @param	surveyId	the id of the question to be found
+	 * @return				an instance of Question if there is a question identified by id, null otherwise
+	 * @see QuestionRepository#get(int id)
+	 */
+	@Override
+	public Iterable<Question> getBySurveyId(int surveyId) {
+
+		return questionDAO.findBySurveyId(surveyId);
+	}
+
     /**
      * Returns all questions in the database.
      * @return  a list of Questions
