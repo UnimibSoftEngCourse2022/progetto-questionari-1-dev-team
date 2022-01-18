@@ -1,11 +1,12 @@
 package it.unimib.unimibmodules.controller;
 
+import it.unimib.unimibmodules.dto.CategoryDTO;
 import it.unimib.unimibmodules.dto.CloseEndedAnswerDTO;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.NotFoundException;
+import it.unimib.unimibmodules.model.Category;
 import it.unimib.unimibmodules.model.CloseEndedAnswer;
 import it.unimib.unimibmodules.model.Question;
-import it.unimib.unimibmodules.repository.CloseEndedAnswerRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -36,6 +37,12 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 		super(modelMapper);
 		this.closeEndedAnswerRepository = closeEndedAnswerRepository;
 
+		modelMapper.createTypeMap(CloseEndedAnswer.class, CloseEndedAnswerDTO.class)
+				.addMappings(mapper -> {
+					mapper.map(CloseEndedAnswer::getId, CloseEndedAnswerDTO::setId);
+					mapper.map(CloseEndedAnswer::getText, CloseEndedAnswerDTO::setText);
+				});
+
 		modelMapper.createTypeMap(Question.class, CloseEndedAnswerDTO.class)
 				.addMapping(Question::getId, (closeEndedAnswerDTO, id) -> closeEndedAnswerDTO.getQuestionDTO().setId(id));
 	}
@@ -47,8 +54,8 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	 * 								answer has been found, 500 otherwise
 	 * @throws	NotFoundException	if no close-ended answer with identified by <code>id</code> has been found
 	 */
-	@GetMapping(path = "/getCloseEndedAnswer/{id}")
-	public ResponseEntity<CloseEndedAnswerDTO> getAnswer(@PathVariable int id) throws NotFoundException {
+	@GetMapping(path = "/findCloseEndedAnswer/{id}")
+	public ResponseEntity<CloseEndedAnswerDTO> findCloseEndedAnswer(@PathVariable int id) throws NotFoundException {
 
 		CloseEndedAnswer closeEndedAnswer = closeEndedAnswerRepository.get(id);
 		logger.debug("Retrieved CloseEndedAnswer with id " + id + ".");

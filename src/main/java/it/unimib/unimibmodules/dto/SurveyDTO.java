@@ -21,10 +21,10 @@ public class SurveyDTO {
 	/**
 	 * Serialization of the name of the survey.
 	 */
-	private String name;
+	private String surveyName;
 
 	/**
-	 * Serialization of the dateCreation  of the survey.
+	 * Serialization of the dateCreation of the survey.
 	 */
 	private String creationDate;
 		
@@ -66,16 +66,16 @@ public class SurveyDTO {
      * Returns the name of the surveyDTO.
      * @return   the name of the surveyDTO
      */
-	public String getName() {
-		return name;
+	public String getSurveyName() {
+		return surveyName;
 	}
 
 	/**
      * Modifies the name of the surveyDTO, setting name as the new value.
-     * @param   name  the new name value
+     * @param	surveyName	the new name value
      */
-	public void setName(String name) {
-		this.name = name;
+	public void setSurveyName(String surveyName) {
+		this.surveyName = surveyName;
 	}
 
 	/**
@@ -99,6 +99,15 @@ public class SurveyDTO {
 			    
 		}
     }
+
+	/**
+	 * Returns the creationDate of the surveyDTO in Date type using the given time zone.
+	 * @return   the creationDate of the surveyDTO in Date type
+	 */
+	public String getCreationDate() {
+
+		return creationDate;
+	}
 	
 	/**
      * Modifies the creationDate of the surveyDTO, setting creationDate as the new value after its 
@@ -122,7 +131,7 @@ public class SurveyDTO {
 	
 	/**
      * Modifies the userDTO of the survey, setting userDTO as the new value.
-     * @param   user_creator_DTO  the new userDTO value
+     * @param   userDTO  the new userDTO value
      */
 	public void setUserDTO(UserDTO userDTO) {
 		this.userDTO = userDTO;

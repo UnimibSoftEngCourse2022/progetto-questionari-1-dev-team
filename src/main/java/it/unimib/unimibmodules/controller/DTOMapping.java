@@ -1,11 +1,10 @@
 package it.unimib.unimibmodules.controller;
 
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-
-
 import it.unimib.unimibmodules.exception.FormatException;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Defines the method that will be used by controllers to convert an instance of M (the model) to an instance of T (the
@@ -23,7 +22,10 @@ public abstract class DTOMapping<M, T> {
 	
 	@Autowired
 	protected DTOMapping(ModelMapper modelMapper) {
+
 		this.modelMapper = modelMapper;
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+		modelMapper.getConfiguration().setImplicitMappingEnabled(false);
 	}
 
 	/**

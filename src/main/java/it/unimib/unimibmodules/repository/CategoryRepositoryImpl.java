@@ -1,8 +1,8 @@
 package it.unimib.unimibmodules.repository;
 
-import it.unimib.unimibmodules.dao.CategoryDAO;
-import it.unimib.unimibmodules.model.Category;
+import it.unimib.unimibmodules.controller.CategoryRepository;
 import it.unimib.unimibmodules.exception.NotFoundException;
+import it.unimib.unimibmodules.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ import java.util.Optional;
  * @version 0.1.0
  */
 @Component("categoryRepository")
-public class CategoryRepository implements Repository<Category> {
+public class CategoryRepositoryImpl implements CategoryRepository {
 
     /**
      * The instance of categoryDAO that will be used to perform actions to the DB
@@ -25,16 +25,14 @@ public class CategoryRepository implements Repository<Category> {
     private final CategoryDAO categoryDAO;
 
     @Autowired
-    public CategoryRepository(CategoryDAO categoryDAO) {
+    public CategoryRepositoryImpl(CategoryDAO categoryDAO) {
         this.categoryDAO = categoryDAO;
     }
 
     /**
      * Inserts an instance of Category in the database
      * @param   category  an instance of Category
-     * @see Repository#add
      */
-    @Override
     public void add(Category category) {
         categoryDAO.save(category);
     }
@@ -42,9 +40,7 @@ public class CategoryRepository implements Repository<Category> {
     /**
      * Inserts a list of categories in the database
      * @param   categoryList  a list of categories
-     * @see Repository#addAll
      */
-    @Override
     public void addAll(List<Category> categoryList) {
         categoryDAO.saveAll(categoryList);
     }
@@ -53,7 +49,7 @@ public class CategoryRepository implements Repository<Category> {
      * Finds the category identified by id in the database
      * @param   id  the id of the category to be found
      * @return      an instance of Category if there is a category identified by id, null otherwise
-     * @see Repository#get(int id)
+     * @see CategoryRepository#get(int id)
      */
     @Override
     public Category get(int id) throws NotFoundException {
@@ -67,10 +63,8 @@ public class CategoryRepository implements Repository<Category> {
 
     /**
      * Returns all categories in the database.
-     * @see Repository#getAll()
      * @return  a list of Category
      */
-    @Override
     public Iterable<Category> getAll() {
         return categoryDAO.findAll();
     }
@@ -78,18 +72,14 @@ public class CategoryRepository implements Repository<Category> {
     /**
      * Deletes from the database the category identified by id.
      * @param   id  the id of the category to be deleted
-     * @see Repository#remove(int id)
      */
-    @Override
     public void remove(int id) {
         categoryDAO.deleteById(id);
     }
 
     /**
      * Deletes all categories in the database.
-     * @see Repository#removeAll()
      */
-    @Override
     public void removeAll() {
         categoryDAO.deleteAll();
     }
@@ -97,9 +87,7 @@ public class CategoryRepository implements Repository<Category> {
     /**
      * Updates a category in the database using a new instance of Category.
      * @param   category  the new instance of Category
-     * @see Repository#modify
      */
-    @Override
     public void modify(Category category) {
         categoryDAO.save(category);
     }

@@ -1,4 +1,4 @@
-package it.unimib.unimibmodules.dao;
+package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.model.User;
 import org.springframework.data.repository.CrudRepository;

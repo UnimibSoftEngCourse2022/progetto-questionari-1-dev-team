@@ -1,11 +1,9 @@
 package it.unimib.unimibmodules.repository;
 
 
-import it.unimib.unimibmodules.dao.AnswerDAO;
+import it.unimib.unimibmodules.controller.AnswerRepository;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Answer;
-import it.unimib.unimibmodules.unitofwork.UnitOfWork;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
@@ -21,7 +19,7 @@ import java.util.Optional;
  * @version 0.1.0
  */
 @Component("answerRepository")
-public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer>  {
+public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer>  {
 
     /**
      * The instance of AnswerDAO that will be used to perform actions to the DB
@@ -29,7 +27,7 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
     private final AnswerDAO answerDAO;
 
     @Autowired
-    public AnswerRepository(AnswerDAO answerDAO) {
+    public AnswerRepositoryImpl(AnswerDAO answerDAO) {
 
         this.answerDAO = answerDAO;
     }
@@ -37,8 +35,9 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
     /**
      * Inserts an instance of Answer in the database
      * @param   answer  an instance of Answer
-     * @see Repository#add
+     * @see AnswerRepository#add
      */
+	@Override
     public void add(Answer answer) {
 
         answerDAO.save(answer);
@@ -47,7 +46,6 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
     /**
      * Inserts a list of answers in the database
      * @param   answerList  a list of Answers
-     * @see Repository#addAll
      */
     public void addAll(List<Answer> answerList) {
 
@@ -59,8 +57,9 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
      * @param	id					the id of the answer to be found
      * @return						an instance of Answer if there is an answer identified by id, null otherwise
 	 * @throws	NotFoundException	if no answer identified by <code>id</code> has been found
-     * @see Repository#get(int id)
+     * @see AnswerRepository#get(int id)
      */
+	@Override
     public Answer get(int id) throws NotFoundException {
 
 		Optional<Answer> answer = answerDAO.findById(id);
@@ -73,7 +72,6 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
 
     /**
      * Returns all answers in the database.
-     * @see Repository#getAll()
      * @return  a list of Answers
      */
     public Iterable<Answer> getAll() {
@@ -85,8 +83,9 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
      * Deletes from the database the answer identified by id.
      * @param   id					the id of the answer to be deleted
 	 * @throws	NotFoundException	if no answer identified by <code>id</code> has been found
-     * @see Repository#remove(int id)
+     * @see AnswerRepository#remove(int id)
      */
+	@Override
     public void remove(int id) throws NotFoundException {
 
 		try {
@@ -98,7 +97,6 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
 
     /**
      * Deletes all answers in the database.
-     * @see Repository#removeAll()
      */
     public void removeAll() {
 
@@ -108,8 +106,9 @@ public class AnswerRepository implements Repository<Answer>, UnitOfWork<Answer> 
     /**
      * Updates an answer in the database using a new instance of Answer.
      * @param   answer  the new instance of Answer
-     * @see Repository#modify
+     * @see AnswerRepository#modify
      */
+	@Override
     public void modify(Answer answer) {
 
         answerDAO.save(answer);

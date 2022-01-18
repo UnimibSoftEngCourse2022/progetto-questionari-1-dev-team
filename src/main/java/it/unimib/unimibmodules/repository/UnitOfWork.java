@@ -1,4 +1,4 @@
-package it.unimib.unimibmodules.unitofwork;
+package it.unimib.unimibmodules.repository;
 
 /**
  * Defines the method that will be used by controllers to implement a Unit of Work

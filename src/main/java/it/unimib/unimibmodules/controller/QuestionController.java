@@ -1,20 +1,20 @@
 package it.unimib.unimibmodules.controller;
 
+import it.unimib.unimibmodules.dto.QuestionDTO;
+import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Category;
+import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import it.unimib.unimibmodules.dto.QuestionDTO;
-import it.unimib.unimibmodules.model.Question;
-import it.unimib.unimibmodules.repository.QuestionRepository;
-import it.unimib.unimibmodules.exception.EmptyFieldException;
-import it.unimib.unimibmodules.exception.NotFoundException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller handling HTTP requests related to Question.
@@ -35,8 +35,19 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	
 	@Autowired
 	public QuestionController(QuestionRepository questionRepository, ModelMapper modelMapper) {
+
 		super(modelMapper);
 		this.questionRepository = questionRepository;
+
+		modelMapper.createTypeMap(Question.class, QuestionDTO.class)
+				.addMappings(mapper -> {
+					mapper.map(Question::getId, QuestionDTO::setId);
+					mapper.map(Question::getUrlImage, QuestionDTO::setUrlImage);
+					mapper.map(Question::getText, QuestionDTO::setText);
+					mapper.map(Question::getCategory, QuestionDTO::setCategory);
+					mapper.map(Question::getCloseEndedAnswerSet, QuestionDTO::setCloseEndedAnswerDTOSet);
+				});
+
         modelMapper.createTypeMap(User.class, QuestionDTO.class)
                 .addMapping(User::getId, (questionDTO, id) -> questionDTO.getUser().setId(id));
 	}
@@ -53,6 +64,21 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
         Question question = questionRepository.get(id);
 		logger.debug("Retrieved Question with id "+ id + ".");
 		return new ResponseEntity<>(convertToDTO(question), HttpStatus.OK);
+	}
+
+	/**
+	 * Gets the Question associated with the given id.
+	 * @param	id	the id of the question
+	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
+	 * @throws  NotFoundException	if 404 no question with identified by <code>id</code> has been found
+	 */
+	@GetMapping(path = "/findQuestionForSurvey/{id}")
+	public ResponseEntity<List<QuestionDTO>> findQuestionsForSurvey(@PathVariable int id) throws NotFoundException {
+
+		Iterable<Question> questionList = questionRepository.getBySurveyId(id);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		logger.debug("Retrieved " + questionDTOList.size() + " questions for survey with id " + id + ".");
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 	
 	/**
@@ -75,12 +101,11 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 * @param	text	the new text of the question
 	 * @return			an HTTP response with status 200 if the question has been modified, 500 otherwise
 	 * @throws  NotFoundException    if no question with identified by <code>id</code> has been found
-	 * @throws	EmptyFieldException	if <code>text</code> or <code>urlImage</code> or <code>category</code> are empty
 	 */
 	@PatchMapping(path = "/modifyQuestion")
 	public ResponseEntity<String> modifyQuestion(@RequestParam int id, @RequestParam String text,
 												 @RequestParam String urlImage, @RequestParam Category category)
-			throws NotFoundException, EmptyFieldException{
+			throws NotFoundException {
 		Question question = questionRepository.get(id);
 		question.setText(text);
 		question.setUrlImage(urlImage);
@@ -117,6 +142,21 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	}
 
 	/**
+	 * Converts an instance of Question to an instance of questionDTO
+	 * @param   questions	an instance of Question
+	 * @return			    an instance of QuestionDTO, containing the serialized data of question
+	 * @see DTOMapping#convertToDTO
+	 */
+	public List<QuestionDTO> convertListToDTO(Iterable<Question> questions) {
+
+		List<QuestionDTO> questionList = new ArrayList<>();
+		for (Question question : questions)
+			questionList.add(convertToDTO(question));
+
+		return questionList;
+	}
+
+	/**
 	 * Converts an instance of QuestionDTO to an instance of Question
 	 * @param   questionDTO	an instance of QuestionDTO
 	 * @return				an instance of Question, containing the deserialized data of questionDTO
@@ -127,11 +167,4 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 
 		return modelMapper.map(questionDTO, Question.class);
 	}
-	
-	
-	
-	
-	
-	
-	
 }

@@ -9,7 +9,7 @@ import java.util.Set;
  * @version 0.1.0
  */
 
-public class QuestionDTO{
+public class QuestionDTO {
 
 	/**
 	 * Serialization of the id of the question.
@@ -19,7 +19,7 @@ public class QuestionDTO{
 	/**
 	 * Serialization of the category of the question.
 	 */
-	private String categoryName;
+	private CategoryDTO categoryDTO;
 	
 	/**
 	 * Serialization of the image's url of the question.
@@ -39,7 +39,7 @@ public class QuestionDTO{
 	/**
 	 * Serialization of the list of the answers.
 	 */
-	private Set<String> closeEndedAnswerText;
+	private Set<CloseEndedAnswerDTO> closeEndedAnswerDTOSet;
 
 	/**
 	 * Serialization of the id of the user who created the question.
@@ -136,36 +136,36 @@ public class QuestionDTO{
 	 * Returns the list of close-ended answers to the question.
 	 * @return	the list of close-ended answers to the question.
 	 */
-	public Set<String> getCloseEndedAnswerSet() {
+	public Set<CloseEndedAnswerDTO> getCloseEndedAnswerDTOSet() {
 
-		return closeEndedAnswerText;
+		return closeEndedAnswerDTOSet;
 	}
 
 	/**
 	 * Modifies the list of close-ended answers to the question, setting <code>closeEndedAnswerSet</code> as the new value.
-	 * @param	closeEndedAnswerText	the new list of close-ended answers
+	 * @param	closeEndedAnswerDTOSet	the new list of close-ended answers
 	 */
-	public void setCloseEndedAnswerSet(Set<String> closeEndedAnswerText) {
+	public void setCloseEndedAnswerDTOSet(Set<CloseEndedAnswerDTO> closeEndedAnswerDTOSet) {
 
-		this.closeEndedAnswerText = closeEndedAnswerText;
+		this.closeEndedAnswerDTOSet = closeEndedAnswerDTOSet;
 	}
 
 	/**
 	 * Returns the category of the question.
 	 * @return	the category of the question
 	 */
-	public String getCategory() {
+	public CategoryDTO getCategory() {
 
-		return categoryName;
+		return categoryDTO;
 	}
 
 	/**
 	 * Modifies the category of the question, setting <code>category</code> as the new value.
-	 * @param	categoryName	the new category
+	 * @param	categoryDTO	the new category
 	 */
-	public void setCategory(String categoryName) {
+	public void setCategory(CategoryDTO categoryDTO) {
 
-		this.categoryName = categoryName;
+		this.categoryDTO = categoryDTO;
 	}
 
 	/**

@@ -1,6 +1,6 @@
 package it.unimib.unimibmodules.repository;
 
-import it.unimib.unimibmodules.dao.CloseEndedAnswerDAO;
+import it.unimib.unimibmodules.controller.CloseEndedAnswerRepository;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.CloseEndedAnswer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.Optional;
  * @version 0.1.0
  */
 @Component("closeEndedAnswerRepository")
-public class CloseEndedAnswerRepository implements Repository<CloseEndedAnswer> {
+public class CloseEndedAnswerRepositoryImpl implements CloseEndedAnswerRepository {
 
 	/**
 	 * The instance of CloseEndedAnswerDAO that will be used to perform actions to the DB
@@ -26,7 +26,7 @@ public class CloseEndedAnswerRepository implements Repository<CloseEndedAnswer> 
 	private final CloseEndedAnswerDAO closeEndedAnswerDAO;
 
 	@Autowired
-	public CloseEndedAnswerRepository(CloseEndedAnswerDAO closeEndedAnswerDAO) {
+	public CloseEndedAnswerRepositoryImpl(CloseEndedAnswerDAO closeEndedAnswerDAO) {
 
 		this.closeEndedAnswerDAO = closeEndedAnswerDAO;
 	}
@@ -34,8 +34,9 @@ public class CloseEndedAnswerRepository implements Repository<CloseEndedAnswer> 
 	/**
 	 * Inserts an instance of CloseEndedAnswer in the database
 	 * @param   closeEndedAnswer	an instance of CloseEndedAnswer
-	 * @see Repository#add
+	 * @see CloseEndedAnswerRepository#add
 	 */
+	@Override
 	public void add(CloseEndedAnswer closeEndedAnswer) {
 
 		closeEndedAnswerDAO.save(closeEndedAnswer);
@@ -44,7 +45,6 @@ public class CloseEndedAnswerRepository implements Repository<CloseEndedAnswer> 
 	/**
 	 * Inserts a list of CloseEndedAnswer in the database
 	 * @param   closeEndedAnswerList	a list of CloseEndedAnswer
-	 * @see Repository#addAll
 	 */
 	public void addAll(List<CloseEndedAnswer> closeEndedAnswerList) {
 
@@ -57,8 +57,9 @@ public class CloseEndedAnswerRepository implements Repository<CloseEndedAnswer> 
 	 * @return						an instance of CloseEndedAnswer if there is a close-ended answer identified by
 	 * 								<code>id</code>
 	 * @throws	NotFoundException	if no close-ended answer identified by <code>id</code> has been found
-	 * @see Repository#get(int id)
+	 * @see CloseEndedAnswerRepository#get(int id)
 	 */
+	@Override
 	public CloseEndedAnswer get(int id) throws NotFoundException {
 
 		Optional<CloseEndedAnswer> closeEndedAnswer = closeEndedAnswerDAO.findById(id);
@@ -71,7 +72,6 @@ public class CloseEndedAnswerRepository implements Repository<CloseEndedAnswer> 
 
 	/**
 	 * Returns all CloseEndedAnswer in the database.
-	 * @see Repository#getAll()
 	 * @return	a list of CloseEndedAnswer
 	 */
 	public Iterable<CloseEndedAnswer> getAll() {
@@ -83,8 +83,9 @@ public class CloseEndedAnswerRepository implements Repository<CloseEndedAnswer> 
 	 * Deletes from the database the CloseEndedAnswer identified by <code>id</code>.
 	 * @param	id					the id of the CloseEndedAnswer to be deleted
 	 * @throws	NotFoundException	if no close-ended answer identified by <code>id</code> has been found
-	 * @see Repository#remove(int id)
+	 * @see CloseEndedAnswerRepository#remove(int id)
 	 */
+	@Override
 	public void remove(int id) throws NotFoundException {
 
 		try {
@@ -96,7 +97,6 @@ public class CloseEndedAnswerRepository implements Repository<CloseEndedAnswer> 
 
 	/**
 	 * Deletes all CloseEndedAnswer in the database.
-	 * @see Repository#removeAll()
 	 */
 	public void removeAll() {
 
@@ -106,8 +106,9 @@ public class CloseEndedAnswerRepository implements Repository<CloseEndedAnswer> 
 	/**
 	 * Updates a CloseEndedAnswer in the database using a new instance of CloseEndedAnswer.
 	 * @param	closeEndedAnswer	the new instance of CloseEndedAnswer
-	 * @see Repository#modify
+	 * @see CloseEndedAnswerRepository#modify
 	 */
+	@Override
 	public void modify(CloseEndedAnswer closeEndedAnswer) {
 
 		closeEndedAnswerDAO.save(closeEndedAnswer);

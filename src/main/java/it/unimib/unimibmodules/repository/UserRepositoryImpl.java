@@ -1,16 +1,15 @@
 package it.unimib.unimibmodules.repository;
 
+import it.unimib.unimibmodules.controller.UserRepository;
+import it.unimib.unimibmodules.exception.NotFoundException;
+import it.unimib.unimibmodules.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
-import it.unimib.unimibmodules.exception.NotFoundException;
-import it.unimib.unimibmodules.unitofwork.UnitOfWork;
-import org.springframework.beans.factory.annotation.Autowired;
-import it.unimib.unimibmodules.model.User;
-import it.unimib.unimibmodules.dao.UserDAO;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Component;
 
 /**
  * Repository for the User. Adds business logic to User instances before actually accessing
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @version 0.1.0
  */
 @Component("userRepository")
-public class UserRepository implements Repository<User>, UnitOfWork<User> {
+public class UserRepositoryImpl implements UserRepository {
     
     /**
      * The instance of UserDAO that will be used to perform actions to the DB
@@ -27,15 +26,16 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
     private final UserDAO userDAO;
 
     @Autowired
-    public UserRepository(UserDAO userDAO) {
+    public UserRepositoryImpl(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
 
     /**
      * Inserts an instance of User in the database
      * @param   user  an instance of User
-     * @see     Repository#add
+     * @see     UserRepository#add
      */
+    @Override
     public void add(User user) {
 
         userDAO.save(user);
@@ -44,7 +44,6 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
     /**
      * Inserts a list of users in the database
      * @param   userList  a list of Users
-     * @see     Repository#addAll
      */
     public void addAll(List<User> userList) {
 
@@ -56,8 +55,9 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
      * @param   id                      the id of the user to be found
      * @return                          an instance of User if there is a user identified by id, null otherwise
      * @throws  NotFoundException       if no user identified by the id has been found
-     * @see Repository#get(int id)
+     * @see     UserRepository#get(int id)
      */
+    @Override
     public User get(int id) throws NotFoundException {
 
         Optional<User> user = userDAO.findById(id);
@@ -67,7 +67,16 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
             throw new NotFoundException("The User with the id " + id + " was not found.");
         }
     }
-    public User getUsername(String username) throws NotFoundException {
+
+    /**
+     * Finds the user identified by username in the database
+     * @param   username                      the id of the user to be found
+     * @return                          an instance of User if there is a user identified by id, null otherwise
+     * @throws  NotFoundException       if no user identified by the id has been found
+     * @see     UserRepository#getByUsername(String username)
+     */
+    @Override
+    public User getByUsername(String username) throws NotFoundException {
 
         Optional<User> user = userDAO.findByUsername(username);
         try {
@@ -79,7 +88,6 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
 
     /**
      * Returns all users in the database.
-     * @see     Repository#getAll()
      * @return  a list of Users
      */
     public Iterable<User> getAll() {
@@ -91,7 +99,6 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
      * Deletes from the database the user identified by id.
      * @param   id                  the id of the user to be deleted
      * @throws  NotFoundException   if no user identified by the id has been found
-     * @see     Repository#remove(int id)
      */
     public void remove(int id) throws NotFoundException {
 
@@ -104,7 +111,6 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
 
     /**
      * Deletes all users in the database.
-     * @see     Repository#removeAll()
      */
     public void removeAll() {
 
@@ -114,30 +120,9 @@ public class UserRepository implements Repository<User>, UnitOfWork<User> {
     /**
      * Updates a user in the database using a new instance of User.
      * @param   user  the new instance of User
-     * @see     Repository#modify
      */
     public void modify(User user) {
 
         userDAO.save(user);
-    }
-
-    @Override
-    public void registerNew(User entity) {
-
-    }
-
-    @Override
-    public void registerModified(User entity) {
-
-    }
-
-    @Override
-    public void registerDeleted(User entity) {
-
-    }
-
-    @Override
-    public void commit() {
-
     }
 }

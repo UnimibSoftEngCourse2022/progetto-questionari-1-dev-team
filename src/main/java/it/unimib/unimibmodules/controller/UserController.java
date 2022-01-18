@@ -4,7 +4,6 @@ import it.unimib.unimibmodules.dto.UserDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.factory.UserFactory;
 import it.unimib.unimibmodules.model.User;
-import it.unimib.unimibmodules.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,7 +57,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public ResponseEntity<String> logInUser(@RequestParam String username, @RequestParam String password) throws NotFoundException {
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        User user = userRepository.getUsername(username);
+        User user = userRepository.getByUsername(username);
 
         if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
             return new ResponseEntity<>("Login Successful", HttpStatus.OK);
@@ -76,7 +75,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public ResponseEntity<String> signUpUser(@RequestParam Map<String,String> requestParams) {
 
         try {
-            User user = userRepository.getUsername(requestParams.get("username"));
+            User user = userRepository.getByUsername(requestParams.get("username"));
             return new ResponseEntity<>("Username already existing.", HttpStatus.BAD_REQUEST);
         } catch (NotFoundException e) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();

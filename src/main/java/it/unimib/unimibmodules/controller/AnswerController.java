@@ -5,7 +5,6 @@ import it.unimib.unimibmodules.dto.CloseEndedAnswerDTO;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.*;
-import it.unimib.unimibmodules.repository.AnswerRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -56,8 +55,8 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	 * 								500 otherwise
 	 * @throws	NotFoundException	if no close-ended answer with identified by <code>id</code> has been found
 	 */
-	@GetMapping(path = "/getAnswer/{id}")
-	public ResponseEntity<AnswerDTO> getAnswer(@PathVariable int id) throws NotFoundException {
+	@GetMapping(path = "/findAnswer/{id}")
+	public ResponseEntity<AnswerDTO> findAnswer(@PathVariable int id) throws NotFoundException {
 
 		Answer answer = answerRepository.get(id);
 		logger.debug("Retrieved Answer with id " + id + ".");
