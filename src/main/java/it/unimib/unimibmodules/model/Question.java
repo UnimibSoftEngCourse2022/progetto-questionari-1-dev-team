@@ -69,6 +69,11 @@ public class Question {
     private Set<Survey> survey;
 
 	/**
+	 * The type of the question.
+	 */
+	private QuestionType questionType;
+
+	/**
      * Creates an empty question.
      * @see it.unimib.unimibmodules.factory.QuestionFactory#createQuestion
      */
@@ -202,5 +207,21 @@ public class Question {
 	 */
 	public void setSurvey(Set<Survey> survey) {
 		this.survey = survey;
+	}
+
+	/**
+	 * Returns the type of the question.
+	 * @return the type of the question
+	 */
+	public QuestionType getQuestionType() {
+		return questionType;
+	}
+
+	/**
+	 * Modifies the type of the question, setting <code>questionType</code> as the new value.
+	 * @param questionType the type of the question
+	 */
+	public void setQuestionType(QuestionType questionType) {
+		this.questionType = questionType;
 	}
 }
