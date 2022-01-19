@@ -46,6 +46,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 					mapper.map(Question::getText, QuestionDTO::setText);
 					mapper.map(Question::getCategory, QuestionDTO::setCategory);
 					mapper.map(Question::getCloseEndedAnswerSet, QuestionDTO::setCloseEndedAnswerDTOSet);
+					mapper.map(Question::getQuestionType, QuestionDTO::setQuestionType);
 				});
 
         modelMapper.createTypeMap(User.class, QuestionDTO.class)
