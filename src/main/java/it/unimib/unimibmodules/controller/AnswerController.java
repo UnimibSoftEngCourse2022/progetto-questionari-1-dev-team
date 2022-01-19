@@ -89,7 +89,7 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	public ResponseEntity<AnswerDTO> findAnswer(@PathVariable int id) throws NotFoundException {
 
 		Answer answer = answerRepository.get(id);
-		logger.debug("Retrieved Answer with id " + id + ".");
+		logger.debug("Retrieved Answer with id {}.", id);
 		return new ResponseEntity<>(convertToDTO(answer), HttpStatus.OK);
 	}
 
@@ -103,7 +103,7 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 
 		Answer answer = convertToEntity(answerDTO);
 		answerRepository.add(answer);
-		logger.debug("Added Answer with id " + answer.getId() + ".");
+		logger.debug("Added Answer with id {}.", answer.getId());
 		return new ResponseEntity<>("{\"response\":\"Answer creted.\"}", HttpStatus.CREATED);
 	}
 
@@ -121,7 +121,7 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 		Answer answer = answerRepository.get(id);
 		answer.setText(text);
 		answerRepository.modify(answer);
-		logger.debug("Modified Answer with id " + id + ".");
+		logger.debug("Modified Answer with id {}.", id);
 		return new ResponseEntity<>("Answer modified.", HttpStatus.OK);
 	}
 
@@ -143,7 +143,7 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 					return closeEndedAnswer;
 				}).collect(Collectors.toSet())));
 		answerRepository.modify(answer);
-		logger.debug("Modified Answer with id " + id + ".");
+		logger.debug("Modified Answer with id {}.", id);
 		return new ResponseEntity<>("Answer modified.", HttpStatus.OK);
 	}
 
@@ -156,7 +156,7 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	public ResponseEntity<String> deleteAnswer(@PathVariable int id) throws NotFoundException {
 
 		answerRepository.remove(id);
-		logger.debug("Removed Answer with id " + id + ".");
+		logger.debug("Removed Answer with id {}.", id);
 		return new ResponseEntity<>("Answer deleted.", HttpStatus.OK);
 	}
 

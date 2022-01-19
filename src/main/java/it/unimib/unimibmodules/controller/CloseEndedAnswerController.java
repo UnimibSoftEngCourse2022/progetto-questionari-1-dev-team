@@ -1,14 +1,10 @@
 package it.unimib.unimibmodules.controller;
 
-import it.unimib.unimibmodules.dto.CategoryDTO;
 import it.unimib.unimibmodules.dto.CloseEndedAnswerDTO;
-import it.unimib.unimibmodules.dto.SurveyDTO;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.NotFoundException;
-import it.unimib.unimibmodules.model.Category;
 import it.unimib.unimibmodules.model.CloseEndedAnswer;
 import it.unimib.unimibmodules.model.Question;
-import it.unimib.unimibmodules.model.Survey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -27,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, CloseEndedAnswerDTO> {
 
-	private static final Logger logger = LogManager.getLogger(CloseEndedAnswer.class);
+	private static final Logger logger = LogManager.getLogger(CloseEndedAnswerController.class);
 
 	/**
 	 * Instance of CloseEndedAnswerRepository that will be used to access the db.
@@ -75,7 +71,7 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	public ResponseEntity<CloseEndedAnswerDTO> findCloseEndedAnswer(@PathVariable int id) throws NotFoundException {
 
 		CloseEndedAnswer closeEndedAnswer = closeEndedAnswerRepository.get(id);
-		logger.debug("Retrieved CloseEndedAnswer with id " + id + ".");
+		logger.debug("Retrieved CloseEndedAnswer with id {}.", id);
 		return new ResponseEntity<>(convertToDTO(closeEndedAnswer), HttpStatus.OK);
 	}
 
@@ -92,7 +88,7 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 
 		CloseEndedAnswer closeEndedAnswer = convertToEntity(closeEndedAnswerDTO);
 		closeEndedAnswerRepository.add(closeEndedAnswer);
-		logger.debug("Added CloseEndedAnswer with id " + closeEndedAnswer.getId() + ".");
+		logger.debug("Added CloseEndedAnswer with id {}.", closeEndedAnswer.getId());
 		return new ResponseEntity<>("{\"response\":\"CloseEndedAnswer creted.\"}", HttpStatus.CREATED);
 	}
 
@@ -112,7 +108,7 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 		CloseEndedAnswer closeEndedAnswer = closeEndedAnswerRepository.get(id);
 		closeEndedAnswer.setText(text);
 		closeEndedAnswerRepository.modify(closeEndedAnswer);
-		logger.debug("Modified CloseEndedAnswer with id " + id + ".");
+		logger.debug("Modified CloseEndedAnswer with id {}.", id);
 		return new ResponseEntity<>("CloseEndedAnswer modified.", HttpStatus.OK);
 	}
 
@@ -127,7 +123,7 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	public ResponseEntity<String> deleteAnswer(@PathVariable int id) throws NotFoundException {
 
 		closeEndedAnswerRepository.remove(id);
-		logger.debug("Removed CloseEndedAnswer with id " + id + ".");
+		logger.debug("Removed CloseEndedAnswer with id {}.", id);
 		return new ResponseEntity<>("CloseEndedAnswer deleted.", HttpStatus.OK);
 	}
 

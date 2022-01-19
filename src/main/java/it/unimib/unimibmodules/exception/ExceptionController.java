@@ -47,7 +47,7 @@ public class ExceptionController {
 	@ExceptionHandler(value = EmptyFieldException.class)
 	public ResponseEntity<Object> handleNotFoundException(EmptyFieldException e) {
 
-		LOGGER.error("EmptyFieldException: " + e.getMessage());
+		LOGGER.error("EmptyFieldException: {}", e.getMessage());
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 }

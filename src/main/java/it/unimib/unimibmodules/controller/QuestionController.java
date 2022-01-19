@@ -77,7 +77,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 
 		Iterable<Question> questionList = questionRepository.getBySurveyId(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
-		logger.debug("Retrieved " + questionDTOList.size() + " questions for survey with id " + id + ".");
+		logger.debug("Retrieved {} questions for survey with id {}.", questionDTOList.size(), id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 	
