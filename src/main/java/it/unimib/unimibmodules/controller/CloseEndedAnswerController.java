@@ -2,16 +2,19 @@ package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.CategoryDTO;
 import it.unimib.unimibmodules.dto.CloseEndedAnswerDTO;
+import it.unimib.unimibmodules.dto.SurveyDTO;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Category;
 import it.unimib.unimibmodules.model.CloseEndedAnswer;
 import it.unimib.unimibmodules.model.Question;
+import it.unimib.unimibmodules.model.Survey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,16 +34,30 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	 */
 	private final CloseEndedAnswerRepository closeEndedAnswerRepository;
 
+	/**
+	 * Instance of QuestionRepository that will be used to access the db.
+	 */
+	private final QuestionRepository questionRepository;
+
+
 	@Autowired
-	public CloseEndedAnswerController(CloseEndedAnswerRepository closeEndedAnswerRepository, ModelMapper modelMapper) {
+	public CloseEndedAnswerController(CloseEndedAnswerRepository closeEndedAnswerRepository, ModelMapper modelMapper,
+									  QuestionRepository questionRepository) {
 
 		super(modelMapper);
 		this.closeEndedAnswerRepository = closeEndedAnswerRepository;
+		this.questionRepository = questionRepository;
 
 		modelMapper.createTypeMap(CloseEndedAnswer.class, CloseEndedAnswerDTO.class)
 				.addMappings(mapper -> {
 					mapper.map(CloseEndedAnswer::getId, CloseEndedAnswerDTO::setId);
 					mapper.map(CloseEndedAnswer::getText, CloseEndedAnswerDTO::setText);
+				});
+
+		modelMapper.createTypeMap(CloseEndedAnswerDTO.class, CloseEndedAnswer.class)
+				.addMappings(mapper -> {
+					mapper.map(CloseEndedAnswerDTO::getId, CloseEndedAnswer::setId);
+					mapper.map(CloseEndedAnswerDTO::getText, CloseEndedAnswer::setText);
 				});
 
 		modelMapper.createTypeMap(Question.class, CloseEndedAnswerDTO.class)
@@ -67,14 +84,16 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	 * @param	closeEndedAnswerDTO	the serialized object of the close-ended answer
 	 * @return						an HTTP response with status 201 if the new close-ended answer has been created,
 	 * 								500 otherwise
+	 * @throws	NotFoundException	when one of the queries of convertToEntity fails.
 	 */
-	@PostMapping(path = "/addCloseEndedAnswer")
-	public ResponseEntity<String> postCloseEndedAnswer(@RequestBody CloseEndedAnswerDTO closeEndedAnswerDTO) {
+	@PostMapping(path = "/addCloseEndedAnswer", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> postCloseEndedAnswer(@RequestBody CloseEndedAnswerDTO closeEndedAnswerDTO)
+			throws NotFoundException {
 
 		CloseEndedAnswer closeEndedAnswer = convertToEntity(closeEndedAnswerDTO);
 		closeEndedAnswerRepository.add(closeEndedAnswer);
 		logger.debug("Added CloseEndedAnswer with id " + closeEndedAnswer.getId() + ".");
-		return new ResponseEntity<>("CloseEndedAnswer creted.", HttpStatus.CREATED);
+		return new ResponseEntity<>("{\"response\":\"CloseEndedAnswer creted.\"}", HttpStatus.CREATED);
 	}
 
 	/**
@@ -131,11 +150,14 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	 * Converts an instance of CloseEndedAnswer to an instance of CloseEndedAnswerDTO
 	 * @param   closeEndedAnswerDTO	an instance of CloseEndedAnswerDTO
 	 * @return						an instance of CloseEndedAnswer, containing the deserialized data of closeEndedAnswerDTO
+	 * @throws	NotFoundException	when one of the queries fails.
 	 * @see DTOMapping#convertToEntity
 	 */
 	@Override
-	public CloseEndedAnswer convertToEntity(CloseEndedAnswerDTO closeEndedAnswerDTO) {
+	public CloseEndedAnswer convertToEntity(CloseEndedAnswerDTO closeEndedAnswerDTO) throws NotFoundException {
 
-		return modelMapper.map(closeEndedAnswerDTO, CloseEndedAnswer.class);
+		CloseEndedAnswer closeEndedAnswer = modelMapper.map(closeEndedAnswerDTO, CloseEndedAnswer.class);
+		closeEndedAnswer.setQuestion(questionRepository.get(closeEndedAnswerDTO.getQuestionDTO().getId()));
+		return closeEndedAnswer;
 	}
 }

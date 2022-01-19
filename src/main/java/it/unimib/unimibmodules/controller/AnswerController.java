@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,11 +35,40 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	 */
 	private final AnswerRepository answerRepository;
 
+	/**
+	 * Instance of AnswerRepository that will be used to access the db.
+	 */
+	private final UserRepository userRepository;
+
+	/**
+	 * Instance of AnswerRepository that will be used to access the db.
+	 */
+	private final SurveyRepository surveyRepository;
+
+	/**
+	 * Instance of AnswerRepository that will be used to access the db.
+	 */
+	private final QuestionRepository questionRepository;
+
+	/**
+	 * Instance of AnswerRepository that will be used to access the db.
+	 */
+	private final CloseEndedAnswerRepository closeEndedAnswerRepository;
+
 	@Autowired
-	public AnswerController(AnswerRepository answerRepository, ModelMapper modelMapper) {
+	public AnswerController(AnswerRepository answerRepository, ModelMapper modelMapper, UserRepository userRepository,
+							SurveyRepository surveyRepository, QuestionRepository questionRepository,
+							CloseEndedAnswerRepository closeEndedAnswerRepository) {
 
 		super(modelMapper);
 		this.answerRepository = answerRepository;
+		this.userRepository = userRepository;
+		this.surveyRepository = surveyRepository;
+		this.questionRepository = questionRepository;
+		this.closeEndedAnswerRepository = closeEndedAnswerRepository;
+
+		modelMapper.createTypeMap(AnswerDTO.class, Answer.class)
+				.addMapping(AnswerDTO::getAnswerText, Answer::setText);
 
 		modelMapper.createTypeMap(User.class, AnswerDTO.class)
 				.addMapping(User::getId, (answerDTO, id) -> answerDTO.getUserDTO().setId(id));
@@ -65,16 +95,16 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 
 	/**
 	 * Creates an Answer.
-	 * @param	answerDTO	the serialized object of theanswer
+	 * @param	answerDTO	the serialized object of the answer
 	 * @return				an HTTP Response with status 201 if the answer has been created, 500 otherwise
 	 */
-	@PostMapping(path = "/addAnswer")
-	public ResponseEntity<String> addAnswer(@RequestBody AnswerDTO answerDTO) {
+	@PostMapping(path = "/addAnswer", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> addAnswer(@RequestBody AnswerDTO answerDTO) throws NotFoundException {
 
 		Answer answer = convertToEntity(answerDTO);
 		answerRepository.add(answer);
 		logger.debug("Added Answer with id " + answer.getId() + ".");
-		return new ResponseEntity<>("Answer creted.", HttpStatus.CREATED);
+		return new ResponseEntity<>("{\"response\":\"Answer creted.\"}", HttpStatus.CREATED);
 	}
 
 	/**
@@ -163,12 +193,20 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	 * @see DTOMapping#convertToEntity
 	 */
 	@Override
-	public Answer convertToEntity(AnswerDTO answerDTO) {
+	public Answer convertToEntity(AnswerDTO answerDTO) throws NotFoundException {
 
 		Answer answer = modelMapper.map(answerDTO, Answer.class);
-		answer.setCloseEndedAnswers(answerDTO.getCloseEndedAnswerDTOs().stream()
-				.map(closeEndedAnswerDTO -> modelMapper.map(closeEndedAnswerDTO, CloseEndedAnswer.class))
-				.collect(Collectors.toSet()));
+		answer.setUser(userRepository.get(answerDTO.getUserDTO().getId()));
+		answer.setSurvey(surveyRepository.get(answerDTO.getSurveyDTO().getId()));
+		answer.setQuestion(questionRepository.get(answerDTO.getQuestionDTO().getId()));
+		if(answerDTO.getCloseEndedAnswerDTOs() != null) {
+			Set<CloseEndedAnswer> closeEndedAnswerSet = new HashSet<>();
+			for (CloseEndedAnswerDTO closeEndedAnswerDTO : answerDTO.getCloseEndedAnswerDTOs()) {
+				CloseEndedAnswer closeEndedAnswer = closeEndedAnswerRepository.get(closeEndedAnswerDTO.getId());
+				closeEndedAnswerSet.add(closeEndedAnswer);
+			}
+			answer.setCloseEndedAnswers(closeEndedAnswerSet);
+		}
 		return answer;
 	}
 }
