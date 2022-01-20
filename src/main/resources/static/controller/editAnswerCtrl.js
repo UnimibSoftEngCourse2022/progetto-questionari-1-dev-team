@@ -1,6 +1,7 @@
 app.controller('editAnswerCtrl', function ($scope, $http) {
 
     $scope.model = {};
+    $scope.options = [];
     $scope.surveys = [];
     $scope.questions = [];
     $scope.answers = [];
@@ -13,8 +14,10 @@ app.controller('editAnswerCtrl', function ($scope, $http) {
             $scope.surveys = response.data;
         }, function errorCallback(response) {
 
-            alert("Error");
-            console.log(response);
+            if (response.status === 404) {
+                alert("No survey found.");
+            } else
+                console.log(response);
         });
     }
 
@@ -26,9 +29,11 @@ app.controller('editAnswerCtrl', function ($scope, $http) {
         }, function errorCallback(response) {
 
             if (response.status === 404) {
-                alert("Survey not found.");
-            } else
-            console.log(response);
+                alert("No questions found.");
+            } else {
+                alert("Error");
+                console.error(response);
+            }
         });
         $http.get("/api/findSurveyAnswersForUser/?surveyId=" + $scope.surveys[index].id + "&userId=1")
             .then(function onfulFilled(response) {
@@ -38,9 +43,10 @@ app.controller('editAnswerCtrl', function ($scope, $http) {
 
                 if (response.status === 404) {
                     alert("You have not compiled this survey yet.");
-                } else
+                } else {
                     alert("Error");
-                console.log(response);
+                    console.error(response);
+                }
             });
         $scope.question_select = undefined;
     }
@@ -50,8 +56,14 @@ app.controller('editAnswerCtrl', function ($scope, $http) {
         for (let answer of $scope.answers) {
             if (answer.questionDTO.id === $scope.questions[index].id) {
                 $scope.currentAnswer = answer;
-                if (answer.closeEndedAnswerDTOs)
+                if ($scope.questions[index].questionType === "SINGLECLOSED")
                     $scope.model.closeended_answer =  answer.closeEndedAnswerDTOs[0].id;
+                else if ($scope.questions[index].questionType === "MULTIPLECLOSED") {
+                    for (let closeEndedAnswer in $scope.questions[index].closeEndedAnswerDTOSet)
+                        if (answer.closeEndedAnswerDTOs
+                            .find(v => v.id === $scope.questions[index].closeEndedAnswerDTOSet[closeEndedAnswer].id))
+                            $scope.options[closeEndedAnswer] = true;
+                }
             }
         }
     }
@@ -73,12 +85,23 @@ app.controller('editAnswerCtrl', function ($scope, $http) {
             }
         }
 
-        if ($scope.questions[index].closeEndedAnswerDTOSet.length === 0) {
-            data.answerText = $scope.openended_answer
-        } else {
-            data.closeEndedAnswerDTOs = [{
-                id: $scope.model.closeended_answer
-            }];
+        switch($scope.questions[index].questionType) {
+            case "OPEN":
+                data.answerText = $scope.openended_answer
+                break;
+            case "SINGLECLOSED":
+                data.closeEndedAnswerDTOs = [{
+                    id: $scope.model.closeended_answer
+                }];
+                break;
+            case "MULTIPLECLOSED":
+                data.closeEndedAnswerDTOs = [];
+                for (let answer in $scope.questions[index].closeEndedAnswerDTOSet) {
+                    if ($scope.options[answer] && $scope.options[answer] === true)
+                        data.closeEndedAnswerDTOs.push({
+                            id: $scope.questions[index].closeEndedAnswerDTOSet[answer].id
+                        })
+                }
         }
 
         $http.patch("/api/modifyAnswer", data).then(function onfulFilled(response) {
@@ -87,7 +110,7 @@ app.controller('editAnswerCtrl', function ($scope, $http) {
         }, function errorCallback(response) {
 
             alert("Error");
-            console.log(response);
+            console.error(response);
         });
     }
 
@@ -99,7 +122,7 @@ app.controller('editAnswerCtrl', function ($scope, $http) {
         }, function errorCallback(response) {
 
             alert("Error");
-            console.log(response);
+            console.error(response);
         });
     }
 });

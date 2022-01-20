@@ -2,7 +2,7 @@
 <html lang="en" ng-app="UNIMIBModules">
 	<head>
 		<meta charset="UTF-8">
-		<title>Title</title>
+		<title>Edit Answer</title>
 	</head>
 	<body ng-controller="editAnswerCtrl">
 		<div ng-init="load()">
@@ -22,14 +22,20 @@
 			<br/>
 			<div ng-hide="!question_select">
 				<p>{{ questions[question_select].text }}</p>
-				<div ng-hide="!currentAnswer.closeEndedAnswerDTOs">
+				<div ng-hide="questions[question_select].questionType != 'SINGLECLOSED'">
 					<label ng-repeat="answer in questions[question_select].closeEndedAnswerDTOSet">
 						<input type="radio" ng-model="model.closeended_answer" name="closeended_answer"
 							   ng-value="answer.id"/> {{ answer.text }}
 						<br/>
 					</label>
 				</div>
-				<div ng-hide="currentAnswer.closeEndedAnswerDTOs">
+				<div ng-hide="questions[question_select].questionType != 'MULTIPLECLOSED'">
+					<div ng-repeat="answer in questions[question_select].closeEndedAnswerDTOSet">
+						<input type="checkbox" name="answer" id="{{answer.id}}" ng-model="options[$index]" ng-value="answer.id">
+						<label for="{{answer.id}}">{{answer.text}}</label>
+					</div>
+				</div>
+				<div ng-hide="questions[question_select].questionType != 'OPEN'">
 					<label for="openended_answer">Answer:</label>
 					<br/>
 					<input type="text" ng-model="openended_answer" name="openended_answer" id="openended_answer"

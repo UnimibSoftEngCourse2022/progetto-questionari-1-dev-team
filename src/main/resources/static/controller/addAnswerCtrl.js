@@ -1,6 +1,7 @@
 app.controller('addAnswerCtrl', function ($scope, $http) {
 
     $scope.model = {};
+    $scope.options = [];
     $scope.surveys = []
     $scope.questions = []
 
@@ -10,7 +11,13 @@ app.controller('addAnswerCtrl', function ($scope, $http) {
 
             $scope.surveys = response.data;
         }, function errorCallback(response) {
-            console.log("Error");
+
+            if (response.status === 404) {
+                alert("No survey found.");
+            } else {
+                alert("Error");
+                console.error(response);
+            }
         });
     }
 
@@ -20,9 +27,14 @@ app.controller('addAnswerCtrl', function ($scope, $http) {
 
             $scope.questions = response.data;
         }, function errorCallback(response) {
-            console.log("Error");
-        });
 
+            if (response.status === 404) {
+                alert("No questions found.");
+            } else {
+                alert("Error");
+                console.error(response);
+            }
+        });
     }
 
     $scope.submit = function(index) {
@@ -37,19 +49,27 @@ app.controller('addAnswerCtrl', function ($scope, $http) {
                 id: $scope.surveys[$scope.survey_select].id
             },
             questionDTO: {
-                id: $scope.questions[index].id,
-                text: "",
-                urlImage: ""
+                id: $scope.questions[index].id
             }
         }
 
-        if ($scope.questions[index].closeEndedAnswerDTOSet.length === 0) {
-            data.answerText = $scope.openended_answer
-        } else {
-            console.log($scope.model.closeended_answer);
-            data.closeEndedAnswerDTOs = [{
-                id: $scope.model.closeended_answer
-            }];
+        switch($scope.questions[index].questionType) {
+            case "OPEN":
+                data.answerText = $scope.openended_answer
+                break;
+            case "SINGLECLOSED":
+                data.closeEndedAnswerDTOs = [{
+                    id: $scope.model.closeended_answer
+                }];
+                break;
+            case "MULTIPLECLOSED":
+                data.closeEndedAnswerDTOs = [];
+                for (let answer in $scope.questions[index].closeEndedAnswerDTOSet) {
+                    if ($scope.options[answer] && $scope.options[answer] === true)
+                        data.closeEndedAnswerDTOs.push({
+                            id: $scope.questions[index].closeEndedAnswerDTOSet[answer].id
+                        })
+                }
         }
 
         $http.post("/api/addAnswer", data).then(function onfulFilled(response) {
@@ -57,7 +77,8 @@ app.controller('addAnswerCtrl', function ($scope, $http) {
             console.log(response.data.response);
         }, function errorCallback(response) {
 
-            console.log(response);
+            alert("Error");
+            console.error(response);
         });
     }
 });
