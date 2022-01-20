@@ -162,7 +162,10 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	@Override
 	public QuestionDTO convertToDTO(Question question) {
 
-		return modelMapper.map(question, QuestionDTO.class);
+		QuestionDTO questionDTO = modelMapper.map(question, QuestionDTO.class);
+		modelMapper.getTypeMap(User.class, QuestionDTO.class)
+				.map(question.getUser(), questionDTO);
+		return questionDTO;
 	}
 
 	/**

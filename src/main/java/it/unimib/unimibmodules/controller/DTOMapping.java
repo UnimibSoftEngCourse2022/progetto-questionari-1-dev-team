@@ -2,6 +2,7 @@ package it.unimib.unimibmodules.controller;
 
 
 import it.unimib.unimibmodules.exception.FormatException;
+import it.unimib.unimibmodules.exception.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,5 @@ public abstract class DTOMapping<M, T> {
 	 * @return		an instance of M, containing the deserialized data of T
 	 * @throws FormatException 
 	 */
-	public abstract M convertToEntity(T dto) throws FormatException;
+	public abstract M convertToEntity(T dto) throws FormatException, NotFoundException;
 }

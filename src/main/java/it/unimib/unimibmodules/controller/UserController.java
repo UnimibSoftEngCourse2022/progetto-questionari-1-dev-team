@@ -32,6 +32,20 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public UserController(UserRepository userRepository, ModelMapper modelMapper) {
     	super(modelMapper);
         this.userRepository = userRepository;
+
+        modelMapper.createTypeMap(User.class, UserDTO.class)
+                .addMappings(mapper -> {
+                    mapper.map(User::getId, UserDTO::setId);
+                    mapper.map(User::getName, UserDTO::setName);
+                    mapper.map(User::getUsername, UserDTO::setUsername);
+                });
+
+        modelMapper.createTypeMap(UserDTO.class, User.class)
+                .addMappings(mapper -> {
+                    mapper.map(UserDTO::getId, User::setId);
+                    mapper.map(UserDTO::getName, User::setName);
+                    mapper.map(UserDTO::getUsername, User::setUsername);
+                });
     }
 
     /**
