@@ -94,6 +94,29 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	}
 
 	/**
+	 * Finds all the Answer the User associated with <code>userId</code> has created for the Survey associated with <code>surveyId</code>.
+	 * @param	surveyId			the id of the survey
+	 * @param	userId				the id of the user
+	 * @return						an HTTP response with status 200 and the AnswerDTO if the answer has been found,
+	 * 								500 otherwise
+	 * @throws	NotFoundException	if no answer for the survey identified by <code>surveyId</code> and created by the
+	 * 								user identified by <code>userId</code> has been found
+	 */
+	@GetMapping(path = "/findSurveyAnswersForUser")
+	public ResponseEntity<List<AnswerDTO>> findSurveyAnswersForUser(@RequestParam int surveyId, @RequestParam int userId)
+			throws NotFoundException {
+
+		Iterable<Answer> answer = answerRepository.getSurveyAnswersForUser(surveyId, userId);
+		List<AnswerDTO> answerDTOList = convertListToDTO(answer);
+		if (answerDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Answers for Survey with id " + surveyId +
+					" was found for User with id " + userId + ".\"}");
+		logger.debug("Retrieved {} answers for survey with id {} and user with id {}.", answerDTOList.size(),
+				surveyId, userId);
+		return new ResponseEntity<>(answerDTOList, HttpStatus.OK);
+	}
+
+	/**
 	 * Creates an Answer.
 	 * @param	answerDTO	the serialized object of the answer
 	 * @return				an HTTP Response with status 201 if the answer has been created, 500 otherwise
