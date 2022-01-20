@@ -89,11 +89,11 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	}
 
 	/**
-	 * Gets the Answer associated with the given <code>id</code>.
+	 * Finds the Answer associated with the given <code>id</code>.
 	 * @param	id					the id of the answer
 	 * @return						an HTTP response with status 200 and the AnswerDTO if the answer has been found,
 	 * 								500 otherwise
-	 * @throws	NotFoundException	if no close-ended answer with identified by <code>id</code> has been found
+	 * @throws	NotFoundException	if no answer identified by <code>id</code> has been found
 	 */
 	@GetMapping(path = "/findAnswer/{id}")
 	public ResponseEntity<AnswerDTO> findAnswer(@PathVariable int id) throws NotFoundException {
@@ -128,8 +128,9 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 
 	/**
 	 * Creates an Answer.
-	 * @param	answerDTO	the serialized object of the answer
-	 * @return				an HTTP Response with status 201 if the answer has been created, 500 otherwise
+	 * @param	answerDTO			the serialized object of the answer
+	 * @return						an HTTP Response with status 201 if the answer has been created, 500 otherwise
+	 * @throws	NotFoundException	if some of the attributes of the new answer can't be found on database
 	 */
 	@PostMapping(path = "/addAnswer", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addAnswer(@RequestBody AnswerDTO answerDTO) throws NotFoundException {
@@ -141,56 +142,39 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	}
 
 	/**
-	 * Modifies the text of an open-ended question associated with the given <code>id</code>, setting <code>text</code>
-	 * as the new answer.
-	 * @param   id		the id of the answer that will be modified
-	 * @param   text	the new text value
-	 * @return			an HTTP response with status 200 if the answer has been modified, 500 otherwise
+	 * Modifies an Answer using the values of <code>modifiedAnswerDTO</code>.
+	 * @param	modifiedAnswerDTO	the serialization of the modified answer
+	 * @return						an HTTP response with status 200 if the answer has been modified, 500 otherwise
+	 * @throws	NotFoundException	if the original Answer has not been found
+	 * @throws	EmptyFieldException
 	 */
-	@PatchMapping(path = "/modifyAnswerText")
-	public ResponseEntity<String> modifyOpenEndedAnswer(@RequestParam int id, @RequestParam String text)
+	@PatchMapping(path = "/modifyAnswer")
+	public ResponseEntity<String> modifyAnswer(@RequestBody AnswerDTO modifiedAnswerDTO)
 			throws NotFoundException, EmptyFieldException {
 
-		Answer answer = answerRepository.get(id);
-		answer.setText(text);
+		Answer modifiedAnswer = convertToEntity(modifiedAnswerDTO);
+		Answer answer = answerRepository.get(modifiedAnswer.getId());
+		if (modifiedAnswer.getText() != null)
+			answer.setText(modifiedAnswer.getText());
+		else if (modifiedAnswer.getCloseEndedAnswers() != null)
+			answer.setCloseEndedAnswers(modifiedAnswer.getCloseEndedAnswers());
 		answerRepository.modify(answer);
-		logger.debug("Modified Answer with id {}.", id);
-		return new ResponseEntity<>("Answer modified.", HttpStatus.OK);
-	}
-
-	/**
-	 * Modifies the answer of a close-ended question associated with the given <code>id</code>, setting text as the new answer.
-	 * @param	id						the id of the answer that will be modified
-	 * @param	closeEndedAnswerIdList	the new answer
-	 * @return							an HTTP response with status 200 if the answer has been modified, 500 otherwise
-	 */
-	@PatchMapping(path = "/modifyAnswerChoices")
-	public ResponseEntity<String> modifyCloseEndedAnswer(@RequestParam int id, @RequestParam List<Integer> closeEndedAnswerIdList)
-			throws NotFoundException {
-
-		Answer answer = answerRepository.get(id);
-		answer.setCloseEndedAnswers((closeEndedAnswerIdList.stream()
-				.map(closeEndedAnswerId -> {
-					CloseEndedAnswer closeEndedAnswer = new CloseEndedAnswer();
-					closeEndedAnswer.setId(closeEndedAnswerId);
-					return closeEndedAnswer;
-				}).collect(Collectors.toSet())));
-		answerRepository.modify(answer);
-		logger.debug("Modified Answer with id {}.", id);
-		return new ResponseEntity<>("Answer modified.", HttpStatus.OK);
+		logger.debug("Modified Answer with id {}.", answer.getId());
+		return new ResponseEntity<>("{\"response\": \"Answer modified.\"}", HttpStatus.OK);
 	}
 
 	/**
 	 * Deletes the answer associated with the given <code>id</code>.
-	 * @param   id	the id of the answer that will be deleted
-	 * @return		an HTTP Response with status 200 if the answer has been deleted, 500 otherwise
+	 * @param	id					the id of the answer that will be deleted
+	 * @return						an HTTP Response with status 200 if the answer has been deleted, 500 otherwise
+	 * @throws	NotFoundException	if no answer identified by <code>id</code> has been found
 	 */
 	@DeleteMapping(path = "/deleteAnswer/{id}")
 	public ResponseEntity<String> deleteAnswer(@PathVariable int id) throws NotFoundException {
 
 		answerRepository.remove(id);
 		logger.debug("Removed Answer with id {}.", id);
-		return new ResponseEntity<>("Answer deleted.", HttpStatus.OK);
+		return new ResponseEntity<>("{\"response\":\"Answer deleted.\"}", HttpStatus.OK);
 	}
 
 	/**

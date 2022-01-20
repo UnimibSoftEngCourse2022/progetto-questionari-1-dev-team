@@ -50,7 +50,7 @@ public class Answer {
     /**
      * The list of close-ended answers related to this answer.
      */
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(
             name = "answer_closeendedanswer",
             joinColumns = @JoinColumn(name = "answer_id"),
