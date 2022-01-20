@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 import it.unimib.unimibmodules.exception.FormatException;
+import it.unimib.unimibmodules.exception.NotFoundException;
 
 /**
  * Defines the method that will be used by controllers to convert an instance of M (the model) to an instance of T (the
@@ -39,6 +40,7 @@ public abstract class DTOMapping<M, T> {
 	 * @param   dto	an instance of T
 	 * @return		an instance of M, containing the deserialized data of T
 	 * @throws FormatException 
+	 * @throws NotFoundException 
 	 */
-	public abstract M convertToEntity(T dto) throws FormatException;
+	public abstract M convertToEntity(T dto) throws FormatException, NotFoundException;
 }

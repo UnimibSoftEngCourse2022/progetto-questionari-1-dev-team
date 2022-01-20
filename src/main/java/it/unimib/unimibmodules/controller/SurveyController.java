@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,13 +31,20 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * Instance of SurveyRepository. It's used to access the Repository layer.
 	 */
 	private final SurveyRepository surveyRepository;
+	
+	/**
+	 * Instance of AnswerRepository that will be used to access the db.
+	 */
+	private final UserRepository userRepository;
+	
 	private static final Logger logger = LogManager.getLogger(SurveyController.class);
 	
 	@Autowired
-	public SurveyController(SurveyRepository surveyRepository, ModelMapper modelMapper) {
+	public SurveyController(UserRepository userRepository , SurveyRepository surveyRepository, ModelMapper modelMapper) {
 		
 		super(modelMapper);
 		this.surveyRepository = surveyRepository;
+		this.userRepository = userRepository;
 
 		modelMapper.createTypeMap(Survey.class, SurveyDTO.class)
 				.addMappings(mapper -> {
@@ -108,11 +116,12 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @param	surveyDTO	the serialized version of a Survey object
 	 * @return			an HTTP response with status 201 if the survey has been added
 	 * @throws FormatException
+	 * @throws NotFoundException 
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
-	@PostMapping("/addSurvey")
-	public ResponseEntity<String> addSurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException {
+	@PostMapping(path = "/addSurvey" , produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> addSurvey(@RequestBody SurveyDTO surveyDTO) throws FormatException, NotFoundException {
 		
 		Survey survey = convertToEntity(surveyDTO);
 		surveyRepository.add(survey);
@@ -125,11 +134,12 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @param	surveyDTO	the serialized version of a Survey object
 	 * @return			an HTTP response with status 200 if the survey has been updated
 	 * @throws FormatException
+	 * @throws NotFoundException 
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
 	@PatchMapping(path = "/modifySurvey")
-	public ResponseEntity<String> modifySurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException {
+	public ResponseEntity<String> modifySurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException, NotFoundException {
 		
 		Survey survey = convertToEntity(surveyDTO);
 		surveyRepository.modify(survey);
@@ -204,10 +214,12 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
 	@Override
-	public Survey convertToEntity(SurveyDTO surveyDTO) throws FormatException {
+	public Survey convertToEntity(SurveyDTO surveyDTO) throws FormatException , NotFoundException {
 		
 		Survey survey = modelMapper.map(surveyDTO, Survey.class);
+		survey.setName(surveyDTO.getSurveyName());
 		survey.setCreationDate(surveyDTO.getCreationDateConverted(TimeZone.getDefault().toString(), survey.getCreationDateFormat()));
+		survey.setUser(userRepository.get(surveyDTO.getUserDTO().getId()));
 	    return survey;
 	}
 }
