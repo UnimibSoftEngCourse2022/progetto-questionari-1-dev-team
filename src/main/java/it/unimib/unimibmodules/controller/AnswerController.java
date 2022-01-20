@@ -14,10 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Controller handling HTTP requests related to Answer and ClosedEndedAnswer.
@@ -67,8 +67,18 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 		this.questionRepository = questionRepository;
 		this.closeEndedAnswerRepository = closeEndedAnswerRepository;
 
+
+		modelMapper.createTypeMap(Answer.class, AnswerDTO.class)
+				.addMappings(mapper -> {
+					mapper.map(Answer::getId, AnswerDTO::setId);
+					mapper.map(Answer::getText, AnswerDTO::setAnswerText);
+				});
+
 		modelMapper.createTypeMap(AnswerDTO.class, Answer.class)
-				.addMapping(AnswerDTO::getAnswerText, Answer::setText);
+				.addMappings(mapper -> {
+					mapper.map(AnswerDTO::getId, Answer::setId);
+					mapper.map(AnswerDTO::getAnswerText, Answer::setText);
+				});
 
 		modelMapper.createTypeMap(User.class, AnswerDTO.class)
 				.addMapping(User::getId, (answerDTO, id) -> answerDTO.getUserDTO().setId(id));
@@ -199,14 +209,31 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 				.map(answer.getSurvey(), answerDTO);
 		modelMapper.getTypeMap(Question.class, AnswerDTO.class)
 				.map(answer.getQuestion(), answerDTO);
-		Set<CloseEndedAnswerDTO> closeEndedAnswerDTOSet = new HashSet<>();
-		for (CloseEndedAnswer closeEndedAnswer : answer.getCloseEndedAnswers()) {
-			CloseEndedAnswerDTO closeEndedAnswerDTO = new CloseEndedAnswerDTO();
-			closeEndedAnswerDTO.setId(closeEndedAnswer.getId());
-			closeEndedAnswerDTOSet.add(closeEndedAnswerDTO);
+		if (!answer.getCloseEndedAnswers().isEmpty()) {
+			Set<CloseEndedAnswerDTO> closeEndedAnswerDTOSet = new HashSet<>();
+			for (CloseEndedAnswer closeEndedAnswer : answer.getCloseEndedAnswers()) {
+				CloseEndedAnswerDTO closeEndedAnswerDTO = new CloseEndedAnswerDTO();
+				closeEndedAnswerDTO.setId(closeEndedAnswer.getId());
+				closeEndedAnswerDTOSet.add(closeEndedAnswerDTO);
+			}
+			answerDTO.setCloseEndedAnswerDTOSet(closeEndedAnswerDTOSet);
 		}
-		answerDTO.setCloseEndedAnswerDTOSet(closeEndedAnswerDTOSet);
 		return answerDTO;
+	}
+
+	/**
+	 * Converts a list of Answers to a list of AnswerDTO
+	 * @param	answers	the list of Answer
+	 * @return			a list of QuestionDTO, containing the serialized data of answers
+	 * @see DTOMapping#convertToDTO
+	 */
+	public List<AnswerDTO> convertListToDTO(Iterable<Answer> answers) {
+
+		List<AnswerDTO> answerDTOList = new ArrayList<>();
+		for (Answer answer : answers)
+			answerDTOList.add(convertToDTO(answer));
+
+		return answerDTOList;
 	}
 
 	/**
