@@ -1,0 +1,29 @@
+nav{
+	padding-left: 2%;
+	color:white;
+}
+
+.container-fluid{
+	padding-top:2%;
+}
+
+body{
+	color: black;
+}
+
+.container-fluid{
+	padding-right: 10%;
+}
+
+.search-form{
+	width: 30%;
+}
+
+.search-form input{
+	margin-right: 2%;
+}
+
+#row-not-found{
+	margin-top:15%;
+}
+
