@@ -67,8 +67,8 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	}
 
 	/**
-	 * Gets the Question associated with the given id.
-	 * @param	id	the id of the question
+	 * Gets the Questions of the Survey associated with the given id.
+	 * @param	id	the id of the Survey
 	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
 	 * @throws  NotFoundException	if 404 no question with identified by <code>id</code> has been found
 	 */
@@ -77,6 +77,8 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 
 		Iterable<Question> questionList = questionRepository.getBySurveyId(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Question for Survey with id " + id + " was found.\"}");
 		logger.debug("Retrieved {} questions for survey with id {}.", questionDTOList.size(), id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
@@ -142,9 +144,9 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	}
 
 	/**
-	 * Converts an instance of Question to an instance of questionDTO
-	 * @param   questions	an instance of Question
-	 * @return			    an instance of QuestionDTO, containing the serialized data of question
+	 * Converts a list of Question to a list of questionDTO
+	 * @param   questions	the list of Questions
+	 * @return			    a list of QuestionDTO, containing the serialized data of questions
 	 * @see DTOMapping#convertToDTO
 	 */
 	public List<QuestionDTO> convertListToDTO(Iterable<Question> questions) {
