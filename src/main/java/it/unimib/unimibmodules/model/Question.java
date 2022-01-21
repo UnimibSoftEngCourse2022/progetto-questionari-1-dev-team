@@ -35,13 +35,13 @@ public class Question {
 	/**
      * The answers of the question.
      */
-	 @OneToMany(mappedBy="question")
+	 @OneToMany(mappedBy="question", cascade = CascadeType.ALL)
 	private Set<Answer> answer;
 
 	/**
 	 * The list of close-ended answers to the question.
 	 */
-	@OneToMany(mappedBy="question")
+	@OneToMany(mappedBy="question", cascade = CascadeType.ALL)
 	private Set<CloseEndedAnswer> closeEndedAnswerSet;
 	
 	/**

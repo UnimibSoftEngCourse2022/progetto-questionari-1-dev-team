@@ -90,6 +90,19 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	}
 
 	/**
+	 * Gets all the questions
+	 * @return		an HTTP response with status 200, 500 otherwise
+	 * @throws NotFoundException
+	 */
+	@GetMapping(path = "/getQuestion")
+	public ResponseEntity<List<QuestionDTO>> getQuestions() throws NotFoundException{
+		Iterable<Question> questionList = questionRepository.getAll();
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		logger.debug("Retrieved all the questions.");
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
+
+	/**
 	 * Gets the Question associated with the given id.
 	 * @param	id	the id of the question
 	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
@@ -121,21 +134,16 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	
 	/**
 	 * Modifies the question's text associated with the given id.
-	 * @param	id		the id of the question
-	 * @param	text	the new text of the question
+	 * @param	questionDTO the serialized object of the question
 	 * @return			an HTTP response with status 200 if the question has been modified, 500 otherwise
 	 * @throws  NotFoundException    if no question with identified by <code>id</code> has been found
 	 */
 	@PatchMapping(path = "/modifyQuestion")
-	public ResponseEntity<String> modifyQuestion(@RequestParam int id, @RequestParam String text,
-												 @RequestParam String urlImage, @RequestParam Category category)
+	public ResponseEntity<String> modifyQuestion(@RequestBody QuestionDTO questionDTO)
 			throws NotFoundException {
-		Question question = questionRepository.get(id);
-		question.setText(text);
-		question.setUrlImage(urlImage);
-		question.setCategory(category);
+		Question question = convertToEntity(questionDTO);
 		questionRepository.modify(question);
-		logger.debug("Modified Question with id " + id + ".");
+		logger.debug("Modified Question with id " + question.getId() + ".");
 		return new ResponseEntity<>("Question modified.", HttpStatus.OK);
 	}
 	
