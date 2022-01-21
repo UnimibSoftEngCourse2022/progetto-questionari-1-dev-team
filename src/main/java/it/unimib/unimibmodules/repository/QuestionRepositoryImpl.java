@@ -85,10 +85,10 @@ public class QuestionRepositoryImpl implements QuestionRepository {
      * Returns all questions in the database.
      * @return  a list of Questions
      */
-	public Iterable<Question> getAll() {
+	@Override
+	public Iterable<Question> getAll() throws NotFoundException {
 		return questionDAO.findAll();
 	}
-
 
 	/**
      * Deletes from the database the question identified by id.
