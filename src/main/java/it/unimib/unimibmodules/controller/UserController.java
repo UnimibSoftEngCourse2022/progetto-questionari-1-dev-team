@@ -4,6 +4,8 @@ import it.unimib.unimibmodules.dto.UserDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.factory.UserFactory;
 import it.unimib.unimibmodules.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class UserController extends DTOMapping<User, UserDTO> {
-    
+
+    private static final Logger logger = LogManager.getLogger(User.class);
+
     /**
      * Instance of UserRepository that will be used to access the db.
      */
@@ -43,7 +47,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public ResponseEntity<UserDTO> getUser(@PathVariable int id) throws NotFoundException {
 
         User user = userRepository.get(id);
-
+        logger.debug("Retrieved User with id " + id + ".");
         return new ResponseEntity<>(convertToDTO(user), HttpStatus.OK);
     }
 
@@ -60,8 +64,10 @@ public class UserController extends DTOMapping<User, UserDTO> {
         User user = userRepository.getByUsername(username);
 
         if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            logger.debug("Successful sign in of user: " + username + ".");
             return new ResponseEntity<>("Login Successful", HttpStatus.OK);
         } else {
+            logger.debug("Failed sign in of user: " + username + ".");
             return new ResponseEntity<>("Login failed.", HttpStatus.UNAUTHORIZED);
         }
     }
@@ -76,6 +82,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
 
         try {
             User user = userRepository.getByUsername(requestParams.get("username"));
+            logger.debug("Failed creation of user " + requestParams.get("username") + ": user already exist.");
             return new ResponseEntity<>("Username already existing.", HttpStatus.BAD_REQUEST);
         } catch (NotFoundException e) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -88,7 +95,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
                     requestParams.get("surname"));
 
             userRepository.add(user);
-
+            logger.debug("Successful creation of user " + requestParams.get("username") + ".");
             return new ResponseEntity<>("User created.", HttpStatus.CREATED);
         }
     }
