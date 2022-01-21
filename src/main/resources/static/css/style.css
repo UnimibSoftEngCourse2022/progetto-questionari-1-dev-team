@@ -1,0 +1,8 @@
+.link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration-line: underline;
+    text-decoration-thickness: initial;
+    text-decoration-style: initial;
+    text-decoration-color: initial;
+}
