@@ -1,8 +1,10 @@
 package it.unimib.unimibmodules.controller;
 
+import it.unimib.unimibmodules.dto.SurveyDTO;
 import it.unimib.unimibmodules.dto.UserDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.factory.UserFactory;
+import it.unimib.unimibmodules.model.Survey;
 import it.unimib.unimibmodules.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,6 +38,13 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public UserController(UserRepository userRepository, ModelMapper modelMapper) {
     	super(modelMapper);
         this.userRepository = userRepository;
+
+        modelMapper.createTypeMap(User.class, UserDTO.class)
+                .addMappings(mapper -> {
+                    mapper.map(User::getId, UserDTO::setId);
+                    mapper.map(User::getUsername, UserDTO::setUsername);
+                    mapper.map(User::getEmail, UserDTO::setEmail);
+                });
     }
 
     /**
@@ -108,8 +117,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
 	 */
 	@Override
 	public UserDTO convertToDTO(User user) {
-
-		return modelMapper.map(user, UserDTO.class);
+        return modelMapper.getTypeMap(User.class, UserDTO.class).map(user);
 	}
 
 	/**
@@ -120,7 +128,6 @@ public class UserController extends DTOMapping<User, UserDTO> {
 	 */
 	@Override
 	public User convertToEntity(UserDTO userDTO) {
-
-		return modelMapper.map(userDTO, User.class);
+        return modelMapper.map(userDTO, User.class);
 	}
 }
