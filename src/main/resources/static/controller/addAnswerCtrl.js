@@ -1,29 +1,34 @@
-app.controller('addAnswerCtrl', function ($scope, $http) {
+app.controller('addAnswerCtrl', function ($scope, $http, $location, routeService) {
 
     $scope.model = {};
     $scope.options = [];
-    $scope.surveys = []
+    $scope.survey = {}
     $scope.questions = []
 
     $scope.load = function() {
 
-        $http.get("/api/findAllSurveys/").then(function onfulFilled(response) {
+        let surveyId = routeService.get();
 
-            $scope.surveys = response.data;
+        $http.head("/api/findSurveyAnswersForUser?surveyId=" + surveyId + "&userId=1")
+            .then(function onfulFilled() {
+
+                $location.path("edit_answer");
+        });
+
+        $http.get("/api/findSurvey?id=" + surveyId).then(function onfulFilled(response) {
+
+            $scope.survey = response.data;
         }, function errorCallback(response) {
 
             if (response.status === 404) {
-                alert("No survey found.");
+                alert("Survey not found.");
             } else {
                 alert("Error");
                 console.error(response);
             }
         });
-    }
 
-    $scope.selectSurvey = function(index) {
-
-        $http.get("/api/findQuestionForSurvey/" + $scope.surveys[index].id).then(function onfulFilled(response) {
+        $http.get("/api/findQuestionForSurvey/" + surveyId).then(function onfulFilled(response) {
 
             $scope.questions = response.data;
         }, function errorCallback(response) {
@@ -46,7 +51,7 @@ app.controller('addAnswerCtrl', function ($scope, $http) {
                 id: 1
             },
             surveyDTO: {
-                id: $scope.surveys[$scope.survey_select].id
+                id: $scope.survey.id
             },
             questionDTO: {
                 id: $scope.questions[index].id
@@ -74,6 +79,7 @@ app.controller('addAnswerCtrl', function ($scope, $http) {
 
         $http.post("/api/addAnswer", data).then(function onfulFilled(response) {
 
+            alert("Answer created.");
             console.log(response.data.response);
         }, function errorCallback(response) {
 

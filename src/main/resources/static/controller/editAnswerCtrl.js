@@ -1,29 +1,30 @@
-app.controller('editAnswerCtrl', function ($scope, $http) {
+app.controller('editAnswerCtrl', function ($scope, $http, routeService) {
 
     $scope.model = {};
     $scope.options = [];
-    $scope.surveys = [];
+    $scope.survey = {};
     $scope.questions = [];
     $scope.answers = [];
     $scope.currentAnswer = {};
 
     $scope.load = function() {
 
-        $http.get("/api/findAllSurveys/").then(function onfulFilled(response) {
+        let surveyId = routeService.get();
 
-            $scope.surveys = response.data;
+        $http.get("/api/findSurvey?id=" + surveyId).then(function onfulFilled(response) {
+
+            $scope.survey = response.data;
         }, function errorCallback(response) {
 
             if (response.status === 404) {
-                alert("No survey found.");
-            } else
-                console.log(response);
+                alert("Survey not found.");
+            } else {
+                alert("Error");
+                console.error(response);
+            }
         });
-    }
 
-    $scope.selectSurvey = function(index) {
-
-        $http.get("/api/findQuestionForSurvey/" + $scope.surveys[index].id).then(function onfulFilled(response) {
+        $http.get("/api/findQuestionForSurvey/" + surveyId).then(function onfulFilled(response) {
 
             $scope.questions = response.data;
         }, function errorCallback(response) {
@@ -35,7 +36,8 @@ app.controller('editAnswerCtrl', function ($scope, $http) {
                 console.error(response);
             }
         });
-        $http.get("/api/findSurveyAnswersForUser/?surveyId=" + $scope.surveys[index].id + "&userId=1")
+
+        $http.get("/api/findSurveyAnswersForUser/?surveyId=" + surveyId + "&userId=1")
             .then(function onfulFilled(response) {
 
                 $scope.answers = response.data;
@@ -78,7 +80,7 @@ app.controller('editAnswerCtrl', function ($scope, $http) {
                 id: 1
             },
             surveyDTO: {
-                id: $scope.surveys[$scope.survey_select].id
+                id: $scope.survey.id
             },
             questionDTO: {
                 id: $scope.questions[index].id
@@ -106,6 +108,7 @@ app.controller('editAnswerCtrl', function ($scope, $http) {
 
         $http.patch("/api/modifyAnswer", data).then(function onfulFilled(response) {
 
+            alert("Answer modified.");
             console.log(response.data.response);
         }, function errorCallback(response) {
 
@@ -118,6 +121,7 @@ app.controller('editAnswerCtrl', function ($scope, $http) {
 
         $http.delete("/api/deleteAnswer/" + $scope.currentAnswer.id).then(function onfulFilled(response) {
 
+            alert("Answer deleted.");
             console.log(response.data.response);
         }, function errorCallback(response) {
 
