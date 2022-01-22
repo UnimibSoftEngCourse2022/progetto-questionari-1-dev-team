@@ -36,10 +36,9 @@ public interface QuestionRepository {
 	/**
 	 * Finds the question in the database where text is contained in the text of the question
 	 * @param	text	the text of the question to be found
-	 * @return				an instance of Question if there is a question identified by id, null otherwise
-	 * @throws NotFoundException	if no question identified by <code>id</code> has been found
+	 * @return			an instance of Question if there is a question identified by id, null otherwise
 	 */
-	Iterable<Question> getByText(String text) throws NotFoundException;
+	Iterable<Question> getByText(String text);
 
 	/**
 	 * Deletes from the database the question identified by id.
