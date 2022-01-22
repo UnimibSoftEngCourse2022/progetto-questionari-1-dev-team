@@ -43,12 +43,8 @@ public abstract class DTOMapping<M, T> {
 	 * @return		an instance of M, containing the deserialized data of T
 	 * @throws FormatException 
 	 * @throws NotFoundException 
-<<<<<<< HEAD
 	 * @throws EmptyFieldException 
-=======
->>>>>>> c18a49f (Question Pull - Resolved conflict DTOMapping)
 	 */
-
 	public abstract M convertToEntity(T dto) throws FormatException, NotFoundException, EmptyFieldException;
 
 }
