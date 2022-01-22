@@ -4,7 +4,7 @@ package it.unimib.unimibmodules.controller;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 
@@ -41,6 +41,7 @@ public abstract class DTOMapping<M, T> {
 	 * @return		an instance of M, containing the deserialized data of T
 	 * @throws FormatException 
 	 * @throws NotFoundException 
+	 * @throws EmptyFieldException 
 	 */
-	public abstract M convertToEntity(T dto) throws FormatException, NotFoundException;
+	public abstract M convertToEntity(T dto) throws FormatException, NotFoundException, EmptyFieldException;
 }
