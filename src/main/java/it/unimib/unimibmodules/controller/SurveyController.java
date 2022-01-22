@@ -147,8 +147,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
 	@PatchMapping(path = "/modifySurvey")
-	public ResponseEntity<String> modifySurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException, NotFoundException, EmptyFieldException {
-		
+	public ResponseEntity<String> modifySurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException, NotFoundException, EmptyFieldException {		
 		Survey survey = convertToEntity(surveyDTO);
 		surveyRepository.modify(survey);
 		logger.debug("Updated Survey with id: {0}."+ survey.getId());
