@@ -1,6 +1,7 @@
 package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.exception.NotFoundException;
+import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.Survey;
 
 import java.util.List;
@@ -26,6 +27,13 @@ public interface SurveyRepository {
 	 * @throws NotFoundException
 	 */
 	Survey get(int id) throws NotFoundException;
+
+	/**
+	 * Finds the Survey in the database where text is contained in the name of the survey
+	 * @param	text	the text to be found in the name of the survey
+	 * @return			a list of Surveys the text is contained in the name of the survey
+	 */
+	Iterable<Survey> getByText(String text);
 
 	/**
 	 * Returns all surveys in the database.

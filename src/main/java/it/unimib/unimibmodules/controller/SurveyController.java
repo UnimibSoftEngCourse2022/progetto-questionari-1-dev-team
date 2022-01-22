@@ -83,7 +83,27 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 		logger.debug("Retrieved Survey without questions with id "+ id + ".");
 		return new ResponseEntity<>(convertToDTOAndSkipQuestions(survey), HttpStatus.OK);
 	}
-	
+
+	/**
+	 * Gets the survey in the database where text is contained in the name of the survey
+	 * @param	text	the text to be found in the name of the survey
+	 * @return		an HTTP response with status 200 and the SurveyDTO if the question has been found, 500 otherwise
+	 * @throws  NotFoundException	if 404 no question with identified by <code>id</code> has been found
+	 */
+	@GetMapping(path = "/findSurveyByText/{text}")
+	public ResponseEntity<List<SurveyDTO>> findQuestionsByText(@PathVariable String text) throws NotFoundException {
+
+		Iterable<Survey> surveyList = surveyRepository.getByText(text);
+		List<SurveyDTO> surveyDTOList = new ArrayList<>();
+		for( Survey survey : surveyList ){
+			surveyDTOList.add(convertToDTO(survey));
+		}
+		if (surveyDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Survey with " + text + " was found.\"}");
+		logger.debug("Retrieved " + surveyDTOList.size() + " questions containing the text " + text + ".");
+		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
+	}
+
 	/**
 	 * Finds all surveys, without their questions list.
 	 * @return		an HTTP response with status 200 if all surveys have been found.
