@@ -2,6 +2,8 @@ package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.QuestionDTO;
 import it.unimib.unimibmodules.dto.SurveyDTO;
+import it.unimib.unimibmodules.dto.UserDTO;
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Question;
@@ -40,7 +42,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	private static final Logger logger = LogManager.getLogger(SurveyController.class);
 	
 	@Autowired
-	public SurveyController(UserRepository userRepository , SurveyRepository surveyRepository, ModelMapper modelMapper) {
+	public SurveyController(UserRepository userRepository , SurveyRepository surveyRepository, ModelMapper modelMapper){
 		
 		super(modelMapper);
 		this.surveyRepository = surveyRepository;
@@ -51,14 +53,19 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 					mapper.map(Survey::getId, SurveyDTO::setId);
 					mapper.map(Survey::getName, SurveyDTO::setSurveyName);
 				});
-
+		
+		modelMapper.createTypeMap(SurveyDTO.class, Survey.class) 
+		.addMappings(mapper -> {
+			mapper.map(SurveyDTO::getId, Survey::setId);
+		});
+		
 		modelMapper.createTypeMap(User.class, SurveyDTO.class)
 				.addMappings(mapper -> {
 					mapper.map(User::getId, (surveyDTO, id) -> surveyDTO.getUserDTO().setId(id));
 					mapper.map(User::getUsername, (surveyDTO, username) -> surveyDTO.getUserDTO().setUsername(username));
 				});
-
 	}
+	
 	
 	/**
 	 * Finds the survey associated with the given id.
@@ -117,16 +124,16 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @return			an HTTP response with status 201 if the survey has been added
 	 * @throws FormatException
 	 * @throws NotFoundException 
+	 * @throws EmptyFieldException 
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
 	@PostMapping(path = "/addSurvey" , produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> addSurvey(@RequestBody SurveyDTO surveyDTO) throws FormatException, NotFoundException {
-		
+	public ResponseEntity<String> addSurvey(@RequestBody SurveyDTO surveyDTO) throws FormatException, NotFoundException, EmptyFieldException {
 		Survey survey = convertToEntity(surveyDTO);
 		surveyRepository.add(survey);
 		logger.debug(String.format("Added Survey with id: {0}.", survey.getId()));
-		return new ResponseEntity<>("Survey created.", HttpStatus.CREATED);
+		return new ResponseEntity<>("{\"response\":\"Survey creted.\"}", HttpStatus.CREATED);
 	}
 	
 	/**
@@ -135,11 +142,12 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @return			an HTTP response with status 200 if the survey has been updated
 	 * @throws FormatException
 	 * @throws NotFoundException 
+	 * @throws EmptyFieldException 
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
 	@PatchMapping(path = "/modifySurvey")
-	public ResponseEntity<String> modifySurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException, NotFoundException {
+	public ResponseEntity<String> modifySurvey(@RequestParam SurveyDTO surveyDTO) throws FormatException, NotFoundException, EmptyFieldException {
 		
 		Survey survey = convertToEntity(surveyDTO);
 		surveyRepository.modify(survey);
@@ -209,17 +217,18 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @param   surveyDTO	an instance of SurveyDTO
 	 * @return				an instance of Survey
 	 * @throws FormatException
+	 * @throws EmptyFieldException 
 	 * @see DTOMapping#convertToEntity
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
 	@Override
-	public Survey convertToEntity(SurveyDTO surveyDTO) throws FormatException , NotFoundException {
+	public Survey convertToEntity(SurveyDTO surveyDTO) throws FormatException , NotFoundException, EmptyFieldException {
 		
-		Survey survey = modelMapper.map(surveyDTO, Survey.class);
-		survey.setName(surveyDTO.getSurveyName());
-		survey.setCreationDate(surveyDTO.getCreationDateConverted(TimeZone.getDefault().toString(), survey.getCreationDateFormat()));
+		Survey survey = modelMapper.getTypeMap(SurveyDTO.class, Survey.class).map(surveyDTO);
 		survey.setUser(userRepository.get(surveyDTO.getUserDTO().getId()));
-	    return survey;
+		survey.setCreationDate(surveyDTO.getCreationDateConverted(TimeZone.getDefault().toString(), survey.getCreationDateFormat()));
+		survey.setName(surveyDTO.getSurveyName());
+		return survey;
 	}
 }
