@@ -5,15 +5,15 @@ nav{
 
 .container-fluid{
 	padding-top:2%;
+	padding-left:1%;
 }
 
 body{
 	color: black;
+
 }
 
-.container-fluid{
-	padding-right: 10%;
-}
+
 
 .search-form{
 	width: 30%;
@@ -26,4 +26,32 @@ body{
 #row-not-found{
 	margin-top:15%;
 }
+
+.inputError{
+	color:red;
+}
+
+.question-card{
+	border: 1px solid black;
+	background-color : #d7e9f5;
+	width: 100%;
+}
+
+.question-card .col-sm-1{
+	border-right: 1px solid black;
+	background-color : white;
+	width:4%;
+	
+}
+
+.question-card .col-md-11{
+	padding:1%;
+	
+}
+
+#questionCardContainer{
+	width: 100%;
+	height: 20%;
+}
+
 

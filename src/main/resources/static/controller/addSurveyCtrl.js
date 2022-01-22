@@ -1,35 +1,36 @@
 app.controller('addSurveyCtrl', function($rootScope, $scope, $http) {
 
-	$scope.survey = {}
 	$scope.name = "";
 
 	$scope.addSurvey = function() {
 
-		if ($scope.name == "") {
-			//show error
-		} else {
-			
-			actualDate = new Date()
-			
-			let surveyDTO = {
-				 
-					surveyName: $scope.name,
-					creationDate: actualDate.getFullYear()+'-'+(actualDate.getMonth()+1)+'-'+actualDate.getDate() + " " + actualDate.getMinutes() + ":" +  actualDate.getSeconds(),
-					userDTO: {
-						id: 1
-					},
-					questionsDTO: null
-			}
+		let actualDate = new Date()
 
-			$http.post("/api/addSurvey", surveyDTO).then(function onfulFilled(response) {
+		let data = {
 
-				console.log(response.data.response);
-			}, function errorCallback(response) {
-
-				console.log(response);
-			});
+			surveyName: $scope.name,
+			creationDate: actualDate.getFullYear() + '-' + (actualDate.getMonth() + 1) + '-' + actualDate.getDate() + " " + actualDate.getMinutes() + ":" + actualDate.getSeconds(),
+			userDTO: {
+				id: 1,
+				username: "luca_milaz"
+			},
+			questionsDTO: null
 		}
 
-	};
+		$http.post("/api/addSurvey", data).then(function onfulFilled(response) {
+
+			console.log(response.data.response);
+
+		}, function errorCallback(response) {
+
+			alert("Error");
+			console.error(response);
+		});
+
+
+
+	}
+
+
 
 });
