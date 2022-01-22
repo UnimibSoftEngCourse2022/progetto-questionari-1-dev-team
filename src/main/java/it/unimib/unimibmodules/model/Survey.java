@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
 
+import it.unimib.unimibmodules.exception.EmptyFieldException;
+
 /**
  * Represents a survey.
  * @author Luca Milazzo
@@ -89,10 +91,14 @@ public class Survey {
     /**
      * Modifies the name of the survey, setting name as the new value.
      * @param   name  the new name value
+     * @throws EmptyFieldException 
      */
-    public void setName(String name){
+    public void setName(String name) throws EmptyFieldException{
     	
-    	this.name = name;
+    	 if (name == null || name.isBlank())
+             throw new EmptyFieldException("Survey name must not be empty.");
+    	 else
+    		 this.name = name;
     }
     
     /**
