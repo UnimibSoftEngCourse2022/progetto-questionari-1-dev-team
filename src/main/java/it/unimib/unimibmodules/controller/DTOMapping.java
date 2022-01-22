@@ -26,10 +26,7 @@ public abstract class DTOMapping<M, T> {
 	protected DTOMapping(ModelMapper modelMapper) {
 
 		this.modelMapper = modelMapper;
-<<<<<<< HEAD
-=======
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
->>>>>>> 916ff62 (Disabled implicit mapping)
 		modelMapper.getConfiguration().setImplicitMappingEnabled(false);
 	}
 
@@ -48,5 +45,7 @@ public abstract class DTOMapping<M, T> {
 	 * @throws NotFoundException 
 	 * @throws EmptyFieldException 
 	 */
+
 	public abstract M convertToEntity(T dto) throws FormatException, NotFoundException, EmptyFieldException;
+
 }
