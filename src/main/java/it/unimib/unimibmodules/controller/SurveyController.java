@@ -42,8 +42,8 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	private static final Logger logger = LogManager.getLogger(SurveyController.class);
 	
 	@Autowired
+
 	public SurveyController(UserRepository userRepository , SurveyRepository surveyRepository, ModelMapper modelMapper){
-		
 		super(modelMapper);
 		this.surveyRepository = surveyRepository;
 		this.userRepository = userRepository;
@@ -124,7 +124,10 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @return			an HTTP response with status 201 if the survey has been added
 	 * @throws FormatException
 	 * @throws NotFoundException 
+<<<<<<< HEAD
 	 * @throws EmptyFieldException 
+=======
+>>>>>>> c18a49f (Question Pull - Resolved conflict DTOMapping)
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
@@ -142,7 +145,10 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO>{
 	 * @return			an HTTP response with status 200 if the survey has been updated
 	 * @throws FormatException
 	 * @throws NotFoundException 
+<<<<<<< HEAD
 	 * @throws EmptyFieldException 
+=======
+>>>>>>> c18a49f (Question Pull - Resolved conflict DTOMapping)
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
