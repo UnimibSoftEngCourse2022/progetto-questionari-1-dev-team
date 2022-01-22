@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<!-- This page is used to compile a specific Survey. -->
+<html lang="en" ng-app="UNIMIBModules">
+<head>
+<meta charset="utf-8">
+<title>UNIMIB</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css"
+	href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="./styles/survey.css">
+</head>
+<body ng-controller="editSurveyCtrl">
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<a class="navbar-brand" href="#">UNIMIB</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item "><a class="nav-link" href="#">Survey</a></li>
+			</ul>
+		</div>
+	</nav>
+
+
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-4">
+				<h1>Edit your Survey</h1><br><br>
+			</div>
+		</div>
+		<div class="row ">
+			<div class="col-md-4">
+				<p>
+					<b>Name:</b>
+				</p>
+				<p>
+					<b>Creation Date:</b>
+				</p>
+				<form name="form" novalidate>
+					<div class="form-group">
+						<label for="Name">New Survey Name</label> <input type="text"
+							class="form-control" name="name" aria-describedby="Name"
+							placeholder="Enter name" ng-model="name" required> <br />
+
+						<p class="inputError"
+							ng-show="(form.$submitted || form.name.$touched ) && form.name.$error.required">This
+							field is required</p>
+					</div>
+
+					<br>
+					<button ng-disabled="form.$invalid" ng-click="addSurvey()"
+						type="submit" class="btn btn-primary">Submit</button>
+				</form>
+
+				<br> <br>
+
+				<form name="form-delete" novalidate>
+					<button ng-click="deleteSurvey()" type="submit"
+						class="btn btn-danger">Delete Survey</button>
+				</form>
+
+			</div>
+
+			<div class="col-md-8">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12">
+							<h2>Add Questions:</h2>
+						</div>
+
+					</div>
+				</div>
+				<div class="container-fluid">
+					<div class="row">
+						<div id="questionCardContainer" class="col-md-12 overflow-auto">
+							<div class="question-card row">
+								<div class='col-sm-1 checkbox-col d-flex align-items-center'>
+									<input type="checkbox">
+								</div>
+								<div class='col-md-11'>
+									<p>
+										<b>User creator:</b>
+									</p>
+									<p>
+										<b>Question:</b>
+									</p>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<script src="./node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+<script src="./node_modules/angular/angular.min.js"></script>
+<script src="controller/app.js"></script>
+<script src="controller/editSurveyCtrl.js"></script>
+</html>
