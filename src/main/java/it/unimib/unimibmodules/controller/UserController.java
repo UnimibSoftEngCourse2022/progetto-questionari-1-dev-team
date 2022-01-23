@@ -45,6 +45,13 @@ public class UserController extends DTOMapping<User, UserDTO> {
                     mapper.map(User::getUsername, UserDTO::setUsername);
                     mapper.map(User::getEmail, UserDTO::setEmail);
                 });
+
+        modelMapper.createTypeMap(UserDTO.class, User.class)
+                .addMappings(mapper -> {
+                    mapper.map(UserDTO::getId, User::setId);
+                    mapper.map(UserDTO::getUsername, User::setUsername);
+                    mapper.map(UserDTO::getEmail, User::setEmail);
+                });
     }
 
     /**
@@ -128,6 +135,6 @@ public class UserController extends DTOMapping<User, UserDTO> {
 	 */
 	@Override
 	public User convertToEntity(UserDTO userDTO) {
-        return modelMapper.map(userDTO, User.class);
+        return modelMapper.getTypeMap(UserDTO.class, User.class).map(userDTO);
 	}
 }
