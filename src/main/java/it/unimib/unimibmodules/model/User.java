@@ -1,12 +1,10 @@
 package it.unimib.unimibmodules.model;
 
-import java.util.Set;
 import javax.persistence.*;
-
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import java.util.Set;
 
 /**
- * Rapresentation of a user in a general website way. 
+ * Representation of a user in a general website way.
  * @author Gianlorenzo Martini
  * @version 0.2.0
  */
@@ -65,7 +63,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Answer> answers;
 
-    public User() {}
+    /**
+     * Creates an empty user.
+     * @see it.unimib.unimibmodules.factory.UserFactory#createUser
+     */
+    public User() {
+
+        // Empty constructor; use UserFactory.createUser.
+    }
     
     public int getId() {
         return id;
