@@ -4,7 +4,7 @@ app.controller('editQuestionCtrl', function($scope, $http, $window) {
     var counter;
     var tmpObj = {};
 
-    $http.get("http://localhost:5000/api/getQuestion/159")
+    $http.get("http://localhost:5000/api/getQuestion/182")
         .then(function(response) {
             $scope.question =  response.data;
             $scope.questiontext = $scope.question.text;
@@ -163,7 +163,6 @@ app.controller('editQuestionCtrl', function($scope, $http, $window) {
                         $scope.prova = "Risposta eliminata con successo!";
                     });
         });
-
         $window.open("http://localhost:5000/selectQuestion", "_self");
     };
 

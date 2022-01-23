@@ -45,6 +45,7 @@ public abstract class DTOMapping<M, T> {
 	 * @throws NotFoundException 
 	 * @throws EmptyFieldException 
 	 */
+
 	public abstract M convertToEntity(T dto) throws FormatException, NotFoundException, EmptyFieldException;
 
 }

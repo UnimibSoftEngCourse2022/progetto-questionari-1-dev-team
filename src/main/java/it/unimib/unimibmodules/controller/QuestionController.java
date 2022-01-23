@@ -52,7 +52,6 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 		this.userRepository = userRepository;
 		this.categoryRepository = categoryRepository;
 
-
 		modelMapper.createTypeMap(Question.class, QuestionDTO.class)
 				.addMappings(mapper -> {
 					mapper.map(Question::getId, QuestionDTO::setId);
@@ -70,7 +69,6 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 					mapper.map(QuestionDTO::getUrlImage, Question::setUrlImage);
 					mapper.map(QuestionDTO::getText, Question::setText);
 					mapper.map(QuestionDTO::getQuestionType, Question::setQuestionType);
-
 				});
 
         modelMapper.createTypeMap(User.class, QuestionDTO.class)
