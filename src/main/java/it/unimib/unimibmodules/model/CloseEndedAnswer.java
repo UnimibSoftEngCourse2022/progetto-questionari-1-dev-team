@@ -45,11 +45,10 @@ public class CloseEndedAnswer{
 
 	/**
 	 * Creates an empty close-ended answer.
-	 * @see it.unimib.unimibmodules.factory.AnswerFactory#createClosedEndedAnswer
 	 */
 	public CloseEndedAnswer() {
 
-		// Empty constructor; use Answerfactory.createClosedEndedAnswer.
+		// Empty constructor
 	}
 
 	/**
@@ -79,13 +78,13 @@ public class CloseEndedAnswer{
 
 	/**
 	 * Modifies the text of the close-ended answer, setting <code>text</code> as the new value.
-	 * @param   text                    the new text value
-	 * @throws	EmptyFieldException    if the answer is empty
+	 * @param	text					the new text value
+	 * @throws	EmptyFieldException		if text is empty
 	 */
 	public void setText(String text) throws EmptyFieldException {
 
-		if (text == null || text.isBlank())
-			throw new EmptyFieldException("Close-ended answers must not be empty.");
+		if (text == null || text.isEmpty())
+			throw new EmptyFieldException("The text of a close-ended answer must not be empty.");
 		this.text = text;
 	}
 

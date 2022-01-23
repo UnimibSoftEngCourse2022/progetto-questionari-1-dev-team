@@ -51,10 +51,7 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 				});
 
 		modelMapper.createTypeMap(CloseEndedAnswerDTO.class, CloseEndedAnswer.class)
-				.addMappings(mapper -> {
-					mapper.map(CloseEndedAnswerDTO::getId, CloseEndedAnswer::setId);
-					mapper.map(CloseEndedAnswerDTO::getText, CloseEndedAnswer::setText);
-				});
+				.addMapping(CloseEndedAnswerDTO::getId, CloseEndedAnswer::setId);
 
 		modelMapper.createTypeMap(Question.class, CloseEndedAnswerDTO.class)
 				.addMapping(Question::getId, (closeEndedAnswerDTO, id) -> closeEndedAnswerDTO.getQuestionDTO().setId(id));
@@ -80,11 +77,12 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	 * @param	closeEndedAnswerDTO	the serialized object of the close-ended answer
 	 * @return						an HTTP response with status 201 if the new close-ended answer has been created,
 	 * 								500 otherwise
-	 * @throws	NotFoundException	when one of the queries of convertToEntity fails.
+	 * @throws	EmptyFieldException	when one of the required field is emptys
+	 * @throws	NotFoundException	when one of the queries of convertToEntity fails
 	 */
 	@PostMapping(path = "/addCloseEndedAnswer", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> postCloseEndedAnswer(@RequestBody CloseEndedAnswerDTO closeEndedAnswerDTO)
-			throws NotFoundException {
+			throws EmptyFieldException, NotFoundException {
 
 		CloseEndedAnswer closeEndedAnswer = convertToEntity(closeEndedAnswerDTO);
 		closeEndedAnswerRepository.add(closeEndedAnswer);
@@ -146,13 +144,15 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	 * Converts an instance of CloseEndedAnswer to an instance of CloseEndedAnswerDTO
 	 * @param   closeEndedAnswerDTO	an instance of CloseEndedAnswerDTO
 	 * @return						an instance of CloseEndedAnswer, containing the deserialized data of closeEndedAnswerDTO
-	 * @throws	NotFoundException	when one of the queries fails.
+	 * @throws	EmptyFieldException	when one of the required field is empty
+	 * @throws	NotFoundException	when one of the queries fails
 	 * @see DTOMapping#convertToEntity
 	 */
 	@Override
-	public CloseEndedAnswer convertToEntity(CloseEndedAnswerDTO closeEndedAnswerDTO) throws NotFoundException {
+	public CloseEndedAnswer convertToEntity(CloseEndedAnswerDTO closeEndedAnswerDTO) throws EmptyFieldException, NotFoundException {
 
 		CloseEndedAnswer closeEndedAnswer = modelMapper.map(closeEndedAnswerDTO, CloseEndedAnswer.class);
+		closeEndedAnswer.setText(closeEndedAnswerDTO.getText());
 		closeEndedAnswer.setQuestion(questionRepository.get(closeEndedAnswerDTO.getQuestionDTO().getId()));
 		return closeEndedAnswer;
 	}

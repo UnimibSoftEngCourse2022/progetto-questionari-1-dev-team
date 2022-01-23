@@ -3,6 +3,7 @@ package it.unimib.unimibmodules.controller;
 import it.unimib.unimibmodules.dto.AnswerDTO;
 import it.unimib.unimibmodules.dto.CloseEndedAnswerDTO;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
+import it.unimib.unimibmodules.exception.IncorrectSizeException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.*;
 import org.apache.logging.log4j.LogManager;
@@ -75,10 +76,7 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 				});
 
 		modelMapper.createTypeMap(AnswerDTO.class, Answer.class)
-				.addMappings(mapper -> {
-					mapper.map(AnswerDTO::getId, Answer::setId);
-					mapper.map(AnswerDTO::getAnswerText, Answer::setText);
-				});
+				.addMapping(AnswerDTO::getId, Answer::setId);
 
 		modelMapper.createTypeMap(User.class, AnswerDTO.class)
 				.addMapping(User::getId, (answerDTO, id) -> answerDTO.getUserDTO().setId(id));
@@ -130,15 +128,17 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	 * Creates an Answer.
 	 * @param	answerDTO			the serialized object of the answer
 	 * @return						an HTTP Response with status 201 if the answer has been created, 500 otherwise
+	 * @throws	EmptyFieldException	if some of the attributes of the new answer can't be found on database
 	 * @throws	NotFoundException	if some of the attributes of the new answer can't be found on database
 	 */
 	@PostMapping(path = "/addAnswer", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> addAnswer(@RequestBody AnswerDTO answerDTO) throws NotFoundException {
+	public ResponseEntity<String> addAnswer(@RequestBody AnswerDTO answerDTO)
+			throws EmptyFieldException, NotFoundException, IncorrectSizeException {
 
 		Answer answer = convertToEntity(answerDTO);
 		answerRepository.add(answer);
 		logger.debug("Added Answer with id {}.", answer.getId());
-		return new ResponseEntity<>("{\"response\":\"Answer creted.\"}", HttpStatus.CREATED);
+		return new ResponseEntity<>("{\"response\":\"Answer created.\"}", HttpStatus.CREATED);
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	 */
 	@PatchMapping(path = "/modifyAnswer")
 	public ResponseEntity<String> modifyAnswer(@RequestBody AnswerDTO modifiedAnswerDTO)
-			throws NotFoundException, EmptyFieldException {
+			throws NotFoundException, EmptyFieldException, IncorrectSizeException {
 
 		Answer modifiedAnswer = convertToEntity(modifiedAnswerDTO);
 		Answer answer = answerRepository.get(modifiedAnswer.getId());
@@ -227,12 +227,14 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	 * @see DTOMapping#convertToEntity
 	 */
 	@Override
-	public Answer convertToEntity(AnswerDTO answerDTO) throws NotFoundException {
+	public Answer convertToEntity(AnswerDTO answerDTO) throws EmptyFieldException, NotFoundException,
+			IncorrectSizeException {
 
 		Answer answer = modelMapper.map(answerDTO, Answer.class);
 		answer.setUser(userRepository.get(answerDTO.getUserDTO().getId()));
 		answer.setSurvey(surveyRepository.get(answerDTO.getSurveyDTO().getId()));
 		answer.setQuestion(questionRepository.get(answerDTO.getQuestionDTO().getId()));
+		answer.setText(answerDTO.getAnswerText());
 		if(answerDTO.getCloseEndedAnswerDTOs() != null) {
 			Set<CloseEndedAnswer> closeEndedAnswerSet = new HashSet<>();
 			for (CloseEndedAnswerDTO closeEndedAnswerDTO : answerDTO.getCloseEndedAnswerDTOs()) {
