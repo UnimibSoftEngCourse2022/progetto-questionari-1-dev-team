@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="UNIMIBModules">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+    <body ng-controller="searchQuestionCtrl">
+        <div>
+            <input type="text" ng-model="name">
+            <button ng-click="search(name)">Cerca</button>
+        </div>
+        <li ng-repeat="question in questions" value="{{question}}"> {{question.text}} </li>
+    </body>
+    <script src="node_modules/angular/angular.min.js"></script>
+    <script src="controller/app.js"></script>
+    <script src="controller/searchQuestionCtrl.js"></script>
+</html>

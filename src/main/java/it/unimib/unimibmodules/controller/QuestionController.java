@@ -67,6 +67,23 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	}
 
 	/**
+	 * Gets the question in the database where text is contained in the text of the question
+	 * @param	text	the text of the question to be found
+	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
+	 * @throws  NotFoundException	if 404 no question with identified by <code>id</code> has been found
+	 */
+	@GetMapping(path = "/findQuestionsByText/{text}")
+	public ResponseEntity<List<QuestionDTO>> findQuestionsByText(@PathVariable String text) throws NotFoundException {
+
+		Iterable<Question> questionList = questionRepository.getByText(text);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
+		logger.debug("Retrieved " + questionDTOList.size() + " questions containing the text " + text + ".");
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
+
+	/**
 	 * Gets the Question associated with the given id.
 	 * @param	id	the id of the question
 	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
