@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,6 +67,26 @@ public class UserController extends DTOMapping<User, UserDTO> {
         User user = userRepository.get(id);
         logger.debug("Retrieved User with id " + id + ".");
         return new ResponseEntity<>(convertToDTO(user), HttpStatus.OK);
+    }
+
+    @GetMapping("/getSurveysCreated")
+    public ResponseEntity<List<SurveyDTO>> getSurveysCreated(@RequestParam (name = "username") String username) throws NotFoundException {
+
+        User user = userRepository.getByUsername(username);
+        List<Survey> surveys  = (List<Survey>) user.getSurveysCreated();
+
+        List<SurveyDTO> surveysDTO = new ArrayList<>();
+
+        for (Survey survey : surveys) {
+            SurveyDTO surveyDTO = new SurveyDTO();
+            surveyDTO.setId(survey.getId());
+            surveyDTO.setSurveyName(survey.getName());
+            surveyDTO.setUserDTO(convertToDTO(survey.getUser()));
+            surveysDTO.add(surveyDTO);
+        }
+
+        logger.debug("Retrieved surveys created by user: " + username + ".");
+        return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
     }
 
     /**
