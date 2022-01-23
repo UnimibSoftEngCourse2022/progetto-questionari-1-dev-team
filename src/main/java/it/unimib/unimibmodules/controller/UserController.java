@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Controller handling HTTP requests from User
@@ -73,7 +74,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public ResponseEntity<List<SurveyDTO>> getSurveysCreated(@RequestParam (name = "username") String username) throws NotFoundException {
 
         User user = userRepository.getByUsername(username);
-        List<Survey> surveys  = (List<Survey>) user.getSurveysCreated();
+        Set<Survey> surveys  = user.getSurveysCreated();
 
         List<SurveyDTO> surveysDTO = new ArrayList<>();
 
