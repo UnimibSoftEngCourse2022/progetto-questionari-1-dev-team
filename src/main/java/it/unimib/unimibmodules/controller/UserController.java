@@ -3,7 +3,6 @@ package it.unimib.unimibmodules.controller;
 import it.unimib.unimibmodules.dto.SurveyDTO;
 import it.unimib.unimibmodules.dto.UserDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
-import it.unimib.unimibmodules.factory.UserFactory;
 import it.unimib.unimibmodules.model.Survey;
 import it.unimib.unimibmodules.model.User;
 import org.apache.logging.log4j.LogManager;
@@ -77,9 +76,9 @@ public class UserController extends DTOMapping<User, UserDTO> {
 
     /**
      * Gets the surveys created by the user identified by the username
-     * @param   username    the username of a user
-     * @return              a list of surveys created by the user identified with username
-     * @throws NotFoundException
+     * @param   username            the username of a user
+     * @return                      a list of surveys created by the user identified with username
+     * @throws NotFoundException    if no user identified by username is found
      */
     @GetMapping("/getSurveysCreated")
     public ResponseEntity<List<SurveyDTO>> getSurveysCreated(@RequestParam (name = "username") String username) throws NotFoundException {
