@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="UNIMIBModules">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body ng-controller="searchSurveyCtrl">
+        <div>
+            <input type="text" ng-model="name">
+            <button ng-click="search(name)">Cerca</button>
+        </div>
+        <ul>
+            <li ng-hide="!questionId.id">{{questionId.surveyName}}</li>
+            <li ng-repeat="question in questions" value="{{question}}" ng-hide="questionId.id===question.id">{{question.surveyName}}</li>
+        </ul>
+    </body>
+    <script src="node_modules/angular/angular.min.js"></script>
+    <script src="controller/app.js"></script>
+    <script src="controller/searchSurveyCtrl.js"></script>
+</html>

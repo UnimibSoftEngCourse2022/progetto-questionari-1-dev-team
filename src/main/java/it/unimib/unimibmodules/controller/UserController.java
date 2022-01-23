@@ -48,6 +48,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
                     mapper.map(User::getId, UserDTO::setId);
                     mapper.map(User::getUsername, UserDTO::setUsername);
                     mapper.map(User::getEmail, UserDTO::setEmail);
+                    mapper.map(User::getName, UserDTO::setName);                 
                 });
 
         modelMapper.createTypeMap(UserDTO.class, User.class)
@@ -118,6 +119,27 @@ public class UserController extends DTOMapping<User, UserDTO> {
             logger.debug("Failed sign in of user: " + userDTO.getUsername() + ".");
             return new ResponseEntity<>("{\"response\":\"Login fAILED.\"}", HttpStatus.UNAUTHORIZED);
         }
+    }
+    
+    
+    @GetMapping("/getSurveysCreated")
+    public ResponseEntity<List<SurveyDTO>> getSurveysCreated(@RequestParam (name = "username") String username) throws NotFoundException {
+
+        User user = userRepository.getByUsername(username);
+        Set<Survey> surveys  = user.getSurveysCreated();
+
+        List<SurveyDTO> surveysDTO = new ArrayList<>();
+
+        for (Survey survey : surveys) {
+            SurveyDTO surveyDTO = new SurveyDTO();
+            surveyDTO.setId(survey.getId());
+            surveyDTO.setSurveyName(survey.getName());
+            surveyDTO.setUserDTO(convertToDTO(survey.getUser()));
+            surveysDTO.add(surveyDTO);
+        }
+
+        //logger.debug("Retrieved surveys created by user: " + username + ".");
+        return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
     }
 
     /**

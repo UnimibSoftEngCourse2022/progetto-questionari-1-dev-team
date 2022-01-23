@@ -1,7 +1,10 @@
 package it.unimib.unimibmodules.repository;
 
+import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.Survey;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 /**
  * DAO for the Survey class.
@@ -10,4 +13,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface SurveyDAO extends CrudRepository<Survey, Integer>{
 
+    @Query("SELECT s FROM Survey s Where name LIKE %:text%")
+    Iterable<Survey> findByText(@Param("text") String text);
 }

@@ -82,10 +82,10 @@ public class CloseEndedAnswer{
 	 * @param   text                    the new text value
 	 * @throws	EmptyFieldException    if the answer is empty
 	 */
-	public void setText(String text) throws EmptyFieldException {
+	public void setText(String text) {
 
-		if (text == null || text.isBlank())
-			throw new EmptyFieldException("Close-ended answers must not be empty.");
+		//if (text == null || text.isBlank())
+			//throw new EmptyFieldException("Close-ended answers must not be empty.");
 		this.text = text;
 	}
 
