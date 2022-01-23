@@ -1,9 +1,11 @@
 package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.controller.SurveyRepository;
+import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
-import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.Survey;
+
+import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,19 +36,29 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	/**
 	 * Inserts an instance of Survey in the database
 	 * @param	survey	an instance of Survey
+	 * @throws FormatException 
 	 * @see SurveyRepository#add
 	 */
 	@Override
-	public void add(Survey survey) {
-		surveyDAO.save(survey);
+	public void add(Survey survey) throws FormatException {
+		try {
+			surveyDAO.save(survey);
+		}catch(IllegalArgumentException ex) {
+			throw new FormatException("The surveys must be not null", ex); 
+		} 	
 	}
 	
 	/**
      * Inserts a Set of surveys in the database
      * @param   surveySet  a Set of Survey
+	 * @throws FormatException 
      */
-	public void addAll(List<Survey> surveySet) {
-		surveyDAO.saveAll(surveySet);
+	public void addAll(List<Survey> surveySet) throws FormatException {
+		try {
+			surveyDAO.saveAll(surveySet);
+		}catch(IllegalArgumentException ex) {
+			throw new FormatException("All the surveys must be not null", ex); 
+		} 	
 	}
 
 	/**
@@ -61,39 +73,58 @@ public class SurveyRepositoryImpl implements SurveyRepository {
         try {
         	return survey.orElseThrow();
         }catch(NoSuchElementException ex) {
-        	throw new NotFoundException("The survey with id = " + id + " has not been found.", ex); 
+        	throw new NotFoundException("The survey with id = " + id + " doesn't exists.", ex); 
         }
     }
     
     /**
      * Returns all surveys in the database.
      * @return  a Set of Surveys
+     * @throws NotFoundException 
 	 * @see SurveyRepository#getAll()
      */
 	@Override
-    public Iterable<Survey> getAll() {
-        return surveyDAO.findAll();
+    public Iterable<Survey> getAll() throws NotFoundException {
+		Iterable<Survey> surveys =  surveyDAO.findAll();
+		if(IterableUtils.size(surveys) > 0) {
+			return surveys;
+		}else {
+			NotFoundException ex = new NotFoundException("No surveys exist.");
+			throw ex;  
+		}
     }
 
 	/**
 	 * Finds the survey in the database where text is contained in the name of the survey
 	 * @param	text	the text to search in the name of the survey
 	 * @return			a list of Surveys where the text is contained in the name of the survey
+	 * @throws NotFoundException 
 	 */
 	@Override
-	public Iterable<Survey> getByText(String text) {
-
-		return surveyDAO.findByText(text);
+	public Iterable<Survey> getByText(String text) throws NotFoundException {
+		
+		Iterable<Survey> surveys =  surveyDAO.findByText(text);
+		if(IterableUtils.size(surveys) > 0) {
+			return surveys;
+		}else {
+			NotFoundException ex = new NotFoundException("No surveys containing " + text + " in their name have been found");
+			throw ex;  
+		}
 	}
 
     /**
      * Deletes from the database the survey identified by id.
      * @param   id  the id of the survey to be deleted
+     * @throws NotFoundException 
      * @see SurveyRepository#remove(int id)
      */
 	@Override
-    public void remove(int id) {
-    	surveyDAO.deleteById(id);
+    public void remove(int id) throws FormatException {
+		try {
+			surveyDAO.deleteById(id);
+		}catch(IllegalArgumentException ex) {
+			throw new FormatException("The ID can't be null", ex); 
+		} 	
     }
     
     /**
@@ -106,10 +137,15 @@ public class SurveyRepositoryImpl implements SurveyRepository {
     /**
      * Updates a survey in the database using a new instance of Survey.
      * @param   survey  the new instance of Survey
+     * @throws NotFoundException 
      * @see SurveyRepository#modify
      */
 	@Override
-    public void modify(Survey survey) {
-    	surveyDAO.save(survey);
+    public void modify(Survey survey) throws FormatException {
+		try {
+			surveyDAO.save(survey);
+		}catch(IllegalArgumentException ex) {
+			throw new FormatException("The given entity is empty.", ex); 
+		} 	
     }
 }
