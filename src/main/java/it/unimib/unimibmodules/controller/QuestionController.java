@@ -60,6 +60,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 					mapper.map(Question::getCategory, QuestionDTO::setCategory);
 					mapper.map(Question::getCloseEndedAnswerSet, QuestionDTO::setCloseEndedAnswerDTOSet);
 					mapper.map(Question::getQuestionType, QuestionDTO::setQuestionType);
+					mapper.map(Question::getUser, QuestionDTO::setUser);
 				});
 
 		modelMapper.createTypeMap(QuestionDTO.class, Question.class)
@@ -110,7 +111,6 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 */
 	@GetMapping(path = "/findQuestionForSurvey/{id}")
 	public ResponseEntity<List<QuestionDTO>> findQuestionsForSurvey(@PathVariable int id) throws NotFoundException {
-
 		Iterable<Question> questionList = questionRepository.getBySurveyId(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		logger.debug("Retrieved " + questionDTOList.size() + " questions for survey with id " + id + ".");
