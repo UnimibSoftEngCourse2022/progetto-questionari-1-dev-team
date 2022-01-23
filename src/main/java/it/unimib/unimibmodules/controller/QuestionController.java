@@ -60,6 +60,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 					mapper.map(Question::getCategory, QuestionDTO::setCategory);
 					mapper.map(Question::getCloseEndedAnswerSet, QuestionDTO::setCloseEndedAnswerDTOSet);
 					mapper.map(Question::getQuestionType, QuestionDTO::setQuestionType);
+					mapper.map(Question::getUser, QuestionDTO::setUser);
 				});
 
 		modelMapper.createTypeMap(QuestionDTO.class, Question.class)
@@ -99,7 +100,25 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getAll();
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		logger.debug("Retrieved all the questions.");
-		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+    return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+   }
+  
+  
+  
+	 * Gets the question in the database where text is contained in the text of the question
+	 * @param	text	the text of the question to be found
+	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
+	 * @throws  NotFoundException	if 404 no question with identified by <code>id</code> has been found
+	 */
+	@GetMapping(path = "/findQuestionsByText/{text}")
+	public ResponseEntity<List<QuestionDTO>> findQuestionsByText(@PathVariable String text) throws NotFoundException {
+
+		Iterable<Question> questionList = questionRepository.getByText(text);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
+		logger.debug("Retrieved " + questionDTOList.size() + " questions containing the text " + text + ".");
+    return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
 	/**
@@ -110,7 +129,6 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 */
 	@GetMapping(path = "/findQuestionForSurvey/{id}")
 	public ResponseEntity<List<QuestionDTO>> findQuestionsForSurvey(@PathVariable int id) throws NotFoundException {
-
 		Iterable<Question> questionList = questionRepository.getBySurveyId(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		logger.debug("Retrieved " + questionDTOList.size() + " questions for survey with id " + id + ".");
@@ -174,6 +192,21 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 		modelMapper.getTypeMap(User.class, QuestionDTO.class)
 				.map(question.getUser(), questionDTO);
 		return questionDTO;
+	}
+
+	/**
+	 * Converts an instance of Question to an instance of questionDTO
+	 * @param   questions	an instance of Question
+	 * @return			    an instance of QuestionDTO, containing the serialized data of question
+	 * @see DTOMapping#convertToDTO
+	 */
+	public List<QuestionDTO> convertListToDTO(Iterable<Question> questions) {
+
+		List<QuestionDTO> questionList = new ArrayList<>();
+		for (Question question : questions)
+			questionList.add(convertToDTO(question));
+
+		return questionList;
 	}
 
 	/**

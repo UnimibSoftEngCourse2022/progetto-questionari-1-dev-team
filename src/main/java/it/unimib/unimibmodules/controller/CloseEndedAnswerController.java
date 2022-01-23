@@ -44,6 +44,17 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 		super(modelMapper);
 		this.closeEndedAnswerRepository = closeEndedAnswerRepository;
 		this.questionRepository = questionRepository;
+		modelMapper.createTypeMap(CloseEndedAnswer.class, CloseEndedAnswerDTO.class)
+				.addMappings(mapper -> {
+					mapper.map(CloseEndedAnswer::getId, CloseEndedAnswerDTO::setId);
+					mapper.map(CloseEndedAnswer::getText, CloseEndedAnswerDTO::setText);
+				});
+
+		modelMapper.createTypeMap(CloseEndedAnswerDTO.class, CloseEndedAnswer.class)
+				.addMappings(mapper -> {
+					mapper.map(CloseEndedAnswerDTO::getId, CloseEndedAnswer::setId);
+					mapper.map(CloseEndedAnswerDTO::getText, CloseEndedAnswer::setText);
+				});
 
 		modelMapper.createTypeMap(CloseEndedAnswer.class, CloseEndedAnswerDTO.class)
 				.addMappings(mapper -> {

@@ -33,5 +33,17 @@ public class ViewController {
 	@GetMapping(path = "/editQuestion")
 	public ModelAndView editQuestion(){
 		return new ModelAndView("edit_Question.html");
+  }
+
+	@GetMapping(path = "/searchQuestion")
+	public ModelAndView searchQuestion() {
+
+		return new ModelAndView("searchQuestion.html");
+	}
+
+	@GetMapping(path = "/searchSurvey")
+	public ModelAndView searchSurvey() {
+
+		return new ModelAndView("searchSurvey.html");
 	}
 }

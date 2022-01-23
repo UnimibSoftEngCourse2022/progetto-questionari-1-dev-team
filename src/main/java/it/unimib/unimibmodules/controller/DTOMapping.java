@@ -1,6 +1,7 @@
 package it.unimib.unimibmodules.controller;
 
 
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import org.modelmapper.ModelMapper;
@@ -41,6 +42,10 @@ public abstract class DTOMapping<M, T> {
 	 * @param   dto	an instance of T
 	 * @return		an instance of M, containing the deserialized data of T
 	 * @throws FormatException 
+	 * @throws NotFoundException 
+	 * @throws EmptyFieldException 
 	 */
-	public abstract M convertToEntity(T dto) throws FormatException, NotFoundException;
+
+	public abstract M convertToEntity(T dto) throws FormatException, NotFoundException, EmptyFieldException;
+
 }

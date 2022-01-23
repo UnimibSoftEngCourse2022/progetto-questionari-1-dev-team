@@ -156,6 +156,13 @@ app.controller('editQuestionCtrl', function($scope, $http, $window) {
                 $scope.prova = "Domanda eliminata con successo!";
             });
 
+        angular.forEach($scope.questionAnswer, function (answer, key) {
+            if(answer.id !== null && !angular.isUndefined(answer.id))
+                $http.delete("http://localhost:5000/api/deleteCloseEndedAnswer/"+answer.id)
+                    .then(function (response) {
+                        $scope.prova = "Risposta eliminata con successo!";
+                    });
+        });
         $window.open("http://localhost:5000/selectQuestion", "_self");
     };
 
