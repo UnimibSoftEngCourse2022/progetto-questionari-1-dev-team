@@ -38,11 +38,17 @@ paths:
                 password:
                   type: string
       responses:
-        '501':
-          description: Not implemented yet.
+        '200':
+          description: Login Successful!
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: The combination of username and password does not match. Login Failed!
   /signUpUser:
     post:
-      summary: Modifies the survey's name associated with the given id.
+      summary: Create a new User.
       requestBody:
         required: true
         content:
@@ -50,8 +56,14 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
       responses:
-        '501':
-          description: Not implemented yet.
+        '201':
+          description: User created!
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Username already existing!
   /getSurvey/{id}:
     get:
       summary: Returns the survey associated with the given id.
