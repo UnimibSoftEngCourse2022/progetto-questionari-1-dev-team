@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Repository for the Answers. Adds business logic to Answer instances before actually accessing
@@ -30,10 +28,16 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
      */
     private final AnswerDAO answerDAO;
 
+	/**
+	 * The context of the UnitOfWork
+	 */
+	private final Map<String, List<Answer>> uofContext;
+
     @Autowired
     public AnswerRepositoryImpl(AnswerDAO answerDAO) {
 
         this.answerDAO = answerDAO;
+		uofContext = new HashMap<>();
     }
 
     /**
@@ -138,7 +142,12 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	 */
 	private void register(Answer answer, String operation) {
 
-		// TODO Auto-generated method stub
+		List<Answer> answerToOperate = uofContext.get(operation);
+		if (answerToOperate == null) {
+			answerToOperate = new ArrayList<>();
+		}
+		answerToOperate.add(answer);
+		uofContext.put(operation, answerToOperate);
 	}
 
 	/**
@@ -149,7 +158,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	@Override
 	public void registerNew(Answer answer) {
 
-		// TODO Auto-generated method stub
+		logger.info("Registering Answer with id {} for insert in context.", answer.getId());
 		register(answer, UnitOfWork.INSERT);
 	}
 
@@ -161,7 +170,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	@Override
 	public void registerModified(Answer answer) {
 
-		// TODO Auto-generated method stub
+		logger.info("Registering Answer with id {} for modify in context.", answer.getId());
 		register(answer, UnitOfWork.MODIFY);
 	}
 
@@ -173,7 +182,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	@Override
 	public void registerDeleted(Answer answer) {
 
-		// TODO Auto-generated method stub
+		logger.info("Registering Answer with id {} for delete in context.", answer.getId());
 		register(answer, UnitOfWork.DELETE);
 	}
 
@@ -185,5 +194,6 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	public void commit() {
 
 		// TODO Auto-generated method stub
+		// https://java-design-patterns.com/patterns/unit-of-work/
 	}
 }
