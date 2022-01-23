@@ -30,6 +30,8 @@ public class ViewController {
 	public ModelAndView editAnswer() {
 
 		return new ModelAndView("edit_answer.html");
+	}
+
 	@GetMapping(path = "/addQuestion")
 	public ModelAndView addQuestion() {
 		return new ModelAndView("add_Question.html");
