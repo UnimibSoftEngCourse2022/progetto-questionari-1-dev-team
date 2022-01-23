@@ -14,9 +14,13 @@ app.controller('signUpUserCtrl', function($scope, $http) {
             name : $scope.name,
             surname : $scope.surname,
             email : $scope.email,
-            password : $scope.password
+            password : $scope.password,
+            questionsCreatedDTO : null,
+            surveysCreatedDTO : null
 
         }
+
+        console.log(data);
 
         $http.post("/api/signUpUser", data).then(function onFulfilled(response) {
 

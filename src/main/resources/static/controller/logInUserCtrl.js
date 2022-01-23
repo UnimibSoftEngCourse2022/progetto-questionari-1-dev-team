@@ -1,14 +1,19 @@
 app.controller('logInUserCtrl', function($scope, $http) {
 
-    $scope.credentials.username = "";
-    $scope.credentials.password = "";
+    $scope.username = "";
+    $scope.password = "";
 
     $scope.loginUser = function() {
 
         let data = {
 
-            username : $scope.credentials.username,
-            password : $scope.credentials.password
+            name : null,
+            surname : null,
+            email : null,
+            username : $scope.username,
+            password : $scope.password,
+            questionsCreatedDTO : null,
+            surveysCreatedDTO : null
 
         }
 
