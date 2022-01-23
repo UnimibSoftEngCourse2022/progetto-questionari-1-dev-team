@@ -65,6 +65,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
      * Returns all categories in the database.
      * @return  a list of Category
      */
+    @Override
     public Iterable<Category> getAll() {
         return categoryDAO.findAll();
     }

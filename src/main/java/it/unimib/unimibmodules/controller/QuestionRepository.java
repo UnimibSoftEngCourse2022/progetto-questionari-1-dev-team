@@ -26,11 +26,24 @@ public interface QuestionRepository {
 	Question get(int id) throws NotFoundException;
 
 	/**
+	 * Finds all the questions in the database
+	 * @return      all the instances of Question, null otherwise
+	 */
+	Iterable<Question> getAll() throws NotFoundException;
+
+	/**
 	 * Finds the question identified by id in the database
 	 * @param	surveyId	the id of the question to be found
 	 * @return				an instance of Question if there is a question identified by id, null otherwise
 	 */
 	Iterable<Question> getBySurveyId(int surveyId);
+
+	/**
+	 * Finds the question in the database where text is contained in the text of the question
+	 * @param	text	the text of the question to be found
+	 * @return			an instance of Question if there is a question identified by id, null otherwise
+	 */
+	Iterable<Question> getByText(String text);
 
 	/**
 	 * Deletes from the database the question identified by id.

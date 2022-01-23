@@ -1,0 +1,27 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-4">
+			<h1>Create a new Survey</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<form name="form" novalidate>
+				<div class="form-group">
+					<label for="Name">Survey Name</label> <input type="text"
+						class="form-control" name="name" aria-describedby="Name"
+						placeholder="Enter name" ng-model="name" required> <br />
+
+					<p class="inputError"
+						ng-show="(form.$submitted || form.name.$touched ) && form.name.$error.required">This
+						field is required</p>
+				</div>
+
+				<br>
+				<button ng-disabled="form.$invalid" ng-click="addSurvey()"
+					type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+
+	</div>
+</div>

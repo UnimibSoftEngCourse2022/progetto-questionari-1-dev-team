@@ -29,6 +29,11 @@ public class UserDTO {
     private String username;
 
     /**
+     * Serialization of the password of the user
+     */
+    private String password;
+
+    /**
      * Serialization of the name of the user
      */
 
@@ -112,6 +117,23 @@ public class UserDTO {
     public void setUsername(Object username) {
 
         this.username = username.toString();
+    }
+
+    /**
+     * Returns the password of the user.
+     * @return  the password of the user
+     */
+
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Modifies the password of the user.
+     * @param password  the new password of the user
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     /**

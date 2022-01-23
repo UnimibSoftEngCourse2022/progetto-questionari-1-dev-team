@@ -52,6 +52,11 @@ public class QuestionDTO {
 	private Set<SurveyDTO> surveyDTO;
 
 	/**
+	 * Serialization of the type of the question.
+	 */
+	private String questionType;
+
+	/**
 	 * Returns the id of the question.
 	 * @return	the id of the question
 	 */
@@ -202,5 +207,21 @@ public class QuestionDTO {
 	public void setSurvey(Set<SurveyDTO> surveyDTOSet) {
 
 		this.surveyDTO = surveyDTOSet;
+	}
+
+	/**
+	 * Returns the type of the question.
+	 * @return	the type of the question
+	 */
+	public String getQuestionType() {
+		return questionType;
+	}
+
+	/**
+	 * Modifies the type of the question, setting <code>questionType</code> as the new value.
+	 * @param questionType the type of the question
+	 */
+	public void setQuestionType(String questionType) {
+		this.questionType = questionType;
 	}
 }

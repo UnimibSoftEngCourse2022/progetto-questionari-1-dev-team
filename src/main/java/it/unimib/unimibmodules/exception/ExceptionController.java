@@ -36,6 +36,7 @@ public class ExceptionController {
      */
     @ExceptionHandler(value = { NotFoundException.class })
     public ResponseEntity<Object> handleNotFoundException(NotFoundException ex) {
+
         LOGGER.error("Not found: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
     }

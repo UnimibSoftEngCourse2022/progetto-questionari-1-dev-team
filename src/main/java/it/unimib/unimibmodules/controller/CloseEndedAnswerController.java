@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Controller handling HTTP requests related to ClosedEndedAnswer.
  * @author Davide Costantini
+ * @author Khalil Mohamed Khalil
  * @version 0.1.0
  */
 @RestController
@@ -92,21 +93,18 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 
 	/**
 	 * Modifies the answer of a close-ended question associated with the given id, setting text as the answer.
-	 * @param	id					the id of the close-ended answer to be modified
-	 * @param	text				the new text of the close-ended answer
-	 * @return						an HTTP response with status 200 if the close-ended answer has been modified,
+	 * @param	closeEndedAnswerDTO	the serialized object of the close-ended answer
 	 * 								500 otherwise
 	 * @throws	NotFoundException	if no close-ended answer with identified by <code>id</code> has been found
 	 * @throws	EmptyFieldException	if <code>text</code> is empty
 	 */
 	@PatchMapping(path = "/modifyCloseEndedAnswer")
-	public ResponseEntity<String> modifyCloseEndedAnswer(@RequestParam int id, @RequestParam String text)
+	public ResponseEntity<String> modifyCloseEndedAnswer(@RequestBody CloseEndedAnswerDTO closeEndedAnswerDTO)
 			throws NotFoundException, EmptyFieldException {
 
-		CloseEndedAnswer closeEndedAnswer = closeEndedAnswerRepository.get(id);
-		closeEndedAnswer.setText(text);
+		CloseEndedAnswer closeEndedAnswer = convertToEntity(closeEndedAnswerDTO);
 		closeEndedAnswerRepository.modify(closeEndedAnswer);
-		logger.debug("Modified CloseEndedAnswer with id {}.", id);
+		logger.debug("Modified CloseEndedAnswer with id {}.", closeEndedAnswer.getId());
 		return new ResponseEntity<>("CloseEndedAnswer modified.", HttpStatus.OK);
 	}
 

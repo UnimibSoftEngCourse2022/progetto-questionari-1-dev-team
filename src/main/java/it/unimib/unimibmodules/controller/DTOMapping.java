@@ -45,6 +45,7 @@ public abstract class DTOMapping<M, T> {
 	 * @throws	FormatException
 	 * @throws	EmptyFieldException	when one of the required field is empty
 	 * @throws	NotFoundException	when one of the queries fails
+	 * @throws	IncorrectSizeException
 	 */
 	public abstract M convertToEntity(T dto) throws FormatException, EmptyFieldException, NotFoundException, IncorrectSizeException;
 }
