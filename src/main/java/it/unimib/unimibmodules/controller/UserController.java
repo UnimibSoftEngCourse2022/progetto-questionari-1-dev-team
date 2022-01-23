@@ -30,7 +30,7 @@ import java.util.Set;
 @RequestMapping("/api")
 public class UserController extends DTOMapping<User, UserDTO> {
 
-    private static final Logger logger = LogManager.getLogger(User.class);
+    private static final Logger logger = LogManager.getLogger(UserController.class);
 
     /**
      * Instance of UserRepository that will be used to access the db.
@@ -70,7 +70,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public ResponseEntity<UserDTO> getUser(@PathVariable int id) throws NotFoundException {
 
         User user = userRepository.get(id);
-        logger.debug("Retrieved User with id " + id + ".");
+        logger.debug("Retrieved User with id %d.", id);
         return new ResponseEntity<>(convertToDTO(user), HttpStatus.OK);
     }
 
@@ -96,7 +96,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
             surveysDTO.add(surveyDTO);
         }
 
-        logger.debug("Retrieved surveys created by user: " + username + ".");
+        logger.debug("Retrieved surveys created by user: %s.", username);
         return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
     }
 
@@ -112,10 +112,10 @@ public class UserController extends DTOMapping<User, UserDTO> {
         User user = userRepository.getByUsername(userDTO.getUsername());
 
         if (bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
-            logger.debug("Successful sign in of user: " + userDTO.getUsername() + ".");
+            logger.debug("Successful sign in of user: %s.", userDTO.getUsername());
             return new ResponseEntity<>("{\"response\":\"Login Successful.\"}", HttpStatus.OK);
         } else {
-            logger.debug("Failed sign in of user: " + userDTO.getUsername() + ".");
+            logger.debug("Failed sign in of user: %s.", userDTO.getUsername());
             return new ResponseEntity<>("{\"response\":\"Login fAILED.\"}", HttpStatus.UNAUTHORIZED);
         }
     }
@@ -129,9 +129,8 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public ResponseEntity<String> signUpUser(@RequestBody UserDTO userDTO) {
 
         try {
-            System.out.println(userDTO.getUsername());
-            User user = userRepository.getByUsername(userDTO.getUsername());
-            logger.debug("Failed creation of user " + userDTO.getUsername() + ": user already exist.");
+            userRepository.getByUsername(userDTO.getUsername());
+            logger.debug("Failed creation of user %s: user already exist.", userDTO.getUsername());
             return new ResponseEntity<>("{\"response\":\"Username already existing.\"}", HttpStatus.BAD_REQUEST);
         } catch (NotFoundException e) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -140,7 +139,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
             user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
             userRepository.add(user);
-            logger.debug("Successful creation of user " + userDTO.getUsername() + ".");
+            logger.debug("Successful creation of user %s.", userDTO.getUsername());
             return new ResponseEntity<>("{\"response\":\"User created.\"}", HttpStatus.CREATED);
         }
     }
