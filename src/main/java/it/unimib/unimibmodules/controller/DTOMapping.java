@@ -3,6 +3,7 @@ package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.FormatException;
+import it.unimib.unimibmodules.exception.IncorrectSizeException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -41,11 +42,10 @@ public abstract class DTOMapping<M, T> {
 	 * Converts an instance of T to an instance of M
 	 * @param   dto	an instance of T
 	 * @return		an instance of M, containing the deserialized data of T
-	 * @throws FormatException 
-	 * @throws NotFoundException 
-	 * @throws EmptyFieldException 
+	 * @throws	FormatException
+	 * @throws	EmptyFieldException	when one of the required field is empty
+	 * @throws	NotFoundException	when one of the queries fails
+	 * @throws	IncorrectSizeException
 	 */
-
-	public abstract M convertToEntity(T dto) throws FormatException, NotFoundException, EmptyFieldException;
-
+	public abstract M convertToEntity(T dto) throws FormatException, EmptyFieldException, NotFoundException, IncorrectSizeException;
 }

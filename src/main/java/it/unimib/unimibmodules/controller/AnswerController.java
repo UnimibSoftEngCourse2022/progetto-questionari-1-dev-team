@@ -3,6 +3,7 @@ package it.unimib.unimibmodules.controller;
 import it.unimib.unimibmodules.dto.AnswerDTO;
 import it.unimib.unimibmodules.dto.CloseEndedAnswerDTO;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
+import it.unimib.unimibmodules.exception.IncorrectSizeException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.*;
 import org.apache.logging.log4j.LogManager;
@@ -10,13 +11,14 @@ import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Controller handling HTTP requests related to Answer and ClosedEndedAnswer.
@@ -34,11 +36,47 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	 */
 	private final AnswerRepository answerRepository;
 
+	/**
+	 * Instance of AnswerRepository that will be used to access the db.
+	 */
+	private final UserRepository userRepository;
+
+	/**
+	 * Instance of AnswerRepository that will be used to access the db.
+	 */
+	private final SurveyRepository surveyRepository;
+
+	/**
+	 * Instance of AnswerRepository that will be used to access the db.
+	 */
+	private final QuestionRepository questionRepository;
+
+	/**
+	 * Instance of AnswerRepository that will be used to access the db.
+	 */
+	private final CloseEndedAnswerRepository closeEndedAnswerRepository;
+
 	@Autowired
-	public AnswerController(AnswerRepository answerRepository, ModelMapper modelMapper) {
+	public AnswerController(AnswerRepository answerRepository, ModelMapper modelMapper, UserRepository userRepository,
+							SurveyRepository surveyRepository, QuestionRepository questionRepository,
+							CloseEndedAnswerRepository closeEndedAnswerRepository) {
 
 		super(modelMapper);
 		this.answerRepository = answerRepository;
+		this.userRepository = userRepository;
+		this.surveyRepository = surveyRepository;
+		this.questionRepository = questionRepository;
+		this.closeEndedAnswerRepository = closeEndedAnswerRepository;
+
+
+		modelMapper.createTypeMap(Answer.class, AnswerDTO.class)
+				.addMappings(mapper -> {
+					mapper.map(Answer::getId, AnswerDTO::setId);
+					mapper.map(Answer::getText, AnswerDTO::setAnswerText);
+				});
+
+		modelMapper.createTypeMap(AnswerDTO.class, Answer.class)
+				.addMapping(AnswerDTO::getId, Answer::setId);
 
 		modelMapper.createTypeMap(User.class, AnswerDTO.class)
 				.addMapping(User::getId, (answerDTO, id) -> answerDTO.getUserDTO().setId(id));
@@ -49,85 +87,94 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	}
 
 	/**
-	 * Gets the Answer associated with the given <code>id</code>.
+	 * Finds the Answer associated with the given <code>id</code>.
 	 * @param	id					the id of the answer
 	 * @return						an HTTP response with status 200 and the AnswerDTO if the answer has been found,
 	 * 								500 otherwise
-	 * @throws	NotFoundException	if no close-ended answer with identified by <code>id</code> has been found
+	 * @throws	NotFoundException	if no answer identified by <code>id</code> has been found
 	 */
 	@GetMapping(path = "/findAnswer/{id}")
 	public ResponseEntity<AnswerDTO> findAnswer(@PathVariable int id) throws NotFoundException {
 
 		Answer answer = answerRepository.get(id);
-		logger.debug("Retrieved Answer with id " + id + ".");
+		logger.debug("Retrieved Answer with id {}.", id);
 		return new ResponseEntity<>(convertToDTO(answer), HttpStatus.OK);
 	}
 
 	/**
-	 * Creates an Answer.
-	 * @param	answerDTO	the serialized object of theanswer
-	 * @return				an HTTP Response with status 201 if the answer has been created, 500 otherwise
+	 * Finds all the Answer the User associated with <code>userId</code> has created for the Survey associated with <code>surveyId</code>.
+	 * @param	surveyId			the id of the survey
+	 * @param	userId				the id of the user
+	 * @return						an HTTP response with status 200 and the AnswerDTO if the answer has been found,
+	 * 								500 otherwise
+	 * @throws	NotFoundException	if no answer for the survey identified by <code>surveyId</code> and created by the
+	 * 								user identified by <code>userId</code> has been found
 	 */
-	@PostMapping(path = "/addAnswer")
-	public ResponseEntity<String> addAnswer(@RequestBody AnswerDTO answerDTO) {
+	@GetMapping(path = "/findSurveyAnswersForUser")
+	public ResponseEntity<List<AnswerDTO>> findSurveyAnswersForUser(@RequestParam int surveyId, @RequestParam int userId)
+			throws NotFoundException {
+
+		Iterable<Answer> answer = answerRepository.getSurveyAnswersForUser(surveyId, userId);
+		List<AnswerDTO> answerDTOList = convertListToDTO(answer);
+		if (answerDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Answers for Survey with id " + surveyId +
+					" was found for User with id " + userId + ".\"}");
+		logger.debug("Retrieved {} answers for survey with id {} and user with id {}.", answerDTOList.size(),
+				surveyId, userId);
+		return new ResponseEntity<>(answerDTOList, HttpStatus.OK);
+	}
+
+	/**
+	 * Creates an Answer.
+	 * @param	answerDTO			the serialized object of the answer
+	 * @return						an HTTP Response with status 201 if the answer has been created, 500 otherwise
+	 * @throws	EmptyFieldException	if some of the attributes of the new answer can't be found on database
+	 * @throws	NotFoundException	if some of the attributes of the new answer can't be found on database
+	 */
+	@PostMapping(path = "/addAnswer", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> addAnswer(@RequestBody AnswerDTO answerDTO)
+			throws EmptyFieldException, NotFoundException, IncorrectSizeException {
 
 		Answer answer = convertToEntity(answerDTO);
 		answerRepository.add(answer);
-		logger.debug("Added Answer with id " + answer.getId() + ".");
-		return new ResponseEntity<>("Answer creted.", HttpStatus.CREATED);
+		logger.debug("Added Answer with id {}.", answer.getId());
+		return new ResponseEntity<>("{\"response\":\"Answer created.\"}", HttpStatus.CREATED);
 	}
 
 	/**
-	 * Modifies the text of an open-ended question associated with the given <code>id</code>, setting <code>text</code>
-	 * as the new answer.
-	 * @param   id		the id of the answer that will be modified
-	 * @param   text	the new text value
-	 * @return			an HTTP response with status 200 if the answer has been modified, 500 otherwise
+	 * Modifies an Answer using the values of <code>modifiedAnswerDTO</code>.
+	 * @param	modifiedAnswerDTO	the serialization of the modified answer
+	 * @return						an HTTP response with status 200 if the answer has been modified, 500 otherwise
+	 * @throws	NotFoundException	if the original Answer has not been found
+	 * @throws	EmptyFieldException
 	 */
-	@PatchMapping(path = "/modifyAnswerText")
-	public ResponseEntity<String> modifyOpenEndedAnswer(@RequestParam int id, @RequestParam String text)
-			throws NotFoundException, EmptyFieldException {
+	@PatchMapping(path = "/modifyAnswer")
+	public ResponseEntity<String> modifyAnswer(@RequestBody AnswerDTO modifiedAnswerDTO)
+			throws NotFoundException, EmptyFieldException, IncorrectSizeException {
 
-		Answer answer = answerRepository.get(id);
-		answer.setText(text);
+		Answer modifiedAnswer = convertToEntity(modifiedAnswerDTO);
+		Answer answer = answerRepository.get(modifiedAnswer.getId());
+		if (modifiedAnswer.getText() != null)
+			answer.setText(modifiedAnswer.getText());
+		else if (modifiedAnswer.getCloseEndedAnswers() != null)
+			answer.setCloseEndedAnswers(modifiedAnswer.getCloseEndedAnswers());
 		answerRepository.modify(answer);
-		logger.debug("Modified Answer with id " + id + ".");
-		return new ResponseEntity<>("Answer modified.", HttpStatus.OK);
-	}
-
-	/**
-	 * Modifies the answer of a close-ended question associated with the given <code>id</code>, setting text as the new answer.
-	 * @param	id						the id of the answer that will be modified
-	 * @param	closeEndedAnswerIdList	the new answer
-	 * @return							an HTTP response with status 200 if the answer has been modified, 500 otherwise
-	 */
-	@PatchMapping(path = "/modifyAnswerChoices")
-	public ResponseEntity<String> modifyCloseEndedAnswer(@RequestParam int id, @RequestParam List<Integer> closeEndedAnswerIdList)
-			throws NotFoundException {
-
-		Answer answer = answerRepository.get(id);
-		answer.setCloseEndedAnswers((closeEndedAnswerIdList.stream()
-				.map(closeEndedAnswerId -> {
-					CloseEndedAnswer closeEndedAnswer = new CloseEndedAnswer();
-					closeEndedAnswer.setId(closeEndedAnswerId);
-					return closeEndedAnswer;
-				}).collect(Collectors.toSet())));
-		answerRepository.modify(answer);
-		logger.debug("Modified Answer with id " + id + ".");
-		return new ResponseEntity<>("Answer modified.", HttpStatus.OK);
+		logger.debug("Modified Answer with id {}.", answer.getId());
+		return new ResponseEntity<>("{\"response\": \"Answer modified.\"}", HttpStatus.OK);
 	}
 
 	/**
 	 * Deletes the answer associated with the given <code>id</code>.
-	 * @param   id	the id of the answer that will be deleted
-	 * @return		an HTTP Response with status 200 if the answer has been deleted, 500 otherwise
+	 * @param	id					the id of the answer that will be deleted
+	 * @return						an HTTP Response with status 200 if the answer has been deleted, 500 otherwise
+	 * @throws	NotFoundException	if no answer identified by <code>id</code> has been found
 	 */
 	@DeleteMapping(path = "/deleteAnswer/{id}")
 	public ResponseEntity<String> deleteAnswer(@PathVariable int id) throws NotFoundException {
 
 		answerRepository.remove(id);
-		logger.debug("Removed Answer with id " + id + ".");
-		return new ResponseEntity<>("Answer deleted.", HttpStatus.OK);
+		logger.debug("Removed Answer with id {}.", id);
+		return new ResponseEntity<>("{\"response\":\"Answer deleted.\"}", HttpStatus.OK);
 	}
 
 	/**
@@ -146,14 +193,31 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 				.map(answer.getSurvey(), answerDTO);
 		modelMapper.getTypeMap(Question.class, AnswerDTO.class)
 				.map(answer.getQuestion(), answerDTO);
-		Set<CloseEndedAnswerDTO> closeEndedAnswerDTOSet = new HashSet<>();
-		for (CloseEndedAnswer closeEndedAnswer : answer.getCloseEndedAnswers()) {
-			CloseEndedAnswerDTO closeEndedAnswerDTO = new CloseEndedAnswerDTO();
-			closeEndedAnswerDTO.setId(closeEndedAnswer.getId());
-			closeEndedAnswerDTOSet.add(closeEndedAnswerDTO);
+		if (!answer.getCloseEndedAnswers().isEmpty()) {
+			Set<CloseEndedAnswerDTO> closeEndedAnswerDTOSet = new HashSet<>();
+			for (CloseEndedAnswer closeEndedAnswer : answer.getCloseEndedAnswers()) {
+				CloseEndedAnswerDTO closeEndedAnswerDTO = new CloseEndedAnswerDTO();
+				closeEndedAnswerDTO.setId(closeEndedAnswer.getId());
+				closeEndedAnswerDTOSet.add(closeEndedAnswerDTO);
+			}
+			answerDTO.setCloseEndedAnswerDTOSet(closeEndedAnswerDTOSet);
 		}
-		answerDTO.setCloseEndedAnswerDTOSet(closeEndedAnswerDTOSet);
 		return answerDTO;
+	}
+
+	/**
+	 * Converts a list of Answers to a list of AnswerDTO
+	 * @param	answers	the list of Answer
+	 * @return			a list of QuestionDTO, containing the serialized data of answers
+	 * @see DTOMapping#convertToDTO
+	 */
+	public List<AnswerDTO> convertListToDTO(Iterable<Answer> answers) {
+
+		List<AnswerDTO> answerDTOList = new ArrayList<>();
+		for (Answer answer : answers)
+			answerDTOList.add(convertToDTO(answer));
+
+		return answerDTOList;
 	}
 
 	/**
@@ -163,12 +227,22 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	 * @see DTOMapping#convertToEntity
 	 */
 	@Override
-	public Answer convertToEntity(AnswerDTO answerDTO) {
+	public Answer convertToEntity(AnswerDTO answerDTO) throws EmptyFieldException, NotFoundException,
+			IncorrectSizeException {
 
 		Answer answer = modelMapper.map(answerDTO, Answer.class);
-		answer.setCloseEndedAnswers(answerDTO.getCloseEndedAnswerDTOs().stream()
-				.map(closeEndedAnswerDTO -> modelMapper.map(closeEndedAnswerDTO, CloseEndedAnswer.class))
-				.collect(Collectors.toSet()));
+		answer.setUser(userRepository.get(answerDTO.getUserDTO().getId()));
+		answer.setSurvey(surveyRepository.get(answerDTO.getSurveyDTO().getId()));
+		answer.setQuestion(questionRepository.get(answerDTO.getQuestionDTO().getId()));
+		answer.setText(answerDTO.getAnswerText());
+		if(answerDTO.getCloseEndedAnswerDTOs() != null) {
+			Set<CloseEndedAnswer> closeEndedAnswerSet = new HashSet<>();
+			for (CloseEndedAnswerDTO closeEndedAnswerDTO : answerDTO.getCloseEndedAnswerDTOs()) {
+				CloseEndedAnswer closeEndedAnswer = closeEndedAnswerRepository.get(closeEndedAnswerDTO.getId());
+				closeEndedAnswerSet.add(closeEndedAnswer);
+			}
+			answer.setCloseEndedAnswers(closeEndedAnswerSet);
+		}
 		return answer;
 	}
 }

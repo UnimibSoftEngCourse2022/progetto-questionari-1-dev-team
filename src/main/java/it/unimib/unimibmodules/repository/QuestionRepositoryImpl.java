@@ -70,9 +70,9 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
 
 	/**
-	 * Finds the question identified by id in the database
-	 * @param	surveyId	the id of the question to be found
-	 * @return				an instance of Question if there is a question identified by id, null otherwise
+	 * Finds the question associated with the survey identified by <code>surveyId</code>
+	 * @param	surveyId	the id of the survey
+	 * @return				a list of Questions
 	 * @see QuestionRepository#get(int id)
 	 */
 	@Override

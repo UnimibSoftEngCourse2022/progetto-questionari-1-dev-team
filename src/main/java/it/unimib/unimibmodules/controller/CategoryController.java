@@ -1,11 +1,8 @@
 package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.CategoryDTO;
-import it.unimib.unimibmodules.dto.QuestionDTO;
-import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Category;
-import it.unimib.unimibmodules.model.Question;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

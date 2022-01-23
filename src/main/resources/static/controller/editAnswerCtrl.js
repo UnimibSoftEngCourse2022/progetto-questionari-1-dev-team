@@ -1,19 +1,15 @@
-app.controller('addAnswerCtrl', function ($scope, $http, $location, routeService) {
+app.controller('editAnswerCtrl', function ($scope, $http, routeService) {
 
     $scope.model = {};
     $scope.options = [];
-    $scope.survey = {}
-    $scope.questions = []
+    $scope.survey = {};
+    $scope.questions = [];
+    $scope.answers = [];
+    $scope.currentAnswer = {};
 
     $scope.load = function() {
 
         let surveyId = routeService.get();
-
-        $http.head("/api/findSurveyAnswersForUser?surveyId=" + surveyId + "&userId=1")
-            .then(function onfulFilled() {
-
-                $location.path("edit_answer");
-        });
 
         $http.get("/api/findSurvey?id=" + surveyId).then(function onfulFilled(response) {
 
@@ -40,11 +36,44 @@ app.controller('addAnswerCtrl', function ($scope, $http, $location, routeService
                 console.error(response);
             }
         });
+
+        $http.get("/api/findSurveyAnswersForUser/?surveyId=" + surveyId + "&userId=1")
+            .then(function onfulFilled(response) {
+
+                $scope.answers = response.data;
+            }, function errorCallback(response) {
+
+                if (response.status === 404) {
+                    alert("You have not compiled this survey yet.");
+                } else {
+                    alert("Error");
+                    console.error(response);
+                }
+            });
+        $scope.question_select = undefined;
+    }
+
+    $scope.selectQuestion = function(index) {
+
+        for (let answer of $scope.answers) {
+            if (answer.questionDTO.id === $scope.questions[index].id) {
+                $scope.currentAnswer = answer;
+                if ($scope.questions[index].questionType === "SINGLECLOSED")
+                    $scope.model.closeended_answer =  answer.closeEndedAnswerDTOs[0].id;
+                else if ($scope.questions[index].questionType === "MULTIPLECLOSED") {
+                    for (let closeEndedAnswer in $scope.questions[index].closeEndedAnswerDTOSet)
+                        if (answer.closeEndedAnswerDTOs
+                            .find(v => v.id === $scope.questions[index].closeEndedAnswerDTOSet[closeEndedAnswer].id))
+                            $scope.options[closeEndedAnswer] = true;
+                }
+            }
+        }
     }
 
     $scope.submit = function(index) {
 
         let data = {
+            id: $scope.currentAnswer.id,
             answerText: null,
             closeEndedAnswerDTOs: null,
             userDTO: {
@@ -77,9 +106,22 @@ app.controller('addAnswerCtrl', function ($scope, $http, $location, routeService
                 }
         }
 
-        $http.post("/api/addAnswer", data).then(function onfulFilled(response) {
+        $http.patch("/api/modifyAnswer", data).then(function onfulFilled(response) {
 
-            alert("Answer created.");
+            alert("Answer modified.");
+            console.log(response.data.response);
+        }, function errorCallback(response) {
+
+            alert("Error");
+            console.error(response);
+        });
+    }
+
+    $scope.delete = function() {
+
+        $http.delete("/api/deleteAnswer/" + $scope.currentAnswer.id).then(function onfulFilled(response) {
+
+            alert("Answer deleted.");
             console.log(response.data.response);
         }, function errorCallback(response) {
 

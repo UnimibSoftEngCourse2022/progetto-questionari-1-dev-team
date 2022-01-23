@@ -103,8 +103,8 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
     return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
    }
   
-  
-  
+
+ 	/**
 	 * Gets the question in the database where text is contained in the text of the question
 	 * @param	text	the text of the question to be found
 	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
@@ -118,7 +118,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 		if (questionDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
 		logger.debug("Retrieved " + questionDTOList.size() + " questions containing the text " + text + ".");
-    return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+    	return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
 	/**
@@ -131,7 +131,9 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	public ResponseEntity<List<QuestionDTO>> findQuestionsForSurvey(@PathVariable int id) throws NotFoundException {
 		Iterable<Question> questionList = questionRepository.getBySurveyId(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
-		logger.debug("Retrieved " + questionDTOList.size() + " questions for survey with id " + id + ".");
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Question for Survey with id " + id + " was found.\"}");
+		logger.debug("Retrieved {} questions for survey with id {}.", questionDTOList.size(), id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 	
@@ -195,24 +197,9 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	}
 
 	/**
-	 * Converts an instance of Question to an instance of questionDTO
-	 * @param   questions	an instance of Question
-	 * @return			    an instance of QuestionDTO, containing the serialized data of question
-	 * @see DTOMapping#convertToDTO
-	 */
-	public List<QuestionDTO> convertListToDTO(Iterable<Question> questions) {
-
-		List<QuestionDTO> questionList = new ArrayList<>();
-		for (Question question : questions)
-			questionList.add(convertToDTO(question));
-
-		return questionList;
-	}
-
-	/**
-	 * Converts an instance of Question to an instance of questionDTO
-	 * @param   questions	an instance of Question
-	 * @return			    an instance of QuestionDTO, containing the serialized data of question
+	 * Converts a list of Question to a list of questionDTO
+	 * @param   questions	the list of Questions
+	 * @return			    a list of QuestionDTO, containing the serialized data of questions
 	 * @see DTOMapping#convertToDTO
 	 */
 	public List<QuestionDTO> convertListToDTO(Iterable<Question> questions) {

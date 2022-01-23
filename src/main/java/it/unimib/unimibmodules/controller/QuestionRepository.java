@@ -35,9 +35,8 @@ public interface QuestionRepository {
 	 * Finds the question identified by id in the database
 	 * @param	surveyId	the id of the question to be found
 	 * @return				an instance of Question if there is a question identified by id, null otherwise
-	 * @throws NotFoundException	if no question identified by <code>id</code> has been found
 	 */
-	Iterable<Question> getBySurveyId(int surveyId) throws NotFoundException;
+	Iterable<Question> getBySurveyId(int surveyId);
 
 	/**
 	 * Finds the question in the database where text is contained in the text of the question

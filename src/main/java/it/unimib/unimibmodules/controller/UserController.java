@@ -121,27 +121,6 @@ public class UserController extends DTOMapping<User, UserDTO> {
         }
     }
     
-    
-    @GetMapping("/getSurveysCreated")
-    public ResponseEntity<List<SurveyDTO>> getSurveysCreated(@RequestParam (name = "username") String username) throws NotFoundException {
-
-        User user = userRepository.getByUsername(username);
-        Set<Survey> surveys  = user.getSurveysCreated();
-
-        List<SurveyDTO> surveysDTO = new ArrayList<>();
-
-        for (Survey survey : surveys) {
-            SurveyDTO surveyDTO = new SurveyDTO();
-            surveyDTO.setId(survey.getId());
-            surveyDTO.setSurveyName(survey.getName());
-            surveyDTO.setUserDTO(convertToDTO(survey.getUser()));
-            surveysDTO.add(surveyDTO);
-        }
-
-        //logger.debug("Retrieved surveys created by user: " + username + ".");
-        return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
-    }
-
     /**
      * Create a new User.
      * @param   userDTO         Representation of a user from the body of the http post

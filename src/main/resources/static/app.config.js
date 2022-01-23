@@ -19,7 +19,15 @@ angular.
 				}).
 				when('/compileSurvey/:idSurvey/:idUser', {
 					template: '<compileSurvey></compileSurvey>'
-				}).
-				otherwise('/findSurvey');
+				}).when("/", {
+					templateUrl: "/template/home.html",
+					controller: "homeCtrl"
+				}).when("/add_answer", {
+					templateUrl: "/template/add_answer.html",
+					controller: "addAnswerCtrl"
+				}).when("/edit_answer", {
+					templateUrl: "/template/edit_answer.html",
+					controller: "editAnswerCtrl"
+				}).otherwise({ redirectTo: "/findSurvey" });
 		}
 	]);
