@@ -7,7 +7,7 @@ import it.unimib.unimibmodules.model.User;
 /**
  * Factory class for Question.
  * @author Khalil
- * @version 0.1.0
+ * @version 0.2.0
  */
 public class QuestionFactory {
 	

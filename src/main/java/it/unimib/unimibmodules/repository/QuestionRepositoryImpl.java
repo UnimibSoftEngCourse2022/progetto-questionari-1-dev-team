@@ -14,7 +14,7 @@ import java.util.Optional;
 /**
  * Repository for the Question class.
  * @author Khalil
- * @version 0.1.0
+ * @version 0.2.0
  */
 @Component("questionRepository")
 public class QuestionRepositoryImpl implements QuestionRepository {

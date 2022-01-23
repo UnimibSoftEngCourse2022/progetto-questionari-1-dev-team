@@ -24,7 +24,7 @@ import java.util.*;
 /**
  * Controller handling HTTP requests related to Survey.
  * @author Luca Milazzo
- * @version 0.1.0
+ * @version 0.2.0
  */
 @RestController
 @RequestMapping("/api")

@@ -16,7 +16,7 @@ import java.util.*;
  * Repository for the Answers. Adds business logic to Answer instances before actually accessing
  * the database via DAO.
  * @author Davide Costantini
- * @version 0.1.0
+ * @version 0.2.0
  */
 @Component("answerRepository")
 public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer>  {

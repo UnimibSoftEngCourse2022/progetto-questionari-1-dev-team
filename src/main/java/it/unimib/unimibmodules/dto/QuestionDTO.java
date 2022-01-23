@@ -6,7 +6,7 @@ import java.util.Set;
  * DTO for Question.
  * @author Khalil
  * @author Lorenzo Occhipinti
- * @version 0.1.0
+ * @version 0.2.0
  */
 
 public class QuestionDTO {

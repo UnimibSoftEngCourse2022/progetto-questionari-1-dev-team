@@ -6,7 +6,7 @@ import it.unimib.unimibmodules.model.Answer;
 /**
  * Interface for AnswerRepository.
  * @author Davide Costantini
- * @version 0.1.0
+ * @version 0.2.0
  */
 public interface AnswerRepository {
 
