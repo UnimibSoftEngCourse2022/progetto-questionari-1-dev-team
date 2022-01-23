@@ -81,6 +81,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 		return questionDAO.findBySurveyId(surveyId);
 	}
 
+
 	/**
 	 * Finds the question in the database where text is contained in the text of the question
 	 * @param	text	the text to search in the question
@@ -92,14 +93,15 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 		return questionDAO.findByText(text);
 	}
 
+
     /**
      * Returns all questions in the database.
      * @return  a list of Questions
      */
-	public Iterable<Question> getAll() {
+	@Override
+	public Iterable<Question> getAll() throws NotFoundException {
 		return questionDAO.findAll();
 	}
-
 
 	/**
      * Deletes from the database the question identified by id.

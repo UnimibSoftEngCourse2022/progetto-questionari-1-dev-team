@@ -35,13 +35,13 @@ public class Question {
 	/**
      * The answers of the question.
      */
-	 @OneToMany(mappedBy="question")
+	 @OneToMany(mappedBy="question", cascade = CascadeType.ALL)
 	private Set<Answer> answer;
 
 	/**
 	 * The list of close-ended answers to the question.
 	 */
-	@OneToMany(mappedBy="question")
+	@OneToMany(mappedBy="question", cascade = CascadeType.ALL)
 	private Set<CloseEndedAnswer> closeEndedAnswerSet;
 	
 	/**
@@ -67,6 +67,11 @@ public class Question {
       joinColumns = @JoinColumn(name = "question_id"), 
       inverseJoinColumns = @JoinColumn(name = "survey_id"))
     private Set<Survey> survey;
+
+	/**
+	 * The type of the question.
+	 */
+	private QuestionType questionType;
 
 	/**
      * Creates an empty question.
@@ -202,5 +207,21 @@ public class Question {
 	 */
 	public void setSurvey(Set<Survey> survey) {
 		this.survey = survey;
+	}
+
+	/**
+	 * Returns the type of the question.
+	 * @return the type of the question
+	 */
+	public QuestionType getQuestionType() {
+		return questionType;
+	}
+
+	/**
+	 * Modifies the type of the question, setting <code>questionType</code> as the new value.
+	 * @param questionType the type of the question
+	 */
+	public void setQuestionType(QuestionType questionType) {
+		this.questionType = questionType;
 	}
 }

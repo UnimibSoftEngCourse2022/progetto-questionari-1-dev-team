@@ -15,9 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Controller handling HTTP requests related to Category.
  * @author Lorenzo Occhipinti
+ * @author Khalil Mohamed Khalil
  * @version 0.1.0
  */
 @RestController
@@ -55,6 +59,18 @@ public class CategoryController extends DTOMapping<Category, CategoryDTO>{
         return new ResponseEntity<>(convertToDTO(category), HttpStatus.OK);
     }
 
+    /**
+     * Gets all the categories
+     * @return		an HTTP response with status 200, 500 otherwise
+     * @throws NotFoundException
+     */
+    @GetMapping(path = "/getCategory")
+    public ResponseEntity<List<CategoryDTO>> getCategories () throws NotFoundException{
+        Iterable<Category> categoryList = categoryRepository.getAll();
+        List<CategoryDTO> categoryListDTO = convertListToDTO(categoryList);
+        return new ResponseEntity<>(categoryListDTO, HttpStatus.OK);
+    }
+
     @Override
     public CategoryDTO convertToDTO(Category value) {
         return modelMapper.map(value, CategoryDTO.class);
@@ -63,5 +79,14 @@ public class CategoryController extends DTOMapping<Category, CategoryDTO>{
     @Override
     public Category convertToEntity(CategoryDTO dto) {
         return modelMapper.map(dto, Category.class);
+    }
+
+    public List<CategoryDTO> convertListToDTO(Iterable<Category> categories) {
+
+        List<CategoryDTO> categoryList = new ArrayList<>();
+        for (Category c : categories)
+            categoryList.add(convertToDTO(c));
+
+        return categoryList;
     }
 }

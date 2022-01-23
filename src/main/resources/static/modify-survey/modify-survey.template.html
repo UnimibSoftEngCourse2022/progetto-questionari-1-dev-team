@@ -1,0 +1,142 @@
+<div class="container-fluid" ng-init="load()">
+		<div class="row">
+	<div class="col-md-10">
+		<h1>Survey</h1>
+		<br> <br>
+	</div>
+	<div class=col-md-1>
+		<button ng-hide="! isSurveyCreator" ng-click="modifySurvey()"
+			class="btn btn-primary">Save Changes</button>
+	</div>
+	<div class=col-md-1>
+		<button ng-hide="! isSurveyCreator" ng-click="deleteSurvey()"
+			class="btn btn-danger">Delete Survey</button>
+	</div>
+
+</div>
+<div class="row ">
+	<div class="col-md-4">
+		<p>
+			<b>Name:</b> {{survey.surveyName}}
+		</p>
+		<p>
+			<b>Creation Date:</b> {{survey.creationDate}}
+		</p>
+
+		<p>
+			<b>Creator Username:</b> {{survey.userDTO.username}}
+		</p>
+
+		<button ng-click="compileRedirect()" class="btn btn-success">Compile</button>
+		
+		<br> <br> <label ng-hide="! isSurveyCreator" for="Name"><b>New
+				Survey Name (Leave empty to avoid update)</b></label> <input
+			ng-hide="! isSurveyCreator" type="text" class="form-control"
+			name="name" aria-describedby="Name" placeholder="Enter name"
+			ng-model="newSurveyName"> <br /> <br> <br> <br>
+
+
+
+	</div>
+
+	<div class="col-md-8" ng-hide="! isSurveyCreator">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>Add Questions:</h2>
+				</div>
+
+			</div>
+		</div>
+		<div class="container-fluid overflow-auto" id="questionCardContainer">
+			<div class="row" ng-repeat="question in questions">
+				<div class="col-md-12">
+					<div class="question-card row">
+						<div class='col-sm-1 checkbox-col d-flex align-items-center'>
+							<input type="checkbox" value="{{ $index }}"
+								name="selectedQuestions[]"
+								ng-checked="selectedQuestionsIndex.indexOf($index) > -1"
+								ng-click="toggleSelection($index)">
+						</div>
+						<div class='col-md-8'>
+							<p>
+								<b>Category:</b> {{ question.category.name }}
+							</p>
+							<p>
+								<b>User creator:</b> {{ question.user.username }}
+							</p>
+							<p>
+								<b>Question:</b> {{ question.text }}
+							</p>
+						</div>
+						<div class='col-md-3 d-flex align-items-center flex-row-reverse'>
+							<button ng-click="modalManager($index)" class="btn btn-primary">Details</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+
+
+
+</div>
+</div>
+
+
+<!-- Start: Modal form for question details -->
+<!-- Trigger/Open The Modal -->
+
+<!-- The Modal -->
+<div id="myModal" class="modal" ng-style="{'display': displayModal}">
+
+	<!-- Modal content -->
+	<div class="modal-content">
+		<div class="modal-header">
+			<span ng-click="modalManager(-1)" class="close">&times;</span>
+			<h2>Question Details</h2>
+		</div>
+		<div class="modal-body">
+
+
+			<p>
+				<b>Category:</b> {{ questions[modalQuestion].category.name }}
+			</p>
+			<p>
+				<b>User creator:</b> {{ questions[modalQuestion].user.username }}
+			</p>
+
+			<p>
+				<b>Question Type:</b> {{ questions[modalQuestion].questionType }}
+			</p>
+
+			<p>
+				<b>Question:</b> {{ questions[modalQuestion].text }}
+			</p>
+
+			<p>
+				<b>Image:</b> {{ questions[modalQuestion].urlImage }}
+			</p>
+
+			<p>
+				<b>Closed answers</b>
+			</p>
+			<ul>
+				<li
+					ng-repeat="closedAnswer in questions[modalQuestion].closeEndedAnswerDTOSet">{{closedAnswer.text}}</li>
+			</ul>
+
+
+			<button ng-click="editQuestionRoute(modalQuestion)"
+				ng-hide="! editQuestion" class="btn btn-primary">Edit
+				Question</button>
+			<!-- REDIRECT PAGINA EDIT QUESTION -->
+		</div>
+
+	</div>
+
+</div>
