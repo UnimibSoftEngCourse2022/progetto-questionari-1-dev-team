@@ -2,6 +2,7 @@ package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.controller.SurveyRepository;
 import it.unimib.unimibmodules.exception.NotFoundException;
+import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.Survey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -73,7 +74,18 @@ public class SurveyRepositoryImpl implements SurveyRepository {
     public Iterable<Survey> getAll() {
         return surveyDAO.findAll();
     }
-    
+
+	/**
+	 * Finds the survey in the database where text is contained in the name of the survey
+	 * @param	text	the text to search in the name of the survey
+	 * @return			a list of Surveys where the text is contained in the name of the survey
+	 */
+	@Override
+	public Iterable<Survey> getByText(String text) {
+
+		return surveyDAO.findByText(text);
+	}
+
     /**
      * Deletes from the database the survey identified by id.
      * @param   id  the id of the survey to be deleted

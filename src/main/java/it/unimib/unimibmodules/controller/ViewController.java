@@ -17,4 +17,16 @@ public class ViewController {
 
 		return new ModelAndView("index.html");
 	}
+
+	@GetMapping(path = "/searchQuestion")
+	public ModelAndView searchQuestion() {
+
+		return new ModelAndView("searchQuestion.html");
+	}
+
+	@GetMapping(path = "/searchSurvey")
+	public ModelAndView searchSurvey() {
+
+		return new ModelAndView("searchSurvey.html");
+	}
 }

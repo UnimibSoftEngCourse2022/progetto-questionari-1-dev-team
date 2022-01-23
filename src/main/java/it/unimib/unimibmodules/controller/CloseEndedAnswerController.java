@@ -1,8 +1,10 @@
 package it.unimib.unimibmodules.controller;
 
+import it.unimib.unimibmodules.dto.CategoryDTO;
 import it.unimib.unimibmodules.dto.CloseEndedAnswerDTO;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.NotFoundException;
+import it.unimib.unimibmodules.model.Category;
 import it.unimib.unimibmodules.model.CloseEndedAnswer;
 import it.unimib.unimibmodules.model.Question;
 import org.apache.logging.log4j.LogManager;
@@ -55,6 +57,12 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 				.addMappings(mapper -> {
 					mapper.map(CloseEndedAnswerDTO::getId, CloseEndedAnswer::setId);
 					mapper.map(CloseEndedAnswerDTO::getText, CloseEndedAnswer::setText);
+				});
+
+		modelMapper.createTypeMap(CloseEndedAnswer.class, CloseEndedAnswerDTO.class)
+				.addMappings(mapper -> {
+					mapper.map(CloseEndedAnswer::getId, CloseEndedAnswerDTO::setId);
+					mapper.map(CloseEndedAnswer::getText, CloseEndedAnswerDTO::setText);
 				});
 
 		modelMapper.createTypeMap(Question.class, CloseEndedAnswerDTO.class)
