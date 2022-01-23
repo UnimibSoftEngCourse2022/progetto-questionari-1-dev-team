@@ -1,8 +1,10 @@
 package it.unimib.unimibmodules.controller;
 
+import it.unimib.unimibmodules.dto.SurveyDTO;
 import it.unimib.unimibmodules.dto.UserDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.factory.UserFactory;
+import it.unimib.unimibmodules.model.Survey;
 import it.unimib.unimibmodules.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Controller handling HTTP requests from User
@@ -78,6 +83,27 @@ public class UserController extends DTOMapping<User, UserDTO> {
         } else {
             return new ResponseEntity<>("Login failed.", HttpStatus.UNAUTHORIZED);
         }
+    }
+    
+    
+    @GetMapping("/getSurveysCreated")
+    public ResponseEntity<List<SurveyDTO>> getSurveysCreated(@RequestParam (name = "username") String username) throws NotFoundException {
+
+        User user = userRepository.getByUsername(username);
+        Set<Survey> surveys  = user.getSurveysCreated();
+
+        List<SurveyDTO> surveysDTO = new ArrayList<>();
+
+        for (Survey survey : surveys) {
+            SurveyDTO surveyDTO = new SurveyDTO();
+            surveyDTO.setId(survey.getId());
+            surveyDTO.setSurveyName(survey.getName());
+            surveyDTO.setUserDTO(convertToDTO(survey.getUser()));
+            surveysDTO.add(surveyDTO);
+        }
+
+        //logger.debug("Retrieved surveys created by user: " + username + ".");
+        return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
     }
 
     /**
