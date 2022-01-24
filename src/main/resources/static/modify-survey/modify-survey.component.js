@@ -1,91 +1,128 @@
 'use strict';
 
-// Register `phoneList` component, along with its associated controller and template
 angular.
 	module('UNIMIBModules').
 	component('modifySurvey', {
 		templateUrl: 'modify-survey/modify-survey.template.html',
-		controller: ['$location' , '$routeParams', '$scope', '$http',
-			function modifySurveyController($location , $routeParams, $scope, $http) {
+		controller: ['$location', '$routeParams', '$scope', '$http',
+			function modifySurveyController($location, $routeParams, $scope, $http) {
+				//TODO: Lazy loading
 				
-				//All questions of the system
+				$scope.idUser = 1 //from cookie
+				$scope.isSurveyCreator = false
+				$scope.idSurvey = $routeParams.idSurvey;
 				$scope.questions = []
-
-				//ID of the survey to modify
-				$scope.surveyId = $routeParams.idSurvey;
-
-				//Survey  to modify JSON
 				$scope.survey = {}
-
-				//Array containing all the indexes of questions. The associated question in questions will be added to the survey
 				$scope.selectedQuestionsIndex = []
-
-				$scope.newSurveyName = ""
-
 				$scope.displayModal = "none"
-
 				$scope.modalQuestion = -1;
-
-				$scope.userId = $routeParams.idUser;
-
 				$scope.editQuestion = false;
+				$scope.isEmptyResult = true;
 
-				$scope.isSurveyCreator = false;
+				//error alert 
+				$scope.showAlert = function(text) {
 
+					alert('ERROR - ' + text)
+				}
+
+				$scope.questionsHandler = function(data) {
+					$scope.isEmptyResult = false;
+					$scope.questions = data;
+					angular.forEach($scope.questions, function(question) {
+						angular.forEach($scope.survey.questions, function(questionSurvey) {
+							if (questionSurvey.id == question.id) {
+								$scope.selectedQuestionsIndex.push($scope.questions.indexOf(question))
+							}
+						});
+					});
+				}
+
+				//start-up function
 				$scope.load = function() {
-
 					//Get info about the Survey from its ID
-					$http.get("/api/findSurvey/?id=" + $scope.surveyId).then(function onfulFilled(response) {
+					$http.get("/api/findSurvey/?id=" + $scope.idSurvey).then(function onfulFilled(response) {
 						$scope.survey = response.data;
-						console.log($scope.survey)
-						if ($scope.survey.userDTO.id == $scope.userId) {
+						if ($scope.survey.userDTO.id == $scope.idUser) {
 							$scope.isSurveyCreator = true;
+						} else {
+							$scope.showAlert("RESTRICTED AREA")
+							$location.path('/')
 						}
-
 					}, function errorCallback(response) {
-						$scope.survey = {}
+						$scope.showAlert("This survey doesn't exist")
+						$location.path('/')
+					});
+					//Get only survey questions
+					$http.get("api/findQuestionForSurvey/" + $scope.idSurvey).then(function onfulFilled(response) {
+						$scope.questionsHandler(response.data)
+					}, function errorCallback(response) {
+						$scope.isEmptyResult = true;
+					});
+				}
+
+				//Get only Survey questions
+				$scope.filterQuestionAdded = function() {
+					$http.get("api/findQuestionForSurvey/" + $scope.idSurvey).then(function onfulFilled(response) {
+						$scope.questionsHandler(response.data)
+					}, function errorCallback(response) {
+						$scope.isEmptyResult = true;
+					});
+				}
+
+				//Get only User questions
+				$scope.filterQuestionCreated = function() {
+
+					$http.get("api/findQuestionForSurvey/" + $scope.idUser).then(function onfulFilled(response) {
+						$scope.questionsHandler(response.data)
+					}, function errorCallback(response) {
+						$scope.isEmptyResult = true;
 					});
 
-					//Get all system questions
+
+				}
+
+				/*
+				//Get all system questions
 					$http.get("/api/getQuestion").then(function onfulFilled(response) {
-
 						$scope.questions = response.data;
-
-						console.log($scope.questions)
-
 						//Questions SetUp
 						angular.forEach($scope.questions, function(question) {
-
 							angular.forEach($scope.survey.questions, function(questionSurvey) {
-
 								if (questionSurvey.id == question.id) {
 									$scope.selectedQuestionsIndex.push($scope.questions.indexOf(question))
 								}
-
 							});
-
-
 						});
-
-
 					}, function errorCallback(response) {
-						$scope.questions = []
+						// error
 					});
-
-
-				}
+				*/
 				
-				$scope.compileRedirect = function(){
-					
+				$scope.filterQuestionByText = function(textFilterQuestion) {
+					if (textFilterQuestion !== undefined && textFilterQuestion != "" && textFilterQuestion.replace(/\s/g, '').length) {
+						$http.get("api/findQuestionsByText/" + textFilterQuestion).then(function onfulFilled(response) {
+							$scope.questionsHandler(response.data)
+						}, function errorCallback(response) {
+							$scope.isEmptyResult = true;
+						});
+					} else {
+						$scope.load()
+					}
+				}
+
+				$scope.compileRedirect = function() {
+
 					$location.path('/compileSurvey/' + $scope.surveyId + '/' + $scope.userId);
 				}
 
-
 				$scope.editQuestionRoute = function(modalQuestion) {
-					let question = questions[modalQuestion]
+					let question = $scope.questions[modalQuestion]
 					$location.path('/editQuestion/' + question.id);
 				}
 
+				$scope.createQuestionRoute = function() {
+					$location.path('/addQuestion')
+				}
 
 				$scope.modalManager = function(index) {
 					if ($scope.displayModal == 'block') {
@@ -104,63 +141,43 @@ angular.
 					}
 				}
 
-
 				//Handling checkbox
 				$scope.toggleSelection = function toggleSelection(index) {
 					var idx = $scope.selectedQuestionsIndex.indexOf(index);
-
 					if (idx > -1) {
 						$scope.selectedQuestionsIndex.splice(idx, 1);
 					} else {
 						$scope.selectedQuestionsIndex.push(index);
 					}
-
-					console.log($scope.selectedQuestionsIndex)
 				};
 
-
-
+				//Delete survey
 				$scope.delete = function() {
 					$http.delete("/api/deleteSurvey/" + $scope.surveyId).then(function onfulFilled(response) {
 
 						console.log(response.data.response);
 					}, function errorCallback(response) {
-
-						alert("Error");
-						console.error(response);
+						$scope.showAlert("CANNOT DELETE SURVEY")
 					});
 				}
 
-
-
-				$scope.modifySurvey = function() {
+				//Modify Survey
+				$scope.modifySurvey = function(newSurveyName) {
 
 					let data = $scope.survey
-
 					let newQuestionArray = []
-
 					angular.forEach($scope.selectedQuestionsIndex, function(question_index) {
-
 						newQuestionArray.push($scope.questions[question_index])
-
 					});
-
-
 					data.questions = newQuestionArray
-
-					if ($scope.newSurveyName != "" && $scope.newSurveyName.replace(/\s/g, '').length) {
-						data.surveyName = $scope.newSurveyName
+					if (newSurveyName != "" && newSurveyName.replace(/\s/g, '').length) {
+						data.surveyName = newSurveyName
 					}
-
 					$http.patch("/api/modifySurvey", data).then(function onfulFilled(response) {
-
-						console.log(response.data.response);
+						$scope.load()
 					}, function errorCallback(response) {
-
-						alert("Error");
-						console.error(response);
+						$scope.showAlert("CANNOT MODIFY SURVEY")
 					});
-
 				}
 			}
 		]
