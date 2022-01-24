@@ -82,7 +82,6 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	 */
 	@GetMapping("/findSurvey")
 	public ResponseEntity<SurveyDTO> findSurvey(@RequestParam(name = "id") int id) throws NotFoundException {
-		//TODO Lazy loading
 		Survey survey = surveyRepository.get(id);
 		logger.debug(String.format("Retreived Survey with id: {0}.", id));
 		return new ResponseEntity<>(convertToDTO(survey), HttpStatus.OK);

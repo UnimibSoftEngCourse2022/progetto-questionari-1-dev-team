@@ -103,7 +103,7 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	@Override
 	public Iterable<Survey> getByText(String text) throws NotFoundException {
 		
-		Iterable<Survey> surveys =  surveyDAO.findByText(text);
+		Iterable<Survey> surveys =  surveyDAO.findByText(text, text);
 		if(IterableUtils.size(surveys) > 0) {
 			return surveys;
 		}else {
