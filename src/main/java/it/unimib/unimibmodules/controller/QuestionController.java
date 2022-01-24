@@ -2,7 +2,6 @@ package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.QuestionDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
-import it.unimib.unimibmodules.model.Category;
 import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.User;
 import org.apache.logging.log4j.LogManager;
@@ -93,7 +92,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	/**
 	 * Gets all the questions
 	 * @return		an HTTP response with status 200, 500 otherwise
-	 * @throws NotFoundException
+	 * @throws NotFoundException if 404 no question has been found
 	 */
 	@GetMapping(path = "/getQuestion")
 	public ResponseEntity<List<QuestionDTO>> getQuestions() throws NotFoundException{
@@ -102,6 +101,18 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 		logger.debug("Retrieved all the questions.");
     return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
    }
+
+	/**
+	 * Gets all the questions of the user
+	 * @return		an HTTP response with status 200, 500 otherwise
+	 */
+	@GetMapping(path = "/getQuestionByUser/{id}")
+	public ResponseEntity<List<QuestionDTO>> getQuestionsByUser(@PathVariable int id){
+		Iterable<Question> questionList = questionRepository.getByUser(id);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		logger.debug("Retrieved all the questions.");
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
   
 
  	/**
