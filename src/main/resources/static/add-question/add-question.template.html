@@ -1,59 +1,93 @@
+<div class="container-fluid">
 <form novalidate>
-    Testo domanda:<br>
-    <input type="text" ng-model="questiontext"><p ng-show="errorQuestion" style="color:red;display:inline"> Domanda mancante</p><br>
-    <br>
-    <select ng-model="categorySelected">
-        <option value="">
-            Scegli la categoria
-        </option>
-        <option ng-repeat="category in categories" value="{{category}}">
-            {{category.name}}
-        </option>
-    </select><p ng-show="errorCategory" style="color:red;display:inline"> Categoria mancante</p>
-    <br>
-    <br>
-    Tipologia di domanda:
-    <p ng-show="errorQuestionType" style="color:red;display:inline"> Devi selezionare una tipologia</p>
-    <br>
-    <label>
-        <input type="radio" name="questionType" ng-click="showQuestionType(0)">
-        Aperta
-    </label><br/>
-    <label>
-        <input type="radio" name="questionType" ng-click="showQuestionType(1)">
-        Chiusa scelta multipla
-    </label><br/>
-    <label>
-        <input type="radio" name="questionType" ng-click="showQuestionType(2)">
-        Chiusa scelta singola
-    </label><br/>
-    <br/>
-    <div ng-show="showHideClosedM">
-        <div>Inserisci risposte:
-            <p ng-show="errorAnswer" style="color:red;display:inline">
-                Almeno 2 risposte e nessuna risposta deve essere vuota
-            </p>
+    <div class="row">
+        <div class="col-md-4">
+            <h1>Create a new Question</h1>
         </div>
-        <ul>
-            <li ng-repeat="answer in questionAnswer">
-                <div>
-                    <div style="display:inline">
-                            <span>
-                                <input type="text" ng-model="answer.text" placeholder="Risposta" required/>
-                            </span>
-                    </div>
-                    <span ng-hide="answer.length == 1">
-                            <a href ng-click="removeAnswer($index)">rimuovi risposta</a>
-                        </span>
-                </div>
-            </li>
-            <li>
-                <a href ng-click="newAnswer($event)">Aggiungi risposta</a>
-            </li>
-        </ul>
+    </div>
+    <div class="row">
+        <dt class="col-sm-3">Question text:</dt>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="form-control rounded" ng-model="questiontext" aria-describedby="search-addon">
+            <h6 ng-show="errorQuestion" style="color:red;display:inline"> Missing question</h6><br>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <select class="form-select" aria-label="Default select example" ng-model="categorySelected">
+                <option value="">
+                    Choose a category
+                </option>
+                <option ng-repeat="category in categories" value="{{category}}">
+                    {{category.name}}
+                </option>
+            </select><h6 ng-show="errorCategory" style="color:red;display:inline">Missing category</h6>
+        </div>
     </div>
     <br>
-    <br>
-    <button ng-click="addQuestion()">Conferma</button>
+    <div class="row">
+        <dt class="col-sm-3">Question type:</dt>
+        <h6 ng-show="errorQuestionType" style="color:red;display:inline">Missing question type</h6>
+    </div>
+    <div class="row">
+        <div class="m-2">
+            <div class="form-check">
+                <label>
+                    <input class="form-check-input" type="radio" name="questionType" ng-click="showQuestionType(0)">
+                    Open
+                </label>
+            </div>
+            <div class="form-check">
+                <label>
+                    <input class="form-check-input" type="radio" name="questionType" ng-click="showQuestionType(1)">
+                    Closed multiple choice
+                </label>
+            </div>
+            <div class="form-check">
+                <label>
+                    <input class="form-check-input" type="radio" name="questionType" ng-click="showQuestionType(2)">
+                    Closed single choice
+                </label>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div ng-show="showHideClosedM">
+        <div class="row">
+            <div class="row">
+                <dt class="col-sm-3">Enter Answers:</dt>
+                <h6 ng-show="errorAnswer" style="color:red;display:inline">
+                    At least 2 answers and no answer must be blank
+                </h6>
+            </div>
+        </div>
+        <div class ="row">
+            <div class="col-md-4">
+                <ul>
+                    <li ng-repeat="answer in questionAnswer">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control rounded" aria-describedby="button-addon2" ng-model="answer.text" placeholder="Answer" required/>
+                            <button class="btn btn-outline-secondary" type="button" ng-click="removeAnswer($index)">Remove</button>
+                        </div>
+                    </li>
+                    <li>
+                        <a href ng-click="newAnswer($event)">Add Answer</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-primary" ng-click="addQuestion()">Confirm</button>
+        </div>
+    </div>
+
+
 </form>
 <p>{{ prova }}</p>
+</div>

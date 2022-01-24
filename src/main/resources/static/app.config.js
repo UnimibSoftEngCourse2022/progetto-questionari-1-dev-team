@@ -11,7 +11,7 @@ angular.
 					template: '<modify-survey></modify-survey>'
 				}).
 				when('/addSurvey/:idUser', {
-					template: '<addSurvey></addSurvey>'
+					template: '<add-survey></add-survey>'
 				}).
 				when('/compileSurvey/:idSurvey/:idUser', {
 					template: '<compileSurvey></compileSurvey>'
