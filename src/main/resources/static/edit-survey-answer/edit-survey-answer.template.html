@@ -1,4 +1,4 @@
-<div ng-init="load()">
+<div class="container-fluid" ng-init="load()">
 	Survey: {{ survey.surveyName }}
 	<br/>
 	Survey by: {{ survey.userDTO.username }}
@@ -13,11 +13,13 @@
 	<div ng-hide="!question_select">
 		<p>{{ questions[question_select].text }}</p>
 		<div ng-hide="questions[question_select].questionType != 'SINGLECLOSED'">
-			<label ng-repeat="answer in questions[question_select].closeEndedAnswerDTOSet">
-				<input type="radio" ng-model="model.closeended_answer" name="closeended_answer"
-					   ng-value="answer.id"/> {{ answer.text }}
-				<br/>
-			</label>
+			<div ng-repeat="answer in questions[question_select].closeEndedAnswerDTOSet">
+				<label>
+					<input type="radio" ng-model="model.closeended_answer" name="closeended_answer" ng-value="answer.id"/>
+					{{ answer.text }}
+					<br/>
+				</label>
+			</div>
 		</div>
 		<div ng-hide="questions[question_select].questionType != 'MULTIPLECLOSED'">
 			<div ng-repeat="answer in questions[question_select].closeEndedAnswerDTOSet">
