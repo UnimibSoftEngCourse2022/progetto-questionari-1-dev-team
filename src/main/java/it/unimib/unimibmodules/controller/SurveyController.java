@@ -118,7 +118,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleNotFoundException
 	 */
 	@GetMapping("/findSurveyByText")
-	public ResponseEntity<List<SurveyDTO>> findsSurveyByText(@RequestParam(name = "text") String text) throws NotFoundException {
+	public ResponseEntity<List<SurveyDTO>> findSurveyByText(@RequestParam(name = "text") String text) throws NotFoundException {
 
 		Iterable<Survey> surveyList = surveyRepository.getByText(text);
 		List<SurveyDTO> surveyDTOList = new ArrayList<>();

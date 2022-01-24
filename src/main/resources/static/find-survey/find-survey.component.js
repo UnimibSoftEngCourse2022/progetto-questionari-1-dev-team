@@ -69,6 +69,7 @@ angular.
 				$scope.findSurveyByName = function() {
 					if ($scope.surveyNameSearch != "" && $scope.surveyNameSearch.replace(/\s/g, '').length) {
 						$http.get("/api/findSurveyByText/?text=" + $scope.surveyNameSearch).then(function onfulFilled(response) {
+							console.log(response);
 							$scope.handleSurveys(response)
 
 						}, function errorCallback(response) {

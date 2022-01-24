@@ -13,6 +13,6 @@ import org.springframework.data.repository.query.Param;
  */
 public interface SurveyDAO extends CrudRepository<Survey, Integer>{
 
-    @Query("SELECT s FROM Survey s Where name LIKE %:text%")
+    @Query("SELECT s FROM Survey s Where name LIKE %:text% OR id=:text")
     Iterable<Survey> findByText(@Param("text") String text);
 }
