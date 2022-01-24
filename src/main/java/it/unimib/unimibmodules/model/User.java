@@ -1,5 +1,6 @@
 package it.unimib.unimibmodules.model;
 
+import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import java.util.Set;
 
@@ -44,6 +45,12 @@ public class User {
      * The surname of the user.
      */
     private String surname;
+
+    /**
+     * The id used to recognize a user not registered.
+     */
+    @Nullable
+    private int compilationId;
 
     /**
      * The list of the surveys created by the user.
@@ -118,6 +125,14 @@ public class User {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public int getCompilationId() {
+        return compilationId;
+    }
+
+    public void setCompilationId(int compilationId) {
+        this.compilationId = compilationId;
     }
 
     public Set<Survey> getSurveysCreated() {
