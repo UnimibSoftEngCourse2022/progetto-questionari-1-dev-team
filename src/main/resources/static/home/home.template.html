@@ -1,109 +1,83 @@
-<div class="container-fluid"  ng-init="load()">
-	<div class="row">
-		<div class="col-md-12">
-			<h1>Find Surveys</h1>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-md-12 d-flex justify-content-center">
-			<div class="input-group search-form">
-				<input type="search" class="form-control rounded"
-					placeholder="By Creator username" aria-describedby="search-addon"
-					ng-model="creatorNameSearch" />
-				<button type="button" class="btn btn-outline-primary"
-					ng-click="findSurveyByCreator()">Search</button>
-			</div>
-
-		</div>
-	</div>
-	<br>
-	<div class="row">
-		<div class="col-md-12 d-flex justify-content-center">
-			<!-- Search form -->
-
-			<div class="input-group search-form">
-				<input type="search" class="form-control rounded"
-					placeholder="By Survey name" ng-model="surveyNameSearch"
-					aria-describedby="search-addon" />
-				<button type="button" class="btn btn-outline-primary"
-					ng-click="findSurveyByName()">Search</button>
-			</div>
-
-		</div>
-	</div>
-	<br>
-	<div class="row">
-		<div class="col-md-12 d-flex justify-content-center">
-			<!-- Search form -->
-
-			<div class="input-group search-form">
-				<input type="search" class="form-control rounded"
-					placeholder="Personal CODE for non-registered users" ng-model="surveyCodeCompile"
-					aria-describedby="search-addon" />
-				<button type="button" class="btn btn-outline-success"
-					ng-click="surveyCodeCompileRedirect()">Compile</button>
-			</div>
-
-		</div>
-	</div>
-	<br>
-	
-	<div class="row" ng-hide="isEmptyResult">
-
-		<div class="container-fluid" id="surveyCardContainer">
-
-			<div class="row">
-				<!-- ng-repeat="question in questions" -->
-				<div class='col-md-12'>
-					<div class="survey-card row" ng-repeat="survey in result">
-						<div class='col-md-8'>
-							<p>
-								<b>Survey Name:</b> {{ survey.surveyName }}
-							</p>
-							<p>
-								<b>User creator:</b> {{ survey.userDTO.username }}
-							</p>
-
-
-						</div>
-
-						<div class='col-md-4 d-flex align-items-center flex-row-reverse' >
-							<div class='col-md-6 '>
-								<button ng-click="modifySurvey($index)" class="btn btn-primary" ng-hide="! isCreator[$index]">Modify</button>
-							</div>
-
-							<div class='col-md-6 '>
-								<button ng-click="compileSurvey($index)" class="btn btn-success">Compile</button>
-							</div>
-						</div>
-
-
-					</div>
-
-
-				</div>
-
-			</div>
-
-
-		</div>
-
-	</div>
-
-
-
-
-	<div class="row" ng-hide="! isEmptyResult">
-		<div class="col-md-12 d-flex justify-content-center">
-
-			<h2>No results found...</h2>
-
-		</div>
-	</div>
-
-
-
+<div class="jumbotron">
+	<h1>Home</h1>
 </div>
+<div class="container-fluid mb-4" ng-init="load()">
 
+	<div class="row mt-4">
+		<div class="col-md-12 d-flex justify-content-center">
+			<p>
+				<b>Find Surveys by Name and Code:</b>
+			</p>
+		</div>
+	</div>
 
+	<div class="row d-flex justify-content-center">
+		<div class="col-md-4">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<button type="button" class="btn btn-outline-primary"
+						ng-click="findSurveyByText(searchText)">Search</button>
+				</div>
+				<input type="text" ng-model="searchText" class="form-control"
+					id="searchSurvey" placeholder="Enter search text">
+			</div>
+		</div>
+	</div>
+	<div class="row ">
+		<div class="col-md-12  d-flex justify-content-center">
+			<p>
+				<b>Get back to compile your survey:</b>
+			</p>
+		</div>
+	</div>
+	<div class="row  d-flex justify-content-center">
+		<div class="col-md-4">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<button type="button" class="btn btn-outline-primary"
+						ng-click="compileByCode(surveyCode)">Compile</button>
+				</div>
+				<input type="text" ng-model="surveyCode" class="form-control"
+					id="searchSurvey" placeholder="Enter the compilation code">
+			</div>
+		</div>
+	</div>
+	<div class="row" ng-hide="! isLogged">
+		<div class="col-md-12 d-flex justify-content-center">
+			<button type="button" class="btn btn-primary m-1 p-2"
+				ng-click="newQuestion()">New Question</button>
+
+			<button type="button" class="btn btn-primary m-1 p-2" ng-click="">New
+				Survey</button>
+		</div>
+	</div>
+	<div class="row mt-4 p-5 " ng-hide="isEmptyResult"
+		id="surveyCardContainer">
+		<div class="col-sm-3 d-flex justify-content-center mb-4"
+			ng-repeat="survey in result">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">{{ survey.surveyName }}</h5>
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item"><b>Survey Code:</b> {{ survey.id
+						}}</li>
+					<li class="list-group-item"><b>Creation Date:</b> {{
+						survey.creationDate }}</li>
+					<li class="list-group-item"><b>User creator:</b> {{
+						survey.userDTO.username }}</li>
+				</ul>
+				<div class="card-body">
+					<button ng-click="modifySurvey($index)" class="btn btn-primary"
+						ng-hide="! isCreator[$index]">Modify</button>
+					<button ng-click="compileSurvey($index)" class="btn btn-success">Compile</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row m-2" ng-hide="! isEmptyResult">
+	<div class="col-md-12 d-flex justify-content-center">
+		<h2>No results found...</h2>
+	</div>
+</div>

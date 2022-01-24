@@ -1,5 +1,5 @@
 'use strict';
 
-angular.module('findSurvey', [
+angular.module('home', [
   'ngRoute'
 ]);

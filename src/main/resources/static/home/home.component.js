@@ -2,47 +2,83 @@
 
 angular.
 	module('UNIMIBModules').
-	component('findSurvey', {
-		templateUrl: 'find-survey/find-survey.template.html',
-		controller: ['$location' , '$routeParams', '$scope', '$http',
-			function findSurveyController($location , $routeParams, $scope, $http) {
-				//in routeParams mi aspetto di avere l'Id utente se è loggato
-				$scope.idUserLogged = 1;
-				$scope.isEmptyResult = true;
-				$scope.surveyNameSearch = "";
-				$scope.creatorNameSearch = "";
-				$scope.result = [];
+	component('home', {
+		templateUrl: 'home/home.template.html',
+		controller: ['$location', '$routeParams', '$scope', '$http',
+			function homeController($location, $routeParams, $scope, $http) {
+				$scope.idUser = 1 //from cookie
+				$scope.isLogged = false
+				$scope.isEmptyResult = true
+				$scope.searchResult = []
 				$scope.isCreator = []
-				$scope.surveyCodeCompile = 33
-				
-				
-				$scope.surveyCodeCompileRedirect = function(){
-					
-					let survey_id = $scope.surveyCodeCompile
-					$location.path('/compileSurvey/' + survey_id + '/' + $scope.idUserLogged)
-					
+
+				//error alert 
+				$scope.showAlert = function(text) {
+
+					alert('ERROR - ' + text)
 				}
-				
-				
-				
-				$scope.compileSurvey = function(idx){
+
+				//Start-up function
+				$scope.load = function() {
+
+					if ($scope.idUser != null){
+						$scope.isLogged = true;
+					}	
+					$http.get("/api/findAllSurveys").then(function onfulFilled(response) {
+						$scope.handleSurveys(response)
+					})
+				}
+
+
+				//compile by code for no-registered users
+				$scope.compileByCode = function(compilationCode) {
+
+					if (compilationCode !== undefined && compilationCode != "" && compilationCode.replace(/\s/g, '').length) {
+						$location.path('/compileSurvey/')
+					} else {
+						$scope.showAlert("This field cannot be empty.")
+						$scope.load()
+					}
+				}
+
+				// find survey by text : its code or name
+				$scope.findSurveyByText = function(searchText) {
+					if (searchText !== undefined && searchText != "" && searchText.replace(/\s/g, '').length) {
+						$http.get("/api/findSurveyByText/?text=" + searchText).then(function onfulFilled(response) {
+							$scope.handleSurveys(response)
+						}, function errorCallback(response) {
+							$scope.survey = {}
+							$scope.isEmptyResult = true
+						});
+					} else {
+						$scope.load()
+					}
+				}
+
+				//redirect compile survey
+				$scope.compileSurvey = function(idx) {
 					let surveyToCompile = $scope.result[idx];
-					$location.path('/compileSurvey/' + surveyToCompile.id + '/' + $scope.idUserLogged)
+					$location.path('/compileSurvey/' + surveyToCompile.id)
 				}
 
-
-				$scope.modifySurvey = function(idx){
+				//redirect modify survey
+				$scope.modifySurvey = function(idx) {
 					let surveyToModify = $scope.result[idx];
-					$location.path('/modifySurvey/' + surveyToModify.id + '/' + $scope.idUserLogged)
+					$location.path('/modifySurvey/' + surveyToModify.id)
+				}
+				
+				//redirect new question
+				$scope.newQuestion = function() {
+					$location.path('/addQuestion')
 				}
 
-
+				//Utility function for showing surveys and setting permissions
 				$scope.handleSurveys = function(response) {
 					if (response.data.length > 0) {
 						$scope.isEmptyResult = false;
 						$scope.result = response.data;
 						$scope.result.forEach(function(survey, idx) {
-							if (survey.userDTO.id == $scope.idUserLogged) {
+							if (survey.userDTO.id == $scope.idUser) {
 								$scope.isCreator[idx] = true
 							} else {
 								$scope.isCreator[idx] = false
@@ -53,46 +89,6 @@ angular.
 						$scope.result = [];
 					}
 				}
-				
-				
-				$scope.load = function() {
-
-					$http.get("/api/findAllSurveys").then(function onfulFilled(response) {
-						$scope.handleSurveys(response)
-
-					}, function errorCallback(response) {
-						$scope.survey = {}
-					});
-
-				}
-
-				$scope.findSurveyByName = function() {
-					if ($scope.surveyNameSearch != "" && $scope.surveyNameSearch.replace(/\s/g, '').length) {
-						$http.get("/api/findSurveyByText/?text=" + $scope.surveyNameSearch).then(function onfulFilled(response) {
-							console.log(response);
-							$scope.handleSurveys(response)
-
-						}, function errorCallback(response) {
-							$scope.survey = {}
-						});
-					}
-
-				}
-
-				$scope.findSurveyByCreator = function() {
-					if ($scope.creatorNameSearch != "" && $scope.creatorNameSearch.replace(/\s/g, '').length) {
-
-						$http.get("/api/getSurveysCreated/?username=" + $scope.creatorNameSearch).then(function onfulFilled(response) {
-
-							$scope.handleSurveys(response)
-
-						}, function errorCallback(response) {
-							$scope.survey = {}
-						});
-					}
-
-				}
-
 			}
 		]
 	});
