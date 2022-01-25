@@ -1,7 +1,7 @@
 'use strict';
 
 angular.
-	module('UNIMIBModules').
+	module('UNIMIBModules', ['ngRoute']).
 	config(['$routeProvider',
 		function config($routeProvider) {
 			$routeProvider.
