@@ -29,6 +29,8 @@ angular.module('UNIMIBModules').component('loginUser', {
                 }, function errorCallback(response) {
 
                     console.error(response);
+                    alert("Invalid username and password. Please try again");
+
                 });
             }
         }
