@@ -24,7 +24,7 @@ angular.
 					if ($scope.idUser != null){
 						$scope.isLogged = true;
 					}	
-					$http.get("/api/findAllSurveys").then(function onfulFilled(response) {
+					$http.get("/api/findAllSurveysNoQuestion").then(function onfulFilled(response) {
 						$scope.handleSurveys(response)
 					})
 				}
@@ -44,7 +44,7 @@ angular.
 				// find survey by text : its code or name
 				$scope.findSurveyByText = function(searchText) {
 					if (searchText !== undefined && searchText != "" && searchText.replace(/\s/g, '').length) {
-						$http.get("/api/findSurveyByText/?text=" + searchText).then(function onfulFilled(response) {
+						$http.get("/api/findSurveyByTextNoQuestion/?text=" + searchText).then(function onfulFilled(response) {
 							$scope.handleSurveys(response)
 						}, function errorCallback(response) {
 							$scope.survey = {}
@@ -71,9 +71,15 @@ angular.
 				$scope.newQuestion = function() {
 					$location.path('/addQuestion')
 				}
+				
+				//redirect new survey
+				$scope.newSurvey = function() {
+					$location.path('/addSurvey')
+				}
 
 				//Utility function for showing surveys and setting permissions
 				$scope.handleSurveys = function(response) {
+					console.log(response.data)
 					if (response.data.length > 0) {
 						$scope.isEmptyResult = false;
 						$scope.result = response.data;

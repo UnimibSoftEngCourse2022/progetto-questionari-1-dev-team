@@ -7,14 +7,14 @@ angular.
 		controller: ['$location', '$routeParams', '$scope', '$http',
 			function modifySurveyController($location, $routeParams, $scope, $http) {
 				//TODO: Lazy loading
-				
 				$scope.idUser = 1 //from cookie
 				$scope.isSurveyCreator = false
 				$scope.idSurvey = $routeParams.idSurvey;
-				$scope.questions = []
+				$scope.questions = [] //Questions displayed at the moment
 				$scope.survey = {}
-				$scope.selectedQuestionsIndex = []
+				$scope.selectedQuestionsIndex = [] //indexes of $scope.questions --> questions of the survey
 				$scope.displayModal = "none"
+				$scope.displaySearchButton = "block"
 				$scope.modalQuestion = -1;
 				$scope.editQuestion = false;
 				$scope.isEmptyResult = true;
@@ -26,6 +26,7 @@ angular.
 				}
 
 				$scope.questionsHandler = function(data) {
+					console.log(data)
 					$scope.isEmptyResult = false;
 					$scope.questions = data;
 					angular.forEach($scope.questions, function(question) {
@@ -44,6 +45,12 @@ angular.
 						$scope.survey = response.data;
 						if ($scope.survey.userDTO.id == $scope.idUser) {
 							$scope.isSurveyCreator = true;
+							if($scope.survey.questions.length == 0){
+								$scope.isEmptyResult = true;
+							}else{
+								$scope.questionsHandler($scope.survey.questions)
+							}
+							
 						} else {
 							$scope.showAlert("RESTRICTED AREA")
 							$location.path('/')
@@ -51,12 +58,6 @@ angular.
 					}, function errorCallback(response) {
 						$scope.showAlert("This survey doesn't exist")
 						$location.path('/')
-					});
-					//Get only survey questions
-					$http.get("api/findQuestionForSurvey/" + $scope.idSurvey).then(function onfulFilled(response) {
-						$scope.questionsHandler(response.data)
-					}, function errorCallback(response) {
-						$scope.isEmptyResult = true;
 					});
 				}
 
@@ -72,32 +73,13 @@ angular.
 				//Get only User questions
 				$scope.filterQuestionCreated = function() {
 
-					$http.get("api/findQuestionForSurvey/" + $scope.idUser).then(function onfulFilled(response) {
+					$http.get("api/getQuestionByUser/" + $scope.idUser).then(function onfulFilled(response) {
 						$scope.questionsHandler(response.data)
 					}, function errorCallback(response) {
 						$scope.isEmptyResult = true;
 					});
-
-
 				}
-
-				/*
-				//Get all system questions
-					$http.get("/api/getQuestion").then(function onfulFilled(response) {
-						$scope.questions = response.data;
-						//Questions SetUp
-						angular.forEach($scope.questions, function(question) {
-							angular.forEach($scope.survey.questions, function(questionSurvey) {
-								if (questionSurvey.id == question.id) {
-									$scope.selectedQuestionsIndex.push($scope.questions.indexOf(question))
-								}
-							});
-						});
-					}, function errorCallback(response) {
-						// error
-					});
-				*/
-				
+		
 				$scope.filterQuestionByText = function(textFilterQuestion) {
 					if (textFilterQuestion !== undefined && textFilterQuestion != "" && textFilterQuestion.replace(/\s/g, '').length) {
 						$http.get("api/findQuestionsByText/" + textFilterQuestion).then(function onfulFilled(response) {
@@ -123,12 +105,15 @@ angular.
 				$scope.createQuestionRoute = function() {
 					$location.path('/addQuestion')
 				}
-
+				
+				//Modal
 				$scope.modalManager = function(index) {
 					if ($scope.displayModal == 'block') {
 						$scope.displayModal = 'none';
+						$scope.displaySearchButton = "block"
 					} else {
 						$scope.displayModal = 'block';
+						$scope.displaySearchButton = "none"
 					}
 
 					if (index > -1) {
@@ -170,7 +155,7 @@ angular.
 						newQuestionArray.push($scope.questions[question_index])
 					});
 					data.questions = newQuestionArray
-					if (newSurveyName != "" && newSurveyName.replace(/\s/g, '').length) {
+					if (newSurveyName !== undefined && newSurveyName != "" && newSurveyName.replace(/\s/g, '').length) {
 						data.surveyName = newSurveyName
 					}
 					$http.patch("/api/modifySurvey", data).then(function onfulFilled(response) {

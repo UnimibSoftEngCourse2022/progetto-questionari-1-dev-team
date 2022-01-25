@@ -12,8 +12,12 @@
 
 #questionCardContainer {
 	width: 100%;
-	height: 80%;
+	height: 35%;
 	border: 1px solid black;
+}
+
+#modifySurveyContainer{
+	margin-bottom: 5%;
 }
 
 /* The Modal (background) */
@@ -48,8 +52,7 @@
 }
 
 /* Add Animation */
-@
--webkit-keyframes animatetop {
+@-webkit-keyframes animatetop {
 	from {top: -300px;
 	opacity: 0
 }
@@ -60,8 +63,7 @@ to {
 }
 
 }
-@
-keyframes animatetop {
+@keyframes animatetop {
 	from {top: -300px;
 	opacity: 0
 }
@@ -93,9 +95,7 @@ to {
 	color: white;
 }
 
-.modal-body {
-	padding: 2px 16px;
-}
+
 
 .modal-footer {
 	padding: 2px 16px;

@@ -1,9 +1,9 @@
 <div class="jumbotron">
 	<h1>Survey Editing</h1>
 </div>
-<div class="container-fluid mb-4 mt-4" ng-init="load()"
+<div class="container-fluid mt-4" id = "modifySurveyContainer" ng-init="load()"
 	ng-hide="! isSurveyCreator">
-	<div class="row ">
+	<div class="row">
 		<div class="col-md-4">
 			<h3>Info:</h3>
 			<p>
@@ -43,7 +43,7 @@
 						<div class="input-group mb-3">
 
 							<div class="input-group-prepend">
-								<button type="button" class="btn btn-outline-primary "
+								<button ng-style="{'display': displaySearchButton}" type="button" class="btn btn-outline-primary "
 									ng-click="filterQuestionByText(textFilterQuestion)">Search</button>
 							</div>
 							<input type="text" ng-model="textFilterQuestion"
@@ -98,7 +98,7 @@
 	<div class="modal-content">
 		<div class="modal-header">
 			<span ng-click="modalManager(-1)" class="close">&times;</span>
-			<h2>Question Details</h2>
+			<h3>Question Details</h3>
 		</div>
 		<div class="modal-body">
 			<p>

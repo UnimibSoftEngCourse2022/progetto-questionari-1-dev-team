@@ -9,10 +9,10 @@ angular.
 					template: '<home></home>',
 				}).when('/modifySurvey/:idSurvey', {
 					template: '<modify-survey></modify-survey>'
-				}).when('/addSurvey/:idUser', {
-					template: '<addSurvey></addSurvey>'
+				}).when('/addSurvey', {
+					template: '<add-survey></add-survey>'
 				}).when('/compileSurvey/:idSurvey/', {
-					template: '<compileSurvey></compileSurvey>'
+					template: '<compile-survey></compile-survey>'
 				}).when("/addQuestion", {
                     template: '<add-question></add-question>'
                 }).when("/editQuestion/:idQuestion", {
