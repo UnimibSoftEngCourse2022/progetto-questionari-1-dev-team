@@ -104,6 +104,17 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 		return questionDAO.findByUser(userId);
 	}
 
+	/**
+	 * Finds the question associated with the category identified by <code>surveyId</code>
+	 * @param	categoryId	the id of the category
+	 * @return				a list of Questions
+	 * @see QuestionRepository#get(int id)
+	 */
+	@Override
+	public Iterable<Question> getByCategory(int categoryId) {
+
+		return questionDAO.findByCategory(categoryId);
+	}
 
 	/**
      * Returns all questions in the database.

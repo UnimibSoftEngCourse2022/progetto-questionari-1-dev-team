@@ -110,10 +110,21 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	public ResponseEntity<List<QuestionDTO>> getQuestionsByUser(@PathVariable int id){
 		Iterable<Question> questionList = questionRepository.getByUser(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
-		logger.debug("Retrieved all the questions.");
+		logger.debug("Retrieved all the questions of the user "+id + ".");
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
-  
+
+	/**
+	 * Gets all the questions associated with the given id of category
+	 * @return		an HTTP response with status 200, 500 otherwise
+	 */
+	@GetMapping(path = "/getQuestionByCategory/{id}")
+	public ResponseEntity<List<QuestionDTO>> getQuestionsByCategory(@PathVariable int id){
+		Iterable<Question> questionList = questionRepository.getByCategory(id);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		logger.debug("Retrieved all the questions of the user "+id + ".");
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
 
  	/**
 	 * Gets the question in the database where text is contained in the text of the question

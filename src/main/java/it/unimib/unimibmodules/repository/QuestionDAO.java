@@ -19,6 +19,9 @@ public interface QuestionDAO extends CrudRepository<Question, Integer> {
 	@Query("SELECT q FROM Question q Where q.text LIKE %:text%")
 	Iterable<Question> findByText(@Param("text") String text);
 
-	@Query("SELECT q FROM Question q Where q.user = :id")
+	@Query("SELECT q FROM Question q Where q.user.id = :id")
 	Iterable<Question> findByUser(@Param("id") int userId);
+
+	@Query("SELECT q FROM Question q Where q.category.id = :id")
+	Iterable<Question> findByCategory(@Param("id") int categoryId);
 }
