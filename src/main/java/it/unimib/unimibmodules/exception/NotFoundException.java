@@ -2,9 +2,9 @@ package it.unimib.unimibmodules.exception;
 /**
  * Exception class for not found entities.
  * @author Luca Milazzo
- * @version 0.1.0
+ * @version 0.2.0
  */
-public class NotFoundException extends Throwable{
+public class NotFoundException extends Exception{
 	/**
 	 * Constructs an FormatException with the specified message and exception data.
 	 * @param	message	the exception message

@@ -1,28 +1,38 @@
 package it.unimib.unimibmodules.controller;
 
+import it.unimib.unimibmodules.dto.SurveyDTO;
 import it.unimib.unimibmodules.dto.UserDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.factory.UserFactory;
+import it.unimib.unimibmodules.model.Survey;
 import it.unimib.unimibmodules.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Controller handling HTTP requests from User
  * @author Gianlorenzo Martini
- * @version 0.1.0
+ * @version 0.2.0
  */
 
 @RestController
 @RequestMapping("/api")
 public class UserController extends DTOMapping<User, UserDTO> {
-    
+
+    private static final Logger logger = LogManager.getLogger(User.class);
+
     /**
      * Instance of UserRepository that will be used to access the db.
      */
@@ -32,6 +42,24 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public UserController(UserRepository userRepository, ModelMapper modelMapper) {
     	super(modelMapper);
         this.userRepository = userRepository;
+
+        modelMapper.createTypeMap(User.class, UserDTO.class)
+                .addMappings(mapper -> {
+                    mapper.map(User::getId, UserDTO::setId);
+                    mapper.map(User::getUsername, UserDTO::setUsername);
+                    mapper.map(User::getEmail, UserDTO::setEmail);
+                    mapper.map(User::getName, UserDTO::setName);                 
+                });
+
+        modelMapper.createTypeMap(UserDTO.class, User.class)
+                .addMappings(mapper -> {
+                    mapper.map(UserDTO::getId, User::setId);
+                    mapper.map(UserDTO::getUsername, User::setUsername);
+                    mapper.map(UserDTO::getPassword, User::setPassword);
+                    mapper.map(UserDTO::getEmail, User::setEmail);
+                    mapper.map(UserDTO::getName, User::setName);
+                    mapper.map(UserDTO::getSurname, User::setSurname);
+                });
     }
 
     /**
@@ -43,53 +71,78 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public ResponseEntity<UserDTO> getUser(@PathVariable int id) throws NotFoundException {
 
         User user = userRepository.get(id);
-
+        logger.debug("Retrieved User with id " + id + ".");
         return new ResponseEntity<>(convertToDTO(user), HttpStatus.OK);
     }
 
     /**
-     * Logs the User into the website if the combination of username and password match.
-     * @param       username        the username insert by the user
-     * @param       password        the password insert by the user
-     * @return                      an HTTP response with status 200 and the UserDTO if the user has been auth, 500 otherwise
+     * Gets the surveys created by the user identified by the username
+     * @param   username    the username of a user
+     * @return              a list of surveys created by the user identified with username
+     * @throws NotFoundException
      */
-    @PostMapping(path = "/logInUser")
-    public ResponseEntity<String> logInUser(@RequestParam String username, @RequestParam String password) throws NotFoundException {
+    @GetMapping("/getSurveysCreated")
+    public ResponseEntity<List<SurveyDTO>> getSurveysCreated(@RequestParam (name = "username") String username) throws NotFoundException {
 
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         User user = userRepository.getByUsername(username);
+        Set<Survey> surveys  = user.getSurveysCreated();
 
-        if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
-            return new ResponseEntity<>("Login Successful", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Login failed.", HttpStatus.UNAUTHORIZED);
+        List<SurveyDTO> surveysDTO = new ArrayList<>();
+
+        for (Survey survey : surveys) {
+            SurveyDTO surveyDTO = new SurveyDTO();
+            surveyDTO.setId(survey.getId());
+            surveyDTO.setSurveyName(survey.getName());
+            surveyDTO.setUserDTO(convertToDTO(survey.getUser()));
+            surveysDTO.add(surveyDTO);
         }
+
+        logger.debug("Retrieved surveys created by user: " + username + ".");
+        return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
     }
 
     /**
+     * Logs the User into the website if the combination of username and password match.
+     * @param       userDTO        Representation of a user from the body of the http post
+     * @return                     an HTTP response with status 200 and the UserDTO if the user has been auth, 500 otherwise
+     */
+    @PostMapping(path = "/logInUser", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> logInUser(@RequestBody UserDTO userDTO) throws NotFoundException {
+
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        User user = userRepository.getByUsername(userDTO.getUsername());
+
+        if (bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+            logger.debug("Successful sign in of user: " + userDTO.getUsername() + ".");
+            return new ResponseEntity<>("{\"response\":\"Login Successful.\"}", HttpStatus.OK);
+        } else {
+            logger.debug("Failed sign in of user: " + userDTO.getUsername() + ".");
+            return new ResponseEntity<>("{\"response\":\"Login fAILED.\"}", HttpStatus.UNAUTHORIZED);
+        }
+    }
+    
+    /**
      * Create a new User.
-     * @param requestParams     Parameters insert in order to create a new User
+     * @param   userDTO         Representation of a user from the body of the http post
      * @return                  an HTTP response with status 200 and the UserDTO if the user has been created, 500 otherwise
      */
-    @PostMapping(path = "/signUpUser")
-    public ResponseEntity<String> signUpUser(@RequestParam Map<String,String> requestParams) {
+    @PostMapping(path = "/signUpUser", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> signUpUser(@RequestBody UserDTO userDTO) {
 
         try {
-            User user = userRepository.getByUsername(requestParams.get("username"));
-            return new ResponseEntity<>("Username already existing.", HttpStatus.BAD_REQUEST);
+            System.out.println(userDTO.getUsername());
+            User user = userRepository.getByUsername(userDTO.getUsername());
+            logger.debug("Failed creation of user " + userDTO.getUsername() + ": user already exist.");
+            return new ResponseEntity<>("{\"response\":\"Username already existing.\"}", HttpStatus.BAD_REQUEST);
         } catch (NotFoundException e) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-            User user = UserFactory.createUser(
-                    requestParams.get("email"),
-                    bCryptPasswordEncoder.encode(requestParams.get("password")),
-                    requestParams.get("username"),
-                    requestParams.get("name"),
-                    requestParams.get("surname"));
+            User user = convertToEntity(userDTO);
+            user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
             userRepository.add(user);
-
-            return new ResponseEntity<>("User created.", HttpStatus.CREATED);
+            logger.debug("Successful creation of user " + userDTO.getUsername() + ".");
+            return new ResponseEntity<>("{\"response\":\"User created.\"}", HttpStatus.CREATED);
         }
     }
 
@@ -101,8 +154,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
 	 */
 	@Override
 	public UserDTO convertToDTO(User user) {
-
-		return modelMapper.map(user, UserDTO.class);
+        return modelMapper.getTypeMap(User.class, UserDTO.class).map(user);
 	}
 
 	/**
@@ -113,7 +165,6 @@ public class UserController extends DTOMapping<User, UserDTO> {
 	 */
 	@Override
 	public User convertToEntity(UserDTO userDTO) {
-
-		return modelMapper.map(userDTO, User.class);
+        return modelMapper.getTypeMap(UserDTO.class, User.class).map(userDTO);
 	}
 }

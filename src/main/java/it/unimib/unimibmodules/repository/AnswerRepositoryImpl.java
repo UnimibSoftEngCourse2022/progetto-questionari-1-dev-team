@@ -4,32 +4,40 @@ package it.unimib.unimibmodules.repository;
 import it.unimib.unimibmodules.controller.AnswerRepository;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Answer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Repository for the Answers. Adds business logic to Answer instances before actually accessing
  * the database via DAO.
  * @author Davide Costantini
- * @version 0.1.0
+ * @version 0.2.0
  */
 @Component("answerRepository")
 public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer>  {
+
+	private static final Logger logger = LogManager.getLogger(AnswerRepositoryImpl.class);
 
     /**
      * The instance of AnswerDAO that will be used to perform actions to the DB
      */
     private final AnswerDAO answerDAO;
 
+	/**
+	 * The context of the UnitOfWork
+	 */
+	private final Map<String, List<Answer>> uofContext;
+
     @Autowired
     public AnswerRepositoryImpl(AnswerDAO answerDAO) {
 
         this.answerDAO = answerDAO;
+		uofContext = new HashMap<>();
     }
 
     /**
@@ -66,9 +74,22 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 		try {
 			return answer.orElseThrow();
 		} catch (NoSuchElementException e) {
-			throw new NotFoundException("No Answer with id " + id + " was found.");
+			throw new NotFoundException("{\"response\":\"No Answer with id " + id + " was found.\"}");
 		}
     }
+
+	/**
+	 * Finds all the answers the user created for a survey.
+	 * @param	surveyId	the id of the Survey
+	 * @param	userId		the id of the User
+	 * @return				an instance of Answer if there is an answer identified by id, null otherwise
+	 * @see AnswerRepository#get(int id)
+	 */
+	@Override
+	public Iterable<Answer> getSurveyAnswersForUser(int surveyId, int userId) {
+
+		return answerDAO.findSurveyAnswersForUser(surveyId, userId);
+	}
 
     /**
      * Returns all answers in the database.
@@ -91,7 +112,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 		try {
 			answerDAO.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new NotFoundException("No ClosedEndedAnswer with id " + id + " was found.");
+			throw new NotFoundException("{\"response\":\"No ClosedEndedAnswer with id " + id + " was found.\"");
 		}
     }
 
@@ -121,7 +142,12 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	 */
 	private void register(Answer answer, String operation) {
 
-		// TODO Auto-generated method stub
+		List<Answer> answerToOperate = uofContext.get(operation);
+		if (answerToOperate == null) {
+			answerToOperate = new ArrayList<>();
+		}
+		answerToOperate.add(answer);
+		uofContext.put(operation, answerToOperate);
 	}
 
 	/**
@@ -132,7 +158,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	@Override
 	public void registerNew(Answer answer) {
 
-		// TODO Auto-generated method stub
+		logger.info("Registering Answer with id {} for insert in context.", answer.getId());
 		register(answer, UnitOfWork.INSERT);
 	}
 
@@ -144,7 +170,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	@Override
 	public void registerModified(Answer answer) {
 
-		// TODO Auto-generated method stub
+		logger.info("Registering Answer with id {} for modify in context.", answer.getId());
 		register(answer, UnitOfWork.MODIFY);
 	}
 
@@ -156,7 +182,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	@Override
 	public void registerDeleted(Answer answer) {
 
-		// TODO Auto-generated method stub
+		logger.info("Registering Answer with id {} for delete in context.", answer.getId());
 		register(answer, UnitOfWork.DELETE);
 	}
 
@@ -168,5 +194,6 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	public void commit() {
 
 		// TODO Auto-generated method stub
+		// https://java-design-patterns.com/patterns/unit-of-work/
 	}
 }

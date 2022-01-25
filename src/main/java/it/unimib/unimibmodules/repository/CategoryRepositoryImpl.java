@@ -14,7 +14,7 @@ import java.util.Optional;
  * Repository for the Category class. Adds business logic to Category instances before
  * accessing the database via DAO.
  * @author Lorenzo Occhipinti
- * @version 0.1.0
+ * @version 0.2.0
  */
 @Component("categoryRepository")
 public class CategoryRepositoryImpl implements CategoryRepository {
@@ -65,6 +65,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
      * Returns all categories in the database.
      * @return  a list of Category
      */
+    @Override
     public Iterable<Category> getAll() {
         return categoryDAO.findAll();
     }

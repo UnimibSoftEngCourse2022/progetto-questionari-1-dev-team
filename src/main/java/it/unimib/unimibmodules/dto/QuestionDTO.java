@@ -6,7 +6,7 @@ import java.util.Set;
  * DTO for Question.
  * @author Khalil
  * @author Lorenzo Occhipinti
- * @version 0.1.0
+ * @version 0.2.0
  */
 
 public class QuestionDTO {
@@ -50,6 +50,11 @@ public class QuestionDTO {
 	 * Serialization of the list of the questions.
 	 */
 	private Set<SurveyDTO> surveyDTO;
+
+	/**
+	 * Serialization of the type of the question.
+	 */
+	private String questionType;
 
 	/**
 	 * Returns the id of the question.
@@ -202,5 +207,21 @@ public class QuestionDTO {
 	public void setSurvey(Set<SurveyDTO> surveyDTOSet) {
 
 		this.surveyDTO = surveyDTOSet;
+	}
+
+	/**
+	 * Returns the type of the question.
+	 * @return	the type of the question
+	 */
+	public String getQuestionType() {
+		return questionType;
+	}
+
+	/**
+	 * Modifies the type of the question, setting <code>questionType</code> as the new value.
+	 * @param questionType the type of the question
+	 */
+	public void setQuestionType(String questionType) {
+		this.questionType = questionType;
 	}
 }

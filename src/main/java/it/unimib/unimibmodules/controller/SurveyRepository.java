@@ -3,12 +3,10 @@ package it.unimib.unimibmodules.controller;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Survey;
 
-import java.util.List;
-
 /**
  * Repository for SurveyRepository.
  * @author Luca Milazzo
- * @version 0.1.0
+ * @version 0.2.0
  */
 public interface SurveyRepository {
 

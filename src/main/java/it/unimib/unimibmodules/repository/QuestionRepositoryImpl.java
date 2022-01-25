@@ -14,7 +14,7 @@ import java.util.Optional;
 /**
  * Repository for the Question class.
  * @author Khalil
- * @version 0.1.0
+ * @version 0.2.0
  */
 @Component("questionRepository")
 public class QuestionRepositoryImpl implements QuestionRepository {
@@ -70,9 +70,9 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
 
 	/**
-	 * Finds the question identified by id in the database
-	 * @param	surveyId	the id of the question to be found
-	 * @return				an instance of Question if there is a question identified by id, null otherwise
+	 * Finds the question associated with the survey identified by <code>surveyId</code>
+	 * @param	surveyId	the id of the survey
+	 * @return				a list of Questions
 	 * @see QuestionRepository#get(int id)
 	 */
 	@Override
@@ -80,6 +80,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
 		return questionDAO.findBySurveyId(surveyId);
 	}
+
 
 	/**
 	 * Finds the question in the database where text is contained in the text of the question
@@ -92,14 +93,15 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 		return questionDAO.findByText(text);
 	}
 
+
     /**
      * Returns all questions in the database.
      * @return  a list of Questions
      */
-	public Iterable<Question> getAll() {
+	@Override
+	public Iterable<Question> getAll() throws NotFoundException {
 		return questionDAO.findAll();
 	}
-
 
 	/**
      * Deletes from the database the question identified by id.

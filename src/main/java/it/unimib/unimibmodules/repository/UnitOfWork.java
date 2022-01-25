@@ -4,7 +4,7 @@ package it.unimib.unimibmodules.repository;
  * Defines the method that will be used by controllers to implement a Unit of Work
  * @author Davide Costantini
  * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
- * @version 0.1.0
+ * @version 0.2.0
  */
 public interface UnitOfWork<T> {
 

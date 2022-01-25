@@ -1,6 +1,6 @@
 {
 	"name": "UNIMIB-Modules",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "UNIMIB Modules",
 	"main": "index.html",
 	"repository": {
@@ -33,6 +33,9 @@
 		}
 	],
 	"dependencies": {
-		"angular": "^1.8.2"
+		"angular": "^1.8.2",
+		"angular-route": "^1.8.2",
+		"bootstrap": "^5.1.3",
+		"jquery": "^3.6.0"
 	}
 }
