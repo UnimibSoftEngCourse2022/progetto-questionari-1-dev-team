@@ -128,7 +128,7 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	 * Creates an Answer.
 	 * @param	answerDTO			the serialized object of the answer
 	 * @return						an HTTP Response with status 201 if the answer has been created, 500 otherwise
-	 * @throws	EmptyFieldException	if some of the attributes of the new answer can't be found on database
+	 * @throws	EmptyFieldException	if the answer text is empty
 	 * @throws	NotFoundException	if some of the attributes of the new answer can't be found on database
 	 */
 	@PostMapping(path = "/addAnswer", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -136,9 +136,9 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 			throws EmptyFieldException, NotFoundException, IncorrectSizeException {
 
 		Answer answer = convertToEntity(answerDTO);
-		answerRepository.add(answer);
+		answerRepository.registerNew(answer);
 		logger.debug("Added Answer with id {}.", answer.getId());
-		return new ResponseEntity<>("{\"response\":\"Answer created.\"}", HttpStatus.CREATED);
+		return new ResponseEntity<>("{\"response\":\"Answer registered for creation.\"}", HttpStatus.CREATED);
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	 * @param	modifiedAnswerDTO	the serialization of the modified answer
 	 * @return						an HTTP response with status 200 if the answer has been modified, 500 otherwise
 	 * @throws	NotFoundException	if the original Answer has not been found
-	 * @throws	EmptyFieldException
+	 * @throws	EmptyFieldException	if the answer text is empty
 	 */
 	@PatchMapping(path = "/modifyAnswer")
 	public ResponseEntity<String> modifyAnswer(@RequestBody AnswerDTO modifiedAnswerDTO)
@@ -158,9 +158,9 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 			answer.setText(modifiedAnswer.getText());
 		else if (modifiedAnswer.getCloseEndedAnswers() != null)
 			answer.setCloseEndedAnswers(modifiedAnswer.getCloseEndedAnswers());
-		answerRepository.modify(answer);
+		answerRepository.registerModified(answer);
 		logger.debug("Modified Answer with id {}.", answer.getId());
-		return new ResponseEntity<>("{\"response\": \"Answer modified.\"}", HttpStatus.OK);
+		return new ResponseEntity<>("{\"response\": \"Answer registered for edit.\"}", HttpStatus.OK);
 	}
 
 	/**
@@ -172,9 +172,39 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	@DeleteMapping(path = "/deleteAnswer/{id}")
 	public ResponseEntity<String> deleteAnswer(@PathVariable int id) throws NotFoundException {
 
-		answerRepository.remove(id);
+		Answer answer = answerRepository.get(id);
+		answerRepository.registerDeleted(answer);
 		logger.debug("Removed Answer with id {}.", id);
-		return new ResponseEntity<>("{\"response\":\"Answer deleted.\"}", HttpStatus.OK);
+		return new ResponseEntity<>("{\"response\":\"Answer registered for deletion.\"}", HttpStatus.OK);
+	}
+
+	/**
+	 * Inserts the registered answers made by the user identified by <code>userId</code> on the survey identified by
+	 * <code>surveyId</code>.
+	 * @param	surveyId	the id of the survey
+	 * @param	userId		the id of the user
+	 * @return				an HTTP Response with status 200 if the answer has been deleted, 500 otherwise
+	 */
+	@PostMapping(path = "/saveSurveyAnswers")
+	public ResponseEntity<String> saveNewAnswers(@RequestParam int surveyId, @RequestParam int userId) {
+
+		answerRepository.commitInsert(surveyId, userId);
+		return new ResponseEntity<>("{\"response\":\"Answers saved.\"}", HttpStatus.OK);
+	}
+
+	/**
+	 * Modifies and deletes the registered answers made by the user identified by <code>userId</code> on the survey
+	 * identified by <code>surveyId</code>
+	 * @param	surveyId	the id of the survey
+	 * @param	userId		the id of the user
+	 * @return				an HTTP Response with status 200 if the answer has been deleted, 500 otherwise
+	 */
+	@PostMapping(path = "/saveModifiedSurveyAnswers")
+	public ResponseEntity<String> saveModifiedAnswers(@RequestParam int surveyId, @RequestParam int userId) {
+
+		answerRepository.commitModify(surveyId, userId);
+		answerRepository.commitDelete(surveyId, userId);
+		return new ResponseEntity<>("{\"response\":\"Changes saved.\"}", HttpStatus.OK);
 	}
 
 	/**
