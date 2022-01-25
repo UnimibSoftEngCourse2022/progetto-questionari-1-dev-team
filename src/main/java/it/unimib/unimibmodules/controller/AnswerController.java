@@ -27,7 +27,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/api")
-public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
+public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 
 	private static final Logger logger = LogManager.getLogger(AnswerController.class);
 
@@ -211,6 +211,7 @@ public class AnswerController extends DTOMapping<Answer, AnswerDTO> {
 	 * @return			a list of QuestionDTO, containing the serialized data of answers
 	 * @see DTOMapping#convertToDTO
 	 */
+	@Override
 	public List<AnswerDTO> convertListToDTO(Iterable<Answer> answers) {
 
 		List<AnswerDTO> answerDTOList = new ArrayList<>();

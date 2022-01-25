@@ -23,7 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-public class CategoryController extends DTOMapping<Category, CategoryDTO>{
+public class CategoryController extends DTOListMapping<Category, CategoryDTO>{
 
     /**
      * Instance of AnswerRepository that will be used to access the db.
@@ -78,6 +78,7 @@ public class CategoryController extends DTOMapping<Category, CategoryDTO>{
         return modelMapper.map(dto, Category.class);
     }
 
+    @Override
     public List<CategoryDTO> convertListToDTO(Iterable<Category> categories) {
 
         List<CategoryDTO> categoryList = new ArrayList<>();
