@@ -1,7 +1,6 @@
 package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.exception.NotFoundException;
-import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.Survey;
 
 import java.util.List;
