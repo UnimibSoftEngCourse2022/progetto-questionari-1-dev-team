@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto py-4 px-0">
+            <h2>Signup</h2>
+            <form class="signup" name="form" ng-submit="signupUser()" role="form">
+                <div class="form-group">
+                    <label for="username">Username:</label> <input class="form-control"
+                                                                   id="username" name="username" ng-model="username"
+                                                                   type="text"/>
+                </div>
+                <div class="form-group">
+                    <label for="name">Name:</label> <input class="form-control"
+                                                           id="name" name="name" ng-model="name" type="text"/>
+                </div>
+                <div class="form-group">
+                    <label for="surname">Surname:</label> <input class="form-control"
+                                                                 id="surname" name="surname" ng-model="surname"
+                                                                 type="text"/>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label> <input class="form-control"
+                                                             id="email" name="email" ng-model="email"
+                                                             type="email"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label> <input class="form-control"
+                                                                   id="password" name="password" ng-model="password"
+                                                                   type="password"/>
+                </div>
+                <br/>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
