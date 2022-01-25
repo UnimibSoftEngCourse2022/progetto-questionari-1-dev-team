@@ -79,7 +79,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
-		logger.debug("Retrieved " + questionDTOList.size() + " questions containing the text " + text + ".");
+		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size(), text);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
