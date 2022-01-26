@@ -2,7 +2,7 @@
 
 app.component('compileSurvey', {
 	templateUrl: 'compile-survey/compile-survey.template.html',
-	controller: function ($scope, $http, $location, $routeParams, $uibModal) {
+	controller: function($scope, $http, $location, $routeParams, $uibModal) {
 
 		$scope.model = {};
 		$scope.options = [];
@@ -56,23 +56,9 @@ app.component('compileSurvey', {
 			let modal = $uibModal.open({
 				animation: true,
 				windowClass: "show",
-				template: `
-							<div class="container-fluid">
-								<div class="modal-header">
-									<h5 class="modal-title">Close survey</h5>
-									<button ng-click="cancel()" class="close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									Do you really want to close? All your answers will be saved.
-								</div>
-								<div class="modal-footer">
-									<button ng-click="cancel()" class="btn btn-danger">Cancel</button>
-									<button ng-click="submit()" class="btn btn-success">Submit</button>
-								</div>
-							</div>`,
+				templateUrl: "template/close-survey.template.html",
 				controller: function($scope, $http, $location) {
+
 					$scope.submit = function() {
 
 						$http.post("/api/saveSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=1")
