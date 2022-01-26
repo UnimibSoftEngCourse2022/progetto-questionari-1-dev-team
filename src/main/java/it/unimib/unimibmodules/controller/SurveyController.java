@@ -1,20 +1,16 @@
 package it.unimib.unimibmodules.controller;
 
-import it.unimib.unimibmodules.dto.QuestionDTO;
 import it.unimib.unimibmodules.dto.SurveyDTO;
 import it.unimib.unimibmodules.dto.SurveyQuestionsDTO;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
-import it.unimib.unimibmodules.model.Answer;
-import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.Survey;
 import it.unimib.unimibmodules.model.SurveyQuestions;
 import it.unimib.unimibmodules.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -45,11 +41,6 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	/**
 	 * Instance of SurveyQuestionsRepository that will be used to access the db.
 	 */
-	private final SurveyQuestionsRepository surveyQuestionsRepository;
-
-	/**
-	 * Instance of SurveyQuestionsRepository that will be used to access the db.
-	 */
 	private final QuestionRepository questionRepository;
 
 	private static final Logger logger = LogManager.getLogger(SurveyController.class);
@@ -57,12 +48,11 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	@Autowired
 
 	public SurveyController(UserRepository userRepository, SurveyRepository surveyRepository,
-			SurveyQuestionsRepository surveyQuestionsRepository, QuestionRepository questionRepository,
+							QuestionRepository questionRepository,
 			ModelMapper modelMapper) {
 		super(modelMapper);
 		this.surveyRepository = surveyRepository;
 		this.userRepository = userRepository;
-		this.surveyQuestionsRepository = surveyQuestionsRepository;
 		this.questionRepository = questionRepository;
 
 		modelMapper.createTypeMap(Survey.class, SurveyDTO.class).addMappings(mapper -> {
@@ -147,7 +137,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		}
 		if (surveyDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Survey with " + text + " was found.\"}");
-		logger.debug("Retrieved {} Surveys containing the text {}.", surveyDTOList.size(), text);
+		logger.debug("Retrieved {} Surveys containing the text", surveyDTOList.size());
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
 
