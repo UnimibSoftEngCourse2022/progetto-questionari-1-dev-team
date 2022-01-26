@@ -1,9 +1,12 @@
 package it.unimib.unimibmodules.controller;
 
+import java.util.Set;
+
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.Survey;
+import it.unimib.unimibmodules.model.SurveyQuestions;
 
 /**
  * Repository for SurveyRepository.
@@ -57,4 +60,12 @@ public interface SurveyRepository {
 	 * @see SurveyRepository#modify
 	 */
 	void modify(Survey survey) throws  FormatException;
+
+	/**
+	 * Updates a survey in the database using a new instance of Survey.
+	 * @param   survey  the new instance of Survey
+	 * @throws NotFoundException 
+	 * @see SurveyRepository#modify
+	 */
+	void modifyQuestions(Set<SurveyQuestions> surveyQuestions, int surveyId) throws FormatException;
 }

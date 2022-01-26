@@ -2,11 +2,14 @@ package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.QuestionDTO;
 import it.unimib.unimibmodules.dto.SurveyDTO;
+import it.unimib.unimibmodules.dto.SurveyQuestionsDTO;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
+import it.unimib.unimibmodules.model.Answer;
 import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.Survey;
+import it.unimib.unimibmodules.model.SurveyQuestions;
 import it.unimib.unimibmodules.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,7 +43,12 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	private final UserRepository userRepository;
 
 	/**
-	 * Instance of QuestionRepository that will be used to access the db.
+	 * Instance of SurveyQuestionsRepository that will be used to access the db.
+	 */
+	private final SurveyQuestionsRepository surveyQuestionsRepository;
+
+	/**
+	 * Instance of SurveyQuestionsRepository that will be used to access the db.
 	 */
 	private final QuestionRepository questionRepository;
 
@@ -49,16 +57,28 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	@Autowired
 
 	public SurveyController(UserRepository userRepository, SurveyRepository surveyRepository,
-			QuestionRepository questionRepository, ModelMapper modelMapper) {
+			SurveyQuestionsRepository surveyQuestionsRepository, QuestionRepository questionRepository,
+			ModelMapper modelMapper) {
 		super(modelMapper);
 		this.surveyRepository = surveyRepository;
 		this.userRepository = userRepository;
+		this.surveyQuestionsRepository = surveyQuestionsRepository;
 		this.questionRepository = questionRepository;
 
 		modelMapper.createTypeMap(Survey.class, SurveyDTO.class).addMappings(mapper -> {
 			mapper.map(Survey::getId, SurveyDTO::setId);
 			mapper.map(Survey::getName, SurveyDTO::setSurveyName);
 			mapper.skip(SurveyDTO::setQuestions);
+		});
+
+		modelMapper.createTypeMap(SurveyQuestions.class, SurveyQuestionsDTO.class).addMappings(mapper -> {
+			mapper.map(SurveyQuestions::getId, SurveyQuestionsDTO::setId);
+			mapper.map(SurveyQuestions::getQuestion, SurveyQuestionsDTO::setQuestionDTO);
+		});
+
+		modelMapper.createTypeMap(SurveyQuestionsDTO.class, SurveyQuestions.class).addMappings(mapper -> {
+			mapper.map(SurveyQuestionsDTO::getQuestionDTO, SurveyQuestions::setQuestion);
+			mapper.map(SurveyQuestionsDTO::getSurveyDTO, SurveyQuestions::setSurvey);
 		});
 
 		modelMapper.createTypeMap(SurveyDTO.class, Survey.class).addMappings(mapper -> {
@@ -69,6 +89,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 			mapper.map(User::getId, (surveyDTO, id) -> surveyDTO.getUserDTO().setId(id));
 			mapper.map(User::getUsername, (surveyDTO, username) -> surveyDTO.getUserDTO().setUsername(username));
 		});
+
 	}
 
 	/**
@@ -129,11 +150,10 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		logger.debug("Retrieved " + surveyDTOList.size() + " surveys containing the text " + text + ".");
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
-	
-	
+
 	/**
-	 * Gets the surveys in the database, without their questions, where text is contained in the name of the
-	 * survey or text is its ID.
+	 * Gets the surveys in the database, without their questions, where text is
+	 * contained in the name of the survey or text is its ID.
 	 * 
 	 * @param text the text to be found in the name of the survey
 	 * @return an HTTP response with status 200 and the SurveyDTOs
@@ -176,7 +196,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		logger.debug("Retrieved " + surveysDTO.size() + " surveys.");
 		return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Finds all surveys without their questions.
 	 * 
@@ -237,9 +257,17 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	@PatchMapping(path = "/modifySurvey", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> modifySurvey(@RequestBody SurveyDTO surveyDTO)
 			throws FormatException, NotFoundException, EmptyFieldException {
+		
 		Survey survey = convertToEntity(surveyDTO);
-		surveyRepository.modify(survey);
-		logger.debug("Modified Survey with id: {0}." + survey.getId());
+		Set<SurveyQuestions> surveyQuestions = survey.getSurveyQuestions();
+		surveyRepository.modifyQuestions(surveyQuestions, survey.getId());
+		
+		/*for (SurveyQuestions surveyQuestion : surveyQuestions) {	
+			int questioId = surveyQuestion.getQuestion().getId();
+			surveyRepository.modifyQuestions(questioId);
+		}*/
+		
+		
 		return new ResponseEntity<>("{\"response\":\"Survey modified.\"}", HttpStatus.OK);
 	}
 
@@ -275,12 +303,13 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		modelMapper.getTypeMap(User.class, SurveyDTO.class).map(survey.getUser(), surveyDTO);
 		surveyDTO.setCreationDate(survey.getCreationDate(), TimeZone.getDefault().toString(),
 				survey.getCreationDateFormat());
-		Set<QuestionDTO> questionDTOSet = new HashSet<>();
-		for (Question question : survey.getQuestions()) {
-			QuestionDTO questionDTO = modelMapper.getTypeMap(Question.class, QuestionDTO.class).map(question);
-			questionDTOSet.add(questionDTO);
+		Set<SurveyQuestionsDTO> surveyQuestionsDTOs = new HashSet<>();
+		for (SurveyQuestions question : survey.getSurveyQuestions()) {
+			SurveyQuestionsDTO surveyQuestionsDTO = modelMapper
+					.getTypeMap(SurveyQuestions.class, SurveyQuestionsDTO.class).map(question);
+			surveyQuestionsDTOs.add(surveyQuestionsDTO);
 		}
-		surveyDTO.setQuestions(questionDTOSet);
+		surveyDTO.setQuestions(surveyQuestionsDTOs);
 		return surveyDTO;
 	}
 
@@ -314,20 +343,19 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	 */
 	@Override
 	public Survey convertToEntity(SurveyDTO surveyDTO) throws FormatException, NotFoundException, EmptyFieldException {
-
 		Survey survey = modelMapper.getTypeMap(SurveyDTO.class, Survey.class).map(surveyDTO);
 		survey.setUser(userRepository.get(surveyDTO.getUserDTO().getId()));
 		survey.setCreationDate(
 				surveyDTO.getCreationDateConverted(TimeZone.getDefault().toString(), survey.getCreationDateFormat()));
 		survey.setName(surveyDTO.getSurveyName());
+		Set<SurveyQuestions> surveyQuestions = new HashSet<>();
 		if (surveyDTO.getQuestions() != null) {
-			Set<Question> questions = new HashSet<>();
-			for (QuestionDTO questionDTO : surveyDTO.getQuestions()) {
-				Question question = questionRepository.get(questionDTO.getId());
-				questions.add(question);
+			Set<SurveyQuestionsDTO> surveyQuestionsDTO =  surveyDTO.getQuestions();
+			for (SurveyQuestionsDTO surveyQuestionDTO : surveyQuestionsDTO) {	
+				surveyQuestions.add(modelMapper.getTypeMap(SurveyQuestionsDTO.class, SurveyQuestions.class).map(surveyQuestionDTO));
 			}
-			survey.setQuestions(questions);
 		}
+		survey.setSurveyQuestions(surveyQuestions);
 		return survey;
 	}
 }

@@ -32,8 +32,12 @@ angular.
 
 				//start-up function
 				$scope.load = function() {
-					$http.get("/api/findSurveyNoQuestion/?id=" + $scope.idSurvey).then(function onfulFilled(response) {
+					$scope.surveyQuestionsId = []
+					$scope.surveyQuestions = []
+					$scope.categories = []
+					$http.get("/api/findSurvey/?id=" + $scope.idSurvey).then(function onfulFilled(response) {
 						$scope.survey = response.data;
+						console.log($scope.survey )
 						if ($scope.survey.userDTO.id == $scope.idUser) {
 							$scope.isSurveyCreator = true
 							$http.get("api/findQuestionForSurvey/" + $scope.idSurvey).then(function onfulFilled(response) {
@@ -216,17 +220,20 @@ angular.
 				$scope.modifySurvey = function() {
 					let questions = []
 					angular.forEach($scope.surveyQuestionsId, function(questionId) {
-						questions.push({ 'id': questionId })
+						questions.push({ 'id': null ,  'questionDTO': {'id' : questionId}, 'surveyDTO': {'id' : $scope.survey.id} })
 					});
 
-					let data = $scope.survey
+					let data = angular.copy($scope.survey)
 					data.questions = questions
 					if ($scope.newSurveyName !== undefined && $scope.newSurveyName != "" && $scope.newSurveyName.replace(/\s/g, '').length) {
 						data.surveyName = $scope.newSurveyName
 					}
 					
+					data.userDTO =  {'id' : $scope.survey.userDTO.id}
+					
 					console.log(data)
-
+					
+					
 					$http.patch("/api/modifySurvey", data).then(function onfulFilled(response) {
 						$scope.load()
 					}, function errorCallback(response) {
