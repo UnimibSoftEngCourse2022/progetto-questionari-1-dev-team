@@ -1,4 +1,4 @@
 'use strict';
 
 const app = angular.module("UNIMIBModules",
-    ['ngRoute', 'findSurvey', 'modifySurvey', 'addSurvey', 'compileSurvey', 'loginUser', 'signupUser']);
+    ['ngRoute', 'ngCookies', 'sessionService', 'findSurvey', 'modifySurvey', 'addSurvey', 'compileSurvey', 'loginUser', 'signupUser', 'getUser']);

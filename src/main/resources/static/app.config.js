@@ -14,6 +14,8 @@ angular.module('UNIMIBModules', ['ngRoute']).config(['$routeProvider',
             template: '<login-user></login-user>'
         }).when("/signupUser", {
             template: '<signup-user></signup-user>'
+        }).when("/getUser/:idUser", {
+            template: '<get-user></get-user>'
         }).otherwise({redirectTo: "/findSurvey"});
     }
 ]);
