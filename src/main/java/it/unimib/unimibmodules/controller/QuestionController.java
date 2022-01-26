@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 
-    private static final Logger logger = LogManager.getLogger(Question.class);
+    private static final Logger logger = LogManager.getLogger(QuestionController.class);
 	
 	/**
 	 * Instance of QuestionRepository that will be used to access the db.
