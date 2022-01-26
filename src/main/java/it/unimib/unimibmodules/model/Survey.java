@@ -47,13 +47,10 @@ public class Survey {
 	 */
 	private String name;
 
+
 	/**
 	 * The questions of the survey.
 	 */
-	/*@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
-	@JoinTable(name = "survey_question", joinColumns = @JoinColumn(name = "survey_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
-	private Set<Question> questions;*/
-
 	@OneToMany(mappedBy="survey", cascade = CascadeType.REMOVE)
 	private Set<SurveyQuestions> surveyQuestions;
 
@@ -149,27 +146,6 @@ public class Survey {
 	 */
 	public SimpleDateFormat getCreationDateFormat() {
 		return creationDateFormat;
-	}
-
-
-	/**
-	 * Returns the questions of the survey.
-	 * 
-	 * @return the questions of the survey
-	 */
-	public Set<Question> getQuestions() {
-
-		return null;
-	}
-
-	/**
-	 * Modifies the questions of the survey, setting questions as the new value.
-	 * 
-	 * @param questions the new questions value
-	 */
-	public void setQuestions(Set<Question> questions) {
-
-		//this.questions = questions;
 	}
 
 	public Set<SurveyQuestions> getSurveyQuestions() {

@@ -7,15 +7,15 @@ angular.module('UNIMIBModules', ['ngRoute', 'ngCookies']).config(['$routeProvide
         }).when('/modifySurvey/:idSurvey', {
             template: '<modify-survey></modify-survey>'
         }).when("/editQuestion/:idQuestion", {
-					template: '<edit-question></edit-question>'
+			template: '<edit-question></edit-question>'
         }).when("/addQuestion", {
-					template: '<add-question></add-question>'
-				}).when('/addSurvey', {
+			template: '<add-question></add-question>'
+		}).when('/addSurvey', {
             template: '<add-survey></add-survey>'
         }).when('/compileSurvey/:idSurvey', {
             template: '<compile-survey></compile-survey>'
         }).when("/editSurveyAnswer/:surveyId", {
-			      template: "<edit-survey-answer></edit-survey-answer>"
+			template: "<edit-survey-answer></edit-survey-answer>"
         }).when("/loginUser", {
             template: '<login-user></login-user>'
         }).when("/signupUser", {

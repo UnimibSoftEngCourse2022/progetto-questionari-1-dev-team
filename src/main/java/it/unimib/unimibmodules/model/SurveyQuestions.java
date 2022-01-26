@@ -31,6 +31,25 @@ public class SurveyQuestions {
     @ManyToOne
     @JoinColumn(name = "survey_id", nullable = false)
     private Survey survey;
+    
+    /**
+	 * Returns the id of the survey.
+	 * 
+	 * @return the id of the survey
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * Modifies the id of the survey, setting id as the new value.
+	 * 
+	 * @param id the new id value
+	 */
+	public void setId(int id) {
+
+		this.id = id;
+	}
 
     /**
      * Returns the question of the relationship.
@@ -40,6 +59,7 @@ public class SurveyQuestions {
         return question;
     }
 
+
     /**
      * Modifies the question of the relationship, setting <code>question</code> as the new value.
      * @param	question	the new question
@@ -48,6 +68,7 @@ public class SurveyQuestions {
         this.question = question;
     }
 
+
     /**
      * Returns the survey of the relationship.
      * @return	the survey of the relationship.
@@ -55,6 +76,7 @@ public class SurveyQuestions {
     public Survey getSurvey() {
         return survey;
     }
+
 
     /**
      * Modifies the survey of the relationship, setting <code>survey</code> as the new value.

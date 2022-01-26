@@ -12,7 +12,7 @@ public class SurveyQuestionsDTO {
     private int id;
 
     /**
-     * Serialization of the question of the relationship.
+     * Serialization of the id of the user who created the survey.
      */
     private QuestionDTO questionDTO;
 
@@ -45,6 +45,7 @@ public class SurveyQuestionsDTO {
         return questionDTO;
     }
 
+
     /**
      * Modifies the questionDTO of the relationship, setting questionDTO as the new value.
      * @param   questionDTO  the new questionDTO value
@@ -60,7 +61,7 @@ public class SurveyQuestionsDTO {
     public SurveyDTO getSurveyDTO() {
         return surveyDTO;
     }
-
+	
     /**
      * Modifies the surveyDTO of the relationship, setting surveyDTO as the new value.
      * @param   surveyDTO  the new surveyDTO value
