@@ -11,7 +11,7 @@ import it.unimib.unimibmodules.exception.EmptyFieldException;
  * Represents a survey.
  * 
  * @author Luca Milazzo
- * @version 0.2.0
+ * @version 0.3.0
  */
 @Entity
 @Table(name = "survey")

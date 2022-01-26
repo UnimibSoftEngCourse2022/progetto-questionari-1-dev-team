@@ -9,7 +9,7 @@ import java.util.Set;
  * Represents a closed-ended answer.
  * @author Davide Costantini
  * @author Lorenzo Occhipinti
- * @version 0.2.0
+ * @version 0.3.0
  */
 @Entity
 @Table(name = "closeendedanswer")

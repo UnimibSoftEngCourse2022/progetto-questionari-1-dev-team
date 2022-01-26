@@ -3,7 +3,7 @@ package it.unimib.unimibmodules.exception;
 /**
  * Exception for empty fields.
  * @author Luca milazzo
- * @version 0.2.0
+ * @version 0.3.0
  */
 public class EmptyFieldException extends Exception {
 

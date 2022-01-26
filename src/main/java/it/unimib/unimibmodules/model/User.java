@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Representation of a user in a general website way.
  * @author Gianlorenzo Martini
- * @version 0.2.0
+ * @version 0.3.0
  */
 
 @Entity

@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Represents a surveyQuestion relationship.
  *
  * @author Khalil Mohamed Khalil
- * @version 0.2.0
+ * @version 0.3.0
  */
 @Entity
 @Table(name = "surveyquestions")

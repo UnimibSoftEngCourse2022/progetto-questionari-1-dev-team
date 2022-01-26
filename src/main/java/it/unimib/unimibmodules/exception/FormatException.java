@@ -2,7 +2,7 @@ package it.unimib.unimibmodules.exception;
 /**
  * Exception for format incompatibilities.
  * @author Luca milazzo
- * @version 0.2.0
+ * @version 0.3.0
  */
 public class FormatException extends Exception{
 	/**

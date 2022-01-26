@@ -6,7 +6,7 @@ import it.unimib.unimibmodules.model.User;
 /**
  * Interface for UserRepository.
  * @author Gianlorenzo Martini
- * @version 0.2.0
+ * @version 0.3.0
  */
 public interface UserRepository {
 

@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 /**
  * DAO for the Survey class.
  * @author Luca Milazzo
- * @version 0.2.0
+ * @version 0.3.0
  */
 public interface SurveyDAO extends CrudRepository<Survey, Integer>{
 

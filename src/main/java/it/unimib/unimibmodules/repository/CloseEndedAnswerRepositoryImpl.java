@@ -15,7 +15,7 @@ import java.util.Optional;
  * Repository for CloseEndedAnswers. Adds business logic to CloseEndedAnswers instances before actually accessing
  * the database via DAO.
  * @author Davide Costantini
- * @version 0.2.0
+ * @version 0.3.0
  */
 @Component("closeEndedAnswerRepository")
 public class CloseEndedAnswerRepositoryImpl implements CloseEndedAnswerRepository {
