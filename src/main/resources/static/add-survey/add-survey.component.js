@@ -16,10 +16,9 @@ angular.
 				$scope.addSurvey = function() {
 
 					if ($scope.name !== undefined && $scope.name != "" && $scope.name.replace(/\s/g, '').length) {
-						let actualDate = new Date()
 						let data = {
 							surveyName: $scope.name,
-							creationDate: actualDate.getFullYear() + '-' + (actualDate.getMonth() + 1) + '-' + actualDate.getDate() + " " + actualDate.getMinutes() + ":" + actualDate.getSeconds(),
+							creationDate: null,
 							userDTO: {
 								id: $scope.idUser,
 							}

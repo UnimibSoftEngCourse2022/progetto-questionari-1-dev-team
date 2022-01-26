@@ -328,6 +328,8 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	public Survey convertToEntity(SurveyDTO surveyDTO) throws FormatException, NotFoundException, EmptyFieldException {
 		Survey survey = modelMapper.getTypeMap(SurveyDTO.class, Survey.class).map(surveyDTO);
 		survey.setUser(userRepository.get(surveyDTO.getUserDTO().getId()));
+		Date creationDate = new Date();
+		surveyDTO.setCreationDate(survey.getCreationDateFormat().format(creationDate));
 		survey.setCreationDate(
 				surveyDTO.getCreationDateConverted(TimeZone.getDefault().toString(), survey.getCreationDateFormat()));
 		survey.setName(surveyDTO.getSurveyName());
