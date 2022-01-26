@@ -241,6 +241,10 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	public void commitModify(int surveyId, int userId) {
 
 		List<Answer> answerList = uofContext.get(UnitOfWork.MODIFY);
+
+		if (answerList == null)
+			return;
+
 		answerList.stream()
 				.filter(answer -> answer.getSurvey().getId() == surveyId && answer.getUser().getId() == userId)
 				.collect(Collectors.toList())
@@ -261,6 +265,10 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	public void commitDelete(int surveyId, int userId) {
 
 		List<Answer> answerList = uofContext.get(UnitOfWork.DELETE);
+
+		if (answerList == null)
+			return;
+
 		answerList.stream()
 				.filter(answer -> answer.getSurvey().getId() == surveyId && answer.getUser().getId() == userId)
 				.collect(Collectors.toList())
