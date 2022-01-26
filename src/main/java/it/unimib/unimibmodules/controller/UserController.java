@@ -70,7 +70,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public ResponseEntity<UserDTO> getUser(@PathVariable int id) throws NotFoundException {
 
         User user = userRepository.get(id);
-        logger.debug(String.format("Retrieved User with id: {}.", id));
+        logger.debug("Retrieved User with id: {}.", id);
         return new ResponseEntity<>(convertToDTO(user), HttpStatus.OK);
     }
 
@@ -96,7 +96,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
             surveysDTO.add(surveyDTO);
         }
 
-        logger.debug(String.format("Retrieved surveys created by user with id: {}.", user.getId()));
+        logger.debug("Retrieved surveys created by user with id: {}.", user.getId());
         return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
     }
 
@@ -112,10 +112,10 @@ public class UserController extends DTOMapping<User, UserDTO> {
         User user = userRepository.getByUsername(userDTO.getUsername());
 
         if (bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
-            logger.debug(String.format("Successful sign in of user with id: {}.", userDTO.getId()));
+            logger.debug("Successful sign in of user with id: {}.", userDTO.getId());
             return new ResponseEntity<>("{\"response\":\"Login Successful.\"}", HttpStatus.OK);
         } else {
-            logger.debug(String.format("Failed sign in of user with id: {}.", userDTO.getId()));
+            logger.debug("Failed sign in of user with id: {}.", userDTO.getId());
             return new ResponseEntity<>("{\"response\":\"Login Failed.\"}", HttpStatus.UNAUTHORIZED);
         }
     }
@@ -130,7 +130,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
 
         try {
             userRepository.getByUsername(userDTO.getUsername());
-            logger.debug(String.format("Failed creation of user %s: user already exist.", userDTO.getUsername()));
+            logger.debug("Failed creation of user: user already exist.");
             return new ResponseEntity<>("{\"response\":\"Username already existing.\"}", HttpStatus.BAD_REQUEST);
         } catch (NotFoundException e) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -139,7 +139,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
             user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
             userRepository.add(user);
-            logger.debug(String.format("Successful creation of user %s.", userDTO.getUsername()));
+            logger.debug("Successful creation of user.");
             return new ResponseEntity<>("{\"response\":\"User created.\"}", HttpStatus.CREATED);
         }
     }
