@@ -119,9 +119,11 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 * @return		an HTTP response with status 200, 500 otherwise
 	 */
 	@GetMapping(path = "/getQuestionByCategory/{id}")
-	public ResponseEntity<List<QuestionDTO>> getQuestionsByCategory(@PathVariable int id){
+	public ResponseEntity<List<QuestionDTO>> getQuestionsByCategory(@PathVariable int id) throws NotFoundException{
 		Iterable<Question> questionList = questionRepository.getByCategory(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Question with category" + id + " was found.\"}");
 		logger.debug("Retrieved all the questions of the user "+id + ".");
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
