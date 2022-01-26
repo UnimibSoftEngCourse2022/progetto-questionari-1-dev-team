@@ -1,12 +1,11 @@
 package it.unimib.unimibmodules.model;
 
-import java.util.Set;
+import org.springframework.lang.Nullable;
 import javax.persistence.*;
-
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import java.util.Set;
 
 /**
- * Rapresentation of a user in a general website way. 
+ * Representation of a user in a general website way.
  * @author Gianlorenzo Martini
  * @version 0.2.0
  */
@@ -48,6 +47,12 @@ public class User {
     private String surname;
 
     /**
+     * The id used to recognize a user not registered.
+     */
+    @Nullable
+    private int compilationId;
+
+    /**
      * The list of the surveys created by the user.
      */
     @OneToMany(mappedBy = "user")
@@ -65,7 +70,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Answer> answers;
 
-    public User() {}
+    /**
+     * Creates an empty user.
+     * @see it.unimib.unimibmodules.factory.UserFactory#createUser
+     */
+    public User() {
+
+        // Empty constructor; use UserFactory.createUser.
+    }
     
     public int getId() {
         return id;
@@ -113,6 +125,14 @@ public class User {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public int getCompilationId() {
+        return compilationId;
+    }
+
+    public void setCompilationId(int compilationId) {
+        this.compilationId = compilationId;
     }
 
     public Set<Survey> getSurveysCreated() {
