@@ -41,11 +41,6 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	/**
 	 * Instance of SurveyQuestionsRepository that will be used to access the db.
 	 */
-	private final SurveyQuestionsRepository surveyQuestionsRepository;
-
-	/**
-	 * Instance of SurveyQuestionsRepository that will be used to access the db.
-	 */
 	private final QuestionRepository questionRepository;
 
 	private static final Logger logger = LogManager.getLogger(SurveyController.class);
@@ -53,12 +48,11 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	@Autowired
 
 	public SurveyController(UserRepository userRepository, SurveyRepository surveyRepository,
-			SurveyQuestionsRepository surveyQuestionsRepository, QuestionRepository questionRepository,
+							QuestionRepository questionRepository,
 			ModelMapper modelMapper) {
 		super(modelMapper);
 		this.surveyRepository = surveyRepository;
 		this.userRepository = userRepository;
-		this.surveyQuestionsRepository = surveyQuestionsRepository;
 		this.questionRepository = questionRepository;
 
 		modelMapper.createTypeMap(Survey.class, SurveyDTO.class).addMappings(mapper -> {
