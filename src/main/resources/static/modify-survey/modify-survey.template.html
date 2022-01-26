@@ -1,8 +1,8 @@
 <div class="jumbotron">
 	<h1>Survey Editing</h1>
 </div>
-<div class="container-fluid mt-4" id = "modifySurveyContainer" ng-init="load()"
-	ng-hide="! isSurveyCreator">
+<div class="container-fluid mt-4 mb-5" id="modifySurveyContainer"
+	ng-init="load()" ng-hide="! isSurveyCreator">
 	<div class="row">
 		<div class="col-md-4">
 			<h3>Info:</h3>
@@ -20,12 +20,15 @@
 				<b>Creator Username:</b> {{survey.userDTO.username}}
 			</p>
 
+			<p>
+				<b>Number of questions:</b> {{surveyQuestionsId.length}}
+			</p>
+
 			<label for="Name"><b>New Survey Name (Leave empty to
 					avoid update)</b></label> <input type="text" class="form-control mb-4"
 				name="name" aria-describedby="Name" placeholder="Enter name"
 				ng-model="newSurveyName">
-
-			<button ng-click="modifySurvey(newSurveyName)"
+			<button ng-click="modifySurvey()"
 				class="btn btn-primary">Save All Changes</button>
 			<button ng-click="deleteSurvey()" class="btn btn-danger">Delete
 				Survey</button>
@@ -38,95 +41,110 @@
 				<div class="row mb-4">
 					<div class="col-md-12">
 						<h3>Add Questions:</h3>
-						<label for="Name"><b>Find question by Text and Category: </b></label>
+						<label for="Name"><b>Find question by Text</b></label>
 
 						<div class="input-group mb-3">
-
 							<div class="input-group-prepend">
-								<button ng-style="{'display': displaySearchButton}" type="button" class="btn btn-outline-primary "
+								<button ng-style="{'display': displaySearchButton}"
+									type="button" class="btn btn-outline-primary "
 									ng-click="filterQuestionByText(textFilterQuestion)">Search</button>
 							</div>
 							<input type="text" ng-model="textFilterQuestion"
 								class="form-control" name="textFilterQuestion"
 								placeholder="Enter search text">
+
+
+
 						</div>
 
 						<button ng-click="filterQuestionAdded()" class="btn btn-primary">Show
 							Survey Questions</button>
 						<button ng-click="filterQuestionCreated()" class="btn btn-primary">Show
 							Your Questions</button>
+
+						<button type="button" class="btn btn-primary m-1"
+							ng-click="resetQuestions()">Reset Questions</button>
 						<button type="button" class="btn btn-success m-1"
 							ng-click="createQuestionRoute()">New Question</button>
-					</div>
+						<div class="dropdown">
+							<button class="btn btn-outline-primary dropdown-toggle"
+								type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+								aria-expanded="false">Find By Category</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+								<li ng-repeat="category in categories" ng-click="filterQuestionByCategory($index)"><a
+									class="dropdown-item">{{category.name}}</a></li>
+							</ul>
+						</div>
 
-				</div>
-			</div>
-			<div class="container-fluid overflow-auto pt-4"
-				id="questionCardContainer" ng-hide="isEmptyResult">
 
-				<div class="card mb-4" ng-repeat="question in questions">
-					<div class="card-body">
-						
-
-					</div>
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item"><input type="checkbox"
-							value="{{ $index }}" name="selectedQuestions[]"
-							ng-checked="selectedQuestionsIndex.indexOf($index) > -1"
-							ng-click="toggleSelection($index)"> <b>Selected</b></li>
-						<li class="list-group-item"><b>Category:</b> {{ question.category.name }}</li>
-						<li class="list-group-item"><b>User creator:</b> {{ question.user.username }}</li>
-						<li class="list-group-item"><b>Question:</b> {{ question.text }}</li>
-					</ul>
-					<div class="card-body">
-						<button ng-click="modalManager($index)" class="btn btn-success">Details</button>
 					</div>
 				</div>
-			</div>
-			<div class="row m-2" ng-hide="! isEmptyResult">
-				<div class="col-md-12 d-flex justify-content-center">
-					<h2>No results found...</h2>
-				</div>
-			</div>
+				<div class="container-fluid overflow-auto pt-4"
+					id="questionCardContainer" ng-hide="isEmptyResult">
 
+					<div class="card mb-4" ng-repeat="question in searchQuestions">
+						<div class="card-body"></div>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item"><input type="checkbox"
+								value="{{ $index }}" name="surveyQuestions[]"
+								ng-checked="question.isOnSurvey"
+								ng-click="toggleSelection($index)"> <b>Selected</b></li>
+							<li class="list-group-item"><b>Category:</b> {{
+								question.category.name }}</li>
+							<li class="list-group-item"><b>User creator:</b> {{
+								question.user.username }}</li>
+							<li class="list-group-item"><b>Question:</b> {{
+								question.text }}</li>
+						</ul>
+						<div class="card-body">
+							<button ng-click="modalManager($index)" class="btn btn-success">Details</button>
+						</div>
+					</div>
+				</div>
+				<div class="row m-2" ng-hide="! isEmptyResult">
+					<div class="col-md-12 d-flex justify-content-center">
+						<h2>No results found...</h2>
+					</div>
+				</div>
+
+			</div>
 		</div>
 	</div>
-</div>
 
-<!-- Modal form for question details -->
-<div id="myModal" class="modal" ng-style="{'display': displayModal}">
-	<div class="modal-content">
-		<div class="modal-header">
-			<span ng-click="modalManager(-1)" class="close">&times;</span>
-			<h3>Question Details</h3>
-		</div>
-		<div class="modal-body">
-			<p>
-				<b>Category:</b> {{ questions[modalQuestion].category.name }}
-			</p>
-			<p>
-				<b>User creator:</b> {{ questions[modalQuestion].user.username }}
-			</p>
-			<p>
-				<b>Question Type:</b> {{ questions[modalQuestion].questionType }}
-			</p>
-			<p>
-				<b>Question:</b> {{ questions[modalQuestion].text }}
-			</p>
-			<p>
-				<b>Image:</b> {{ questions[modalQuestion].urlImage }}
-			</p>
-			<p>
-				<b>Closed answers</b>
-			</p>
-			<ul>
-				<li
-					ng-repeat="closedAnswer in questions[modalQuestion].closeEndedAnswerDTOSet">{{closedAnswer.text}}</li>
-			</ul>
-			<button ng-click="editQuestionRoute(modalQuestion)"
-				class="btn btn-primary">Edit Question</button>
+	<!-- Modal form for question details -->
+	<div id="myModal" class="modal" ng-style="{'display': displayModal}">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span ng-click="modalManager(-1)" class="close">&times;</span>
+				<h3>Question Details</h3>
+			</div>
+			<div class="modal-body">
+				<p>
+					<b>Category:</b> {{ searchQuestions[modalQuestion].category.name }}
+				</p>
+				<p>
+					<b>User creator:</b> {{ searchQuestions[modalQuestion].user.username }}
+				</p>
+				<p>
+					<b>Question Type:</b> {{ searchQuestions[modalQuestion].questionType }}
+				</p>
+				<p>
+					<b>Question:</b> {{ searchQuestions[modalQuestion].text }}
+				</p>
+				<p>
+					<b>Image:</b> {{ searchQuestions[modalQuestion].urlImage }}
+				</p>
+				<p>
+					<b>Closed answers</b>
+				</p>
+				<ul>
+					<li
+						ng-repeat="closedAnswer in searchQuestions[modalQuestion].closeEndedAnswerDTOSet">{{closedAnswer.text}}</li>
+				</ul>
+				<button ng-click="editQuestionRoute(modalQuestion)" ng-hide = "! editQuestion"
+					class="btn btn-primary">Edit Question</button>
+			</div>
+
 		</div>
 
 	</div>
-
-</div>
