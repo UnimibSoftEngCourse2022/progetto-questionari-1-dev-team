@@ -25,11 +25,13 @@ angular.module('UNIMIBModules').component('loginUser', {
                 $http.post("/api/logInUser", data).then(function onFulfilled(response) {
 
                     console.log(response);
+                    alert("Login Successful!");
+                    $location.path("/home");
 
                 }, function errorCallback(response) {
 
                     console.error(response);
-                    alert("Invalid username and password. Please try again");
+                    alert("Invalid username and password. Please try again.");
 
                 });
             }
