@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: UNIMIB Modules
   description: UNIMIB Modules
-  version: 0.2.0
+  version: 0.0.1
 servers:
   - url: http://unimibquestionari-env.eba-3behr9mi.eu-central-1.elasticbeanstalk.com/api
     description: UNIMIB Modules server
@@ -21,55 +21,78 @@ paths:
             minimum: 1
             maximum: 1
       responses:
-        '501':
-          description: Not implemented yet.
+        '500':
+          description: Server Error.
+        '404':
+          description: User not found.
+        '200':
+          description: User with the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /getSurveysCreated:
+    get:
+      summary: Gets the surveys created by the user identified by the username.
+      parameters:
+        - name: username
+          in: query
+          description: the username of a user
+          schema:
+            type: string
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: Survey not found.
+        '200':
+          description: Surveys created by the user identified with username
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfSurveys'
   /logInUser:
     post:
       summary: Logs the User into the website if the combination of username and password match.
       requestBody:
         required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-      responses:
-        '200':
-          description: Login Successful!
-          content:
-            application/json:
-              schema:
-                type: string
-        '401':
-          description: The combination of username and password does not match. Login Failed!
-  /signUpUser:
-    post:
-      summary: Create a new User.
-      requestBody:
-        required: true
+        description: the DTO of a user
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/User'
       responses:
-        '201':
-          description: User created!
-          content:
-            application/json:
-              schema:
-                type: string
-        '400':
-          description: Username already existing!
-  /getSurvey/{id}:
+        '500':
+          description: Server Error.
+        '404':
+          description: User not found.
+        '401':
+          description: User not authorized.
+        '200':
+          description: User authorized.
+  /signUpUser:
+    post:
+      summary: Create a new User.
+      requestBody:
+        required: true
+        description: the DTO of a user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '500':
+          description: Server Error.
+        '200':
+          description: User created.
+  /findSurvey/{id}:
     get:
       summary: Returns the survey associated with the given id.
       parameters:
         - name: id
-          in: path
+          in: query
           description: The id of the Survey
           required: true
           schema:
@@ -78,37 +101,92 @@ paths:
             minimum: 1
             maximum: 1
       responses:
-        '501':
-          description: Not implemented yet.
-  /postSurvey:
+        '500':
+          description: Server Error.
+        '200':
+          description: Survey with the given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Survey'
+  /findSurveyNoQuestions/:
+    get:
+      summary: Returns the survey associated with the given id.
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: No Survey without questions found.
+        '200':
+          description: Surveys with no questions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfSurveys'
+  /findSurveyByText/{text}:
+    get:
+      summary: Gets the survey in the database where text is contained in the name of the survey
+      parameters:
+        - name: text
+          in: path
+          description: the text to be found in the name of the survey
+          required: true
+          schema:
+            type : string
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: Survey not found.
+        '200':
+          description: Survey with the text in the name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfSurveys'
+  /findAllSurveys:
+    get:
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: Survey not found.
+        '200':
+          description: All Surveys in the database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfSurveys'
+  /addSurvey:
     post:
       summary: Creates a survey, with the given name and request's date-time, that is associated to the given user id
       requestBody:
         required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: integer
-                name:
-                  type: string
-      responses:
-        '501':
-          description: Not implemented yet.
-  /patchSurvey:
-    patch:
-      summary: Modifies the survey's name associated with the given id.
-      requestBody:
-        required: true
+        description: the DTO of a survey
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Survey'
       responses:
-        '501':
-          description: Not implemented yet.
+        '500':
+          description: Server Error.
+        '200':
+          description: Survey Created
+  /modifySurvey:
+    patch:
+      summary: Modifies the survey's name associated with the given surveyDTO.
+      requestBody:
+        required: true
+        description: the DTO of a survey
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Survey'
+      responses:
+        '500':
+          description: Server Error.
+        '200':
+          description: Survey Modified
   /deleteSurvey/{id}:
     delete:
       summary: Deletes the survey associated with the given id.
@@ -123,8 +201,12 @@ paths:
             minimum: 1
             maximum: 1
       responses:
-        '501':
-          description: Not implemented yet.
+        '500':
+          description: Server Error.
+        '404':
+          description: Survey not found.
+        '200':
+          description: Survey deleted.
   /getQuestion/{id}:
     get:
       summary: Returns the Question associated with the given id.
@@ -139,35 +221,107 @@ paths:
             minimum: 1
             maximum: 1
       responses:
-        '501':
-          description: Not implemented yet.
-  /postQuestion:
+        '500':
+          description: Server Error.
+        '404':
+          description: Question not found.
+        '200':
+          description: The Question identifid by Id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+  /getQuestion:
+    get:
+      summary: Returns all the Questions in the database.
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: Question not found.
+        '200':
+          description: All Questions in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfQuestions'
+  /findQuestionsByText/{text}:
+    get:
+      summary: Returns the Question associated with the given id.
+      parameters:
+        - name: text
+          in: path
+          description: The text of the question to be found
+          required: true
+          schema:
+            type : string
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: Question not found.
+        '200':
+          description: The Question that contains the text.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfQuestions'
+  /findQuestionForSurvey/{id}:
+    get:
+      summary: Returns the Question used by the survey associated with the given id.
+      parameters:
+        - name: id
+          in: path
+          description: The id of the survey
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: Question not found.
+        '200':
+          description: The Question used in the survey identifid by Id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfQuestions'
+  /addQuestion:
     post:
-      summary: Creates a question, with the given text
+      summary: Creates a question, with the given text and id
       requestBody:
         required: true
+        description: A QuestionDTO
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
+              $ref: '##/components/schemas/Question'
       responses:
-        '501':
-          description: Not implemented yet.
-  /patchQuestion:
+        '500':
+          description: Server Error.
+        '200':
+          description: Question added.
+  /modifyQuestion:
     patch:
       summary: Modifies the question's text associated with the given id.
       requestBody:
         required: true
+        description: A QuestionDTO
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Question'
       responses:
-        '501':
-          description: Not implemented yet.
+        '500':
+          description: Server Error.
+        '200':
+          description: Question added.
+        '404':
+          description: Question not found.
   /deleteQuestion/{id}:
     delete:
       summary: Deletes the question associated with the given id.
@@ -182,9 +336,13 @@ paths:
             minimum: 1
             maximum: 1
       responses:
-        '501':
-          description: Not implemented yet.
-  /getAnswer/{id}:
+        '500':
+          description: Server Error.
+        '200':
+          description: Question deleted.
+        '404':
+          description: Question not found.
+  /findAnswer/{id}:
     get:
       summary: Returns the Answer associated with the given id.
       parameters:
@@ -198,53 +356,53 @@ paths:
             minimum: 1
             maximum: 1
       responses:
-        '501':
-          description: Not implemented yet.
-  /postCloseEndedAnswer:
+        '500':
+          description: Server Error.
+        '200':
+          description: Answer associated with the given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
+        '404':
+          description: Answer not found.
+  /findSurveyAnswersForUser:
+     get:
+      summary: Finds all the Answer the User associated with userId has created for the Survey associated with surveyId.
+      parameters:
+        - name: surveyId
+          in: query
+          description: The id of the answer
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+        - name: userId
+          in: query
+          description: The id of the answer
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '200':
+          description: Answers the User associated with userId has created for the Survey associated with surveyId.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfAnswers'
+        '404':
+          description: Answer not found.
+  /addAnswer:
     post:
-      summary: Creates an answer to a close-ended question where text is the answer.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                text:
-                  type: string
-      responses:
-        '501':
-          description: Not implemented yet.
-  /postOpenEndedAnswer:
-    post:
-      summary: Creates an answer to an open-ended question, where text is the answer written by the user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                text:
-                  type: string
-      responses:
-        '501':
-          description: Not implemented yet.
-  /patchCloseEndedAnswer:
-    patch:
-      summary: Modifies the answer of a close-ended question associated with the given id, setting text as the answer.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CloseEndedAnswer'
-      responses:
-        '501':
-          description: Not implemented yet.
-  /patchOpenEndedAnswer:
-    patch:
-      summary: Modifies the answer of an open-ended question associated with the given id, setting text as the new answer.
+      summary: Creates an Answer.
+      description: An AnswerDTO
       requestBody:
         required: true
         content:
@@ -252,8 +410,27 @@ paths:
             schema:
               $ref: '#/components/schemas/Answer'
       responses:
-        '501':
-          description: Not implemented yet.
+        '500':
+          description: Server Error.
+        '200':
+          description: Answer added.
+  /modifyAnswer:
+    patch:
+      summary: Modifies an Answer.
+      description: An AnswerDTO
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Answer'
+      responses:
+        '500':
+          description: Server Error.
+        '200':
+          description: Answer Modified.
+        '404':
+          description: Answer not found.
   /deleteAnswer/{id}:
     delete:
       summary: Deletes the answer associated with the given id.
@@ -268,8 +445,126 @@ paths:
             minimum: 1
             maximum: 1
       responses:
-        '501':
-          description: Not implemented yet.
+        '500':
+          description: Server Error.
+        '200':
+          description: Answer deleted.
+        '404':
+          description: Answer not found.
+  /findCloseEndedAnswer/{id}:
+    get:
+      summary: Returns the Close-ended Answer associated with the given id.
+      parameters:
+        - name: id
+          in: path
+          description: The id of the Close-ended answer
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '200':
+          description: Answer associated with the given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloseEndedAnswer'
+        '404':
+          description: Answer not found.
+  /addCloseEndedAnswe:
+    post:
+      summary: Creates an answer to a close-ended question.
+      description: An CloseEndedAnswerDTO 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloseEndedAnswer'
+      responses:
+        '500':
+          description: Server Error.
+        '200':
+          description: Answer added.
+  /modifyCloseEndedAnswer:
+    patch:
+      summary: Modifies the answer of a close-ended question associated with the given id, setting text as the answer.
+      description: A CloseEndedAnswerDTO 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloseEndedAnswer'
+      responses:
+        '500':
+          description: Server Error.
+        '200':
+          description: Answer Modified.
+        '404':
+          description: Answer not found.
+  /deleteCloseEndedAnswer/{id}:
+    delete:
+      summary: Deletes the close-ended answer associated with the given id.
+      parameters:
+        - name: id
+          in: path
+          description: The id of the answer that will be deleted
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '200':
+          description: Answer deleted.
+        '404':
+          description: Answer not found.
+  /findCategory/{id}:
+    get:
+      summary: Gets the Category associated with the given id.
+      parameters:
+        - name: id
+          in: path
+          description: The id of the Close-ended answer
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '200':
+          description: The Category associated with the given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '404':
+          description: Category not found.
+  /findCategories:
+     get:
+      summary: Gets all the categories
+      responses:
+        '500':
+          description: Server Error.
+        '200':
+          description: All Categories in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfCategory'
+        '404':
+          description: Category not found.
 components:
   securitySchemes:
       BasicAuth:
@@ -380,5 +675,21 @@ components:
       required:  
         - id
         - text
+    ArrayOfSurveys:
+      type: array
+      items:
+        $ref: '#/components/schemas/Survey'
+    ArrayOfQuestions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Question'
+    ArrayOfAnswers:
+      type: array
+      items:
+        $ref: '#/components/schemas/Answer'
+    ArrayOfCategory:
+      type: array
+      items:
+        $ref: '#/components/schemas/Category'
 security:
   - BasicAuth: []
