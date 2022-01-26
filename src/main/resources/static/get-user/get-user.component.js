@@ -9,7 +9,6 @@ angular.module('UNIMIBModules').component('getUser', {
             $scope.surname = "";
             $scope.username = "";
             $scope.email = "";
-            $scope.password = "";
 
             $scope.getUser = function () {
 
@@ -20,23 +19,16 @@ angular.module('UNIMIBModules').component('getUser', {
                     $scope.surname = $scope.result.surname;
                     $scope.username = $scope.result.username;
                     $scope.email = $scope.result.email;
-                    $scope.password = $scope.result.password;
-
                 }
 
-                $scope.loadData = function () {
+                $http.get("/api/getUser/" + "7").then(function onFulFilled(response) {
 
-                    $http.get("/api/getUser/" + $routeParams.idUser).then(function onFulFilled(response) {
+                    console.log(response);
+                    $scope.handleUser(response);
 
-                        console.log(response);
-                        $scope.handleUser(response);
-
-                    }, function errorCallback(response) {
-                        console.error(response);
-                    });
-                }
-
-                $scope.loadData();
+                }, function errorCallback(response) {
+                    console.error(response);
+                });
             }
         }
     ]
