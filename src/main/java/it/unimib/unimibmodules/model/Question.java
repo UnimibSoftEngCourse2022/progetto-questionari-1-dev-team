@@ -61,12 +61,16 @@ public class Question {
     /**
      * The surveys where the question is in.
      */
-    @ManyToMany
+    /*@ManyToMany(mappedBy="questions", cascade = CascadeType.DETACH)
     @JoinTable(
       name = "survey_question", 
       joinColumns = @JoinColumn(name = "question_id"), 
       inverseJoinColumns = @JoinColumn(name = "survey_id"))
-    private Set<Survey> survey;
+    private Set<Survey> survey;*/
+
+	@OneToMany(mappedBy="question", cascade = CascadeType.REMOVE)
+	private Set<SurveyQuestions> surveyQuestions;
+
 
 	/**
 	 * The type of the question.
@@ -198,7 +202,7 @@ public class Question {
 	 * @return the survey
 	 */
 	public Set<Survey> getSurvey() {
-		return survey;
+		return null;
 	}
 
 	/**
@@ -206,7 +210,7 @@ public class Question {
 	 * @param survey the survey to set
 	 */
 	public void setSurvey(Set<Survey> survey) {
-		this.survey = survey;
+		//this.survey = survey;
 	}
 
 	/**

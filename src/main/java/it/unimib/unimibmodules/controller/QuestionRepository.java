@@ -46,6 +46,20 @@ public interface QuestionRepository {
 	Iterable<Question> getByText(String text);
 
 	/**
+	 * Finds the question in the database created by a specified user
+	 * @param	userId  	id of the user
+	 * @return			an instance of Question if there is a question identified by id, null otherwise
+	 */
+	Iterable<Question> getByUser(int userId);
+
+	/**
+	 * Finds the question identified by id of the category in the database
+	 * @param	categoryId	the id of the category
+	 * @return				an instance of Question if there is a question identified by id, null otherwise
+	 */
+	Iterable<Question> getByCategory(int categoryId);
+
+	/**
 	 * Deletes from the database the question identified by id.
 	 * @param   id  the id of the question to be deleted
 	 * @throws  NotFoundException	if no question identified by <code>id</code> has been found

@@ -28,8 +28,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 	public QuestionRepositoryImpl(QuestionDAO questionDAO) {
 		this.questionDAO = questionDAO;
 	}
-	
-	
+
+
 	/**
      * Inserts an instance of Question in the database
      * @param   entity  an instance of Question
@@ -39,8 +39,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 	public void add(Question entity) {
 		questionDAO.save(entity);
 	}
-	
-	
+
+
 	/**
      * Inserts a list of questions in the database
      * @param   entities  a list of Questions
@@ -49,7 +49,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 		questionDAO.saveAll(entities);
 	}
 
-	
+
 	/**
      * Finds the question identified by id in the database
      * @param   id  the id of the question to be found
@@ -93,8 +93,30 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 		return questionDAO.findByText(text);
 	}
 
+	/**
+	 * Finds the question in the database created by a specified user
+	 * @param	userId  	id of the user
+	 * @return			an instance of Question if there is a question identified by id, null otherwise
+	 */
+	@Override
+	public Iterable<Question> getByUser(int userId) {
 
-    /**
+		return questionDAO.findByUser(userId);
+	}
+
+	/**
+	 * Finds the question associated with the category identified by <code>surveyId</code>
+	 * @param	categoryId	the id of the category
+	 * @return				a list of Questions
+	 * @see QuestionRepository#get(int id)
+	 */
+	@Override
+	public Iterable<Question> getByCategory(int categoryId) {
+
+		return questionDAO.findByCategory(categoryId);
+	}
+
+	/**
      * Returns all questions in the database.
      * @return  a list of Questions
      */
@@ -118,7 +140,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 			throw new NotFoundException("No Question with id " + id + " was found.");
 		}
 	}
-	
+
 	 /**
      * Deletes all questions in the database.
      */
@@ -126,7 +148,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 		questionDAO.deleteAll();
 	}
 
-	
+
 	 /**
      * Updates a question in the database using a new instance of Question.
      * @param   entity  the new instance of Question

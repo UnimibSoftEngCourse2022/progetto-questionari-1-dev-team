@@ -2,15 +2,17 @@
 
 angular.module('UNIMIBModules', ['ngRoute', 'ngCookies']).config(['$routeProvider',
     function config($routeProvider) {
-        $routeProvider.when('/findSurvey', {
-            template: '<find-survey></find-survey>',
-        }).when('/modifySurvey/:idSurvey/:idUser', {
+        $routeProvider.when('/home', {
+            template: '<home></home>',
+        }).when('/modifySurvey/:idSurvey', {
             template: '<modify-survey></modify-survey>'
-        }).when('/editQuestion/:questionId/:userId', {
-			      template: '<editQuestion></editQuestion>'
-        }).when('/addSurvey/:idUser', {
+        }).when("/editQuestion/:idQuestion", {
+					template: '<edit-question></edit-question>'
+        }).when("/addQuestion", {
+					template: '<add-question></add-question>'
+				}).when('/addSurvey', {
             template: '<add-survey></add-survey>'
-        }).when('/compileSurvey/:idSurvey/:idUser', {
+        }).when('/compileSurvey/:idSurvey', {
             template: '<compile-survey></compile-survey>'
         }).when("/editSurveyAnswer/:surveyId", {
 			      template: "<edit-survey-answer></edit-survey-answer>"
@@ -22,6 +24,6 @@ angular.module('UNIMIBModules', ['ngRoute', 'ngCookies']).config(['$routeProvide
             template: '<get-user></get-user>'
         }).when("/cookies", {
             template: '<cookies></cookies>'
-        }).otherwise({redirectTo: "/findSurvey"});
+        }).otherwise({redirectTo: "/home"});
     }
 ]);

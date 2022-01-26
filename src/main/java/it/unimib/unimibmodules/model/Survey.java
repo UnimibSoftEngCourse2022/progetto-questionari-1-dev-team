@@ -50,9 +50,12 @@ public class Survey {
 	/**
 	 * The questions of the survey.
 	 */
-	@ManyToMany(cascade = {CascadeType.DETACH})
+	/*@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
 	@JoinTable(name = "survey_question", joinColumns = @JoinColumn(name = "survey_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
-	private Set<Question> questions;
+	private Set<Question> questions;*/
+
+	@OneToMany(mappedBy="survey", cascade = CascadeType.REMOVE)
+	private Set<SurveyQuestions> surveyQuestions;
 
 	/**
 	 * The answer of the survey.
@@ -148,6 +151,7 @@ public class Survey {
 		return creationDateFormat;
 	}
 
+
 	/**
 	 * Returns the questions of the survey.
 	 * 
@@ -155,7 +159,7 @@ public class Survey {
 	 */
 	public Set<Question> getQuestions() {
 
-		return questions;
+		return null;
 	}
 
 	/**
@@ -165,6 +169,14 @@ public class Survey {
 	 */
 	public void setQuestions(Set<Question> questions) {
 
-		this.questions = questions;
+		//this.questions = questions;
+	}
+
+	public Set<SurveyQuestions> getSurveyQuestions() {
+		return surveyQuestions;
+	}
+
+	public void setSurveyQuestions(Set<SurveyQuestions> surveyQuestions) {
+		this.surveyQuestions = surveyQuestions;
 	}
 }
