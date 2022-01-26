@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('UNIMIBModules', ['ngRoute']).config(['$routeProvider',
+angular.module('UNIMIBModules', ['ngRoute', 'ngCookies']).config(['$routeProvider',
     function config($routeProvider) {
         $routeProvider.when('/findSurvey', {
             template: '<find-survey></find-survey>',
@@ -16,6 +16,8 @@ angular.module('UNIMIBModules', ['ngRoute']).config(['$routeProvider',
             template: '<signup-user></signup-user>'
         }).when("/getUser/:idUser", {
             template: '<get-user></get-user>'
+        }).when("/cookies", {
+            template: '<cookies></cookies>'
         }).otherwise({redirectTo: "/findSurvey"});
     }
 ]);
