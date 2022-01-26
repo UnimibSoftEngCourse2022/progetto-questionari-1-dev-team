@@ -1,3 +1,4 @@
 'use strict';
 
-const app = angular.module("UNIMIBModules", ['ngRoute', 'findSurvey', 'modifySurvey', 'addSurvey', 'compileSurvey']);
+const app = angular.module("UNIMIBModules", ["ngRoute", "ui.bootstrap", 'findSurvey', 'modifySurvey',
+    'addSurvey', "compileSurvey", "editSurveyAnswer"]);
