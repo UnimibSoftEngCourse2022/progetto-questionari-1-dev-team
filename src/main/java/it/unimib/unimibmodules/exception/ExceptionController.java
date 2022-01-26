@@ -42,15 +42,28 @@ public class ExceptionController {
     }
 
 	/**
-	 * Returns a ResponseEntity to the rest client with the error message and HTTP code 404
+	 * Returns a ResponseEntity to the rest client with the error message and HTTP code 400.
 	 * @param	e	the object that contains the exception's data
-	 * @return		an HTTP response with status 404 and the error message
-	 * @see NotFoundException
+	 * @return		an HTTP response with status 400 and the error message
+	 * @see EmptyFieldException
 	 */
 	@ExceptionHandler(value = EmptyFieldException.class)
 	public ResponseEntity<Object> handleNotFoundException(EmptyFieldException e) {
 
 		LOGGER.error("EmptyFieldException: {}", e.getMessage());
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+
+	/**
+	 * Returns a ResponseEntity to the rest client with the error message and HTTP code 400.
+	 * @param	e	the object that contains the exception's data
+	 * @return		an HTTP response with status 400 and the error message
+	 * @see IncorrectSizeException
+	 */
+	@ExceptionHandler(value = IncorrectSizeException.class)
+	public ResponseEntity<Object> handleIncorrectSizeException(IncorrectSizeException e) {
+
+		LOGGER.error("IncorrectSizeException: {}", e.getMessage());
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 }
