@@ -46,7 +46,8 @@ public class UserController extends DTOMapping<User, UserDTO> {
                     mapper.map(User::getId, UserDTO::setId);
                     mapper.map(User::getUsername, UserDTO::setUsername);
                     mapper.map(User::getEmail, UserDTO::setEmail);
-                    mapper.map(User::getName, UserDTO::setName);                 
+                    mapper.map(User::getName, UserDTO::setName);
+                    mapper.map(User::getSurname, UserDTO::setSurname);
                 });
 
         modelMapper.createTypeMap(UserDTO.class, User.class)
