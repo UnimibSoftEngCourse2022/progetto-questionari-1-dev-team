@@ -19,7 +19,7 @@ angular.
 				$scope.surveyCodeCompileRedirect = function(){
 					
 					let survey_id = $scope.surveyCodeCompile
-					$location.path('/compileSurvey/' + survey_id + '/' + $scope.idUserLogged)
+					$location.path('/compileSurvey/' + survey_id)
 					
 				}
 				
@@ -27,7 +27,7 @@ angular.
 				
 				$scope.compileSurvey = function(idx){
 					let surveyToCompile = $scope.result[idx];
-					$location.path('/compileSurvey/' + surveyToCompile.id + '/' + $scope.idUserLogged)
+					$location.path('/compileSurvey/' + surveyToCompile.id)
 				}
 
 

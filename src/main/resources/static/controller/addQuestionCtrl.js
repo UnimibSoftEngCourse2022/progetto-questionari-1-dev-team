@@ -8,7 +8,7 @@ app.controller('addQuestionCtrl', function($scope, $http) {
 	var counter = 0;
 	var start = true;
 
-	$http.get("http://localhost:5000/api/getCategory")
+	$http.get("http://localhost:5000/api/findCategories")
 		.then(function(response) {
 			$scope.categories =  response.data;
 		});

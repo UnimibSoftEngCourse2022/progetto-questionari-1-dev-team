@@ -1,6 +1,5 @@
 package it.unimib.unimibmodules.repository;
 
-import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.Survey;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

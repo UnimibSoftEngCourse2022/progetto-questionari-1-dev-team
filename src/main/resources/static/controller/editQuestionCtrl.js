@@ -19,7 +19,7 @@ app.controller('editQuestionCtrl', function($scope, $http, $window) {
             }
         });
 
-    $http.get("http://localhost:5000/api/getCategory")
+    $http.get("http://localhost:5000/api/findCategories")
         .then(function(response) {
             $scope.categories =  response.data;
         });

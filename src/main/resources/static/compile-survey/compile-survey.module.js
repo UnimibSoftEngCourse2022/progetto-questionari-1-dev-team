@@ -1,5 +1,3 @@
 'use strict';
 
-angular.module('compileSurvey', [
-  'ngRoute'
-]);
+angular.module("compileSurvey", []);

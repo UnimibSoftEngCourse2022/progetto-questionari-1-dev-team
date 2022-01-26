@@ -1,7 +1,5 @@
 package it.unimib.unimibmodules.model;
 
-import it.unimib.unimibmodules.exception.EmptyCategoryException;
-
 import javax.persistence.*;
 import java.util.Set;
 
@@ -35,6 +33,7 @@ public class Category {
      * Creates an empty Category.
      */
     public Category() {
+        // Do nothing because it only creates an empty category
     }
 
     /**
@@ -65,9 +64,7 @@ public class Category {
      * Modifies the name of the Category, setting <code>text</code> as the new value.
      * @param   name    the new text value
      */
-    public void setName(String name) throws EmptyCategoryException{
-        if(name==null || name.isBlank())
-            throw new EmptyCategoryException();
+    public void setName(String name) {
         this.name = name;
     }
 }

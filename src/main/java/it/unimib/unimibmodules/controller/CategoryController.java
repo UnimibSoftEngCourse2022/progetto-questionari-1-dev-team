@@ -23,7 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-public class CategoryController extends DTOMapping<Category, CategoryDTO>{
+public class CategoryController extends DTOListMapping<Category, CategoryDTO>{
 
     /**
      * Instance of AnswerRepository that will be used to access the db.
@@ -50,8 +50,8 @@ public class CategoryController extends DTOMapping<Category, CategoryDTO>{
      * @return		an HTTP response with status 200, 500 otherwise
      * @throws NotFoundException 
      */
-    @GetMapping(path = "/getCategory/{id}")
-    public ResponseEntity<CategoryDTO> getCategory(@PathVariable int id) throws NotFoundException {
+    @GetMapping(path = "/findCategory/{id}")
+    public ResponseEntity<CategoryDTO> findCategory(@PathVariable int id) throws NotFoundException {
         Category category = categoryRepository.get(id);
         return new ResponseEntity<>(convertToDTO(category), HttpStatus.OK);
     }
@@ -61,8 +61,8 @@ public class CategoryController extends DTOMapping<Category, CategoryDTO>{
      * @return		an HTTP response with status 200, 500 otherwise
      * @throws NotFoundException
      */
-    @GetMapping(path = "/getCategory")
-    public ResponseEntity<List<CategoryDTO>> getCategories () throws NotFoundException{
+    @GetMapping(path = "/findCategories")
+    public ResponseEntity<List<CategoryDTO>> findCategories () throws NotFoundException{
         Iterable<Category> categoryList = categoryRepository.getAll();
         List<CategoryDTO> categoryListDTO = convertListToDTO(categoryList);
         return new ResponseEntity<>(categoryListDTO, HttpStatus.OK);
@@ -78,6 +78,7 @@ public class CategoryController extends DTOMapping<Category, CategoryDTO>{
         return modelMapper.map(dto, Category.class);
     }
 
+    @Override
     public List<CategoryDTO> convertListToDTO(Iterable<Category> categories) {
 
         List<CategoryDTO> categoryList = new ArrayList<>();

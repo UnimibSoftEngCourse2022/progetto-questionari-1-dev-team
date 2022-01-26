@@ -24,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class QuestionController extends DTOMapping<Question, QuestionDTO>{
+public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 
     private static final Logger logger = LogManager.getLogger(Question.class);
 	
@@ -42,7 +42,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 * Instance of CategoryRepository that will be used to access the db.
 	 */
 	private final CategoryRepository categoryRepository;
-	
+
 	@Autowired
 	public QuestionController(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper modelMapper,
 							  CategoryRepository categoryRepository) {
@@ -102,7 +102,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 		logger.debug("Retrieved all the questions.");
     return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
    }
-  
+
 
  	/**
 	 * Gets the question in the database where text is contained in the text of the question
@@ -117,8 +117,8 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
-		logger.debug("Retrieved " + questionDTOList.size() + " questions containing the text " + text + ".");
-    	return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size(), text);
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
 	/**
@@ -202,6 +202,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 * @return			    a list of QuestionDTO, containing the serialized data of questions
 	 * @see DTOMapping#convertToDTO
 	 */
+	@Override
 	public List<QuestionDTO> convertListToDTO(Iterable<Question> questions) {
 
 		List<QuestionDTO> questionList = new ArrayList<>();
