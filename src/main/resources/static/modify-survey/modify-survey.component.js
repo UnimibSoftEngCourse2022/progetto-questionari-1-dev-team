@@ -77,7 +77,7 @@ angular.
 				
 				$scope.compileRedirect = function(){
 					
-					$location.path('/compileSurvey/' + $scope.surveyId + '/' + $scope.userId);
+					$location.path('/compileSurvey/' + $scope.surveyId);
 				}
 
 
