@@ -115,7 +115,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
             return new ResponseEntity<>("{\"response\":\"Login Successful.\"}", HttpStatus.OK);
         } else {
             logger.debug(String.format("Failed sign in of user with id: {}.", userDTO.getId()));
-            return new ResponseEntity<>("{\"response\":\"Login fAILED.\"}", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("{\"response\":\"Login Failed.\"}", HttpStatus.UNAUTHORIZED);
         }
     }
     
