@@ -1,5 +1,9 @@
-.inputError {
+.messageError {
 	color: red;
+}
+
+.messageConfirm {
+	color: green;
 }
 
 #surveyCardContainer.card .card-body {
@@ -12,12 +16,8 @@
 
 #questionCardContainer {
 	width: 100%;
-	height: 35%;
+	height: 500px;
 	border: 1px solid black;
-}
-
-#modifySurveyContainer{
-	margin-bottom: 5%;
 }
 
 /* The Modal (background) */
