@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: UNIMIB Modules
   description: UNIMIB Modules
-  version: 0.0.1
+  version: 0.3.0
 servers:
   - url: http://unimibquestionari-env.eba-3behr9mi.eu-central-1.elasticbeanstalk.com/api
     description: UNIMIB Modules server
@@ -71,6 +71,10 @@ paths:
         '401':
           description: User not authorized.
         '200':
+          content:
+            application/json:
+              schema:
+                type: string
           description: User authorized.
   /signUpUser:
     post:
@@ -85,8 +89,14 @@ paths:
       responses:
         '500':
           description: Server Error.
+        '400':
+          description: Username already existing!
         '200':
           description: User created.
+          content:
+            application/json:
+              schema:
+                type: string
   /findSurvey/{id}:
     get:
       summary: Returns the survey associated with the given id.
@@ -268,7 +278,7 @@ paths:
                 $ref: '#/components/schemas/ArrayOfQuestions'
   /findQuestionForSurvey/{id}:
     get:
-      summary: Returns the Question used by the survey associated with the given id.
+      summary: Finds the Questions associated to the survey with the given id.
       parameters:
         - name: id
           in: path
@@ -284,6 +294,13 @@ paths:
           description: Server Error.
         '404':
           description: Question not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
         '200':
           description: The Question used in the survey identifid by Id.
           content:
@@ -344,7 +361,7 @@ paths:
           description: Question not found.
   /findAnswer/{id}:
     get:
-      summary: Returns the Answer associated with the given id.
+      summary: Finds the Answer associated with the given id.
       parameters:
         - name: id
           in: path
@@ -366,13 +383,20 @@ paths:
                 $ref: '#/components/schemas/Answer'
         '404':
           description: Answer not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
   /findSurveyAnswersForUser:
      get:
       summary: Finds all the Answer the User associated with userId has created for the Survey associated with surveyId.
       parameters:
         - name: surveyId
           in: query
-          description: The id of the answer
+          description: The id of the survey
           required: true
           schema:
             type : integer
@@ -381,7 +405,7 @@ paths:
             maximum: 1
         - name: userId
           in: query
-          description: The id of the answer
+          description: The id of the user
           required: true
           schema:
             type : integer
@@ -399,10 +423,16 @@ paths:
                 $ref: '#/components/schemas/ArrayOfAnswers'
         '404':
           description: Answer not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
   /addAnswer:
     post:
-      summary: Creates an Answer.
-      description: An AnswerDTO
+      summary: Adds an answer to the Unit Of Work.
       requestBody:
         required: true
         content:
@@ -410,14 +440,38 @@ paths:
             schema:
               $ref: '#/components/schemas/Answer'
       responses:
+        '201':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
         '500':
-          description: Server Error.
-        '200':
-          description: Answer added.
+          description: Generic server error.
   /modifyAnswer:
     patch:
-      summary: Modifies an Answer.
-      description: An AnswerDTO
+      summary: Adds an answer modification to the Unit Of Work.
       requestBody:
         required: true
         content:
@@ -425,15 +479,38 @@ paths:
             schema:
               $ref: '#/components/schemas/Answer'
       responses:
-        '500':
-          description: Server Error.
         '200':
-          description: Answer Modified.
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
         '404':
-          description: Answer not found.
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '500':
+          description: Generic server error.
   /deleteAnswer/{id}:
     delete:
-      summary: Deletes the answer associated with the given id.
+      summary: Adds an answer deletion to the Unit Of Work.
       parameters:
         - name: id
           in: path
@@ -445,19 +522,42 @@ paths:
             minimum: 1
             maximum: 1
       responses:
-        '500':
-          description: Server Error.
         '200':
-          description: Answer deleted.
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
         '404':
-          description: Answer not found.
-  /findCloseEndedAnswer/{id}:
-    get:
-      summary: Returns the Close-ended Answer associated with the given id.
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '500':
+          description: Generic server error.
+  /saveSurveyAnswers:
+    post:
+      summary: Inserts the registered answers made by the user identified by userId on the survey identified by surveyId.
       parameters:
-        - name: id
-          in: path
-          description: The id of the Close-ended answer
+        - name: surveyId
+          in: query
+          description: The id of the survey
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+        - name: userId
+          in: query
+          description: The id of the user
           required: true
           schema:
             type : integer
@@ -465,20 +565,85 @@ paths:
             minimum: 1
             maximum: 1
       responses:
-        '500':
-          description: Server Error.
         '200':
-          description: Answer associated with the given id.
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '500':
+          description: Generic server error.
+  /saveModifiedSurveyAnswers:
+    post:
+      summary: Modifies and deletes the registered answers made by the user identified by userId on the survey identified by surveyId.
+      parameters:
+        - name: surveyId
+          in: path
+          description: The id of the survey
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+        - name: userId
+          in: query
+          description: The id of the user
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '500':
+          description: Generic server error.
+  /findCloseEndedAnswer/{id}:
+    get:
+      summary: Finds the CloseEndedAnswer associated with the given id.
+      parameters:
+        - name: id
+          in: path
+          description: The id of the close-ended answer
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '200':
+          description: OK.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CloseEndedAnswer'
         '404':
           description: Answer not found.
-  /addCloseEndedAnswe:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '500':
+          description: Generic server error.    
+  /addCloseEndedAnswer:
     post:
-      summary: Creates an answer to a close-ended question.
-      description: An CloseEndedAnswerDTO 
+      summary: Creates a close-ended answer.
       requestBody:
         required: true
         content:
@@ -486,14 +651,38 @@ paths:
             schema:
               $ref: '#/components/schemas/CloseEndedAnswer'
       responses:
+        '201':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
         '500':
-          description: Server Error.
-        '200':
-          description: Answer added.
+          description: Generic server error.
   /modifyCloseEndedAnswer:
     patch:
-      summary: Modifies the answer of a close-ended question associated with the given id, setting text as the answer.
-      description: A CloseEndedAnswerDTO 
+      summary: Modifies a close-ended answer.
       requestBody:
         required: true
         content:
@@ -501,12 +690,35 @@ paths:
             schema:
               $ref: '#/components/schemas/CloseEndedAnswer'
       responses:
-        '500':
-          description: Server Error.
         '200':
-          description: Answer Modified.
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
         '404':
-          description: Answer not found.
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '500':
+          description: Generic server error.
   /deleteCloseEndedAnswer/{id}:
     delete:
       summary: Deletes the close-ended answer associated with the given id.
@@ -521,12 +733,26 @@ paths:
             minimum: 1
             maximum: 1
       responses:
-        '500':
-          description: Server Error.
         '200':
-          description: Answer deleted.
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
         '404':
-          description: Answer not found.
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '500':
+          description: Generic server error.
   /findCategory/{id}:
     get:
       summary: Gets the Category associated with the given id.
@@ -649,13 +875,48 @@ components:
           type: integer
           description: The id of the answer
           example: 1
-        text:
+        answerText:
           type: string
           description: The text of the answer
           example: Dave
+        userDTO:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: The id of the user who created this answer.
+              example: 1
+          description: The User who created this answer.
+        surveyDTO:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: The id of the survey related to this answer
+              example: 1
+          description: The Survey related to this answer
+        questionDTO:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: The id of the question related to this answer
+              example: 1
+          description: The Question related to this answer
+        closeEndedAnswerDTOs:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+                description: The id of the CloseEndedAnswer related to this answer
+                example: 1
+          description: The CloseEndedAnswer related to this answer
       required:  
         - id
-        - text
+        - userDTO
+        - surveyDTO
+        - questionDTO
     CloseEndedAnswer:
       type: object
       properties:
@@ -667,14 +928,18 @@ components:
           type: string
           description: The text of the answer
           example: Red
-        chosen:
-          type: boolean
-          description: Represents whether the user selected or not this closed-ended answer.
-          default: false
-          example: true
+        questionDTO:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: The id of the question related to this answer
+              example: 1
+          description: The text of the answer
       required:  
         - id
         - text
+        - questionDTO
     ArrayOfSurveys:
       type: array
       items:
