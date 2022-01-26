@@ -1,3 +1,6 @@
+<div class="jumbotron">
+	<h1>Home</h1>
+</div>
 <div class="container-fluid mb-4" ng-init="load()">
 
 	<div class="row mt-4">
@@ -27,15 +30,22 @@
 			</p>
 		</div>
 	</div>
+	
+	<div class="row " ng-show="showMessageError">
+		<div class="col-md-12  d-flex justify-content-center">
+			<p  class="messageError mt-1">{{messageError}}</p>
+		</div>
+	</div>
+	
 	<div class="row  d-flex justify-content-center">
 		<div class="col-md-4">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<button type="button" class="btn btn-outline-primary"
-						ng-click="compileByCode(surveyCode)">Compile</button>
+						ng-click="compileByCode()">Compile</button>
 				</div>
-				<input type="text" ng-model="surveyCode" class="form-control"
-					id="searchSurvey" placeholder="Enter the compilation code">
+				<input type="text" ng-model="compilationCode" class="form-control"
+					id="searchSurvey" placeholder="Enter the compilation code" required>
 			</div>
 		</div>
 	</div>

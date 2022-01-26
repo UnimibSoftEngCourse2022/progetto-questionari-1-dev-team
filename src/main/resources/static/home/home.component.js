@@ -11,6 +11,9 @@ angular.
 				$scope.isEmptyResult = true
 				$scope.searchResult = []
 				$scope.isCreator = []
+				$scope.messageError = ""
+				$scope.showMessageError = false
+				$scope.compilationCode = ""
 
 				//error alert 
 				$scope.showAlert = function(text) {
@@ -31,13 +34,12 @@ angular.
 
 
 				//compile by code for no-registered users
-				$scope.compileByCode = function(compilationCode) {
-
-					if (compilationCode !== undefined && compilationCode != "" && compilationCode.replace(/\s/g, '').length) {
+				$scope.compileByCode = function() {
+					if ($scope.compilationCode !== undefined && $scope.compilationCode != "" && $scope.compilationCode.replace(/\s/g, '').length) {
 						$location.path('/compileSurvey/')
 					} else {
-						$scope.showAlert("This field cannot be empty.")
-						$scope.load()
+						$scope.messageError = "ERROR - This field cannot be empty."
+						$scope.showMessageError = true 
 					}
 				}
 
@@ -57,14 +59,12 @@ angular.
 
 				//redirect compile survey
 				$scope.compileSurvey = function(idx) {
-					let surveyToCompile = $scope.result[idx];
-					$location.path('/compileSurvey/' + surveyToCompile.id)
+					$location.path('/compileSurvey/' +  $scope.result[idx].id)
 				}
 
 				//redirect modify survey
 				$scope.modifySurvey = function(idx) {
-					let surveyToModify = $scope.result[idx];
-					$location.path('/modifySurvey/' + surveyToModify.id)
+					$location.path('/modifySurvey/' +$scope.result[idx].id)
 				}
 				
 				//redirect new question

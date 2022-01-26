@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 <html ng-app="UNIMIBModules">
-	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta charset="utf-8">
-		<title>UNIMIB-Survey</title>
-		<link rel="stylesheet" type="text/css"
-			href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="./styles/survey.css">
-		<link rel="stylesheet" href="styles/style.css">
-	</head>
-	<body>
-	
-		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-			<a class="navbar-brand" href="#">UNIMIB-Survey</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse"
-				data-target="#navbarSupportedContent"
-				aria-controls="navbarSupportedContent" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-				</ul>
-			</div>
-		</nav>
-	
-		<div ng-view></div>
-		
-		<script src="node_modules/angular/angular.min.js"></script>
-		<script src="node_modules/angular-route/angular-route.min.js"></script>
-		<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-		
-		<script src="app.module.js"></script>
-		<script src="app.config.js"></script>
-		
-		<script src="home/home.component.js"></script>
-  		<script src="home/home.module.js"></script>
-  		<script src="modify-survey/modify-survey.component.js"></script>
-  		<script src="modify-survey/modify-survey.module.js"></script>
-  		<script src="add-survey/add-survey.component.js"></script>
-  		<script src="add-survey/add-survey.module.js"></script>
-  		<script src="compile-survey/compile-survey.component.js"></script>
-  		<script src="compile-survey/compile-survey.module.js"></script>
-	</body>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>UNIMIB-Survey</title>
+<link rel="stylesheet" type="text/css"
+	href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="./styles/survey.css">
+<link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<a class="navbar-brand" href="#">UNIMIB-Survey</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div ng-view></div>
+
+
+	<script src="node_modules/angular/angular.min.js"></script>
+	<script src="node_modules/angular-route/angular-route.min.js"></script>
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="app.module.js"></script>
+	<script src="app.config.js"></script>
+
+	<script src="home/home.component.js"></script>
+	<script src="home/home.module.js"></script>
+	<script src="modify-survey/modify-survey.component.js"></script>
+	<script src="modify-survey/modify-survey.module.js"></script>
+	<script src="add-survey/add-survey.component.js"></script>
+	<script src="add-survey/add-survey.module.js"></script>
+	<script src="compile-survey/compile-survey.component.js"></script>
+	<script src="compile-survey/compile-survey.module.js"></script>
+</body>
 </html>
