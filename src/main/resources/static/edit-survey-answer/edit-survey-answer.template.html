@@ -1,0 +1,37 @@
+<div class="container-fluid" ng-init="load()">
+	Survey: {{ survey.surveyName }}
+	<br/>
+	Survey by: {{ survey.userDTO.username }}
+	<br/><br/>
+	<p>{{ questions[questionIndex].text }}</p>
+	<div ng-hide="questions[questionIndex].questionType != 'SINGLECLOSED'">
+		<div ng-repeat="answer in questions[questionIndex].closeEndedAnswerDTOSet">
+			<label>
+				<input type="radio" ng-model="model.closeended_answer" name="closeended_answer" ng-value="answer.id"/>
+				{{ answer.text }}
+				<br/>
+			</label>
+		</div>
+	</div>
+	<div ng-hide="questions[questionIndex].questionType != 'MULTIPLECLOSED'">
+		<div ng-repeat="answer in questions[questionIndex].closeEndedAnswerDTOSet">
+			<input type="checkbox" name="answer" id="{{answer.id}}" ng-model="options[$index]" ng-value="answer.id">
+			<label for="{{answer.id}}">{{answer.text}}</label>
+		</div>
+	</div>
+	<div ng-hide="questions[questionIndex].questionType != 'OPEN'">
+		<label for="openended_answer">Answer:</label>
+		<br/>
+		<input type="text" ng-model="openended_answer" name="openended_answer" id="openended_answer"
+			   ng-value="currentAnswer.answerText">
+	</div>
+	<br/>
+	<button ng-click="submit()" class="btn btn-warning">Modify</button>
+	<button ng-click="delete()" class="btn btn-danger">Delete</button>
+	<button ng-hide="questionIndex === questions.length - 1" ng-click="closeSurvey()" class="btn btn-success">
+		Close survey
+	</button>
+	<button ng-click="skipQuestion()" class="btn btn-primary">
+		{{ questionIndex === questions.length - 1 ? "Close survey" : "Skip question" }}
+	</button>
+</div>

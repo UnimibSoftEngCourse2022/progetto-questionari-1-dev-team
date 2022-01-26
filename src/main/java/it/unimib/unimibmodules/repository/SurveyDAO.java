@@ -1,6 +1,5 @@
 package it.unimib.unimibmodules.repository;
 
-import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.Survey;
 import it.unimib.unimibmodules.model.SurveyQuestions;
 

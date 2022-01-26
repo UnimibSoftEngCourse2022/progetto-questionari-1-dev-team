@@ -47,6 +47,10 @@ public class Survey {
 	 */
 	private String name;
 
+
+	/**
+	 * The questions of the survey.
+	 */
 	@OneToMany(mappedBy="survey", cascade = CascadeType.REMOVE)
 	private Set<SurveyQuestions> surveyQuestions;
 

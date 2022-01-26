@@ -2,7 +2,6 @@ package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.QuestionDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
-import it.unimib.unimibmodules.model.Category;
 import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.User;
 import org.apache.logging.log4j.LogManager;
@@ -24,9 +23,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class QuestionController extends DTOMapping<Question, QuestionDTO>{
+public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 
-    private static final Logger logger = LogManager.getLogger(Question.class);
+    private static final Logger logger = LogManager.getLogger(QuestionController.class);
 	
 	/**
 	 * Instance of QuestionRepository that will be used to access the db.
@@ -42,7 +41,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 * Instance of CategoryRepository that will be used to access the db.
 	 */
 	private final CategoryRepository categoryRepository;
-	
+
 	@Autowired
 	public QuestionController(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper modelMapper,
 							  CategoryRepository categoryRepository) {
@@ -93,7 +92,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	/**
 	 * Gets all the questions
 	 * @return		an HTTP response with status 200, 500 otherwise
-	 * @throws NotFoundException
+	 * @throws NotFoundException if 404 no question has been found
 	 */
 	@GetMapping(path = "/getQuestion")
 	public ResponseEntity<List<QuestionDTO>> getQuestions() throws NotFoundException{
@@ -102,7 +101,32 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 		logger.debug("Retrieved all the questions.");
     return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
    }
-  
+
+	/**
+	 * Gets all the questions of the user
+	 * @return		an HTTP response with status 200, 500 otherwise
+	 */
+	@GetMapping(path = "/getQuestionByUser/{id}")
+	public ResponseEntity<List<QuestionDTO>> getQuestionsByUser(@PathVariable int id){
+		Iterable<Question> questionList = questionRepository.getByUser(id);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		logger.debug("Retrieved all the questions of the user "+id + ".");
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
+
+	/**
+	 * Gets all the questions associated with the given id of category
+	 * @return		an HTTP response with status 200, 500 otherwise
+	 */
+	@GetMapping(path = "/getQuestionByCategory/{id}")
+	public ResponseEntity<List<QuestionDTO>> getQuestionsByCategory(@PathVariable int id) throws NotFoundException{
+		Iterable<Question> questionList = questionRepository.getByCategory(id);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Question with category" + id + " was found.\"}");
+		logger.debug("Retrieved all the questions of the user "+id + ".");
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
 
  	/**
 	 * Gets the question in the database where text is contained in the text of the question
@@ -117,8 +141,8 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
-		logger.debug("Retrieved " + questionDTOList.size() + " questions containing the text " + text + ".");
-    	return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size(), text);
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
 	/**
@@ -202,6 +226,7 @@ public class QuestionController extends DTOMapping<Question, QuestionDTO>{
 	 * @return			    a list of QuestionDTO, containing the serialized data of questions
 	 * @see DTOMapping#convertToDTO
 	 */
+	@Override
 	public List<QuestionDTO> convertListToDTO(Iterable<Question> questions) {
 
 		List<QuestionDTO> questionList = new ArrayList<>();

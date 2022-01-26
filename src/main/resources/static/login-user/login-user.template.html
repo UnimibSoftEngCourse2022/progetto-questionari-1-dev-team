@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto py-4 px-0">
+            <h2>Login</h2>
+            <form class="signup" name="form" ng-submit="loginUser()" role="form">
+                <div class="form-group"
+                     ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
+                    <label for="username">Username:</label> <input class="form-control"
+                                                                   id="username" name="username" ng-model="username"
+                                                                   required type="text"/>
+                    <span class="help-block" ng-show="form.username.$dirty && form.username.$error.required">Username is required</span>
+                </div>
+                <div class="form-group"
+                     ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
+                    <label for="password">Password:</label> <input class="form-control"
+                                                                   id="password" name="password" ng-model="password"
+                                                                   required type="password"/>
+                    <span class="help-block" ng-show="form.password.$dirty && form.password.$error.required">Password is required</span>
+                </div>
+                <br/>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+            Are you new? <a ng-href="#!/signupUser">Sign Up</a>
+        </div>
+    </div>
+</div>

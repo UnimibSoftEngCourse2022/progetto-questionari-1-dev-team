@@ -10,6 +10,10 @@ import it.unimib.unimibmodules.model.User;
 
 public class UserFactory {
 
+    private UserFactory() {
+        //private constructor in order to hide the implicit public one.
+    }
+
     /**
 	 * Creates a new instance of User.
 	 * @param   email       the email chose by the user

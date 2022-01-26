@@ -147,7 +147,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		}
 		if (surveyDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Survey with " + text + " was found.\"}");
-		logger.debug("Retrieved " + surveyDTOList.size() + " surveys containing the text " + text + ".");
+		logger.debug("Retrieved {} Surveys containing the text {}.", surveyDTOList.size(), text);
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
 
@@ -261,13 +261,6 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		Survey survey = convertToEntity(surveyDTO);
 		Set<SurveyQuestions> surveyQuestions = survey.getSurveyQuestions();
 		surveyRepository.modifyQuestions(surveyQuestions, survey.getId());
-		
-		/*for (SurveyQuestions surveyQuestion : surveyQuestions) {	
-			int questioId = surveyQuestion.getQuestion().getId();
-			surveyRepository.modifyQuestions(questioId);
-		}*/
-		
-		
 		return new ResponseEntity<>("{\"response\":\"Survey modified.\"}", HttpStatus.OK);
 	}
 
