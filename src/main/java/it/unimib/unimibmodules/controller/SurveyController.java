@@ -98,6 +98,8 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		logger.debug(String.format("Retreived Survey with id: {0}.", id));
 		return new ResponseEntity<>(convertToDTO(survey), HttpStatus.OK);
 	}
+	
+	
 
 	/**
 	 * Finds the survey associated with the given id without its question list.
@@ -109,12 +111,14 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	 * @see it.unimib.unimibmodules.exception.NotFoundException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleNotFoundException
 	 */
-	@GetMapping("/findSurveyNoQuestion")
-	public ResponseEntity<SurveyDTO> findSurveyNoQuestion(@RequestParam(name = "id") int id) throws NotFoundException {
+	@GetMapping(path = "/findSurveyNoQuestion/{id}")
+	public ResponseEntity<SurveyDTO> findSurveyNoQuestion(@PathVariable int id) throws NotFoundException {
 		Survey survey = surveyRepository.get(id);
 		logger.debug(String.format("Retreived Survey with id: {0}.", id));
 		return new ResponseEntity<>(convertToDTOAndSkipQuestions(survey), HttpStatus.OK);
 	}
+	
+
 
 	/**
 	 * Gets the survey in the database where text is contained in the name of the

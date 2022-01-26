@@ -24,4 +24,5 @@ public interface QuestionDAO extends CrudRepository<Question, Integer> {
 
 	@Query("SELECT q FROM Question q Where q.category.id = :id")
 	Iterable<Question> findByCategory(@Param("id") int categoryId);
+
 }

@@ -71,4 +71,6 @@ public interface QuestionRepository {
 	 * @param   question  the new instance of Question
 	 */
 	void modify(Question question);
+
+	Iterable<Question> getBySurveyIdLazy(int id, int offset, int limit);
 }

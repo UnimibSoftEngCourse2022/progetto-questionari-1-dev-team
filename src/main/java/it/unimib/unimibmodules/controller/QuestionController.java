@@ -161,6 +161,23 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 	
+	
+	/**
+	 * Gets the Question associated with the given id.
+	 * @param	id	the id of the question
+	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
+	 * @throws  NotFoundException	if 404 no question with identified by <code>id</code> has been found
+	 */
+	@GetMapping(path = "/findQuestionForSurveyLazy")
+	public ResponseEntity<List<QuestionDTO>> findQuestionsForSurveyLazy(@RequestParam int id , @RequestParam int offset , @RequestParam int limit) throws NotFoundException {
+		Iterable<Question> questionList = questionRepository.getBySurveyIdLazy(id, offset, limit);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Question for Survey with id " + id + " was found.\"}");
+		logger.debug("Retrieved {} questions for survey with id {}.", questionDTOList.size(), id);
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
+	
 	/**
 	 * Creates a question, with the given text and id
 	 * @param	questionDTO the serialized object of the question

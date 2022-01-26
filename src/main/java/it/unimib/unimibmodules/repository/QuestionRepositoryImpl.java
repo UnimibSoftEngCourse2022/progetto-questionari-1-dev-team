@@ -80,6 +80,11 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
 		return questionDAO.findBySurveyId(surveyId);
 	}
+	
+	@Override
+	public Iterable<Question> getBySurveyIdLazy(int surveyId, int offset, int limit) {
+		return questionDAO.findBySurveyId(surveyId);
+	}
 
 
 	/**
@@ -158,4 +163,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 	public void modify(Question entity) {
 		questionDAO.save(entity);
 	}
+
+
+	
 }

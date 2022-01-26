@@ -4,7 +4,7 @@ angular.
 	module('UNIMIBModules').
 	component('modifySurvey', {
 		templateUrl: 'modify-survey/modify-survey.template.html',
-		controller: ['$location', '$routeParams', '$scope', '$http',
+		controller: ['$location', '$routeParams', '$scope', '$http', 
 			function modifySurveyController($location, $routeParams, $scope, $http) {
 				$scope.idUser = 1 //from cookie
 				$scope.isSurveyCreator = false
@@ -35,9 +35,9 @@ angular.
 					$scope.surveyQuestionsId = []
 					$scope.surveyQuestions = []
 					$scope.categories = []
-					$http.get("/api/findSurvey/?id=" + $scope.idSurvey).then(function onfulFilled(response) {
+					
+					$http.get("api/findSurveyNoQuestion/" + $scope.idSurvey).then(function onfulFilled(response) {
 						$scope.survey = response.data;
-						console.log($scope.survey )
 						if ($scope.survey.userDTO.id == $scope.idUser) {
 							$scope.isSurveyCreator = true
 							$http.get("api/findQuestionForSurvey/" + $scope.idSurvey).then(function onfulFilled(response) {
@@ -151,7 +151,7 @@ angular.
 						$scope.isEmptyResult = true;
 					});
 				}
-				
+
 				//Handling checkbox
 				$scope.toggleSelection = function toggleSelection(index) {
 					var question = $scope.searchQuestions[index];
@@ -177,7 +177,7 @@ angular.
 
 				$scope.compileRedirect = function() {
 
-					$location.path('/compileSurvey/' + $scope.idSurvey );
+					$location.path('/compileSurvey/' + $scope.idSurvey);
 				}
 
 				$scope.editQuestionRoute = function(modalQuestion) {
@@ -220,7 +220,7 @@ angular.
 				$scope.modifySurvey = function() {
 					let questions = []
 					angular.forEach($scope.surveyQuestionsId, function(questionId) {
-						questions.push({ 'id': null ,  'questionDTO': {'id' : questionId}, 'surveyDTO': {'id' : $scope.survey.id} })
+						questions.push({ 'id': null, 'questionDTO': { 'id': questionId }, 'surveyDTO': { 'id': $scope.survey.id } })
 					});
 
 					let data = angular.copy($scope.survey)
@@ -228,12 +228,12 @@ angular.
 					if ($scope.newSurveyName !== undefined && $scope.newSurveyName != "" && $scope.newSurveyName.replace(/\s/g, '').length) {
 						data.surveyName = $scope.newSurveyName
 					}
-					
-					data.userDTO =  {'id' : $scope.survey.userDTO.id}
-					
+
+					data.userDTO = { 'id': $scope.survey.userDTO.id }
+
 					console.log(data)
-					
-					
+
+
 					$http.patch("/api/modifySurvey", data).then(function onfulFilled(response) {
 						$scope.load()
 					}, function errorCallback(response) {
