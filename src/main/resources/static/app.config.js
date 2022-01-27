@@ -47,15 +47,10 @@ window.routes =
             requireLogin: false
         },
 
-        '/getUser/:idUser': {
+        '/getUser': {
             template: '<get-user></get-user>',
             requireLogin: true
-        },
-
-        '/cookies': {
-            template: '<cookies></cookies>',
-            requireLogin: true
-        },
+        }
     };
 
 app.config(function config($routeProvider) {
