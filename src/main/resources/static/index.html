@@ -23,6 +23,13 @@
 					<li class="nav-item "><a class="nav-link" href="/">Home</a></li>
 				</ul>
 			</div>
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item "><a class="nav-link" href="/#!/loginUser">Login</a></li>
+			</ul>
+			<ul class="navbar-nav mr-auto" ng-controller="logoutUserCtrl">
+				<li class="nav-item "><a class="nav-link" href="/"
+										 ng-class="{disabled: !authService.isLoggedIn()}" ng-click="logoutUser()">Logout</a></li>
+			</ul>
 		</nav>
 		<div ng-view></div>
 	</body>
@@ -36,6 +43,7 @@
 	<script src="app.module.js"></script>
 	<script src="controller/authService.js"></script>
 	<script src="controller/cookieService.js"></script>
+	<script src="controller/logoutUserCtrl.js"></script>
 	<script src="app.config.js"></script>
 	<script src="home/home.component.js"></script>
 	<script src="home/home.module.js"></script>
