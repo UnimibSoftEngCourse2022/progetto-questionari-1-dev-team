@@ -101,7 +101,8 @@
 			<p>
 				<b>Email:</b> <input class="form-control"
 									 id="emailGuest" name="emailGuest" ng-model="emailGuest"
-									 required type="text"/>
+									 required type="text" type="email"/>
+				<h6 ng-show="errorEmail" style="color:red;display:inline"> Missing email</h6>
 			</p>
 			<p>
 				<b>Compilation code:</b> {{randomCode}}

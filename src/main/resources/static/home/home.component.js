@@ -6,7 +6,7 @@ angular.
 		templateUrl: 'home/home.template.html',
 		controller: ['$location', '$routeParams', '$scope', '$http',
 			function homeController($location, $routeParams, $scope, $http) {
-				$scope.idUser; //from cookie
+				$scope.idUser;
 				$scope.isLogged = false
 				$scope.isEmptyResult = true
 				$scope.searchResult = []
@@ -61,8 +61,9 @@ angular.
 				//redirect compile survey
 				$scope.compileSurvey = function(idx) {
 					$scope.modalQuestion = idx;
+					$scope.errorEmail = false;
 
-					if($scope.idUser != null)
+					if($scope.idUser !== undefined)
 					$location.path('/compileSurvey/' +  $scope.result[idx].id)
 					else{
 						$http.get("/api/getNewCode").then(function onfulFilled(response) {
@@ -122,26 +123,30 @@ angular.
 				}
 
 				$scope.compileSurveyGuest = function (idx){
-					let data = {
-						username: $scope.randomCode,
-						name: null,
-						surname: null,
-						email: $scope.emailGuest,
-						password: "",
-						questionsCreatedDTO: null,
-						surveysCreatedDTO: null,
-						compilationId: $scope.randomCode
+					if($scope.emailGuest == null || $scope.emailGuest === "") {
+						$scope.errorEmail = true;
+					}else{
+						let data = {
+							username: $scope.randomCode,
+							name: null,
+							surname: null,
+							email: $scope.emailGuest,
+							password: "",
+							questionsCreatedDTO: null,
+							surveysCreatedDTO: null,
+							compilationId: $scope.randomCode
+						}
+
+						$http.post("/api/signUpUser", data).then(function onFulfilled(response) {
+							//settare cookie response.data.idUser
+							console.log(response.data.idUser);
+							$location.path('/compileSurvey/' +  $scope.result[idx].id)
+
+						}, function errorCallback(response) {
+
+							console.error(response);
+						});
 					}
-
-					$http.post("/api/signUpUser", data).then(function onFulfilled(response) {
-						//settare cookie response.data.idUser
-						console.log(response.data.idUser);
-						$location.path('/compileSurvey/' +  $scope.result[idx].id)
-
-					}, function errorCallback(response) {
-
-						console.error(response);
-					});
 				}
 			}
 		]
