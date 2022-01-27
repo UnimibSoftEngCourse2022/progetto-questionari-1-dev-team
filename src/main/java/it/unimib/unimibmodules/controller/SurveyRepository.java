@@ -2,6 +2,7 @@ package it.unimib.unimibmodules.controller;
 
 import java.util.Set;
 
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Survey;
@@ -51,20 +52,22 @@ public interface SurveyRepository {
 	 */
 	void remove(int id) throws  FormatException;
 
+	
 	/**
-	 * Updates a survey in the database using a new instance of Survey.
-	 * @param   survey  the new instance of Survey
-	 * @throws NotFoundException 
+	 * Updates all the questions of survey in the database.
+	 * @param   surveyQuestions   new questions of Survey
 	 * @throws FormatException 
 	 * @see SurveyRepository#modify
 	 */
-	void modify(Survey survey) throws  FormatException;
+	void modifyQuestions(Set<SurveyQuestions> surveyQuestions, int surveyId) throws FormatException;
 
 	/**
-	 * Updates a survey in the database using a new instance of Survey.
+	 * Updates the survey name 
 	 * @param   survey  the new instance of Survey
+	 * @throws FormatException 
+	 * @throws EmptyFieldException 
 	 * @throws NotFoundException 
 	 * @see SurveyRepository#modify
 	 */
-	void modifyQuestions(Set<SurveyQuestions> surveyQuestions, int surveyId) throws FormatException;
+	void modifyName(String name, int id) throws FormatException, NotFoundException, EmptyFieldException;
 }

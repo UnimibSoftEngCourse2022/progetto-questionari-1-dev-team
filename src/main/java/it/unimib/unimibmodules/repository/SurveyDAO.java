@@ -18,5 +18,5 @@ import org.springframework.data.repository.query.Param;
 public interface SurveyDAO extends CrudRepository<Survey, Integer>{
 
     @Query("SELECT s FROM Survey s Where s.name LIKE %:text% OR CAST( s.id AS string ) = :id")
-    Iterable<Survey> findByText(@Param("text") String text, @Param("id") String id); 
+    Iterable<Survey> findByText(@Param("text") String text, @Param("id") String id);
 }

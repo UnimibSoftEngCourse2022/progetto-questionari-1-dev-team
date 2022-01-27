@@ -1,6 +1,7 @@
 package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.controller.SurveyRepository;
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Survey;
@@ -155,27 +156,41 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	}
 
 	/**
-	 * Updates a survey in the database using a new instance of Survey.
+	 * Updates the name of the survey in the database.
 	 * 
-	 * @param survey the new instance of Survey
-	 * @throws NotFoundException
-	 * @see SurveyRepository#modify
+	 * @param id   survey id
+	 * @param name new name
+	 * @throws FormatException
+	 * @throws NotFoundException 
+	 * @throws EmptyFieldException
 	 */
 	@Override
-	public void modify(Survey survey) throws FormatException {
-		try {
-			surveyDAO.save(survey);
-		} catch (IllegalArgumentException ex) {
-			throw new FormatException("The given entity is empty.", ex);
+	public void modifyName(String name, int id) throws FormatException, NotFoundException, EmptyFieldException {
+
+		if (name != null && !name.isBlank()){
+			Optional<Survey> surveyOpt = surveyDAO.findById(id);
+			if(surveyOpt == null) {
+				NotFoundException ex = new NotFoundException("The survey with id: " + id + " doesn't exist", 
+						new Throwable("The survey with id: " + id + " doesn't exist"));
+				throw ex;
+			}else {
+				Survey survey = surveyOpt.get();
+				survey.setName(name);
+				surveyDAO.save(survey);
+			}
+
+		} else {
+			FormatException ex = new FormatException("The name can't be null", new Throwable("The name can't be null"));
+			throw ex;
 		}
+
 	}
 
 	/**
 	 * Updates a survey in the database using a new instance of Survey.
 	 * 
 	 * @param survey the new instance of Survey
-	 * @throws NotFoundException
-	 * @see SurveyRepository#modify
+	 * @throws FormatException
 	 */
 	@Override
 	public void modifyQuestions(Set<SurveyQuestions> surveyQuestions, int surveyId) throws FormatException {
@@ -185,11 +200,9 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 			int idQuestion = surveyQuestion.getQuestion().getId();
 			SurveyQuestions result = surveyQuestionsDAO.questionHandler(idQuestion, surveyId);
 			if (result == null) {
-				// va inserita
 				surveyQuestionsDAO.save(surveyQuestion);
 			}
 			idIn.add(idQuestion);
-			System.out.println(idQuestion);
 		}
 
 		List<SurveyQuestions> result;
@@ -200,14 +213,14 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 					surveyQuestionsDAO.delete(surveyQuestion);
 				}
 			}
-			
-		}else {
-			result =  (List<SurveyQuestions>) surveyQuestionsDAO.questionNotIn(idIn, surveyId);
+
+		} else {
+			result = (List<SurveyQuestions>) surveyQuestionsDAO.questionNotIn(idIn, surveyId);
 			if (!(result == null || result.isEmpty())) {
 				for (SurveyQuestions surveyQuestion : result) {
 					surveyQuestionsDAO.delete(surveyQuestion);
 				}
-			}	
+			}
 		}
 	}
 }

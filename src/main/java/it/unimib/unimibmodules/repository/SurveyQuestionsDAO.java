@@ -17,7 +17,5 @@ public interface SurveyQuestionsDAO extends CrudRepository<SurveyQuestions, Inte
     Iterable<SurveyQuestions> questionNotIn(@Param("idIn") List<Integer> idIn, @Param("idSurvey") int idSurvey);
 	
 	@Query("SELECT s FROM SurveyQuestions s Where s.survey.id = :idSurvey")
-    Iterable<SurveyQuestions> questionBySurvey(@Param("idSurvey") int idSurvey);
-	
-	
+    Iterable<SurveyQuestions> questionBySurvey(@Param("idSurvey") int idSurvey);	
 }

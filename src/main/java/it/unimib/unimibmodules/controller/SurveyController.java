@@ -255,6 +255,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		Survey survey = convertToEntity(surveyDTO);
 		Set<SurveyQuestions> surveyQuestions = survey.getSurveyQuestions();
 		surveyRepository.modifyQuestions(surveyQuestions, survey.getId());
+		surveyRepository.modifyName(survey.getName(),survey.getId());
 		return new ResponseEntity<>("{\"response\":\"Survey modified.\"}", HttpStatus.OK);
 	}
 
@@ -270,7 +271,6 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	 */
 	@DeleteMapping(path = "/deleteSurvey/{id}")
 	public ResponseEntity<String> deleteSurvey(@PathVariable int id) throws NotFoundException, FormatException {
-
 		surveyRepository.remove(id);
 		logger.debug("Removed Survey with id: {0}." + id);
 		return new ResponseEntity<>("{\"response\":\"Survey deleted.\"}", HttpStatus.OK);
