@@ -6,7 +6,7 @@ angular.
 		templateUrl: 'home/home.template.html',
 		controller: ['$location', '$routeParams', '$scope', '$http',
 			function homeController($location, $routeParams, $scope, $http) {
-				$scope.idUser = 1 //from cookie
+				$scope.idUser; //from cookie
 				$scope.isLogged = false
 				$scope.isEmptyResult = true
 				$scope.searchResult = []
@@ -14,6 +14,7 @@ angular.
 				$scope.messageError = ""
 				$scope.showMessageError = false
 				$scope.compilationCode = ""
+				$scope.randomCode = -1
 
 				//error alert 
 				$scope.showAlert = function(text) {
@@ -59,7 +60,16 @@ angular.
 
 				//redirect compile survey
 				$scope.compileSurvey = function(idx) {
+					$scope.modalQuestion = idx;
+
+					if($scope.idUser != null)
 					$location.path('/compileSurvey/' +  $scope.result[idx].id)
+					else{
+						$http.get("/api/getNewCode").then(function onfulFilled(response) {
+							$scope.randomCode = response.data.compilationCode;
+						});
+						$scope.modalManager(idx);
+					}
 				}
 
 				//redirect modify survey
@@ -75,6 +85,21 @@ angular.
 				//redirect new survey
 				$scope.newSurvey = function() {
 					$location.path('/addSurvey')
+				}
+
+				$scope.modalManager = function(index) {
+					if ($scope.displayModal === 'block') {
+						$scope.displayModal = 'none';
+						$scope.displaySearchButton = "block"
+					} else {
+						$scope.displayModal = 'block';
+						$scope.displaySearchButton = "none"
+					}
+
+					if (index > -1) {
+						$scope.modalQuestion = index
+						$scope.editQuestion = $scope.searchQuestions[index].user.id === $scope.idUser;
+					}
 				}
 
 				//Utility function for showing surveys and setting permissions
@@ -94,6 +119,29 @@ angular.
 						$scope.isEmptyResult = true;
 						$scope.result = [];
 					}
+				}
+
+				$scope.compileSurveyGuest = function (idx){
+					let data = {
+						username: $scope.randomCode,
+						name: null,
+						surname: null,
+						email: $scope.emailGuest,
+						password: "",
+						questionsCreatedDTO: null,
+						surveysCreatedDTO: null,
+						compilationId: $scope.randomCode
+					}
+
+					$http.post("/api/signUpUser", data).then(function onFulfilled(response) {
+						//settare cookie response.data.idUser
+						console.log(response.data.idUser);
+						$location.path('/compileSurvey/' +  $scope.result[idx].id)
+
+					}, function errorCallback(response) {
+
+						console.error(response);
+					});
 				}
 			}
 		]
