@@ -24,11 +24,9 @@ angular.module('UNIMIBModules').component('getUser', {
                 $http.get("/api/getUser/" + cookieService.getCookie()).then(function onFulFilled(response) {
 
                     console.log(response);
-                    console.log(cookieService.getCookie());
                     $scope.handleUser(response);
 
                 }, function errorCallback(response) {
-                    console.log(cookieService.getCookie());
                     console.error(response);
                 });
             }
