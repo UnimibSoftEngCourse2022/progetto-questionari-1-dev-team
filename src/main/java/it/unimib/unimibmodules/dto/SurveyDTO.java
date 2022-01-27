@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Set;
 import java.util.TimeZone;
 import it.unimib.unimibmodules.exception.FormatException;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * DTO for the Survey class.
@@ -16,40 +18,32 @@ public class SurveyDTO {
 	 /**
      * Serialization of the id of the survey.
      */
-    private int id;
+	 @Getter private int id;
 	
 	/**
 	 * Serialization of the name of the survey.
 	 */
-	private String surveyName;
+	@Getter	@Setter private String surveyName;
 
 	/**
 	 * Serialization of the dateCreation of the survey.
 	 */
-	private String creationDate;
+	@Getter	@Setter private String creationDate;
 		
 	/**
 	 * Serialization of the id of the user who created the survey.
 	 */
-	private UserDTO userDTO;
+	@Getter	@Setter private UserDTO userDTO;
 	
 	/**
 	 * Serialization of the questions of the survey.
 	 */
-	private Set<SurveyQuestionsDTO> surveyQuestionsDTO;
-	
-	/**
-     * Returns the id of the surveyDTO.
-     * @return   the id of the surveyDTO
-     */
-	public int getId() {
-		return id;
-	}
+	@Getter	@Setter private Set<SurveyQuestionsDTO> questions;
 
 	/**
-     * Modifies the id of the surveyDTO, setting id as the new value.
-     * @param   id  the new id value
-     */
+	 * Modifies the id of the surveyDTO, setting id as the new value.
+	 * @param   id  the new id value
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -60,22 +54,6 @@ public class SurveyDTO {
 	 */
 	public void setId(Object id) {
 		this.id = (int) id;
-	}
-
-	/**
-     * Returns the name of the surveyDTO.
-     * @return   the name of the surveyDTO
-     */
-	public String getSurveyName() {
-		return surveyName;
-	}
-
-	/**
-     * Modifies the name of the surveyDTO, setting name as the new value.
-     * @param	surveyName	the new name value
-     */
-	public void setSurveyName(String surveyName) {
-		this.surveyName = surveyName;
 	}
 
 	/**
@@ -99,15 +77,6 @@ public class SurveyDTO {
 			    
 		}
     }
-
-	/**
-	 * Returns the creationDate of the surveyDTO in Date type using the given time zone.
-	 * @return   the creationDate of the surveyDTO in Date type
-	 */
-	public String getCreationDate() {
-
-		return creationDate;
-	}
 	
 	/**
      * Modifies the creationDate of the surveyDTO, setting creationDate as the new value after its 
@@ -117,39 +86,8 @@ public class SurveyDTO {
      * @param dateFormat the date format to use during the conversion
      */
     public void setCreationDate(Date creationDate, String timezone, SimpleDateFormat dateFormat) {
+
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         this.creationDate = dateFormat.format(creationDate);
     }
-
-    /**
-     * Returns the userDTO who created the survey.
-     * @return  the userDTO who created the survey
-     */
-	public UserDTO getUserDTO() {
-		return userDTO;
-	}
-	
-	/**
-     * Modifies the userDTO of the survey, setting userDTO as the new value.
-     * @param   userDTO  the new userDTO value
-     */
-	public void setUserDTO(UserDTO userDTO) {
-		this.userDTO = userDTO;
-	}
-
-	 /**
-     * Returns the questionsDTO related to the survey.
-     * @return  the questionsDTO related to the survey
-     */
-	public Set<SurveyQuestionsDTO> getQuestions() {
-		return surveyQuestionsDTO;
-	}
-
-	/**
-     * Modifies the questionsDTO related to the survey, setting questionsDTO as the new value.
-     * @param   questionsDTO  the new questionsDTO value
-     */
-	public void setQuestions(Set<SurveyQuestionsDTO> questionsDTO) {
-		this.surveyQuestionsDTO = questionsDTO;
-	}
 }

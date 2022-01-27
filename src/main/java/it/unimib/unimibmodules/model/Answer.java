@@ -2,6 +2,8 @@ package it.unimib.unimibmodules.model;
 
 import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.IncorrectSizeException;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -20,33 +22,33 @@ public class Answer {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Getter	@Setter private int id;
 
     /**
      * The text of the answer.
      */
-    private String text;
+    @Getter private String text;
 
     /**
      * The user who created the answer.
      */
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Getter	@Setter private User user;
 
     /**
      * The survey to which this answer belongs.
      */
     @ManyToOne
     @JoinColumn(name = "survey_id", nullable = false)
-    private Survey survey;
+    @Getter	@Setter private Survey survey;
 
     /**
      * The question to which this answer belongs.
      */
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
-    private Question question;
+    @Getter	@Setter private Question question;
 
     /**
      * The list of close-ended answers related to this answer.
@@ -56,7 +58,7 @@ public class Answer {
             name = "answer_closeendedanswer",
             joinColumns = @JoinColumn(name = "answer_id"),
             inverseJoinColumns = @JoinColumn(name = "closeendedanswer_id"))
-    private Set<CloseEndedAnswer> closeEndedAnswers;
+    @Getter private Set<CloseEndedAnswer> closeEndedAnswers;
 
     /**
      * Creates an empty answer.
@@ -65,33 +67,6 @@ public class Answer {
     public Answer() {
 
         // Empty constructor; use Answerfactory.createAnswer.
-    }
-
-    /**
-     * Returns the id of the answer.
-     * @return  the id of the answer
-     */
-    public int getId() {
-
-        return id;
-    }
-
-    /**
-     * Modifies the id of the answer, setting <code>id</code> as the new value.
-     * @param   id  the new id value
-     */
-    public void setId(int id) {
-
-        this.id = id;
-    }
-
-    /**
-     * Returns the text of the answer.
-     * @return  the text of the answer
-     */
-    public String getText() {
-
-        return text;
     }
 
     /**
@@ -104,49 +79,6 @@ public class Answer {
         if (question.getQuestionType() == QuestionType.OPEN && (text == null || text.isEmpty()))
             throw new EmptyFieldException("The text of an answer to a open-ended question must not be empty.");
         this.text = text;
-    }
-    
-    /**
-     * Returns the user who created the answer.
-     * @return    an instance of User containing the user who created the answer
-     */
-    public User getUser() {
-
-        return user;
-    }
-
-    /**
-     * Modifies the user who created the answer, setting <code>user</code> as the new user.
-     * @param   user    the new user
-     */
-    public void setUser(User user) {
-
-        this.user = user;
-    }
-
-    public Survey getSurvey() {
-
-        return survey;
-    }
-
-    public void setSurvey(Survey survey) {
-
-        this.survey = survey;
-    }
-
-    public Question getQuestion() {
-
-        return question;
-    }
-
-    public void setQuestion(Question question) {
-
-        this.question = question;
-    }
-
-    public Set<CloseEndedAnswer> getCloseEndedAnswers() {
-
-        return closeEndedAnswers;
     }
 
     public void setCloseEndedAnswers(Set<CloseEndedAnswer> closeEndedAnswers) throws EmptyFieldException, IncorrectSizeException {

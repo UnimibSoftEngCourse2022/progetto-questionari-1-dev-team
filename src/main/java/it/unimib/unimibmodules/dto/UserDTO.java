@@ -1,5 +1,8 @@
 package it.unimib.unimibmodules.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Set;
 
 /**
@@ -7,68 +10,52 @@ import java.util.Set;
  * @author Gianlorenzo Martini
  * @version 0.3.0
  */
-
 public class UserDTO {
 
     /**
      * Serialization of the id of the user
      */
-
-    private int id;
+    @Getter private int id;
 
     /**
      * Serialization of the email of the user
      */
-
-    private String email;
+    @Getter	@Setter private String email;
 
     /**
      * Serialization of the username of the user
      */
-
-    private String username;
+    @Getter private String username;
 
     /**
      * Serialization of the password of the user
      */
-    private String password;
+    @Getter	@Setter private String password;
 
     /**
      * Serialization of the name of the user
      */
-
-    private String name;
+    @Getter	@Setter private String name;
 
     /**
      * Serialization of the surname of the user
      */
-
-    private String surname;
+    @Getter	@Setter private String surname;
 
     /**
      * Serialization of the id used to recognize a non-registered user.
      */
-    private int compilationId;
+    @Getter	@Setter private int compilationId;
 
     /**
      * Serialization of the questions created by the user
      */
-
-    private Set<QuestionDTO> questionsCreatedDTO;
+    @Getter	@Setter private Set<QuestionDTO> questionsCreatedDTO;
 
     /**
      * Serialization of the surveys created by the user
      */
-
-    private Set<SurveyDTO> surveysCreatedDTO;
-
-    /**
-     * Returns the id of the user.
-     * @return	the id of the user
-     */
-    public int getId() {
-        return id;
-    }
+    @Getter	@Setter private Set<SurveyDTO> surveysCreatedDTO;
 
     /**
      * Modifies the id of the user.
@@ -87,26 +74,6 @@ public class UserDTO {
         this.id = (int) id;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Modifies the email of the user.
-     * @param email    the new email value
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Returns the username of the user.
-     * @return  the username of the user
-     */
-    public String getUsername() {
-        return username;
-    }
-
     /**
      * Modifies the username of the user.
      * @param username    the new username value
@@ -123,102 +90,4 @@ public class UserDTO {
 
         this.username = username.toString();
     }
-
-    /**
-     * Returns the password of the user.
-     * @return  the password of the user
-     */
-
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Modifies the password of the user.
-     * @param password  the new password of the user
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * Returns the name of the user.
-     * @return  the name of the user
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Modifies the name of the user.
-     * @param name    the new name value
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Returns the surname of the user.
-     * @return  the surname of the user
-     */
-    public String getSurname() {
-        return surname;
-    }
-
-    /**
-     * Modifies the surname of the user.
-     * @param surname    the new surname value
-     */
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    /**
-     * Returns the id used to recognize a non-registered user.
-     * @return  the id used to recognize a non-registered user
-     */
-    public int getCompilationId() {
-        return compilationId;
-    }
-
-    /**
-     * Modifies the id used to recognize a non-registered user.
-     * @param compilationId the new id used to recognize a non-registered user.
-     */
-    public void setCompilationId(int compilationId) {
-        this.compilationId = compilationId;
-    }
-
-    /**
-     * Returns the DTOs of the questions created by the user.
-     * @return  A list of QuestionDTO containing the questions created by the user
-     */
-    public Set<QuestionDTO> getQuestionsCreatedDTO() {
-        return questionsCreatedDTO;
-    }
-
-    /**
-     * Modifies the DTOs of the questions created by the user.
-     * @param questionsCreatedDTO   the new questionsCreatedDTO value
-     */
-    public void setQuestionsCreatedDTO(Set<QuestionDTO> questionsCreatedDTO) {
-        this.questionsCreatedDTO = questionsCreatedDTO;
-    }
-
-    /**
-     * Returns the DTOs of the surveys created by the user.
-     * @return  A list of SurveyDTO containing the surveys created by the user
-     */
-    public Set<SurveyDTO> getSurveysCreatedDTO() {
-        return surveysCreatedDTO;
-    }
-
-    /**
-     * Modifies the DTOs of the surveys created by the user.
-     * @param surveysCreatedDTO   the new surveysCreatedDTO value
-     */
-    public void setSurveysCreatedDTO(Set<SurveyDTO> surveysCreatedDTO) {
-        this.surveysCreatedDTO = surveysCreatedDTO;
-    }
-
 }

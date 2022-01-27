@@ -1,6 +1,9 @@
 package it.unimib.unimibmodules.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -9,7 +12,6 @@ import java.util.Set;
  * @author Gianlorenzo Martini
  * @version 0.3.0
  */
-
 @Entity
 @Table(name = "user")
 public class User {
@@ -19,56 +21,56 @@ public class User {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Getter	@Setter private int id;
 
     /**
      * The email of the user.
      */
-    private String email;
+    @Getter	@Setter private String email;
 
     /**
      * The password of the user.
      */
-    private String password;
+    @Getter	@Setter private String password;
 
     /**
      * The username of the user.
      */
-    private String username;
+    @Getter	@Setter private String username;
 
     /**
      * The name of the user.
      */
-    private String name;
+    @Getter	@Setter private String name;
 
     /**
      * The surname of the user.
      */
-    private String surname;
+    @Getter	@Setter private String surname;
 
     /**
      * The id used to recognize a user not registered.
      */
     @Nullable
-    private int compilationId;
+    @Getter	@Setter private int compilationId;
 
     /**
      * The list of the surveys created by the user.
      */
     @OneToMany(mappedBy = "user")
-    private Set<Survey> surveysCreated;
+    @Getter	@Setter private Set<Survey> surveysCreated;
 
     /**
      * The list of the questions created by the user.
      */
     @OneToMany(mappedBy = "user")
-    private Set<Question> questionsCreated;
+    @Getter	@Setter private Set<Question> questionsCreated;
 
     /**
      * The list of the answers that the user gave in the surveys he compiled.
      */
     @OneToMany(mappedBy = "user")
-    private Set<Answer> answers;
+    @Getter @Setter private Set<Answer> answers;
 
     /**
      * Creates an empty user.
@@ -77,85 +79,5 @@ public class User {
     public User() {
 
         // Empty constructor; use UserFactory.createUser.
-    }
-    
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public int getCompilationId() {
-        return compilationId;
-    }
-
-    public void setCompilationId(int compilationId) {
-        this.compilationId = compilationId;
-    }
-
-    public Set<Survey> getSurveysCreated() {
-        return surveysCreated;
-    }
-
-    public void setSurveysCreated(Set<Survey> surveysCreated) {
-        this.surveysCreated = surveysCreated;
-    }
-
-    public Set<Question> getQuestionsCreated() {
-        return questionsCreated;
-    }
-
-    public void setQuestionsCreated(Set<Question> questionsCreated) {
-        this.questionsCreated = questionsCreated;
-    }
-
-    public Set<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(Set<Answer> answers) {
-        this.answers = answers;
     }
 }
