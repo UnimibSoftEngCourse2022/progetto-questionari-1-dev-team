@@ -4,8 +4,8 @@ angular.
 	module('UNIMIBModules').
 	component('home', {
 		templateUrl: 'home/home.template.html',
-		controller: ['$location', '$routeParams', '$scope', '$http', 'authService',
-			function homeController($location, $routeParams, $scope, $http, authService) {
+		controller: ['$location', '$routeParams', '$scope', '$http',
+			function homeController($location, $routeParams, $scope, $http) {
 				$scope.idUser = 1 //from cookie
 				$scope.isLogged = false
 				$scope.isEmptyResult = true
@@ -20,20 +20,6 @@ angular.
 
 					alert('ERROR - ' + text)
 				}
-
-				$scope.$watch(authService.isLoggedIn, function (value, oldValue) {
-
-					if(!value && oldValue) {
-						console.log("Disconnect");
-						$location.path('/loginUser');
-					}
-
-					if(value) {
-						console.log("Connect");
-						$location.path('/home');
-					}
-
-				}, true);
 
 				//Start-up function
 				$scope.load = function() {
