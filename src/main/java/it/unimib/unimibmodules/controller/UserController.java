@@ -15,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Controller handling HTTP requests from User
@@ -48,6 +46,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
                     mapper.map(User::getEmail, UserDTO::setEmail);
                     mapper.map(User::getName, UserDTO::setName);
                     mapper.map(User::getSurname, UserDTO::setSurname);
+                    mapper.map(User::getCompilationId, UserDTO::setCompilationId);
                 });
 
         modelMapper.createTypeMap(UserDTO.class, User.class)
@@ -58,7 +57,34 @@ public class UserController extends DTOMapping<User, UserDTO> {
                     mapper.map(UserDTO::getEmail, User::setEmail);
                     mapper.map(UserDTO::getName, User::setName);
                     mapper.map(UserDTO::getSurname, User::setSurname);
+                    mapper.map(UserDTO::getCompilationId, User::setCompilationId);
                 });
+    }
+
+    @GetMapping(path = "/getNewCode")
+    public ResponseEntity<String> getNewCode() throws NotFoundException {
+        boolean check = false;
+        String code;
+
+        do{
+            code = getSaltString();
+            check = userRepository.getByCode(code);
+        }while(check);
+
+        logger.debug("Code generated");
+        return new ResponseEntity<>("{\"compilationCode\": \""+ code +"\"}", HttpStatus.OK);
+    }
+
+    protected String getSaltString() {
+        String saltChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 18) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * saltChars.length());
+            salt.append(saltChars.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
     }
 
     /**
@@ -113,7 +139,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
 
         if (bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
             logger.debug(String.format("Successful sign in of user with id: {}.", userDTO.getId()));
-            return new ResponseEntity<>("{\"response\":\"Login Successful.\"}", HttpStatus.OK);
+            return new ResponseEntity<>("{\"idUser\":\""+ user.getId() +"\"}", HttpStatus.OK);
         } else {
             logger.debug(String.format("Failed sign in of user with id: {}.", userDTO.getId()));
             return new ResponseEntity<>("{\"response\":\"Login Failed.\"}", HttpStatus.UNAUTHORIZED);
@@ -138,9 +164,9 @@ public class UserController extends DTOMapping<User, UserDTO> {
             User user = convertToEntity(userDTO);
             user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
-            userRepository.add(user);
+            User entity = userRepository.add(user);
             logger.debug(String.format("Successful creation of user %s.", userDTO.getUsername()));
-            return new ResponseEntity<>("{\"response\":\"User created.\"}", HttpStatus.CREATED);
+            return new ResponseEntity<>("{\"idUser\":\""+entity.getId()+"\"}", HttpStatus.CREATED);
         }
     }
 

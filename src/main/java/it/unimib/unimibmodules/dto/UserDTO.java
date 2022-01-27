@@ -48,7 +48,7 @@ public class UserDTO {
     /**
      * Serialization of the id used to recognize a non-registered user.
      */
-    private int compilationId;
+    private String compilationId;
 
     /**
      * Serialization of the questions created by the user
@@ -177,7 +177,7 @@ public class UserDTO {
      * Returns the id used to recognize a non-registered user.
      * @return  the id used to recognize a non-registered user
      */
-    public int getCompilationId() {
+    public String getCompilationId() {
         return compilationId;
     }
 
@@ -185,7 +185,7 @@ public class UserDTO {
      * Modifies the id used to recognize a non-registered user.
      * @param compilationId the new id used to recognize a non-registered user.
      */
-    public void setCompilationId(int compilationId) {
+    public void setCompilationId(String compilationId) {
         this.compilationId = compilationId;
     }
 

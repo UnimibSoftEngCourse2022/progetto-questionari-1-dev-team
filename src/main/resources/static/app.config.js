@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('UNIMIBModules', ['ngRoute', 'ngCookies']).config(['$routeProvider',
+app.config(['$routeProvider',
     function config($routeProvider) {
         $routeProvider.when('/home', {
             template: '<home></home>',
@@ -12,7 +12,7 @@ angular.module('UNIMIBModules', ['ngRoute', 'ngCookies']).config(['$routeProvide
 			template: '<add-question></add-question>'
 		}).when('/addSurvey', {
             template: '<add-survey></add-survey>'
-        }).when('/compileSurvey/:idSurvey', {
+        }).when('/compileSurvey/:surveyId', {
             template: '<compile-survey></compile-survey>'
         }).when("/editSurveyAnswer/:surveyId", {
 			template: "<edit-survey-answer></edit-survey-answer>"
