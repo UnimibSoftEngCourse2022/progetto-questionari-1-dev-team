@@ -113,7 +113,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
 
         if (bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
             logger.debug("Successful sign in of user with id: {}.", userDTO.getId());
-            return new ResponseEntity<>("{\"response\":\"Login Successful.\"}", HttpStatus.OK);
+            return new ResponseEntity<>("{\"idUser\":\""+ user.getId() +"\"}", HttpStatus.OK);
         } else {
             logger.debug("Failed sign in of user with id: {}.", userDTO.getId());
             return new ResponseEntity<>("{\"response\":\"Login Failed.\"}", HttpStatus.UNAUTHORIZED);
@@ -138,9 +138,9 @@ public class UserController extends DTOMapping<User, UserDTO> {
             User user = convertToEntity(userDTO);
             user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
-            userRepository.add(user);
+            User entity = userRepository.add(user);
             logger.debug("Successful creation of user.");
-            return new ResponseEntity<>("{\"response\":\"User created.\"}", HttpStatus.CREATED);
+            return new ResponseEntity<>("{\"idUser\":\""+ entity.getId() +"\"}", HttpStatus.CREATED);
         }
     }
 
