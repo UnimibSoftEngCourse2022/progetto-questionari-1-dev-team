@@ -14,6 +14,32 @@ component('addQuestion', {
 			let counter = 0;
 			let start = true;
 			let check;
+			$scope.imageView = false;
+
+			$scope.file_changed = function(element) {
+
+				if(element === null){
+					$scope.imageView = false;
+				}else{
+					let photofile = element.files[0];
+
+					if(photofile === undefined)
+						$scope.imageView = false;
+					else{
+						let reader = new FileReader();
+						reader.onload = function(e) {
+							$scope.$apply(function() {
+								$scope.prev_img = e.target.result;
+								$scope.imageView = true;
+							});
+						};
+						reader.readAsDataURL(photofile);
+					}
+				}
+
+
+
+			};
 
 			$http.get("http://localhost:5000/api/findCategories")
 				.then(function(response) {

@@ -172,7 +172,7 @@ component('editQuestion', {
                                 $scope.prova = "Risposta eliminata con successo!";
                             });
                 });
-                $window.open("http://localhost:5000/selectQuestion", "_self");
+                $location.path('/home');
             };
         }]
 });
