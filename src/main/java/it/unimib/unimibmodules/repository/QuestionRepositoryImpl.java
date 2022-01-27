@@ -81,12 +81,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 		return questionDAO.findBySurveyId(surveyId);
 	}
 	
-	@Override
-	public Iterable<Question> getBySurveyIdLazy(int surveyId, int offset, int limit) {
-		return questionDAO.findBySurveyId(surveyId);
-	}
-
-
+	
 	/**
 	 * Finds the question in the database where text is contained in the text of the question
 	 * @param	text	the text to search in the question
@@ -96,6 +91,18 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 	public Iterable<Question> getByText(String text) {
 
 		return questionDAO.findByText(text);
+	}
+	
+	/**
+	 * Finds the question in the database where text is contained in the text of the question for lazy loading
+	 * @param	surveyId	the id of the survey
+	 * @param offset initial position for the query
+	 * @param limit limiting query results
+	 * @return			a list of Questions where the text is contained in the text of the question
+	 */
+	@Override
+	public Iterable<Question> getByTextLazy(String text, int offset, int limit) {
+		return questionDAO.findByTextLazy(text , offset, limit);
 	}
 
 	/**
@@ -108,6 +115,19 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
 		return questionDAO.findByUser(userId);
 	}
+	
+	/**
+	 *  Finds the question in the database created by a specified user with Lazy Loading
+	 * @param	userId  	id of the user
+	 * @param offset initial position for the query
+	 * @param limit limiting query results
+	 * @return			an instance of Question if there is a question identified by id, null otherwise
+	 */
+	@Override
+	public Iterable<Question> getByUserLazy(int userId, int offset, int limit) {
+		
+		return questionDAO.findByUserLazy(userId , offset, limit);
+	}
 
 	/**
 	 * Finds the question associated with the category identified by <code>surveyId</code>
@@ -119,6 +139,18 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 	public Iterable<Question> getByCategory(int categoryId) {
 
 		return questionDAO.findByCategory(categoryId);
+	}
+	
+	/**
+	 * Finds the question associated with the category identified by <code>surveyId</code> with Lazy Loading
+	 * @param	categoryId	the id of the category
+	 * @param offset initial position for the query
+	 * @param limit limiting query results
+	 * @return				a list of Questions
+	 */
+	@Override
+	public Iterable<Question> getByCategoryLazy(int categoryId, int offset, int limit) {
+		return questionDAO.findByCategoryLazy(categoryId , offset, limit);
 	}
 
 	/**
@@ -163,7 +195,4 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 	public void modify(Question entity) {
 		questionDAO.save(entity);
 	}
-
-
-	
 }
