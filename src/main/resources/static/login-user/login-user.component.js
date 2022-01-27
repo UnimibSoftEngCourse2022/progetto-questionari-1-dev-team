@@ -2,8 +2,8 @@
 
 angular.module('UNIMIBModules').component('loginUser', {
     templateUrl: 'login-user/login-user.template.html',
-    controller: ['$location', '$routeParams', '$scope', '$http', 'authService',
-        function loginUserController($location, $routeParams, $scope, $http, authService) {
+    controller: ['$location', '$routeParams', '$scope', '$http', 'authService', 'cookieService',
+        function loginUserController($location, $routeParams, $scope, $http, authService, cookieService) {
 
             $scope.username = "";
             $scope.password = "";
@@ -27,6 +27,7 @@ angular.module('UNIMIBModules').component('loginUser', {
                     console.log(response);
                     alert("Login Successful!");
                     authService.setUser($scope.username);
+                    $scope.cookiesHandler(response.data.idUser);
                     $location.path("/home");
 
                 }, function errorCallback(response) {
@@ -41,6 +42,12 @@ angular.module('UNIMIBModules').component('loginUser', {
             $scope.resetForm = function () {
                 $scope.username = "";
                 $scope.password = "";
+            }
+
+            $scope.cookiesHandler = function (idUser) {
+                if (cookieService.getCookie() == null) {
+                    cookieService.setCookie(idUser);
+                }
             }
         }
     ]

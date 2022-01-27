@@ -1,13 +1,11 @@
-app.service('cookieService', function () {
-
-    let userId;
+app.service('cookieService', ['$cookies', function ($cookies) {
 
     return {
         setCookie: function (val) {
-            $cookies.put(userId, val);
+            $cookies.put('userId', val);
         },
         getCookie: function () {
-            return $cookies.get(userId);
+            return $cookies.get('userId');
         }
     }
-});
+}]);

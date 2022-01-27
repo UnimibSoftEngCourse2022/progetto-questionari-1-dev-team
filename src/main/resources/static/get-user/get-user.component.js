@@ -2,8 +2,8 @@
 
 angular.module('UNIMIBModules').component('getUser', {
     templateUrl: 'get-user/get-user.template.html',
-    controller: ['$location', '$routeParams', '$scope', '$http',
-        function getUserController($location, $routeParams, $scope, $http) {
+    controller: ['$location', '$routeParams', '$scope', '$http', 'cookieService',
+        function getUserController($location, $routeParams, $scope, $http, cookieService) {
 
             $scope.name = "";
             $scope.surname = "";
@@ -21,12 +21,14 @@ angular.module('UNIMIBModules').component('getUser', {
                     $scope.email = $scope.result.email;
                 }
 
-                $http.get("/api/getUser/" + "7").then(function onFulFilled(response) {
+                $http.get("/api/getUser/" + cookieService.getCookie()).then(function onFulFilled(response) {
 
                     console.log(response);
+                    console.log(cookieService.getCookie());
                     $scope.handleUser(response);
 
                 }, function errorCallback(response) {
+                    console.log(cookieService.getCookie());
                     console.error(response);
                 });
             }
