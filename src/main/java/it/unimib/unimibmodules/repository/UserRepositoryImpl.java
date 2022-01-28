@@ -36,9 +36,9 @@ public class UserRepositoryImpl implements UserRepository {
      * @see     UserRepository#add
      */
     @Override
-    public void add(User user) {
+    public User add(User user) {
 
-        userDAO.save(user);
+        return userDAO.save(user);
     }
 
     /**

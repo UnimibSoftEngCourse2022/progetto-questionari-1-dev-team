@@ -21,13 +21,10 @@ angular.
 				$scope.actualSearch = ""
 				$scope.lastTextSearch = ""
 				$scope.textSearch = ""
-
-
-				//error alert 
-				$scope.showAlert = function(text) {
-
-					alert('ERROR - ' + text)
-				}
+            //error alert
+        $scope.showAlert = function (text) {
+          alert('ERROR - ' + text)
+        }
 
 				//Start-up function
 				$scope.load = function() {
@@ -117,8 +114,7 @@ angular.
 						$scope.setStatusSearch(false)
 					});
 				}
-
-
+        
 				//compile by code for no-registered users
 				$scope.compileByCode = function() {
 					if ($scope.compilationCode !== undefined && $scope.compilationCode != "" && $scope.compilationCode.replace(/\s/g, '').length) {

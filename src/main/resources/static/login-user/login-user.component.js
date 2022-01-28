@@ -2,8 +2,8 @@
 
 angular.module('UNIMIBModules').component('loginUser', {
     templateUrl: 'login-user/login-user.template.html',
-    controller: ['$location', '$routeParams', '$scope', '$http',
-        function loginUserController($location, $routeParams, $scope, $http) {
+    controller: ['$location', '$routeParams', '$scope', '$http', 'authService', 'cookieService',
+        function loginUserController($location, $routeParams, $scope, $http, authService, cookieService) {
 
             $scope.username = "";
             $scope.password = "";
@@ -25,13 +25,29 @@ angular.module('UNIMIBModules').component('loginUser', {
                 $http.post("/api/logInUser", data).then(function onFulfilled(response) {
 
                     console.log(response);
+                    alert("Login Successful!");
+                    authService.setUser($scope.username);
+                    $scope.cookiesHandler(response.data.idUser);
+                    $location.path("/home");
 
                 }, function errorCallback(response) {
 
                     console.error(response);
-                    alert("Invalid username and password. Please try again");
+                    $scope.resetForm();
+                    alert("Invalid username and password. Please try again.");
 
                 });
+            }
+
+            $scope.resetForm = function () {
+                $scope.username = "";
+                $scope.password = "";
+            }
+
+            $scope.cookiesHandler = function (idUser) {
+                if (cookieService.getCookie() == null) {
+                    cookieService.setCookie(idUser);
+                }
             }
         }
     ]

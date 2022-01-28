@@ -58,12 +58,12 @@ public interface AnswerRepository {
 	void commitInsert(int surveyId, int userId);
 
 	/**
-	 * Modifies the registered answers made by the user identified by <code>userId</code> on the survey identified by
+	 * Deletes the registered answers made by the user identified by <code>userId</code> on the survey identified by
 	 * <code>surveyId</code>.
 	 * @param	surveyId	the id of the survey
 	 * @param	userId		the id of the user
 	 */
-	void commitModify(int surveyId, int userId);
+	void commit(int surveyId, int userId);
 
 	/**
 	 * Deletes the registered answers made by the user identified by <code>userId</code> on the survey identified by
@@ -71,5 +71,5 @@ public interface AnswerRepository {
 	 * @param	surveyId	the id of the survey
 	 * @param	userId		the id of the user
 	 */
-	void commitDelete(int surveyId, int userId);
+	void clean(int surveyId, int userId);
 }

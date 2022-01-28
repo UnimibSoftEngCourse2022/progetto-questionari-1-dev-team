@@ -24,3 +24,7 @@ nav{
 	background-color: #d0d8ef;
 	padding: 1%;
 }
+
+.disabled {
+    cursor: not-allowed;
+}
