@@ -86,6 +86,11 @@
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.13.2</version>
 		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-cognitoidentity</artifactId>
+			<version>1.12.148</version>
+		</dependency>
 	</dependencies>
 
 	<build>

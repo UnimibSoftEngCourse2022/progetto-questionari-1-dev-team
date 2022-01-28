@@ -42,7 +42,7 @@
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<button type="button" class="btn btn-outline-primary"
-						ng-click="compileByCode()">Compile</button>
+						ng-click="compileByCode()" ng-style="{'display': displaySearchButton}">Compile</button>
 				</div>
 				<input type="text" ng-model="compilationCode" class="form-control"
 					id="searchSurvey" placeholder="Enter the compilation code" required>
@@ -103,4 +103,30 @@
 	<div class="col-md-12 d-flex justify-content-center">
 		<h2>No results found...</h2>
 	</div>
+</div>
+
+<!-- Modal form for guest user -->
+<div id="myModalGuest" class="modal" ng-style="{'display': displayModal}">
+	<div class="modal-content">
+		<div class="modal-header">
+			<span ng-click="modalManager(-1)" class="close">&times;</span>
+			<h3>Compilation Code for Guest</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				<b>Email:</b> <input class="form-control"
+									 id="emailGuest" name="emailGuest" ng-model="emailGuest"
+									 required type="text" type="email"/>
+				<h6 ng-show="errorEmail" style="color:red;display:inline"> Missing email</h6>
+			</p>
+			<p>
+				<b>Compilation code:</b> {{randomCode}}
+			</p>
+			Already have an account? <a ng-href="#!/loginUser">Sign in</a><br>
+			<button ng-click="compileSurveyGuest(modalQuestion)"
+					class="btn btn-primary">Continue as guest</button>
+		</div>
+
+	</div>
+
 </div>

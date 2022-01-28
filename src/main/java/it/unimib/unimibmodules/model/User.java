@@ -24,6 +24,7 @@ public class User {
     /**
      * The email of the user.
      */
+    @Nullable
     private String email;
 
     /**
@@ -34,23 +35,27 @@ public class User {
     /**
      * The username of the user.
      */
+    @Nullable
     private String username;
 
     /**
      * The name of the user.
      */
+    @Nullable
     private String name;
 
     /**
      * The surname of the user.
      */
+    @Nullable
     private String surname;
 
     /**
      * The id used to recognize a user not registered.
      */
+    @Column(unique = true)
     @Nullable
-    private int compilationId;
+    private String compilationId;
 
     /**
      * The list of the surveys created by the user.
@@ -127,11 +132,11 @@ public class User {
         this.surname = surname;
     }
 
-    public int getCompilationId() {
+    public String getCompilationId() {
         return compilationId;
     }
 
-    public void setCompilationId(int compilationId) {
+    public void setCompilationId(String compilationId) {
         this.compilationId = compilationId;
     }
 

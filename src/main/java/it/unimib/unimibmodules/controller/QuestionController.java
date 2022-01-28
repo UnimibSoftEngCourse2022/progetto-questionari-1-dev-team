@@ -4,6 +4,7 @@ import it.unimib.unimibmodules.dto.QuestionDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.User;
+import it.unimib.unimibmodules.service.AWSTokenImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +28,8 @@ import java.util.List;
 @RequestMapping("/api")
 public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 
-    private static final Logger logger = LogManager.getLogger(QuestionController.class);
-	
+	private static final Logger logger = LogManager.getLogger(QuestionController.class);
+
 	/**
 	 * Instance of QuestionRepository that will be used to access the db.
 	 */
@@ -42,14 +45,17 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	 */
 	private final CategoryRepository categoryRepository;
 
+	private final AWSToken awsToken;
+
 	@Autowired
 	public QuestionController(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper modelMapper,
-							  CategoryRepository categoryRepository) {
+							  CategoryRepository categoryRepository, AWSToken awsToken) {
 
 		super(modelMapper);
 		this.questionRepository = questionRepository;
 		this.userRepository = userRepository;
 		this.categoryRepository = categoryRepository;
+		this.awsToken = awsToken;
 
 		modelMapper.createTypeMap(Question.class, QuestionDTO.class)
 				.addMappings(mapper -> {
@@ -70,11 +76,11 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 					mapper.map(QuestionDTO::getQuestionType, Question::setQuestionType);
 				});
 
-        modelMapper.createTypeMap(User.class, QuestionDTO.class)
-                .addMapping(User::getId, (questionDTO, id) -> questionDTO.getUser().setId(id));
+		modelMapper.createTypeMap(User.class, QuestionDTO.class)
+				.addMapping(User::getId, (questionDTO, id) -> questionDTO.getUser().setId(id));
 
 	}
-	
+
 	/**
 	 * Gets the Question associated with the given id.
 	 * @param	id	the id of the question
@@ -84,7 +90,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	@GetMapping(path = "/getQuestion/{id}")
 	public ResponseEntity<QuestionDTO> getQuestion(@PathVariable int id) throws NotFoundException{
 
-        Question question = questionRepository.get(id);
+		Question question = questionRepository.get(id);
 		logger.debug("Retrieved Question with id "+ id + ".");
 		return new ResponseEntity<>(convertToDTO(question), HttpStatus.OK);
 	}
@@ -99,8 +105,8 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getAll();
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		logger.debug("Retrieved all the questions.");
-    return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
-   }
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
 
 	/**
 	 * Gets all the questions of the user
@@ -166,7 +172,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
- 	/**
+	/**
 	 * Gets the question in the database where text is contained in the text of the question
 	 * @param	text	the text of the question to be found
 	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
@@ -218,7 +224,18 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		logger.debug("Retrieved {} questions for survey with id {}.", questionDTOList.size(), id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
-	
+
+	@GetMapping(path = "/getToken/{id}")
+	public ResponseEntity<String> getToken(@PathVariable int id){
+		GetOpenIdTokenForDeveloperIdentityResult response = awsToken.getToken(id);
+		logger.debug("Get token for id +" + id + ".");
+		return new ResponseEntity<>("{\"token\":\""+response.getToken()+"\"," +
+				"\"identityToken\":\"" + response.getIdentityId() +"\" , " +
+				"\"region\":\""+ AWSTokenImpl.REGION+"\", " +
+				"\"identityPoolId\":\""+ AWSTokenImpl.IDENTITY_POOL_ID+"\", " +
+				"\"bucketName\":\""+ AWSTokenImpl.BUCKET_NAME+"\"}", HttpStatus.CREATED);
+	}
+
 	/**
 	 * Creates a question, with the given text and id
 	 * @param	questionDTO the serialized object of the question
@@ -226,14 +243,26 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	 * @throws	NotFoundException	if no user or category identified by <code>id</code> has been found
 	 */
 	@PostMapping(path = "/addQuestion")
-	public ResponseEntity<Integer> addQuestion(@RequestBody QuestionDTO questionDTO) throws NotFoundException {
+	public ResponseEntity<String> addQuestion(@RequestBody QuestionDTO questionDTO) throws NotFoundException {
 
 		Question question = convertToEntity(questionDTO);
 		questionRepository.add(question);
+
+		if(questionDTO.getUrlImage() != null && questionDTO.getUrlImage().equals("ok")){
+			question.setUrlImage(question.getId() + ".jpg");
+			questionRepository.modify(question);
+		}
+		
+		GetOpenIdTokenForDeveloperIdentityResult response = awsToken.getToken(question.getUser().getId());
 		logger.debug("Added Question with id +" + question.getId() + ".");
-		return new ResponseEntity<>(question.getId(), HttpStatus.CREATED);
+		return new ResponseEntity<>("{\"idQuestion\":\""+ question.getId() +"\"," +
+				"\"token\":\""+response.getToken()+"\"," +
+				"\"identityToken\":\"" + response.getIdentityId() +"\" , " + 
+				"\"region\":\""+ AWSTokenImpl.REGION+"\", " +
+				"\"identityPoolId\":\""+ AWSTokenImpl.IDENTITY_POOL_ID+"\", " +
+				"\"bucketName\":\""+ AWSTokenImpl.BUCKET_NAME+"\"}", HttpStatus.CREATED);
 	}
-	
+
 	/**
 	 * Modifies the question's text associated with the given id.
 	 * @param	questionDTO the serialized object of the question
@@ -244,11 +273,12 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	public ResponseEntity<String> modifyQuestion(@RequestBody QuestionDTO questionDTO)
 			throws NotFoundException {
 		Question question = convertToEntity(questionDTO);
+
 		questionRepository.modify(question);
 		logger.debug("Modified Question with id " + question.getId() + ".");
 		return new ResponseEntity<>("Question modified.", HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Deletes the question associated with the given id.
 	 * @param   id	the id of the question that will be deleted
@@ -262,7 +292,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		logger.debug("Removed Question with id " + id + ".");
 		return new ResponseEntity<>("Question deleted", HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Converts an instance of Question to an instance of questionDTO
 	 * @param   question	an instance of Question
