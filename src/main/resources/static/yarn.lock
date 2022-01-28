@@ -7,6 +7,14 @@ angular-cookies@^1.8.2:
   resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.8.2.tgz#0791c37c395d9fba8144781f3b2ed135ca7c5925"
   integrity sha512-M6fCnsnw1pj1+nXuO28ilJ+h6pFCIXQKSEgy9/PIoN0sZr5FqsE9BK18PdBQa8dif+fnHCAYpPU8MgDzT/sZSg==
 
+angular-file-saver@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/angular-file-saver/-/angular-file-saver-1.1.3.tgz#dcaec0695214f226a4caafc8c16d21a9a61f7d1b"
+  integrity sha1-3K7AaVIU8iakyq/IwW0hqaYffRs=
+  dependencies:
+    blob-tmp "^1.0.0"
+    file-saver "^1.3.3"
+
 angular-route@^1.8.2:
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/angular-route/-/angular-route-1.8.2.tgz#d482bf05a8c9e448300acd8f9989c635d31b5077"
@@ -41,6 +49,11 @@ base64-js@^1.0.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
+  
+blob-tmp@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/blob-tmp/-/blob-tmp-1.0.0.tgz#de82491e222ff1354c77a93ee8e4ea2c89544273"
+  integrity sha1-3oJJHiIv8TVMd6k+6OTqLIlUQnM=
 
 bootstrap@^5.1.3:
   version "5.1.3"
@@ -80,6 +93,11 @@ jmespath@0.16.0:
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/jmespath/-/jmespath-0.16.0.tgz#b15b0a85dfd4d930d43e69ed605943c802785076"
   integrity sha512-9FzQjJ7MATs1tSpnco1K6ayiYE3figslrXA72G2HQ/n76RzvYlofyi5QM+iX4YRs/pu3yzxlVQSST23+dMDknw==
+
+file-saver@^1.3.3:
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/file-saver/-/file-saver-1.3.8.tgz#e68a30c7cb044e2fb362b428469feb291c2e09d8"
+  integrity sha512-spKHSBQIxxS81N/O21WmuXA2F6wppUCsutpzenOeZzOCCJ5gEfcbqJP983IrpLXzYmXnMUa6J03SubcNPdKrlg==
 
 jquery@^3.6.0:
   version "3.6.0"

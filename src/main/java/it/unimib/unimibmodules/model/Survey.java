@@ -1,11 +1,13 @@
 package it.unimib.unimibmodules.model;
 
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
 
 import it.unimib.unimibmodules.exception.EmptyFieldException;
+import it.unimib.unimibmodules.exception.FormatException;
 
 /**
  * Represents a survey.
@@ -134,6 +136,7 @@ public class Survey {
 	 * value.
 	 * 
 	 * @param creationDate the new creationDate value
+	 * @throws FormatException 
 	 */
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;

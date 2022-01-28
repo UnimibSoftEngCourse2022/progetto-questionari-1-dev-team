@@ -1,20 +1,16 @@
 package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.controller.SurveyRepository;
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Survey;
 import it.unimib.unimibmodules.model.SurveyQuestions;
-
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Repository for the Survey. It adds business logic to Survey instances before
@@ -104,8 +100,26 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 		if (IterableUtils.size(surveys) > 0) {
 			return surveys;
 		} else {
-			NotFoundException ex = new NotFoundException("No surveys exist.");
-			throw ex;
+			throw new NotFoundException("No surveys exist.");
+		
+		}
+	}
+	
+	/**
+	 * Returns all surveys in the database with Lazy loading.
+	 * @param offset
+	 * @param limit
+	 * @return a Set of Surveys
+	 * @throws NotFoundException
+	 * @see SurveyRepository#getAll()
+	 */
+	@Override
+	public Iterable<Survey> getAllLazy(int offset, int limit) throws NotFoundException {
+		Iterable<Survey> surveys = surveyDAO.findAllLazy(offset, limit);
+		if (IterableUtils.size(surveys) > 0) {
+			return surveys;
+		} else {
+			throw new NotFoundException("No surveys exist.");
 		}
 	}
 
@@ -125,9 +139,32 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 		if (IterableUtils.size(surveys) > 0) {
 			return surveys;
 		} else {
-			NotFoundException ex = new NotFoundException(
+			throw new NotFoundException(
 					"No surveys containing " + text + " in their name have been found");
-			throw ex;
+			
+		}
+	}
+	
+	/**
+	 * Finds the survey in the database where text is contained in the name of the
+	 * survey with Lazy Loading.
+	 * 
+	 * @param text the text to search in the name of the survey
+	 * @param offset
+	 * @param limit
+	 * @return a list of Surveys where the text is contained in the name of the
+	 *         survey
+	 * @throws NotFoundException
+	 */
+	@Override
+	public Iterable<Survey> getByTextLazy(String text, int offset, int limit) throws NotFoundException {
+		Iterable<Survey> surveys = surveyDAO.findByTextLazy(text, text , offset, limit);
+		if (IterableUtils.size(surveys) > 0) {
+			return surveys;
+		} else {
+			throw new NotFoundException(
+					"No surveys containing " + text + " in their name have been found");
+		
 		}
 	}
 
@@ -155,43 +192,59 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	}
 
 	/**
-	 * Updates a survey in the database using a new instance of Survey.
+	 * Updates the name of the survey in the database.
 	 * 
-	 * @param survey the new instance of Survey
-	 * @throws NotFoundException
-	 * @see SurveyRepository#modify
+	 * @param id   survey id
+	 * @param name new name
+	 * @throws FormatException
+	 * @throws NotFoundException 
+	 * @throws EmptyFieldException
 	 */
 	@Override
-	public void modify(Survey survey) throws FormatException {
-		try {
-			surveyDAO.save(survey);
-		} catch (IllegalArgumentException ex) {
-			throw new FormatException("The given entity is empty.", ex);
+	public void modifyName(String name, int id) throws FormatException, NotFoundException, EmptyFieldException {
+
+		if (name != null && !name.isBlank()){
+			Optional<Survey> surveyOpt = surveyDAO.findById(id);
+			if(surveyOpt == null) {
+				NotFoundException ex = new NotFoundException("The survey with id: " + id + " doesn't exist", 
+						new Throwable("The survey with id: " + id + " doesn't exist"));
+				throw ex;
+			}else {
+				Survey survey = surveyOpt.get();
+				survey.setName(name);
+				surveyDAO.save(survey);
+			}
+
+		} else {
+			throw  new FormatException("The name can't be null", new Throwable("The name can't be null"));
+		
 		}
+
+	}
+	
+	public List<Integer> getListToSave(Set<SurveyQuestions> surveyQuestions, int surveyId){
+		List<Integer> idIn = new ArrayList<>();
+		for (SurveyQuestions surveyQuestion : surveyQuestions) {
+			int idQuestion = surveyQuestion.getQuestion().getId();
+			SurveyQuestions result = surveyQuestionsDAO.questionHandler(idQuestion,   surveyId);
+			if (result == null) {
+				surveyQuestionsDAO.save(surveyQuestion);
+			}
+			idIn.add(idQuestion);
+		}
+		
+		return idIn;
 	}
 
 	/**
 	 * Updates a survey in the database using a new instance of Survey.
 	 * 
 	 * @param survey the new instance of Survey
-	 * @throws NotFoundException
-	 * @see SurveyRepository#modify
+	 * @throws FormatException
 	 */
 	@Override
 	public void modifyQuestions(Set<SurveyQuestions> surveyQuestions, int surveyId) throws FormatException {
-		List<Integer> idIn = new ArrayList<>();
-
-		for (SurveyQuestions surveyQuestion : surveyQuestions) {
-			int idQuestion = surveyQuestion.getQuestion().getId();
-			SurveyQuestions result = surveyQuestionsDAO.questionHandler(idQuestion, surveyId);
-			if (result == null) {
-				// va inserita
-				surveyQuestionsDAO.save(surveyQuestion);
-			}
-			idIn.add(idQuestion);
-			System.out.println(idQuestion);
-		}
-
+		List<Integer> idIn = getListToSave(surveyQuestions, surveyId);
 		List<SurveyQuestions> result;
 		if ((surveyQuestions == null || surveyQuestions.isEmpty())) {
 			result = (List<SurveyQuestions>) surveyQuestionsDAO.questionBySurvey(surveyId);
@@ -200,14 +253,15 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 					surveyQuestionsDAO.delete(surveyQuestion);
 				}
 			}
-			
-		}else {
-			result =  (List<SurveyQuestions>) surveyQuestionsDAO.questionNotIn(idIn, surveyId);
+
+		} else {
+			result = (List<SurveyQuestions>) surveyQuestionsDAO.questionNotIn(idIn, surveyId);
 			if (!(result == null || result.isEmpty())) {
 				for (SurveyQuestions surveyQuestion : result) {
 					surveyQuestionsDAO.delete(surveyQuestion);
 				}
-			}	
+			}
 		}
 	}
+
 }

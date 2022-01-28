@@ -32,18 +32,29 @@ public interface QuestionRepository {
 	Iterable<Question> getAll() throws NotFoundException;
 
 	/**
-	 * Finds the question identified by id in the database
+	 * Finds the question identified by id in the database 
 	 * @param	surveyId	the id of the question to be found
 	 * @return				an instance of Question if there is a question identified by id, null otherwise
 	 */
 	Iterable<Question> getBySurveyId(int surveyId);
-
+	
 	/**
 	 * Finds the question in the database where text is contained in the text of the question
 	 * @param	text	the text of the question to be found
 	 * @return			an instance of Question if there is a question identified by id, null otherwise
 	 */
 	Iterable<Question> getByText(String text);
+	
+	/**
+	 * Finds the question in the database where text is contained in the text of the question with Lazy Loading parameters: 
+	 * <code>offset</code> and <code>limit</code>
+	 * @param	text	the text of the question to be found
+	 * @param offset initial position for the query
+	 * @param limit limiting query results
+	 * @return				an instance of Question if there is a question identified by id, null otherwise
+	 */
+	Iterable<Question> getByTextLazy(String text, int offset, int limit);
+
 
 	/**
 	 * Finds the question in the database created by a specified user
@@ -51,6 +62,15 @@ public interface QuestionRepository {
 	 * @return			an instance of Question if there is a question identified by id, null otherwise
 	 */
 	Iterable<Question> getByUser(int userId);
+	
+	/**
+	 * Finds the question in the database created by a specified user with Lazy Loading parameters:
+	 * @param	userId  	id of the user
+	 * @param offset initial position for the query
+	 * @param limit limiting query results
+	 * @return			an instance of Question if there is a question identified by id, null otherwise
+	 */
+	Iterable<Question> getByUserLazy(int userId, int offset, int limit);
 
 	/**
 	 * Finds the question identified by id of the category in the database
@@ -58,6 +78,15 @@ public interface QuestionRepository {
 	 * @return				an instance of Question if there is a question identified by id, null otherwise
 	 */
 	Iterable<Question> getByCategory(int categoryId);
+	
+	/**
+	 * Finds the question identified by id of the category in the database with Lazy Loading parameters:
+	 * @param	categoryId	the id of the category
+	 * @param offset initial position for the query
+	 * @param limit limiting query results
+	 * @return				an instance of Question if there is a question identified by id, null otherwise
+	 */
+	Iterable<Question> getByCategoryLazy(int categoryId ,  int offset, int limit);
 
 	/**
 	 * Deletes from the database the question identified by id.

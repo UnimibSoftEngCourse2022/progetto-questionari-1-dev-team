@@ -2,6 +2,7 @@ package it.unimib.unimibmodules.controller;
 
 import java.util.Set;
 
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Survey;
@@ -36,6 +37,17 @@ public interface SurveyRepository {
 	 * @throws NotFoundException 
 	 */
 	Iterable<Survey> getByText(String text) throws NotFoundException;
+	
+	/**
+	 * Finds the Survey in the database where text is contained in the name of the survey 
+	 * with Lazy Loading
+	 * @param	text	the text to be found in the name of the survey
+	 * @param offset 
+	 * @param limit
+	 * @return			a list of Surveys the text is contained in the name of the survey
+	 * @throws NotFoundException 
+	 */
+	Iterable<Survey> getByTextLazy(String text, int offset, int limit) throws NotFoundException;
 
 	/**
 	 * Returns all surveys in the database.
@@ -43,6 +55,15 @@ public interface SurveyRepository {
 	 * @throws NotFoundException 
 	 */
 	Iterable<Survey> getAll() throws NotFoundException;
+	
+	/**
+	 * Returns all surveys in the database with lazy Loading.
+	 * @param offset 
+	 * @param limit
+	 * @return  a Set of Surveys
+	 * @throws NotFoundException 
+	 */
+	Iterable<Survey> getAllLazy(int offset, int limit) throws NotFoundException;
 
 	/**
 	 * Deletes from the database the survey identified by id.
@@ -51,20 +72,22 @@ public interface SurveyRepository {
 	 */
 	void remove(int id) throws  FormatException;
 
+	
 	/**
-	 * Updates a survey in the database using a new instance of Survey.
-	 * @param   survey  the new instance of Survey
-	 * @throws NotFoundException 
+	 * Updates all the questions of survey in the database.
+	 * @param   surveyQuestions   new questions of Survey
 	 * @throws FormatException 
 	 * @see SurveyRepository#modify
 	 */
-	void modify(Survey survey) throws  FormatException;
+	void modifyQuestions(Set<SurveyQuestions> surveyQuestions, int surveyId) throws FormatException;
 
 	/**
-	 * Updates a survey in the database using a new instance of Survey.
+	 * Updates the survey name 
 	 * @param   survey  the new instance of Survey
+	 * @throws FormatException 
+	 * @throws EmptyFieldException 
 	 * @throws NotFoundException 
 	 * @see SurveyRepository#modify
 	 */
-	void modifyQuestions(Set<SurveyQuestions> surveyQuestions, int surveyId) throws FormatException;
+	void modifyName(String name, int id) throws FormatException, NotFoundException, EmptyFieldException;
 }

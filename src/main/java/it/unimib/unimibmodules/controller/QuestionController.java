@@ -111,11 +111,32 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	/**
 	 * Gets all the questions of the user
 	 * @return		an HTTP response with status 200, 500 otherwise
+	 * @throws NotFoundException 
 	 */
 	@GetMapping(path = "/getQuestionByUser/{id}")
-	public ResponseEntity<List<QuestionDTO>> getQuestionsByUser(@PathVariable int id){
+	public ResponseEntity<List<QuestionDTO>> getQuestionsByUser(@PathVariable int id) throws NotFoundException{
 		Iterable<Question> questionList = questionRepository.getByUser(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No questions for user with id" + id + " was found.\"}");
+		logger.debug("Retrieved all the questions of the user "+id + ".");
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
+	
+	/**
+	 * Gets all the questions of the user with Lazy Loading
+	 * @param id user id
+	 * @param offset 
+	 * @param limit
+	 * @return		an HTTP response with status 200, 500 otherwise
+	 * @throws NotFoundException 
+	 */
+	@GetMapping(path = "/getQuestionByUserLazy")
+	public ResponseEntity<List<QuestionDTO>> getQuestionsByUserLazy(@RequestParam int id,  @RequestParam int offset , @RequestParam int limit) throws NotFoundException{
+		Iterable<Question> questionList = questionRepository.getByUserLazy(id, offset , limit);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No questions for user with id " + id + " was found.\"}");
 		logger.debug("Retrieved all the questions of the user "+id + ".");
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
@@ -133,6 +154,23 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		logger.debug("Retrieved all the questions of the user "+id + ".");
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
+	
+	
+	/**
+	 * Gets all the questions associated with the given id of category with Lazy Loading
+	 * @param offset 
+	 * @param limit
+	 * @return		an HTTP response with status 200, 500 otherwise
+	 */
+	@GetMapping(path = "/getQuestionByCategoryLazy")
+	public ResponseEntity<List<QuestionDTO>> getQuestionsByCategoryLazy(@RequestParam int id,  @RequestParam int offset , @RequestParam int limit) throws NotFoundException{
+		Iterable<Question> questionList = questionRepository.getByCategoryLazy(id, offset, limit);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Question with category" + id + " was found.\"}");
+		logger.debug("Retrieved all the questions of the user "+id + ".");
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
 
 	/**
 	 * Gets the question in the database where text is contained in the text of the question
@@ -144,6 +182,26 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	public ResponseEntity<List<QuestionDTO>> findQuestionsByText(@PathVariable String text) throws NotFoundException {
 
 		Iterable<Question> questionList = questionRepository.getByText(text);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
+		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size(), text);
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * Gets the question in the database where text is contained in the text of the question with Lazy Loading
+	 * @param	text	the text of the question to be found
+	 * @param offset 
+	 * @param limit
+	 * @return		an HTTP response with status 200 and the QuestionDTO if the question has been found, 500 otherwise
+	 * @throws  NotFoundException	if 404 no question with identified by <code>id</code> has been found
+	 */
+	@GetMapping(path = "/findQuestionsByTextLazy")
+	public ResponseEntity<List<QuestionDTO>> findQuestionsByTextLazy(@RequestParam String text , @RequestParam int offset , @RequestParam int limit) throws NotFoundException {
+
+		Iterable<Question> questionList = questionRepository.getByTextLazy(text, offset, limit);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
