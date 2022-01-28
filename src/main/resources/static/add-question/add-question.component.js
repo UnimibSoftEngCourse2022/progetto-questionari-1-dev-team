@@ -4,8 +4,8 @@ angular.
 	module('UNIMIBModules').
 	component('addQuestion', {
 		templateUrl: 'add-question/add-question.template.html',
-		controller: ['$location', '$routeParams', '$scope', '$http', 'awsService',
-			function addQuestionController($location, $routeParams, $scope, $http, $awsService) {
+		controller: ['$location', '$routeParams', '$scope', '$http', 'awsService', 'cookieService',
+			function addQuestionController($location, $routeParams, $scope, $http, $awsService, cookieService) {
 				let tmpObj = {};
 				let tmpAnswer = {};
 				let user;
@@ -47,7 +47,7 @@ angular.
 						$scope.categories = response.data;
 					});
 
-				$http.get("/api/getUser/1")
+				$http.get("/api/getUser/" + cookieService.getCookie())
 					.then(function(response) {
 						user = response.data;
 					});
