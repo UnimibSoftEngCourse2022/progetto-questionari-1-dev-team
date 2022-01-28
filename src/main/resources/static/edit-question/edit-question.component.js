@@ -4,19 +4,69 @@ angular.
 module('UNIMIBModules').
 component('editQuestion', {
     templateUrl: 'edit-question/edit-question.template.html',
-    controller: ['$location', '$routeParams', '$scope', '$http',
-        function editQuestionController($location, $routeParams, $scope, $http) {
+    controller: ['$location', '$routeParams', '$scope', '$http', 'awsService',
+        function editQuestionController($location, $routeParams, $scope, $http, $awsService) {
             let v;
             let start;
             let counter;
             let tmpObj = {};
             let qType;
             let check;
+            let fileName;
+            let photoFile;
+            let promise;
+            let token;
+            let identityToken;
+            let region;
+            let identityPoolId;
+            let bucketName;
+
+
+            $scope.file_changed = function(element) {
+
+                if (element === null) {
+                    $scope.imageView = false;
+                    photoFile = undefined;
+                } else {
+                    if(element !== -1)
+                        photoFile = element.files[0];
+
+                    if (photoFile === undefined)
+                        $scope.imageView = false;
+                    else {
+                        let reader = new FileReader();
+                        reader.onload = function(e) {
+                            $scope.$apply(function() {
+                                $scope.prev_img = e.target.result;
+                                $scope.imageView = true;
+                            });
+                        };
+                        reader.readAsDataURL(photoFile);
+                    }
+                }
+            };
 
             $http.get("http://localhost:5000/api/getQuestion/" + $routeParams.idQuestion)
                 .then(function(response) {
                     $scope.question =  response.data;
                     $scope.questiontext = $scope.question.text;
+
+                    if(response.data.urlImage !== null && response.data.urlImage !== undefined){
+                        $http.get("/api/getToken/" + response.data.user.id)
+                            .then(function(risposta) {
+                                fileName = response.data.urlImage;
+                                token = risposta.data.token;
+                                identityToken = risposta.data.identityToken;
+                                region = risposta.data.region;
+                                identityPoolId = risposta.data.identityPoolId;
+                                bucketName = risposta.data.bucketName;
+                                promise = $awsService.getPhoto(token, region, identityToken, identityPoolId, bucketName, fileName);
+                                promise.then(photo => {
+                                    photoFile = photo;
+                                    $scope.file_changed(-1);
+                                })
+                            });
+                    }
 
                     if($scope.question.questionType === "OPEN") {
                         start=true;
@@ -28,7 +78,7 @@ component('editQuestion', {
                     }
                 });
 
-            $http.get("http://localhost:5000/api/findCategories")
+            $http.get("/api/findCategories")
                 .then(function(response) {
                     $scope.categories =  response.data;
                 });
@@ -122,6 +172,34 @@ component('editQuestion', {
                     tmpObj["text"] = $scope.questiontext;
                     tmpObj["questionType"] = qType;
 
+                    if (photoFile !== undefined){
+                        tmpObj["urlImage"] = $scope.question.id + ".jpg";
+                        $http.get("/api/getToken/" + $scope.question.user.id)
+                            .then(function (risposta) {
+                                token = risposta.data.token;
+                                identityToken = risposta.data.identityToken;
+                                region = risposta.data.region;
+                                identityPoolId = risposta.data.identityPoolId;
+                                bucketName = risposta.data.bucketName;
+                                $awsService.addPhoto(token, region, identityToken, identityPoolId,
+                                    bucketName, photoFile, tmpObj["urlImage"]);
+                            });
+                    }else{
+                        tmpObj["urlImage"] = null;
+                        if(fileName !== undefined)
+                            $http.get("/api/getToken/" + $scope.question.user.id)
+                                .then(function (risposta) {
+                                    token = risposta.data.token;
+                                    identityToken = risposta.data.identityToken;
+                                    region = risposta.data.region;
+                                    identityPoolId = risposta.data.identityPoolId;
+                                    bucketName = risposta.data.bucketName;
+                                    $awsService.deletePhoto(token, region, identityToken,
+                                        identityPoolId, bucketName, fileName);
+                                });
+                    }
+
+
                     $http.patch("http://localhost:5000/api/modifyQuestion", tmpObj, 'application/json; charset=utf-8')
                         .then(function (response) {
                             $scope.prova = "ok";
@@ -172,6 +250,18 @@ component('editQuestion', {
                                 $scope.prova = "Risposta eliminata con successo!";
                             });
                 });
+
+                if(fileName !== undefined) {
+                    $http.get("/api/getToken/" + $scope.question.user.id)
+                        .then(function (risposta) {
+                            token = risposta.data.token;
+                            identityToken = risposta.data.identityToken;
+                            region = risposta.data.region;
+                            identityPoolId = risposta.data.identityPoolId;
+                            bucketName = risposta.data.bucketName;
+                            $awsService.deletePhoto(token, region, identityToken, identityPoolId, bucketName, fileName);
+                        });
+                }
                 $location.path('/home');
             };
         }]
