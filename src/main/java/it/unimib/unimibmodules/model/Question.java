@@ -13,7 +13,7 @@ import java.util.Set;
  * @version 0.3.0
  */
 @Entity
-@Table(name = "question")
+@Table(name = "Question")
 public class Question {
 	
 	 /**

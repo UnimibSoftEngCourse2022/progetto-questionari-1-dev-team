@@ -18,7 +18,7 @@ import it.unimib.unimibmodules.exception.FormatException;
  * @version 0.3.0
  */
 @Entity
-@Table(name = "survey")
+@Table(name = "Survey")
 public class Survey {
 
 	/**

@@ -11,7 +11,7 @@ import javax.persistence.*;
  * @version 0.3.0
  */
 @Entity
-@Table(name = "surveyquestions")
+@Table(name = "SurveyQuestions")
 public class SurveyQuestions {
 
     /**

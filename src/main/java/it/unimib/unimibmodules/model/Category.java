@@ -12,7 +12,7 @@ import java.util.Set;
  * @version 0.3.0
  */
 @Entity
-@Table(name = "category")
+@Table(name = "Category")
 public class Category {
 
     /**
