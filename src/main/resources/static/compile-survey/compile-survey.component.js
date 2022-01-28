@@ -2,7 +2,7 @@
 
 app.component("compileSurvey", {
 	templateUrl: "compile-survey/compile-survey.template.html",
-	controller: function($scope, $http, $routeParams, $uibModal, $location, AnswerFactory, FileSaver) {
+	controller: function($scope, $http, $routeParams, $uibModal, $location, cookieService, AnswerFactory, FileSaver) {
 
 		$scope.model = {};
 		$scope.options = [];
@@ -35,7 +35,8 @@ app.component("compileSurvey", {
 
 				$scope.questions = response.data;
 
-				$http.get("/api/findSurveyAnswersForUser/?surveyId=" + $routeParams.surveyId + "&userId=1")
+				$http.get("/api/findSurveyAnswersForUser/?surveyId=" + $routeParams.surveyId + "&userId=" +
+					cookieService.getCookie())
 					.then(function onFulfilled(response) {
 
 						$scope.mode = "EDIT";
@@ -79,7 +80,8 @@ app.component("compileSurvey", {
 						else if ($scope.questions[$scope.questionIndex].questionType === "MULTIPLECLOSED") {
 							for (let closeEndedAnswer in $scope.questions[$scope.questionIndex].closeEndedAnswerDTOSet)
 								if (answer.closeEndedAnswerDTOs
-									.find(v => v.id === $scope.questions[$scope.questionIndex].closeEndedAnswerDTOSet[closeEndedAnswer].id))
+									.find(v => v.id === $scope.questions[$scope.questionIndex]
+										.closeEndedAnswerDTOSet[closeEndedAnswer].id))
 									$scope.options[closeEndedAnswer] = true;
 						}
 						$scope.mode = "EDIT";
@@ -133,8 +135,8 @@ app.component("compileSurvey", {
 
 		$scope.insert = function() {
 
-			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, 1, $routeParams.surveyId,
-				$scope.questions[$scope.questionIndex].id);
+			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, cookieService.getCookie(),
+				$routeParams.surveyId, $scope.questions[$scope.questionIndex].id);
 
 			$scope.getInputValues(data);
 
@@ -151,8 +153,8 @@ app.component("compileSurvey", {
 
 		$scope.modify = function() {
 
-			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, 1, $routeParams.surveyId,
-				$scope.questions[$scope.questionIndex].id);
+			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, cookieService.getCookie(),
+				$routeParams.surveyId, $scope.questions[$scope.questionIndex].id);
 
 			$scope.getInputValues(data);
 
@@ -185,14 +187,15 @@ app.component("compileSurvey", {
 				animation: true,
 				windowClass: "show",
 				templateUrl: "template/close-survey.template.html",
-				controller: function($scope, $http, $location) {
+				controller: function($scope, $http) {
 
 					$scope.submit = function() {
 
-						$http.post("/api/saveSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=1")
+						$http.post("/api/saveSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=" +
+							cookieService.getCookie(), {responseType:"blob"})
 							.then(function onFulfilled() {
 
-								modal.close();;
+								modal.close();
                                 self.chooseDownload();
 							}, function errorCallback(response) {
 
@@ -217,11 +220,12 @@ app.component("compileSurvey", {
 				animation: true,
 				windowClass: "show",
 				templateUrl: "template/close-survey.template.html",
-				controller: function($scope, $http, $location) {
+				controller: function($scope, $http) {
 
 					$scope.submit = function() {
 
-						$http.post("/api/saveModifiedSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=1")
+						$http.post("/api/saveModifiedSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=" +
+							cookieService.getCookie(), {responseType:"blob"})
 							.then(function onFulfilled() {
 
 								modal.close();
@@ -252,8 +256,9 @@ app.component("compileSurvey", {
 
                         $scope.download = function() {
 
-                            $http.get("/api/generatePdf?surveyId=" + $routeParams.surveyId + "&userId=1", {responseType:"blob"})
-                                .then(function onFulfilled(response) {
+                            $http.get("/api/generatePdf?surveyId=" + $routeParams.surveyId + "&userId=" +
+								cookieService.getCookie(), {responseType:"blob"})
+								.then(function onFulfilled(response) {
 
                                     modal.close();
                                     FileSaver.saveAs(response.data, "survey.pdf");
