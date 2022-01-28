@@ -2,7 +2,7 @@
 
 app.component("compileSurvey", {
 	templateUrl: "compile-survey/compile-survey.template.html",
-	controller: function($scope, $http, $routeParams, $uibModal, AnswerFactory, FileSaver) {
+	controller: function($scope, $http, $routeParams, $uibModal, $location, AnswerFactory, FileSaver) {
 
 		$scope.model = {};
 		$scope.options = [];
@@ -13,6 +13,8 @@ app.component("compileSurvey", {
 		$scope.questionIndex = 0;
 		$scope.surveyMode = "INSERT";
 		$scope.questionMode = "INSERT";
+        $scope.answered = false;
+        $scope.modified = false;
 
 		$scope.load = function() {
 
@@ -38,6 +40,7 @@ app.component("compileSurvey", {
 
 						$scope.mode = "EDIT";
 						$scope.surveyMode = "EDIT";
+						$scope.answered = true;
 						$scope.answers = response.data;
 						$scope.selectQuestion();
 					}, function errorCallback(response) {
@@ -137,6 +140,7 @@ app.component("compileSurvey", {
 
 			$http.post("/api/addAnswer", data).then(function onFulfilled() {
 
+                $scope.answered = true;
 				$scope.skipQuestion();
 			}, function errorCallback(response) {
 
@@ -154,6 +158,7 @@ app.component("compileSurvey", {
 
 			$http.patch("/api/modifyAnswer", data).then(function onFulfilled() {
 
+                $scope.modified = true;
 				$scope.skipQuestion();
 			}, function errorCallback(response) {
 
@@ -207,6 +212,7 @@ app.component("compileSurvey", {
 
 		$scope.saveModifiedAnswers = function() {
 
+            let self = this;
 			let modal = $uibModal.open({
 				animation: true,
 				windowClass: "show",
@@ -219,7 +225,7 @@ app.component("compileSurvey", {
 							.then(function onFulfilled() {
 
 								modal.close();
-								$location.path("/")
+                                self.chooseDownload();
 							}, function errorCallback(response) {
 
 								modal.close();
@@ -237,35 +243,38 @@ app.component("compileSurvey", {
 		}
 
 		$scope.chooseDownload = function() {
+            if($scope.answered){
+                let modal = $uibModal.open({
+                    animation: true,
+                    windowClass: "show",
+                    templateUrl: "template/download-survey.template.html",
+                    controller: function($scope, $http, $location) {
 
-            let modal = $uibModal.open({
-                animation: true,
-                windowClass: "show",
-                templateUrl: "template/download-survey.template.html",
-                controller: function($scope, $http, $location) {
+                        $scope.download = function() {
 
-                    $scope.download = function() {
+                            $http.get("/api/generatePdf?surveyId=" + $routeParams.surveyId + "&userId=1", {responseType:"blob"})
+                                .then(function onFulfilled(response) {
 
-                        $http.get("/api/generatePdf?surveyId=" + $routeParams.surveyId + "&userId=1", {responseType:"blob"})
-                            .then(function onFulfilled(response) {
+                                    modal.close();
+                                    FileSaver.saveAs(response.data, "survey.pdf");
+                                    $location.path("/");
+                                }, function errorCallback(response) {
 
-                                modal.close();
-                                FileSaver.saveAs(response.data, "survey.pdf");
-                                $location.path("/");
-                            }, function errorCallback(response) {
+                                    modal.close();
+                                    alert("Error");
+                                    console.error(response);
+                                });
+                        }
 
-                                modal.close();
-                                alert("Error");
-                                console.error(response);
-                            });
+                        $scope.ignore = function() {
+                        modal.close();
+                        $location.path("/");
+                        }
                     }
-
-                    $scope.ignore = function() {
-                    modal.close();
-                    $location.path("/");
-                    }
-                }
-            });
+                });
+            }else{
+                $location.path("/");
+            }
         }
 	}
 });
