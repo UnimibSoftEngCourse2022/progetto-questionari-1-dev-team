@@ -275,7 +275,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Question question = convertToEntity(questionDTO);
 
 		questionRepository.modify(question);
-		logger.debug("Modified Question with id " + question.getId() + ".");
+		logger.debug("Modified Question with id ", question.getId());
 		return new ResponseEntity<>("Question modified.", HttpStatus.OK);
 	}
 
