@@ -16,9 +16,9 @@
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<button type="button" class="btn btn-outline-primary"
-						ng-click="findSurveyByText(searchText)">Search</button>
+						ng-click="findSurveyByText()">Search</button>
 				</div>
-				<input type="text" ng-model="searchText" class="form-control"
+				<input type="text" ng-model="textSearch" class="form-control"
 					id="searchSurvey" placeholder="Enter search text">
 			</div>
 		</div>
@@ -30,13 +30,13 @@
 			</p>
 		</div>
 	</div>
-	
+
 	<div class="row " ng-show="showMessageError">
 		<div class="col-md-12  d-flex justify-content-center">
-			<p  class="messageError mt-1">{{messageError}}</p>
+			<p class="messageError mt-1">{{messageError}}</p>
 		</div>
 	</div>
-	
+
 	<div class="row  d-flex justify-content-center">
 		<div class="col-md-4">
 			<div class="input-group mb-3">
@@ -54,9 +54,25 @@
 			<button type="button" class="btn btn-primary m-1 p-2"
 				ng-click="newQuestion()">New Question</button>
 
-			<button type="button" class="btn btn-primary m-1 p-2" ng-click="newSurvey()">New
-				Survey</button>
+			<button type="button" class="btn btn-primary m-1 p-2"
+				ng-click="newSurvey()">New Survey</button>
 		</div>
+	</div>
+	<div class="row mt-4">
+
+		<div class="col-sm-6 d-flex flex-row-reverse">
+			<a href="" ng-hide=" ! isPrevActive" ng-click="prevPage()"
+				class="link-primary"> < Previuos Page</a>
+
+		</div>
+
+		<div class="col-sm-6 d-flex flex-row">
+
+			<a href="" ng-hide=" ! isNextActive" ng-click="nextPage()"
+				class="link-primary ">Next Page > </a>
+		</div>
+
+
 	</div>
 	<div class="row mt-4 p-5 " ng-hide="isEmptyResult"
 		id="surveyCardContainer">

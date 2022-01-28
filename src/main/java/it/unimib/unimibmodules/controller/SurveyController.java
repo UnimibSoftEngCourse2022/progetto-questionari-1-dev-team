@@ -38,22 +38,16 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	 */
 	private final UserRepository userRepository;
 
-	/**
-	 * Instance of SurveyQuestionsRepository that will be used to access the db.
-	 */
-	private final QuestionRepository questionRepository;
-
 	private static final Logger logger = LogManager.getLogger(SurveyController.class);
 
 	@Autowired
 
 	public SurveyController(UserRepository userRepository, SurveyRepository surveyRepository,
-							QuestionRepository questionRepository,
+
 			ModelMapper modelMapper) {
 		super(modelMapper);
 		this.surveyRepository = surveyRepository;
 		this.userRepository = userRepository;
-		this.questionRepository = questionRepository;
 
 		modelMapper.createTypeMap(Survey.class, SurveyDTO.class).addMappings(mapper -> {
 			mapper.map(Survey::getId, SurveyDTO::setId);
@@ -71,9 +65,9 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 			mapper.map(SurveyQuestionsDTO::getSurveyDTO, SurveyQuestions::setSurvey);
 		});
 
-		modelMapper.createTypeMap(SurveyDTO.class, Survey.class).addMappings(mapper -> {
-			mapper.map(SurveyDTO::getId, Survey::setId);
-		});
+		modelMapper.createTypeMap(SurveyDTO.class, Survey.class).addMappings(mapper -> 
+			mapper.map(SurveyDTO::getId, Survey::setId)
+		);
 
 		modelMapper.createTypeMap(User.class, SurveyDTO.class).addMappings(mapper -> {
 			mapper.map(User::getId, (surveyDTO, id) -> surveyDTO.getUserDTO().setId(id));
@@ -95,7 +89,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	@GetMapping("/findSurvey")
 	public ResponseEntity<SurveyDTO> findSurvey(@RequestParam(name = "id") int id) throws NotFoundException {
 		Survey survey = surveyRepository.get(id);
-		logger.debug(String.format("Retreived Survey with id: {0}.", id));
+		logger.debug(String.format("Retreived Survey with id: {}.", id));
 		return new ResponseEntity<>(convertToDTO(survey), HttpStatus.OK);
 	}
 
@@ -109,12 +103,13 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	 * @see it.unimib.unimibmodules.exception.NotFoundException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleNotFoundException
 	 */
-	@GetMapping("/findSurveyNoQuestion")
-	public ResponseEntity<SurveyDTO> findSurveyNoQuestion(@RequestParam(name = "id") int id) throws NotFoundException {
+	@GetMapping(path = "/findSurveyNoQuestion/{id}")
+	public ResponseEntity<SurveyDTO> findSurveyNoQuestion(@PathVariable int id) throws NotFoundException {
 		Survey survey = surveyRepository.get(id);
-		logger.debug(String.format("Retreived Survey with id: {0}.", id));
+		logger.debug(String.format("Retreived Survey with id: {}.", id));
 		return new ResponseEntity<>(convertToDTOAndSkipQuestions(survey), HttpStatus.OK);
 	}
+	
 
 	/**
 	 * Gets the survey in the database where text is contained in the name of the
@@ -162,7 +157,34 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		}
 		if (surveyDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Survey with " + text + " was found.\"}");
-		logger.debug("Retrieved " + surveyDTOList.size() + " surveys containing the text " + text + ".");
+		logger.debug("Retrieved  {0} surveys containing the text  {1}." , surveyDTOList.size(), text);
+		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
+	}
+
+	/**
+	 * Gets the surveys in the database, without their questions, where text is
+	 * contained in the name of the survey or text is its ID with Lazy Loading
+	 * 
+	 * @param text the text to be found in the name of the survey
+	 * @param offset offset for lazy loading
+	 * @param limit to limit the result length
+	 * @return an HTTP response with status 200 and the SurveyDTOs
+	 * @throws NotFoundException if no surveys have been found
+	 * @see it.unimib.unimibmodules.exception.NotFoundException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleNotFoundException
+	 */
+	@GetMapping("/findSurveyByTextNoQuestionLazy")
+	public ResponseEntity<List<SurveyDTO>> findSurveyByTextNoQuestionsLazy(@RequestParam(name = "text") String text,
+			@RequestParam int offset, @RequestParam int limit) throws NotFoundException {
+
+		Iterable<Survey> surveyList = surveyRepository.getByTextLazy(text, offset, limit);
+		List<SurveyDTO> surveyDTOList = new ArrayList<>();
+		for (Survey survey : surveyList) {
+			surveyDTOList.add(convertToDTOAndSkipQuestions(survey));
+		}
+		if (surveyDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Survey with " + text + " was found.\"}");
+		logger.debug("Retrieved  {0} surveys containing the text  {1}." , surveyDTOList.size(), text);
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
 
@@ -183,7 +205,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		for (Survey survey : surveys) {
 			surveysDTO.add(convertToDTO(survey));
 		}
-		logger.debug("Retrieved " + surveysDTO.size() + " surveys.");
+		logger.debug("Retrieved {} surveys.", surveysDTO.size());
 		return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
 	}
 
@@ -204,7 +226,29 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		for (Survey survey : surveys) {
 			surveysDTO.add(convertToDTOAndSkipQuestions(survey));
 		}
-		logger.debug("Retrieved " + surveysDTO.size() + " surveys.");
+		logger.debug("Retrieved {} surveys.", surveysDTO.size());
+		return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
+	}
+	
+	/**
+	 * Finds all surveys without their questions.
+	 * 
+	 * @return an HTTP response with status 200 if one survey exists at least.
+	 * @throws NotFoundException
+	 * @see it.unimib.unimibmodules.exception.NotFoundException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleNotFoundException
+	 */
+	@GetMapping("/findAllSurveysNoQuestionLazy")
+	public ResponseEntity<List<SurveyDTO>> findAllSurveysNoQuestionLazy(@RequestParam int offset, 
+			@RequestParam int limit) throws NotFoundException {
+
+		Iterable<Survey> surveys = surveyRepository.getAllLazy(offset, limit);
+		logger.debug("Retrieved all Surveys.");
+		List<SurveyDTO> surveysDTO = new ArrayList<>();
+		for (Survey survey : surveys) {
+			surveysDTO.add(convertToDTOAndSkipQuestions(survey));
+		}
+		logger.debug("Retrieved {} surveys.", surveysDTO.size());
 		return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
 	}
 
@@ -227,7 +271,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 			throws FormatException, NotFoundException, EmptyFieldException {
 		Survey survey = convertToEntity(surveyDTO);
 		surveyRepository.add(survey);
-		logger.debug(String.format("Added Survey with id: {0}.", survey.getId()));
+		logger.debug(String.format("Added Survey with id: {}.", survey.getId()));
 		return new ResponseEntity<>("{\"response\":\"Survey creted.\"}", HttpStatus.CREATED);
 	}
 
@@ -247,10 +291,11 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	@PatchMapping(path = "/modifySurvey", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> modifySurvey(@RequestBody SurveyDTO surveyDTO)
 			throws FormatException, NotFoundException, EmptyFieldException {
-		
+
 		Survey survey = convertToEntity(surveyDTO);
 		Set<SurveyQuestions> surveyQuestions = survey.getSurveyQuestions();
 		surveyRepository.modifyQuestions(surveyQuestions, survey.getId());
+		surveyRepository.modifyName(survey.getName(), survey.getId());
 		return new ResponseEntity<>("{\"response\":\"Survey modified.\"}", HttpStatus.OK);
 	}
 
@@ -265,10 +310,9 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleNotFoundException
 	 */
 	@DeleteMapping(path = "/deleteSurvey/{id}")
-	public ResponseEntity<String> deleteSurvey(@PathVariable int id) throws NotFoundException, FormatException {
-
+	public ResponseEntity<String> deleteSurvey(@PathVariable int id) throws FormatException {
 		surveyRepository.remove(id);
-		logger.debug("Removed Survey with id: {0}." + id);
+		logger.debug("Removed Survey with id: {}." + id);
 		return new ResponseEntity<>("{\"response\":\"Survey deleted.\"}", HttpStatus.OK);
 	}
 
@@ -328,14 +372,17 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	public Survey convertToEntity(SurveyDTO surveyDTO) throws FormatException, NotFoundException, EmptyFieldException {
 		Survey survey = modelMapper.getTypeMap(SurveyDTO.class, Survey.class).map(surveyDTO);
 		survey.setUser(userRepository.get(surveyDTO.getUserDTO().getId()));
+		Date creationDate = new Date();
+		surveyDTO.setCreationDate(survey.getCreationDateFormat().format(creationDate));
 		survey.setCreationDate(
 				surveyDTO.getCreationDateConverted(TimeZone.getDefault().toString(), survey.getCreationDateFormat()));
 		survey.setName(surveyDTO.getSurveyName());
 		Set<SurveyQuestions> surveyQuestions = new HashSet<>();
 		if (surveyDTO.getQuestions() != null) {
-			Set<SurveyQuestionsDTO> surveyQuestionsDTO =  surveyDTO.getQuestions();
-			for (SurveyQuestionsDTO surveyQuestionDTO : surveyQuestionsDTO) {	
-				surveyQuestions.add(modelMapper.getTypeMap(SurveyQuestionsDTO.class, SurveyQuestions.class).map(surveyQuestionDTO));
+			Set<SurveyQuestionsDTO> surveyQuestionsDTO = surveyDTO.getQuestions();
+			for (SurveyQuestionsDTO surveyQuestionDTO : surveyQuestionsDTO) {
+				surveyQuestions.add(
+						modelMapper.getTypeMap(SurveyQuestionsDTO.class, SurveyQuestions.class).map(surveyQuestionDTO));
 			}
 		}
 		survey.setSurveyQuestions(surveyQuestions);

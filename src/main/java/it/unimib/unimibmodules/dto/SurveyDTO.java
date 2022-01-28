@@ -120,6 +120,17 @@ public class SurveyDTO {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         this.creationDate = dateFormat.format(creationDate);
     }
+    
+    /**
+     * Modifies the creationDate of the surveyDTO, setting creationDate as the new value after its 
+     * conversion to String using the given time zone.
+     * @param   creationDate  the new creationDate value that has to be converted to String
+     * @param    timezone the time zone to use to parse creationDate in String
+     * @param dateFormat the date format to use during the conversion
+     */
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
 
     /**
      * Returns the userDTO who created the survey.

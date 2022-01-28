@@ -20,16 +20,12 @@
 				<b>Creator Username:</b> {{survey.userDTO.username}}
 			</p>
 
-			<p>
-				<b>Number of questions:</b> {{surveyQuestionsId.length}}
-			</p>
-
 			<label for="Name"><b>New Survey Name (Leave empty to
 					avoid update)</b></label> <input type="text" class="form-control mb-4"
 				name="name" aria-describedby="Name" placeholder="Enter name"
 				ng-model="newSurveyName">
-			<button ng-click="modifySurvey()"
-				class="btn btn-primary">Save All Changes</button>
+			<button ng-click="modifySurvey()" class="btn btn-primary">Save
+				All Changes</button>
 			<button ng-click="deleteSurvey()" class="btn btn-danger">Delete
 				Survey</button>
 			<button ng-click="compileRedirect()" class="btn btn-success">Compile</button>
@@ -71,7 +67,8 @@
 								type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
 								aria-expanded="false">Find By Category</button>
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-								<li ng-repeat="category in categories" ng-click="filterQuestionByCategory($index)"><a
+								<li ng-repeat="category in categories"
+									ng-click="filterQuestionByCategory($index)"><a
 									class="dropdown-item">{{category.name}}</a></li>
 							</ul>
 						</div>
@@ -79,8 +76,24 @@
 
 					</div>
 				</div>
-				<div class="container-fluid overflow-auto pt-4"
-					id="questionCardContainer" ng-hide="isEmptyResult">
+				<div class="row">
+
+					<div class="col-sm-6 d-flex flex-row-reverse">
+						<a href="" ng-hide=" ! isPrevActive" ng-click="prevPage()" class="link-primary"> <
+							Previuos Page</a>
+
+					</div>
+
+					<div class="col-sm-6 d-flex flex-row">
+
+						<a href="" ng-hide=" ! isNextActive" ng-click="nextPage()" class="link-primary ">Next
+							Page > </a>
+					</div>
+
+
+				</div>
+				<div class="container-fluid  pt-4 overflow-auto" id="questionCardContainer"
+					ng-hide="isEmptyResult" >
 
 					<div class="card mb-4" ng-repeat="question in searchQuestions">
 						<div class="card-body"></div>
@@ -123,10 +136,12 @@
 					<b>Category:</b> {{ searchQuestions[modalQuestion].category.name }}
 				</p>
 				<p>
-					<b>User creator:</b> {{ searchQuestions[modalQuestion].user.username }}
+					<b>User creator:</b> {{
+					searchQuestions[modalQuestion].user.username }}
 				</p>
 				<p>
-					<b>Question Type:</b> {{ searchQuestions[modalQuestion].questionType }}
+					<b>Question Type:</b> {{
+					searchQuestions[modalQuestion].questionType }}
 				</p>
 				<p>
 					<b>Question:</b> {{ searchQuestions[modalQuestion].text }}
@@ -141,8 +156,9 @@
 					<li
 						ng-repeat="closedAnswer in searchQuestions[modalQuestion].closeEndedAnswerDTOSet">{{closedAnswer.text}}</li>
 				</ul>
-				<button ng-click="editQuestionRoute(modalQuestion)" ng-hide = "! editQuestion"
-					class="btn btn-primary">Edit Question</button>
+				<button ng-click="editQuestionRoute(modalQuestion)"
+					ng-hide="! editQuestion" class="btn btn-primary">Edit
+					Question</button>
 			</div>
 
 		</div>
