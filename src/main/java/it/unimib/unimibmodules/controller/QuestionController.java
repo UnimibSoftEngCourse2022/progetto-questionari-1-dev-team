@@ -275,7 +275,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Question question = convertToEntity(questionDTO);
 
 		questionRepository.modify(question);
-		logger.debug("Modified Question with id ", question.getId());
+		logger.debug("Modified Question with id {}", question.getId());
 		return new ResponseEntity<>("Question modified.", HttpStatus.OK);
 	}
 
@@ -289,7 +289,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	public ResponseEntity<String> deleteQuestion(@PathVariable int id) throws NotFoundException {
 
 		questionRepository.remove(id);
-		logger.debug("Removed Question with id " + id + ".");
+		logger.debug("Removed Question with id {}", id);
 		return new ResponseEntity<>("Question deleted", HttpStatus.OK);
 	}
 
