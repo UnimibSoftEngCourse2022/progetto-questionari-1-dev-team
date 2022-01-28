@@ -6,7 +6,11 @@
 	<br/>
 	Survey by: {{ survey.userDTO.username }}
 	<br/><br/>
-	<p>{{ questions[questionIndex].text }}</p>
+	<p>
+		{{ questions[questionIndex].text }}
+		<br/>
+		<img src="{{questionImage}}" alt="Question image" ng-hide="!questionImage"/>
+	</p>
 	<div ng-hide="questions[questionIndex].questionType != 'SINGLECLOSED'">
 		<div ng-repeat="answer in questions[questionIndex].closeEndedAnswerDTOSet">
 			<label>

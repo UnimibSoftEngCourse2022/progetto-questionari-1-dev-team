@@ -2,7 +2,8 @@
 
 app.component("compileSurvey", {
 	templateUrl: "compile-survey/compile-survey.template.html",
-	controller: function($scope, $http, $routeParams, $uibModal, $location, cookieService, AnswerFactory, FileSaver) {
+	controller: function($scope, $http, $routeParams, $uibModal, $location, cookieService, awsService, AnswerFactory,
+						 FileSaver) {
 
 		$scope.model = {};
 		$scope.options = [];
@@ -11,6 +12,7 @@ app.component("compileSurvey", {
 		$scope.answers = [];
 		$scope.currentAnswer = {};
 		$scope.questionIndex = 0;
+		$scope.questionImage = undefined;
 		$scope.surveyMode = "INSERT";
 		$scope.questionMode = "INSERT";
         $scope.answered = false;
@@ -91,6 +93,25 @@ app.component("compileSurvey", {
 			}
 			if (!$scope.currentAnswer.id)
 				$scope.mode = "INSERT";
+
+			if ($scope.questions[$scope.questionIndex].urlImage) {
+				$http.get("/api/getToken/" + cookieService.getCookie())
+					.then(function (response) {
+						awsService.getPhoto(response.data.token, response.data.region, response.data.identityToken,
+							response.data.identityPoolId, response.data.bucketName,
+							$scope.questions[$scope.questionIndex].urlImage)
+							.then(photo => {
+								let reader = new FileReader();
+								reader.onload = function (event) {
+									$scope.$apply(function () {
+										$scope.questionImage = event.target.result;
+									});
+								};
+								reader.readAsDataURL(photo);
+							})
+					});
+			} else
+				$scope.questionImage = undefined;
 		}
 
 		$scope.skipQuestion = function() {
