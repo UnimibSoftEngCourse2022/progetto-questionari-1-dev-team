@@ -14,6 +14,14 @@ angular.
 				$scope.messageError = ""
 				$scope.showMessageError = false
 				$scope.compilationCode = ""
+				$scope.limit = 8 //Limit on how many questions to show to the user
+				$scope.offset = 0 //actual offset on the search
+				$scope.isPrevActive = false;
+				$scope.isNextActive = false;
+				$scope.actualSearch = ""
+				$scope.lastTextSearch = ""
+				$scope.textSearch = ""
+
 
 				//error alert 
 				$scope.showAlert = function(text) {
@@ -23,63 +31,64 @@ angular.
 
 				//Start-up function
 				$scope.load = function() {
-
-					if ($scope.idUser != null){
+					if ($scope.idUser != null) {
 						$scope.isLogged = true;
-					}	
-					$http.get("/api/findAllSurveysNoQuestion").then(function onfulFilled(response) {
-						$scope.handleSurveys(response)
-					})
-				}
-
-
-				//compile by code for no-registered users
-				$scope.compileByCode = function() {
-					if ($scope.compilationCode !== undefined && $scope.compilationCode != "" && $scope.compilationCode.replace(/\s/g, '').length) {
-						$location.path('/compileSurvey/')
-					} else {
-						$scope.messageError = "ERROR - This field cannot be empty."
-						$scope.showMessageError = true 
 					}
+					$scope.searchSurvey()
 				}
 
-				// find survey by text : its code or name
-				$scope.findSurveyByText = function(searchText) {
-					if (searchText !== undefined && searchText != "" && searchText.replace(/\s/g, '').length) {
-						$http.get("/api/findSurveyByTextNoQuestion/?text=" + searchText).then(function onfulFilled(response) {
-							$scope.handleSurveys(response)
-						}, function errorCallback(response) {
-							$scope.survey = {}
+				$scope.setStatusSearch = function(isFull) {
+					if (isFull) {
+						if ($scope.offset == 0) {
+							$scope.isPrevActive = false
+						} else {
+							$scope.isPrevActive = true
+						}
+						$scope.isNextActive = true
+						$scope.isEmptyResult = false
+					} else {
+						if ($scope.offset > 0) {
 							$scope.isEmptyResult = true
-						});
-					} else {
-						$scope.load()
+							$scope.isPrevActive = true
+							$scope.isNextActive = false
+						} else {
+							$scope.isEmptyResult = true
+							$scope.isNextActive = false
+							$scope.isPrevActive = false
+							$scope.offset = 0
+						}
+
 					}
 				}
 
-				//redirect compile survey
-				$scope.compileSurvey = function(idx) {
-					$location.path('/compileSurvey/' +  $scope.result[idx].id)
+				$scope.nextPage = function() {
+					if (!$scope.isEmptyResult) {
+						$scope.offset = $scope.offset + 8
+						$scope.isPrevActive = true
+						if ($scope.actualSearch == "survey") {
+							$scope.searchSurvey()
+						}else if($scope.actualSearch == "text"){
+							$scope.findSurveyByText()
+						}
+					}
 				}
 
-				//redirect modify survey
-				$scope.modifySurvey = function(idx) {
-					$location.path('/modifySurvey/' +$scope.result[idx].id)
-				}
-				
-				//redirect new question
-				$scope.newQuestion = function() {
-					$location.path('/addQuestion')
-				}
-				
-				//redirect new survey
-				$scope.newSurvey = function() {
-					$location.path('/addSurvey')
+				$scope.prevPage = function() {
+					if ($scope.isPrevActive) {
+						$scope.offset = $scope.offset - 8
+						if ($scope.offset == 0) {
+							$scope.isPrevActive = false
+						}
+						if ($scope.actualSearch == "survey") {
+							$scope.searchSurvey()
+						}else if($scope.actualSearch == "text"){
+							$scope.findSurveyByText()
+						}
+					}
 				}
 
 				//Utility function for showing surveys and setting permissions
 				$scope.handleSurveys = function(response) {
-					console.log(response.data)
 					if (response.data.length > 0) {
 						$scope.isEmptyResult = false;
 						$scope.result = response.data;
@@ -94,6 +103,75 @@ angular.
 						$scope.isEmptyResult = true;
 						$scope.result = [];
 					}
+				}
+
+				$scope.searchSurvey = function() {
+					$scope.actualSearch = "survey"
+					$http({
+						url: "/api/findAllSurveysNoQuestionLazy", method: "GET",
+						params: { offset: $scope.offset, limit: $scope.limit }
+					}).then(function onfulFilled(response) {
+						$scope.setStatusSearch(true)
+						$scope.handleSurveys(response)
+					}, function errorCallback(response) {
+						$scope.setStatusSearch(false)
+					});
+				}
+
+
+				//compile by code for no-registered users
+				$scope.compileByCode = function() {
+					if ($scope.compilationCode !== undefined && $scope.compilationCode != "" && $scope.compilationCode.replace(/\s/g, '').length) {
+						$location.path('/compileSurvey/')
+					} else {
+						$scope.messageError = "ERROR - This field cannot be empty."
+						$scope.showMessageError = true
+					}
+				}
+
+				// find survey by text : its code or name
+				$scope.findSurveyByText = function() {
+					if($scope.lastTextSearch != $scope.textSearch){
+						$scope.lastTextSearch = $scope.textSearch
+						$scope.offset = 0
+					}
+					
+					$scope.actualSearch = "text"
+					
+					if ($scope.textSearch !== undefined && $scope.textSearch != "" && $scope.textSearch.replace(/\s/g, '').length) {
+						$http({
+							url: "/api/findSurveyByTextNoQuestionLazy", method: "GET",
+							params: { text: $scope.textSearch , offset: $scope.offset, limit: $scope.limit }
+						}).then(function onfulFilled(response) {
+							$scope.setStatusSearch(true)
+							$scope.handleSurveys(response)
+						}, function errorCallback(response) {
+							$scope.survey = {}
+							$scope.setStatusSearch(false)
+						});
+					} else {
+						$scope.load()
+					}
+				}
+
+				//redirect compile survey
+				$scope.compileSurvey = function(idx) {
+					$location.path('/compileSurvey/' + $scope.result[idx].id)
+				}
+
+				//redirect modify survey
+				$scope.modifySurvey = function(idx) {
+					$location.path('/modifySurvey/' + $scope.result[idx].id)
+				}
+
+				//redirect new question
+				$scope.newQuestion = function() {
+					$location.path('/addQuestion')
+				}
+
+				//redirect new survey
+				$scope.newSurvey = function() {
+					$location.path('/addSurvey')
 				}
 			}
 		]
