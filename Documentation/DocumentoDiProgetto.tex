@@ -26,6 +26,29 @@
 \renewcommand{\figurename}{Fig.}
 \usepackage{adjustbox}
 \usepackage{pifont}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
 \usepackage{hyperref} % \usepackage[hidelinks]{hyperref} use the 'hidelinks' option to remove red boxes from links
 \newcommand*\rot{\rotatebox{90}} % custom command to rotate columns/rows names in tables
 
@@ -45,7 +68,6 @@
 \begin{document}
 
 \maketitle % Insert the title, author and date
-
 \newpage
 \tableofcontents \newpage
 \section{Visione sintetica}
@@ -183,13 +205,14 @@ Design Principles utilizzati durante la creazione del progetto.
 \end{itemize}
 
 \subsection{SSD}
-Qui di seguit sono presenti gli SSD riguardanti i seguenti scenari:
+Qui di seguito sono presenti gli SSD riguardanti i seguenti scenari:
 \begin{itemize}
 \item Creazione del questionario
 \end{itemize}
 
 \begin{figure}[H]
-\includegraphics[scale=0.5, left]{UNIMIBModule_CreazionequestionarioSequenceDiagram.png}
+\centering
+\includegraphics[scale=0.47]{UNIMIBModule_CreazionequestionarioSequenceDiagram.png}
 \caption{SSD - Creazione del questionario}
 \end{figure}
 
@@ -197,32 +220,484 @@ Qui di seguit sono presenti gli SSD riguardanti i seguenti scenari:
 
 \subsection{Modello di dominio}
 \begin{figure}[H]
-\includegraphics[scale=0.5, left]{UNIMIBModule_UniMiBModuleDomainLayer.png}
+\centering
+\includegraphics[scale=0.5]{UNIMIBModule_UniMiBModuleDomainLayer.png}
 \caption{Modello di dominio}
 \end{figure}
-
-
 \subsection{Diagramma delle classi di progettazione}
 \subsection{Diagrammi di sequenza}
+\subsubsection{aggiugiDomanda}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.40]{UNIMIBModule_aggiungiDomandaQuestionarioSequenceDiagram.png}
+\caption{Diagramma di sequenza aggiungiDomanda}
+\end{figure}
+\subsubsection{eliminaDomanda}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.40]{UNIMIBModule_EliminaDomandaSequenceDiagram.png}
+\caption{Diagramma di sequenza eliminaDomanda}
+\end{figure}
 \subsection{Diagrammi di stato}
+\subsubsection{StateMachine Creazione Questionario}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.40]{UNIMIBModule_StatemachineDiagramCreazioneQuestionario.png}
+\caption{Diagrammi di stato creazioneQuestionario}
+\end{figure}
 \subsection{Diagrammi di attivit\`{a}}
+\subsubsection{Creazione Questionario}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.47]{UNIMIBModule_CompilazioneQuestionarioActivityDiagram.png}
+\caption{Diagramma di attività creazioneQuestionario}
+\end{figure}
 \subsection{Diagramma dell'architettura software}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{UNIMIBModule_LogicalArchitectureDiagram.png}
+\caption{Diagramma dell'architettura software}
+\end{figure}
 \subsection{Design Patterns}
 Design Patterns utilizzati durante la creazione del progetto.
 \subsubsection{Architectural Patterns}
 	\begin{itemize}
-		\item \textbf{Unit of Work}: Classe che si occupa di tenere traccia di ciò che possa modificare il database durante una transazione business e quando è terminata si occupa di applicare tutte le modifiche.
-		\item \textbf{Data Mapper}: Classe che si occupa della conversione dei dati tra database e dominio
+		\item \textbf{Unit of Work}
+    	\begin{itemize}
+            \item \textbf{Nome}: Unit of Work
+            \item \textbf{Classificazione}: Architectural
+            \item \textbf{Applicabilità}: Nel caso di UnimibModules quando l'utente sta compilando un questionario, le risposte non vengono inserite/modificate/eliminate appena l'utente conferma; vengono inserite nella Unit Of Work e vengono poi salvate quando l'utente termina la compilazione.
+            \item \textbf{Partecipanti}:
+                \begin{itemize}
+                    \item {UnitOfWork}
+                    \item {RispostaRepositoryImpl}
+                    
+                \end{itemize}
+            \item \textbf{Scopo}: Classe che si occupa di tenere traccia di ciò che possa modificare il database durante una transazione business e quando è terminata si occupa di applicare tutte le modifiche.
+             \item \textbf{Codice d'esempio}
+            \begin{lstlisting}
+/**
+* The context of the UnitOfWork
+ */
+private final Map<String, List<Answer>> uofContext;
+
+/**
+* Registers <code>answer</code> on the specified <code>operation</code>.
+* @param	answer		the answer to be registered
+* @param	operation	the operation to be performed on answer
+*/
+private void register(Answer answer, String operation) {
+
+List<Answer> answerToOperate = uofContext.computeIfAbsent(operation, k -> new ArrayList<>());
+answerToOperate.add(answer);
+}
+
+/**
+* Adds <code>answer</code> to the elements to be inserted.
+* @param	answer	the new Answer
+* @see UnitOfWork#registerNew
+*/
+@Override
+public void registerNew(Answer answer) {
+
+logger.debug("Registering Answer with id {} for insert in context.", answer.getId());
+register(answer, UnitOfWork.INSERT);
+}
+
+/**
+* Adds <code>answer</code> to the elements to be modified.
+* @param	answer	the answer that will replace the Answer with the same id
+* @see UnitOfWork#registerModified
+*/
+@Override
+public void registerModified(Answer answer) {
+
+logger.debug("Registering Answer with id {} for modify in context.", answer.getId());
+register(answer, UnitOfWork.MODIFY);
+}
+            \end{lstlisting}
+        \end{itemize}
+        
+        
+		\item \textbf{Data Mapper}
+		\begin{itemize}
+            \item \textbf{Nome}: Data Mapper
+            \item \textbf{Classificazione}: Architectural
+            \item \textbf{Applicabilità}: Nel caso di UnimibModules, si effettua il mapping per la conversione dei dati sia da un recupero dati dal database e sia per un invio dati verso il database
+            \item \textbf{Partecipanti}:
+                \begin{itemize}
+                    \item CategoriaDAO
+                    \item Categoria
+                    \item RispostaDAO
+                    \item Risposta
+                    \item DomandaDAO
+                    \item Domanda
+                    \item QuestionarioDAO
+                    \item Questionario
+                    \item UtenteDAO
+                    \item Utente
+                    \item RispostaChiusaDAO
+                    \item RispostaChiusa
+                \end{itemize}
+            \item \textbf{Scopo}: Classe che si occupa della conversione dei dati tra database e dominio
+        \end{itemize}
+		
+		
 		\item \textbf{Front Controller}: Oggetto che fornisce un punto centralizzato per la gestione delle richieste
-		\item \textbf{Lazy Loading}: Rinvia l'inizzializzazione di un oggeto fino a quando non è necessario
+		
+		
+		\item \textbf{Lazy Loading}
+		\begin{itemize}
+            \item \textbf{Nome}: Data Mapper
+            \item \textbf{Classificazione}: Architectural
+            \item \textbf{Applicabilità}: Nel caso di UnimibModules, quando si desidera caricare tutti i questionario o tutte le domande di questionario, queste non verranno mostrate tutte contemporaneamente ma si applicherà il lazy loading. Attraverso un offset si recupereranno un numero definito di domande alla volta.
+            \item \textbf{Partecipanti}:
+                \begin{itemize}
+                    \item QuestionarioController
+                    \item QuestionarioRepositoryImpl
+                    \item DomandaController
+                    \item DomandaRepositoryImpl
+                \end{itemize}
+            \item \textbf{Scopo}: Rinvia l'inizializzazione di un oggeto fino a quando non è necessario
+            \item \textbf{Codice d'esempio}
+            \begin{lstlisting}
+/**
+* Finds all surveys without their questions.
+* 
+* @return an HTTP response with status 200 if one survey exists at least.
+* @throws NotFoundException
+* @see it.unimib.unimibmodules.exception.NotFoundException
+* @see it.unimib.unimibmodules.exception.ExceptionController
+#handleNotFoundException
+*/
+@GetMapping("/findAllSurveysNoQuestionLazy")
+public ResponseEntity<List<SurveyDTO>> findAllSurveysNoQuestionLazy(@RequestParam int offset, 
+	@RequestParam int limit) throws NotFoundException {
+
+Iterable<Survey> surveys = surveyRepository.getAllLazy(offset, limit);
+logger.debug("Retrieved all Surveys.");
+List<SurveyDTO> surveysDTO = new ArrayList<>();
+for (Survey survey : surveys) {
+	surveysDTO.add(convertToDTOAndSkipQuestions(survey));
+}
+logger.debug("Retrieved {} surveys.", surveysDTO.size());
+return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
+}
+
+/**
+* Returns all surveys in the database with Lazy loading.
+* @param offset
+* @param limit
+* @return a Set of Surveys
+* @throws NotFoundException
+* @see SurveyRepository#getAll()
+*/
+@Override
+public Iterable<Survey> getAllLazy(int offset, int limit) throws NotFoundException {
+Iterable<Survey> surveys = surveyDAO.findAllLazy(offset, limit);
+if (IterableUtils.size(surveys) > 0) {
+	return surveys;
+} else {
+	throw new NotFoundException("No surveys exist.");
+}
+}
+            \end{lstlisting}
+        \end{itemize}
 	\end{itemize}
 \subsubsection{Data Patterns}
 	\begin{itemize}
-		\item \textbf{Data Transfer Object}: Oggetto che trasporta data tra i processi per poter ridurre il numero di chiamate ai metodi
-		\item \textbf{Data Access Object}: Oggetto che rappresenta un'entità di una tabella di un database usato per stratificare e isolare l'accesso ad una tabella
-		\item \textbf{Repository}: Interfaccia che si occupa di mediare tra la logica di accesso dati e il resto dell'applicazione
-		\item \textbf{Abstract factory}: Interfaccia che permette di creare famiglie di oggetti connessi o dipendenti tra loro
-		\item \textbf{Façade}: Interfaccia più semplice che permette l'accesso a sottosistemi con Interfacce complesse
+		\item \textbf{Data Transfer Object}
+		\begin{itemize}
+		\item \textbf{Nome}: Data Transfer Object
+            \item \textbf{Classificazione}: Data
+            \item \textbf{Applicabilità}: Nel caso di UnimibModules, quando si vogliono inviare dati al client o si ricevono dati dal client, questi vengono trasportati attraverso il corrispondente DTO.
+            \item \textbf{Partecipanti}:
+                \begin{itemize}
+                    \item DTOMapping
+                    \item UtenteDTO
+                    \item UtenteController
+                    \item QuestionarioDTO
+                    \item QuestionarioController
+                    \item DomandaDTO
+                    \item Domanda Controller
+                    \item RispostaDTO
+                    \item RispostaController
+                    \item RispostaChiusaDTO
+                    \item RispostaChiusaController
+                    \item CategoriaDTO
+                    \item QuestionarioDomandeDTO
+                \end{itemize}
+            \item \textbf{Scopo}: Oggetto che trasporta data tra i processi per poter ridurre il numero di chiamate ai metod
+            \item \textbf{Codice d'esempio}
+            \begin{lstlisting}
+public abstract class DTOMapping<M, T> {
+
+/**
+ * The instance of modelMapper that will be used to convert Question to QuestionDTO and vice versa.
+ */
+protected final ModelMapper modelMapper;
+
+@Autowired
+protected DTOMapping(ModelMapper modelMapper) {
+
+	this.modelMapper = modelMapper;
+	modelMapper.getConfiguration().
+	setMatchingStrategy(MatchingStrategies.STANDARD);
+	modelMapper.getConfiguration().setImplicitMappingEnabled(false);
+}
+
+/**
+ * Converts an instance of M to an instance of T
+ * @param	value	an instance of M
+ * @return			an instance of T, containing the serialized data of value
+ */
+public abstract T convertToDTO(M value);
+
+/**
+ * Converts an instance of T to an instance of M
+ * @param   dto	an instance of T
+ * @return		an instance of M, containing the deserialized data of T
+ * @throws	FormatException
+ * @throws	EmptyFieldException	when one of the required field is empty
+ * @throws	NotFoundException	when one of the queries fails
+ * @throws	IncorrectSizeException
+ */
+public abstract M convertToEntity(T dto) throws FormatException, EmptyFieldException, NotFoundException, IncorrectSizeException;
+}
+
+public class QuestionDTO {
+
+	/**
+	 * Serialization of the id of the question.
+	 */
+	@Getter	private int id;
+
+	/**
+	 * Serialization of the category of the question.
+	 */
+	@Getter	@Setter private CategoryDTO category;
+	
+	/**
+	 * Serialization of the image's url of the question.
+	 */
+	@Getter	@Setter private String urlImage;
+	
+	/**
+	 * Serialization of the text of the question.
+	 */
+	@Getter	@Setter private String text;
+
+	/**
+	 * Modifies the id of the question, setting <code>id</code> as the new value.
+	 * @param	id	the new id value
+	 */
+	public void setId(int id) {
+
+		this.id = id;
+	}
+
+	/**
+	 * Modifies the id of the question, setting <code>id</code> as the new value.
+	 * @param	id	the new id value
+	 */
+	public void setId(Object id) {
+
+		this.id = (int) id;
+	}
+}
+
+public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
+
+public QuestionController(QuestionRepository questionRepository) {
+
+super(modelMapper);
+
+modelMapper.createTypeMap(Question.class, QuestionDTO.class)
+		.addMappings(mapper -> {
+			mapper.map(Question::getId, QuestionDTO::setId);
+			mapper.map(Question::getUrlImage, QuestionDTO::setUrlImage);
+			mapper.map(Question::getText, QuestionDTO::setText);
+			mapper.map(Question::getCategory, QuestionDTO::setCategory);
+		});
+
+modelMapper.createTypeMap(QuestionDTO.class, Question.class)
+		.addMappings(mapper -> {
+			mapper.map(QuestionDTO::getId, Question::setId);
+			mapper.map(QuestionDTO::getUrlImage, Question::setUrlImage);
+			mapper.map(QuestionDTO::getText, Question::setText);
+			mapper.map(QuestionDTO::getQuestionType, Question::setQuestionType);
+		});
+}
+            \end{lstlisting}
+		\end{itemize}
+		
+		\item \textbf{Data Access Object}
+		\begin{itemize}
+		\item \textbf{Nome}: Data Access Object
+            \item \textbf{Classificazione}: Data
+            \item \textbf{Applicabilità}: Nel caso di UnimibModules, quando si vogliono effettuare operazioni su entità di una o più tabelle, lo si può fare attraverso i DAO, dove oltre le operazioni base sono state aggiunte in alcuni casi operazioni custom per interagire con il database.
+            \item \textbf{Partecipanti}:
+                \begin{itemize}
+                    \item CategoriaDAO
+                    \item CategoriaRepositoryImpl
+                    \item RispostaDAO
+                    \item RispostaRepositoryImpl
+                    \item DomandaDAO
+                    \item DomandaRepositoryImpl
+                    \item QuestionarioDAO
+                    \item QuestionarioRepositoryImpl
+                    \item UtenteDAO
+                    \item UtenteRepositoryImpl
+                    \item RispostaChiusaDAO
+                    \item RispostaChiusaRepositoryImpl
+                \end{itemize}
+            \item \textbf{Scopo}: Oggetto che rappresenta un'entità di una tabella di un database usato per stratificare e isolare l'accesso ad una tabella
+            \item \textbf{Codice d'esempio}
+            \begin{lstlisting}
+public interface AnswerDAO extends CrudRepository<Answer, Integer> {
+
+@Query("SELECT a FROM Answer a WHERE a.survey.id = :surveyId AND a.user.id = :userId")
+Iterable<Answer> findSurveyAnswersForUser(@Param("surveyId") int surveyId, @Param("userId") int userId);
+}
+
+public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer>  {
+
+/**
+ * The instance of AnswerDAO that will be used to perform actions to the DB
+ */
+private final AnswerDAO answerDAO;
+
+public Iterable<Answer> getSurveyAnswersForUser(int surveyId, int userId) {
+
+return answerDAO.findSurveyAnswersForUser(surveyId, userId);
+    }
+}
+            \end{lstlisting}
+        \end{itemize}
+		
+		\item \textbf{Repository}
+		\begin{itemize}
+		\item \textbf{Nome}: Repository
+            \item \textbf{Classificazione}: Data
+            \item \textbf{Applicabilità}: Nel caso di UnimibModules, le interfacce Repository permettono di fare da intermediario tra l'accesso ai dati che sia controller o DAO con il resto dell'applicazione
+            \item \textbf{Partecipanti}:
+                \begin{itemize}
+                    \item RispostaRepository
+                    \item RispostaController
+                    \item UtenteRepository
+                    \item UtenteController
+                    \item DomandaRepository
+                    \item DomandaController
+                    \item QuestionarioRepository
+                    \item QuestionarioController
+                \end{itemize}
+            \item \textbf{Scopo}: Interfaccia che si occupa di mediare tra la logica di accesso dati e il resto dell'applicazione
+            \item \textbf{Codice d'esempio}
+            \begin{lstlisting}
+public interface CategoryRepository {
+
+/**
+ * Finds the category identified by id in the database
+ * @param   id  the id of the category to be found
+ * @return      an instance of Category if there is a category identified by id, null otherwise
+ */
+Category get(int id) throws NotFoundException;
+
+/**
+ * Finds all the categories in the database
+ * @return      all the instances of Category, null otherwise
+ */
+Iterable<Category> getAll() throws NotFoundException;
+}
+
+public class CategoryController extends DTOListMapping<Category, CategoryDTO>{
+
+    /**
+     * Instance of CategoryRepository that will be used to access the db.
+     */
+    private final CategoryRepository categoryRepository;
+
+
+    @Autowired
+    public CategoryController(CategoryRepository categoryRepository) {
+
+        super(modelMapper);
+        this.categoryRepository = categoryRepository;
+    }
+
+    /**
+     * Gets the Category associated with the given id.
+     * @param	id	the id of the category
+     * @return		an HTTP response with status 200, 500 otherwise
+     * @throws NotFoundException 
+     */
+    @GetMapping(path = "/findCategory/{id}")
+    public ResponseEntity<CategoryDTO> findCategory(@PathVariable int id) throws NotFoundException {
+        Category category = categoryRepository.get(id);
+        return new ResponseEntity<>(convertToDTO(category), HttpStatus.OK);
+    }
+}
+            \end{lstlisting}
+        \end{itemize}
+		
+		
+		\item \textbf{Abstract factory}
+		\begin{itemize}
+		\item \textbf{Nome}: Abstract Factory
+            \item \textbf{Classificazione}: Data
+            \item \textbf{Applicabilità}: Nel caso di UnimibModules, le interfacce Factory permettono la creazione degli oggetti delle classi principali nel dominio.
+            \item \textbf{Partecipanti}:
+                \begin{itemize}
+                    \item RispostaFactory
+                    \item Risposta
+                    \item DomandaFactory
+                    \item Domanda
+                    \item QuestionarioFactory
+                    \item Questionario
+                    \item UtenteFactory
+                    \item Utente
+                \end{itemize}
+            \item \textbf{Scopo}: Interfaccia che permette di creare famiglie di oggetti connessi o dipendenti tra loro
+            \item \textbf{Codice d'esempio}
+            \begin{lstlisting}
+public class AnswerFactory {
+
+private AnswerFactory() {
+
+    throw new IllegalStateException("Utility class");
+}
+
+/**
+* Creates a new instance of Answer.
+* @param	text				the text of the answer
+* @param	user				the instance of the user who created the answer
+* @param	survey				the instance of the survey related to this answer
+* @param	question			the instance of the question related to this answer
+* @return						the newly created instance of Answer
+* @throws	EmptyFieldException	if the answer is empty
+*/
+public static Answer createAnswerToOpenQuestion(String text, User user, Survey survey, Question question)
+    throws EmptyFieldException {
+    
+    Answer answer = new Answer();
+    answer.setUser(user);
+    answer.setSurvey(survey);
+    answer.setQuestion(question);
+    answer.setText(text);
+    return answer;
+    }
+}
+            \end{lstlisting}
+        \end{itemize}
+		
+		
+		\item \textbf{Façade}
+		\begin{itemize}
+		\item \textbf{Nome}: Façade
+            \item \textbf{Classificazione}: Data
+            \item \textbf{Applicabilità}: Nel caso di UnimibModules, Façade permette l'accesso ai vari controller Spring
+            \item \textbf{Scopo}: Rappresenta il sistema complessivo, un oggetto radice, un dispositivo all’interno del quale viene eseguito il software, un punto di accesso al software o un sottosistema principale.
+        \end{itemize}
 	\end{itemize}
 \subsection{Diagramma di deployment}
 \subsection{Modello E-R}
