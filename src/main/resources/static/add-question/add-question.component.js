@@ -4,8 +4,8 @@ angular.
 	module('UNIMIBModules').
 	component('addQuestion', {
 		templateUrl: 'add-question/add-question.template.html',
-		controller: ['$location', '$routeParams', '$scope', '$http',
-			function addQuestionController($location, $routeParams, $scope, $http) {
+		controller: ['$location', '$routeParams', '$scope', '$http', 'awsService',
+			function addQuestionController($location, $routeParams, $scope, $http, $awsService) {
 				let tmpObj = {};
 				let tmpAnswer = {};
 				let user;
@@ -14,9 +14,10 @@ angular.
 				let counter = 0;
 				let start = true;
 				let check;
-				let photofile
+				let photofile;
 				$scope.imageView = false;
 				$scope.prova = ""
+
 
 				$scope.file_changed = function(element) {
 
@@ -137,12 +138,14 @@ angular.
 
 						if (photofile !== undefined)
 							tmpObj["urlImage"] = "ok";
+						else
+							tmpObj["urlImage"] = null;
 
 						$http.post("/api/addQuestion", tmpObj, 'application/json; charset=utf-8')
 							.then(function(response) {
 								if (v !== 0) {
 									angular.forEach($scope.questionAnswer, function(question, key) {
-										question["questionDTO"] = { "id": response.data };
+										question["questionDTO"] = { "id": response.data.idQuestion };
 
 										$http.post("http://localhost:5000/api/addCloseEndedAnswer", question, 'application/json; charset=utf-8')
 											.then(function(response) {
@@ -150,7 +153,7 @@ angular.
 											});
 									});
 
-								} else {
+								}
 									$scope.token = response.data.token
 									$scope.identityToken = response.data.identityToken
 									$scope.region = response.data.region
@@ -158,52 +161,11 @@ angular.
 									$scope.bucketName = response.data.bucketName
 									
 									if (photofile !== undefined) {
-										AWS.config.region = $scope.region;
-										AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-											IdentityId: $scope.identityToken,
-											IdentityPoolId: response.data.identityPoolId,
-											Logins: {
-												'cognito-identity.amazonaws.com': $scope.token,
-											}
-										});
-
-										AWS.config.credentials.get(function() {
-											var accessKeyId = AWS.config.credentials.accessKeyId;
-											var secretAccessKey = AWS.config.credentials.secretAccessKey;
-											var sessionToken = AWS.config.credentials.sessionToken;
-
-										});
-
-										var identityId = AWS.config.credentials.identityId;
-
-										let albumBucketName = $scope.bucketName;
-
-										let s3 = new AWS.S3({
-											params: { Bucket: albumBucketName }
-										});
-
 										let fileName = response.data.idQuestion + ".jpg";
 
-										let upload = new AWS.S3.ManagedUpload({
-											params: {
-												Bucket: albumBucketName,
-												Key: fileName,
-												Body: photofile
-											}
-										});
-
-										let promise = upload.promise();
-
-										promise.then(function(data) {
-												alert("OK")
-											},
-											function(err) {
-												alert(err.message)
-												$scope.prova = err.message;
-											}
-										);
+										$awsService.addPhoto($scope.token, $scope.region, $scope.identityToken,
+											$scope.identityPoolId, $scope.bucketName, photofile, fileName);
 									}
-								}
 							});
 					}
 				};

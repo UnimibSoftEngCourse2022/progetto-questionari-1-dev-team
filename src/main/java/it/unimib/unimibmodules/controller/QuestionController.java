@@ -166,6 +166,17 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
+	@GetMapping(path = "/getToken/{id}")
+	public ResponseEntity<String> getToken(@PathVariable int id){
+		GetOpenIdTokenForDeveloperIdentityResult response = awsToken.getToken(id);
+		logger.debug("Get token for id +" + id + ".");
+		return new ResponseEntity<>("{\"token\":\""+response.getToken()+"\"," +
+				"\"identityToken\":\"" + response.getIdentityId() +"\" , " +
+				"\"region\":\""+ AWSToken.REGION+"\", " +
+				"\"identityPoolId\":\""+ AWSToken.IDENTITY_POOL_ID+"\", " +
+				"\"bucketName\":\""+ AWSToken.BUCKET_NAME+"\"}", HttpStatus.CREATED);
+	}
+
 	/**
 	 * Creates a question, with the given text and id
 	 * @param	questionDTO the serialized object of the question
@@ -178,7 +189,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Question question = convertToEntity(questionDTO);
 		questionRepository.add(question);
 
-		if(questionDTO.getUrlImage().equals("ok")){
+		if(questionDTO.getUrlImage() != null && questionDTO.getUrlImage().equals("ok")){
 			question.setUrlImage(question.getId() + ".jpg");
 			questionRepository.modify(question);
 		}
@@ -203,6 +214,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	public ResponseEntity<String> modifyQuestion(@RequestBody QuestionDTO questionDTO)
 			throws NotFoundException {
 		Question question = convertToEntity(questionDTO);
+
 		questionRepository.modify(question);
 		logger.debug("Modified Question with id " + question.getId() + ".");
 		return new ResponseEntity<>("Question modified.", HttpStatus.OK);
