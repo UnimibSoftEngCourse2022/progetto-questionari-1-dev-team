@@ -1,29 +1,74 @@
 'use strict';
 
-angular.module('UNIMIBModules', ['ngRoute', 'ngCookies']).config(['$routeProvider',
-    function config($routeProvider) {
-        $routeProvider.when('/home', {
+window.routes =
+    {
+        '/home': {
             template: '<home></home>',
-        }).when('/modifySurvey/:idSurvey', {
-            template: '<modify-survey></modify-survey>'
-        }).when("/editQuestion/:idQuestion", {
-			template: '<edit-question></edit-question>'
-        }).when("/addQuestion", {
-			template: '<add-question></add-question>'
-		}).when('/addSurvey', {
-            template: '<add-survey></add-survey>'
-        }).when('/compileSurvey/:idSurvey', {
-            template: '<compile-survey></compile-survey>'
-        }).when("/editSurveyAnswer/:surveyId", {
-			template: "<edit-survey-answer></edit-survey-answer>"
-        }).when("/loginUser", {
-            template: '<login-user></login-user>'
-        }).when("/signupUser", {
-            template: '<signup-user></signup-user>'
-        }).when("/getUser/:idUser", {
-            template: '<get-user></get-user>'
-        }).when("/cookies", {
-            template: '<cookies></cookies>'
-        }).otherwise({redirectTo: "/home"});
+            requireLogin: false
+        },
+
+        '/modifySurvey/:idSurvey': {
+            template: '<modify-survey></modify-survey>',
+            requireLogin: true
+        },
+
+        '/editQuestion/:idQuestion': {
+            template: '<edit-question></edit-question>',
+            requireLogin: true
+        },
+
+        '/addQuestion': {
+            template: '<add-question></add-question>',
+            requireLogin: true
+        },
+
+        '/addSurvey': {
+            template: '<add-survey></add-survey>',
+            requireLogin: true
+        },
+
+        '/compileSurvey/:surveyId': {
+            template: '<compile-survey></compile-survey>',
+            requireLogin: true
+        },
+
+        '/loginUser': {
+            template: '<login-user></login-user>',
+            requireLogin: false
+        },
+
+        '/signupUser': {
+            template: '<signup-user></signup-user>',
+            requireLogin: false
+        },
+
+        '/getUser': {
+            template: '<get-user></get-user>',
+            requireLogin: true
+        }
+    };
+
+app.config(function config($routeProvider) {
+
+    for (let path in window.routes) {
+        $routeProvider.when(path, window.routes[path])
     }
-]);
+
+    $routeProvider.otherwise({redirectTo: "/home"})
+
+}).run(['$rootScope', '$location', 'authService', function ($rootScope, $location, authService) {
+    $rootScope.$on('$locationChangeStart', function (event, next, current) {
+
+        for (let i in window.routes) {
+            if (next.indexOf(i) !== -1) {
+                if (!authService.isLoggedIn() && window.routes[i].requireLogin) {
+                    console.log('DENY');
+                    event.preventDefault();
+                    $location.path('/loginUser');
+                } else {
+                    console.log('ALLOW');
+                }
+            }
+        }
+    });
+}]);

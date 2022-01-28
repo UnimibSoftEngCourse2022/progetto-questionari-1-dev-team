@@ -16,9 +16,9 @@
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<button type="button" class="btn btn-outline-primary"
-						ng-click="findSurveyByText(searchText)">Search</button>
+						ng-click="findSurveyByText()">Search</button>
 				</div>
-				<input type="text" ng-model="searchText" class="form-control"
+				<input type="text" ng-model="textSearch" class="form-control"
 					id="searchSurvey" placeholder="Enter search text">
 			</div>
 		</div>
@@ -30,19 +30,19 @@
 			</p>
 		</div>
 	</div>
-	
+
 	<div class="row " ng-show="showMessageError">
 		<div class="col-md-12  d-flex justify-content-center">
-			<p  class="messageError mt-1">{{messageError}}</p>
+			<p class="messageError mt-1">{{messageError}}</p>
 		</div>
 	</div>
-	
+
 	<div class="row  d-flex justify-content-center">
 		<div class="col-md-4">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<button type="button" class="btn btn-outline-primary"
-						ng-click="compileByCode()">Compile</button>
+						ng-click="compileByCode()" ng-style="{'display': displaySearchButton}">Compile</button>
 				</div>
 				<input type="text" ng-model="compilationCode" class="form-control"
 					id="searchSurvey" placeholder="Enter the compilation code" required>
@@ -54,9 +54,25 @@
 			<button type="button" class="btn btn-primary m-1 p-2"
 				ng-click="newQuestion()">New Question</button>
 
-			<button type="button" class="btn btn-primary m-1 p-2" ng-click="newSurvey()">New
-				Survey</button>
+			<button type="button" class="btn btn-primary m-1 p-2"
+				ng-click="newSurvey()">New Survey</button>
 		</div>
+	</div>
+	<div class="row mt-4">
+
+		<div class="col-sm-6 d-flex flex-row-reverse">
+			<a href="" ng-hide=" ! isPrevActive" ng-click="prevPage()"
+				class="link-primary"> < Previuos Page</a>
+
+		</div>
+
+		<div class="col-sm-6 d-flex flex-row">
+
+			<a href="" ng-hide=" ! isNextActive" ng-click="nextPage()"
+				class="link-primary ">Next Page > </a>
+		</div>
+
+
 	</div>
 	<div class="row mt-4 p-5 " ng-hide="isEmptyResult"
 		id="surveyCardContainer">
@@ -87,4 +103,30 @@
 	<div class="col-md-12 d-flex justify-content-center">
 		<h2>No results found...</h2>
 	</div>
+</div>
+
+<!-- Modal form for guest user -->
+<div id="myModalGuest" class="modal" ng-style="{'display': displayModal}">
+	<div class="modal-content">
+		<div class="modal-header">
+			<span ng-click="modalManager(-1)" class="close">&times;</span>
+			<h3>Compilation Code for Guest</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				<b>Email:</b> <input class="form-control"
+									 id="emailGuest" name="emailGuest" ng-model="emailGuest"
+									 required type="text" type="email"/>
+				<h6 ng-show="errorEmail" style="color:red;display:inline"> Missing email</h6>
+			</p>
+			<p>
+				<b>Compilation code:</b> {{randomCode}}
+			</p>
+			Already have an account? <a ng-href="#!/loginUser">Sign in</a><br>
+			<button ng-click="compileSurveyGuest(modalQuestion)"
+					class="btn btn-primary">Continue as guest</button>
+		</div>
+
+	</div>
+
 </div>

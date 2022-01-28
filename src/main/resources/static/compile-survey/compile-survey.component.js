@@ -1,28 +1,22 @@
 'use strict';
 
-app.component('compileSurvey', {
-	templateUrl: 'compile-survey/compile-survey.template.html',
-	controller: function($scope, $http, $location, $routeParams, $uibModal) {
+app.component("compileSurvey", {
+	templateUrl: "compile-survey/compile-survey.template.html",
+	controller: function($scope, $http, $routeParams, $uibModal, $location, AnswerFactory, FileSaver) {
 
 		$scope.model = {};
 		$scope.options = [];
-		$scope.survey = {}
-		$scope.questions = []
+		$scope.survey = {};
+		$scope.questions = [];
+		$scope.answers = [];
+		$scope.currentAnswer = {};
 		$scope.questionIndex = 0;
+		$scope.surveyMode = "INSERT";
+		$scope.questionMode = "INSERT";
+        $scope.answered = false;
+        $scope.modified = false;
 
 		$scope.load = function() {
-
-			$http.head("/api/findSurveyAnswersForUser?surveyId=" + $routeParams.surveyId + "&userId=1")
-				.then(function onFulfilled() {
-
-					$location.path("editSurveyAnswer/" + $routeParams.surveyId);
-				}, function errorCallback(response) {
-
-					if (response.status !== 404) {
-						alert("Error");
-						console.error(response);
-					}
-				});
 
 			$http.get("/api/findSurvey?id=" + $routeParams.surveyId).then(function onFulfilled(response) {
 
@@ -40,6 +34,25 @@ app.component('compileSurvey', {
 			$http.get("/api/findQuestionForSurvey/" + $routeParams.surveyId).then(function onFulfilled(response) {
 
 				$scope.questions = response.data;
+
+				$http.get("/api/findSurveyAnswersForUser/?surveyId=" + $routeParams.surveyId + "&userId=1")
+					.then(function onFulfilled(response) {
+
+						$scope.mode = "EDIT";
+						$scope.surveyMode = "EDIT";
+						$scope.answered = true;
+						$scope.answers = response.data;
+						$scope.selectQuestion();
+					}, function errorCallback(response) {
+
+						if (response.status === 404) {
+							$scope.mode = "INSERT";
+							$scope.surveyMode = "INSERT";
+						} else {
+							alert("Error");
+							console.error(response);
+						}
+					});
 			}, function errorCallback(response) {
 
 				if (response.status === 404) {
@@ -51,52 +64,52 @@ app.component('compileSurvey', {
 			});
 		}
 
-		$scope.closeSurvey = function() {
+		$scope.selectQuestion = function() {
 
-			let modal = $uibModal.open({
-				animation: true,
-				windowClass: "show",
-				templateUrl: "template/close-survey.template.html",
-				controller: function($scope, $http, $location) {
+			if ($scope.answers.length < 0)
+				return;
 
-					$scope.submit = function() {
-
-						$http.post("/api/saveSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=1")
-							.then(function onFulfilled() {
-
-								modal.close();
-								$location.path("/");
-							}, function errorCallback(response) {
-
-								modal.close();
-								alert("Error");
-								console.error(response);
-							});
+			$scope.currentAnswer = {};
+			if ($scope.questionIndex < $scope.questions.length) {
+				for (let answer of $scope.answers) {
+					if (answer.questionDTO.id === $scope.questions[$scope.questionIndex].id) {
+						$scope.currentAnswer = answer;
+						if ($scope.questions[$scope.questionIndex].questionType === "SINGLECLOSED")
+							$scope.model.closeended_answer = answer.closeEndedAnswerDTOs[0].id;
+						else if ($scope.questions[$scope.questionIndex].questionType === "MULTIPLECLOSED") {
+							for (let closeEndedAnswer in $scope.questions[$scope.questionIndex].closeEndedAnswerDTOSet)
+								if (answer.closeEndedAnswerDTOs
+									.find(v => v.id === $scope.questions[$scope.questionIndex].closeEndedAnswerDTOSet[closeEndedAnswer].id))
+									$scope.options[closeEndedAnswer] = true;
+						}
+						$scope.mode = "EDIT";
+						break;
 					}
-
-					$scope.cancel = function() {
-
-						modal.close();
-					}
-				}
-			});
-		}
-
-		$scope.submit = function() {
-
-			let data = {
-				answerText: null,
-				closeEndedAnswerDTOs: null,
-				userDTO: {
-					id: 1
-				},
-				surveyDTO: {
-					id: $routeParams.surveyId
-				},
-				questionDTO: {
-					id: $scope.questions[$scope.questionIndex].id
 				}
 			}
+			if (!$scope.currentAnswer.id)
+				$scope.mode = "INSERT";
+		}
+
+		$scope.skipQuestion = function() {
+
+			if ($scope.questionIndex !== $scope.questions.length - 1) {
+				$scope.questionIndex += 1;
+				$scope.selectQuestion();
+			} else {
+				$scope.closeSurvey();
+			}
+		}
+
+		$scope.closeSurvey = function() {
+
+			if ($scope.surveyMode === "INSERT")
+				$scope.saveAnswers();
+			else
+				$scope.saveModifiedAnswers();
+		}
+
+		$scope.getInputValues = function(data) {
 
 			switch ($scope.questions[$scope.questionIndex].questionType) {
 				case "OPEN":
@@ -116,18 +129,152 @@ app.component('compileSurvey', {
 							})
 					}
 			}
+		}
+
+		$scope.insert = function() {
+
+			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, 1, $routeParams.surveyId,
+				$scope.questions[$scope.questionIndex].id);
+
+			$scope.getInputValues(data);
 
 			$http.post("/api/addAnswer", data).then(function onFulfilled() {
 
-				if ($scope.questionIndex === $scope.questions.length - 1)
-					$scope.closeSurvey()
-				else
-					$scope.questionIndex += 1;
+                $scope.answered = true;
+				$scope.skipQuestion();
 			}, function errorCallback(response) {
 
 				alert("Error");
 				console.error(response);
 			});
 		}
+
+		$scope.modify = function() {
+
+			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, 1, $routeParams.surveyId,
+				$scope.questions[$scope.questionIndex].id);
+
+			$scope.getInputValues(data);
+
+			$http.patch("/api/modifyAnswer", data).then(function onFulfilled() {
+
+                $scope.modified = true;
+				$scope.skipQuestion();
+			}, function errorCallback(response) {
+
+				alert("Error");
+				console.error(response);
+			});
+		}
+
+		$scope.delete = function() {
+
+			$http.delete("/api/deleteAnswer/" + $scope.currentAnswer.id).then(function onFulfilled() {
+
+				$scope.skipQuestion();
+			}, function errorCallback(response) {
+
+				alert("Error");
+				console.error(response);
+			});
+		}
+
+		$scope.saveAnswers = function() {
+            let self = this;
+			let modal = $uibModal.open({
+				animation: true,
+				windowClass: "show",
+				templateUrl: "template/close-survey.template.html",
+				controller: function($scope, $http, $location) {
+
+					$scope.submit = function() {
+
+						$http.post("/api/saveSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=1")
+							.then(function onFulfilled() {
+
+								modal.close();;
+                                self.chooseDownload();
+							}, function errorCallback(response) {
+
+								modal.close();
+								alert("Error");
+								console.error(response);
+							});
+					}
+
+					$scope.cancel = function() {
+
+						modal.close();
+					}
+				}
+			});
+		}
+
+		$scope.saveModifiedAnswers = function() {
+
+            let self = this;
+			let modal = $uibModal.open({
+				animation: true,
+				windowClass: "show",
+				templateUrl: "template/close-survey.template.html",
+				controller: function($scope, $http, $location) {
+
+					$scope.submit = function() {
+
+						$http.post("/api/saveModifiedSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=1")
+							.then(function onFulfilled() {
+
+								modal.close();
+                                self.chooseDownload();
+							}, function errorCallback(response) {
+
+								modal.close();
+								alert("Error");
+								console.error(response);
+							});
+					}
+
+					$scope.cancel = function() {
+
+						modal.close();
+					}
+				}
+			});
+		}
+
+		$scope.chooseDownload = function() {
+            if($scope.answered){
+                let modal = $uibModal.open({
+                    animation: true,
+                    windowClass: "show",
+                    templateUrl: "template/download-survey.template.html",
+                    controller: function($scope, $http, $location) {
+
+                        $scope.download = function() {
+
+                            $http.get("/api/generatePdf?surveyId=" + $routeParams.surveyId + "&userId=1", {responseType:"blob"})
+                                .then(function onFulfilled(response) {
+
+                                    modal.close();
+                                    FileSaver.saveAs(response.data, "survey.pdf");
+                                    $location.path("/");
+                                }, function errorCallback(response) {
+
+                                    modal.close();
+                                    alert("Error");
+                                    console.error(response);
+                                });
+                        }
+
+                        $scope.ignore = function() {
+                        modal.close();
+                        $location.path("/");
+                        }
+                    }
+                });
+            }else{
+                $location.path("/");
+            }
+        }
 	}
 });

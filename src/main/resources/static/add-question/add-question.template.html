@@ -15,6 +15,24 @@
         </div>
     </div>
     <div class="row">
+        <dt class="col-sm-3">Upload an image:</dt>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="input-group">
+                <input type="file" onchange="angular.element(this).scope().file_changed(this)" class="form-control" id="customFile" />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04"
+                            ng-click="file_changed(null)">Clear</button>
+                </div>
+            </div>
+            <br>
+            <img src="{{prev_img}}" alt="200x200" style="width: 200px; height:200px"
+            ng-show="imageView"/>
+        </div>
+    </div>
+    <br>
+    <div class="row">
         <div class="col-md-2">
             <select class="form-select" aria-label="Default select example" ng-model="categorySelected">
                 <option value="">

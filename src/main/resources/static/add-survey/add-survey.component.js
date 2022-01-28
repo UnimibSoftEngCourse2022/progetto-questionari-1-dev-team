@@ -4,10 +4,10 @@ angular.
 	module('UNIMIBModules').
 	component('addSurvey', {
 		templateUrl: 'add-survey/add-survey.template.html',
-		controller: ['$location', '$routeParams', '$scope', '$http',
-			function addSurveyController($location, $routeParams, $scope, $http) {
+		controller: ['$location', '$routeParams', '$scope', '$http', 'cookieService',
+			function addSurveyController($location, $routeParams, $scope, $http, cookieService) {
 
-				$scope.idUser = 1 //from cookie
+				$scope.idUser = ""
 				$scope.name = ""
 				$scope.showMessageErr = false
 				$scope.showMessageConf = false
@@ -15,11 +15,14 @@ angular.
 
 				$scope.addSurvey = function() {
 
+					if (cookieService.getCookie() != null) {
+						$scope.idUser = cookieService.getCookie();
+					}
+
 					if ($scope.name !== undefined && $scope.name != "" && $scope.name.replace(/\s/g, '').length) {
-						let actualDate = new Date()
 						let data = {
 							surveyName: $scope.name,
-							creationDate: actualDate.getFullYear() + '-' + (actualDate.getMonth() + 1) + '-' + actualDate.getDate() + " " + actualDate.getMinutes() + ":" + actualDate.getSeconds(),
+							creationDate: null,
 							userDTO: {
 								id: $scope.idUser,
 							}

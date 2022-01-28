@@ -45,7 +45,7 @@ public class UserDTO {
     /**
      * Serialization of the id used to recognize a non-registered user.
      */
-    @Getter	@Setter private int compilationId;
+    @Getter	@Setter private String compilationId;
 
     /**
      * Serialization of the questions created by the user

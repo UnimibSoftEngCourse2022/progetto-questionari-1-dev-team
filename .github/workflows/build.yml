@@ -66,10 +66,26 @@ jobs:
           DB_URL: ${{ secrets.DB_URL }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          ACCESS_KEY_ID_COGNITO: ${{ secrets.ACCESS_KEY_ID_COGNITO }}
+          SECRET_ACESS_KEY_COGNITO: ${{ secrets.SECRET_ACESS_KEY_COGNITO }}
+          EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_SMTP_HOST: ${{ secrets.EMAIL_SMTP_HOST }}
+          EMAIL_SMTP_AUTH: ${{ secrets.EMAIL_SMTP_AUTH }}
+          EMAIL_SMTP_PORT: ${{ secrets.EMAIL_SMTP_PORT }}
+          EMAIL_SMTP_TLS: ${{ secrets.EMAIL_SMTP_TLS }}
         run: |
           perl -pi -e 's/DB_URL/$ENV{DB_URL}/' src/main/resources/application.properties
           perl -pi -e 's/DB_USERNAME/$ENV{DB_USERNAME}/' src/main/resources/application.properties
           perl -pi -e 's/DB_PASSWORD/$ENV{DB_PASSWORD}/' src/main/resources/application.properties
+          perl -pi -e 's/ACCESS_KEY_ID_COGNITO/$ENV{ACCESS_KEY_ID_COGNITO}/' src/main/java/it/unimib/unimibmodules/service/AWSTokenImpl.java
+          perl -pi -e 's/SECRET_ACESS_KEY_COGNITO/$ENV{SECRET_ACESS_KEY_COGNITO}/' src/main/java/it/unimib/unimibmodules/service/AWSTokenImpl.java
+          perl -pi -e 's/EMAIL_USERNAME/$ENV{EMAIL_USERNAME}/' src/main/java/it/unimib/EMAIL_PASSWORD/service/MailServiceImpl.java
+          perl -pi -e 's/EMAIL_PASSWORD/$ENV{EMAIL_PASSWORD}/' src/main/java/it/unimib/EMAIL_PASSWORD/service/MailServiceImpl.java
+          perl -pi -e 's/EMAIL_SMTP_HOST/$ENV{EMAIL_SMTP_HOST}/' src/main/java/it/unimib/EMAIL_PASSWORD/service/MailServiceImpl.java
+          perl -pi -e 's/EMAIL_SMTP_AUTH/$ENV{EMAIL_SMTP_AUTH}/' src/main/java/it/unimib/EMAIL_PASSWORD/service/MailServiceImpl.java
+          perl -pi -e 's/EMAIL_SMTP_PORT/$ENV{EMAIL_SMTP_PORT}/' src/main/java/it/unimib/EMAIL_PASSWORD/service/MailServiceImpl.java
+          perl -pi -e 's/EMAIL_SMTP_TLS/$ENV{EMAIL_SMTP_TLS}/' src/main/java/it/unimib/EMAIL_PASSWORD/service/MailServiceImpl.java
       #Build the application using Maven
       - name: Build with Maven
         run: mvn -B package -DskipTests --file pom.xml

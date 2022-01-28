@@ -33,12 +33,13 @@ public class UserRepositoryImpl implements UserRepository {
     /**
      * Inserts an instance of User in the database
      * @param   user  an instance of User
+     * @return        the saved entity
      * @see     UserRepository#add
      */
     @Override
-    public void add(User user) {
+    public User add(User user) {
 
-        userDAO.save(user);
+        return userDAO.save(user);
     }
 
     /**
@@ -65,6 +66,24 @@ public class UserRepositoryImpl implements UserRepository {
             return user.orElseThrow();
         }catch (NoSuchElementException e) {
             throw new NotFoundException("The User with the id " + id + " was not found.");
+        }
+    }
+
+    /**
+     * Finds the user identified by compilationCode in the database
+     * @param   code                    the code of the user to be found
+     * @return                          an instance of User if there is a user identified by code, null otherwise
+     * @throws  NotFoundException       if no user identified by the id has been found
+     * @see     UserRepository#getByCode(String code)
+     */
+    @Override
+    public boolean getByCode(String code) throws NotFoundException {
+        Optional<User> user = userDAO.findByCompilationCode(code);
+        try {
+            User userR = user.orElseThrow();
+            return true;
+        }catch (NoSuchElementException e) {
+            return false;
         }
     }
 

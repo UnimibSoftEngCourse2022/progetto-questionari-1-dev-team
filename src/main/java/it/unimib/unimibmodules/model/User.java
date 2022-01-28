@@ -26,6 +26,7 @@ public class User {
     /**
      * The email of the user.
      */
+    @Nullable
     @Getter	@Setter private String email;
 
     /**
@@ -36,23 +37,27 @@ public class User {
     /**
      * The username of the user.
      */
+    @Nullable
     @Getter	@Setter private String username;
 
     /**
      * The name of the user.
      */
+    @Nullable
     @Getter	@Setter private String name;
 
     /**
      * The surname of the user.
      */
+    @Nullable
     @Getter	@Setter private String surname;
 
     /**
      * The id used to recognize a user not registered.
      */
+    @Column(unique = true)
     @Nullable
-    @Getter	@Setter private int compilationId;
+    @Getter	@Setter private String compilationId;
 
     /**
      * The list of the surveys created by the user.

@@ -24,7 +24,7 @@ public class ExceptionController {
      */
     @ExceptionHandler(value = { FormatException.class })
     public ResponseEntity<Object> handleFormatException(FormatException ex) {
-        LOGGER.error("Invalid Format: " + ex.getMessage());
+        LOGGER.error("Invalid Format: {}" , ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
     }
     

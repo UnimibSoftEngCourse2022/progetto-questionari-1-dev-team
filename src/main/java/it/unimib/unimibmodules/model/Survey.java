@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
+import it.unimib.unimibmodules.exception.EmptyFieldException;
+import it.unimib.unimibmodules.exception.FormatException;
+
 /**
  * Represents a survey.
  * @author Luca Milazzo
