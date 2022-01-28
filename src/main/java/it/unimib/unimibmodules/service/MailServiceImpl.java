@@ -1,4 +1,4 @@
-package it.unimib.unimibmodules.Service;
+package it.unimib.unimibmodules.service;
 
 import it.unimib.unimibmodules.controller.MailService;
 import org.apache.logging.log4j.LogManager;
