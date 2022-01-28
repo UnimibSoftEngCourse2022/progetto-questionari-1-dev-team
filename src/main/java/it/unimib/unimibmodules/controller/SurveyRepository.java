@@ -11,7 +11,7 @@ import it.unimib.unimibmodules.model.SurveyQuestions;
 /**
  * Repository for SurveyRepository.
  * @author Luca Milazzo
- * @version 0.3.0
+ * @version 0.4.0
  */
 public interface SurveyRepository {
 

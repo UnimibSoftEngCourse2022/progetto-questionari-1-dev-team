@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * DAO for the User class.
  * @author Gianlorenzo Martini
- * @version 0.3.0
+ * @version 0.4.0
  */
 public interface UserDAO extends CrudRepository<User, Integer> {
 

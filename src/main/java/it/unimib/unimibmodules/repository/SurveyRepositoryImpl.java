@@ -17,7 +17,7 @@ import java.util.*;
  * accessing the database trough DAO.
  * 
  * @author Luca Milazzo
- * @version 0.3.0
+ * @version 0.4.0
  */
 @Component("surveyRepository")
 public class SurveyRepositoryImpl implements SurveyRepository {

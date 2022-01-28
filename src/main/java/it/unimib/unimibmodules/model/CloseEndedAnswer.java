@@ -11,7 +11,7 @@ import java.util.Set;
  * Represents a closed-ended answer.
  * @author Davide Costantini
  * @author Lorenzo Occhipinti
- * @version 0.3.0
+ * @version 0.4.0
  */
 @Entity
 @Table(name = "CloseEndedAnswer")

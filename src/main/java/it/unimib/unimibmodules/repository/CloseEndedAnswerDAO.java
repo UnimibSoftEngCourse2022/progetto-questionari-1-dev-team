@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * DAO for the CloseEndedAnswer class.
  * @author Davide Costantini
- * @version 0.3.0
+ * @version 0.4.0
  */
 public interface CloseEndedAnswerDAO extends CrudRepository<CloseEndedAnswer, Integer> {
 

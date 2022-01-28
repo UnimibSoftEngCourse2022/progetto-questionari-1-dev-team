@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Represents an open-ended answer.
  * @author Davide Costantini
- * @version 0.3.0
+ * @version 0.4.0
  */
 @Entity
 @Table(name = "Answer")

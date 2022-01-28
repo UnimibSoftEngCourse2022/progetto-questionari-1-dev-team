@@ -15,7 +15,7 @@ import it.unimib.unimibmodules.exception.FormatException;
 /**
  * Represents a survey.
  * @author Luca Milazzo
- * @version 0.3.0
+ * @version 0.4.0
  */
 @Entity
 @Table(name = "Survey")

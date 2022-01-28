@@ -10,7 +10,7 @@ import java.util.Set;
  * Represents a question.
  * @author Khalil
  * @author Davide Costantini
- * @version 0.3.0
+ * @version 0.4.0
  */
 @Entity
 @Table(name = "Question")

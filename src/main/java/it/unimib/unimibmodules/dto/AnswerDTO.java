@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * DTO for Answer.
  * @author Davide Costantini
- * @version 0.3.0
+ * @version 0.4.0
  */
 public class AnswerDTO {
 

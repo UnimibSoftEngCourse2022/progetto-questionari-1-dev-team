@@ -13,7 +13,7 @@ import java.util.Properties;
 /**
  * Service for sending emails.
  * @author Davide Costantini
- * @version 0.3.0
+ * @version 0.4.0
  */
 @Component("mailServiceImpl")
 public class MailServiceImpl implements MailService {

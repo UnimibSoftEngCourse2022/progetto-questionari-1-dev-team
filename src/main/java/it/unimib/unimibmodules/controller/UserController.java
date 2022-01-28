@@ -20,7 +20,7 @@ import java.util.*;
 /**
  * Controller handling HTTP requests from User
  * @author Gianlorenzo Martini
- * @version 0.3.0
+ * @version 0.4.0
  */
 
 @RestController

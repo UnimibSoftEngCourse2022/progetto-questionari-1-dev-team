@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Factory class for Answer and CloseEndedAnswer.
  * @author Davide Costantini
- * @version 0.3.0
+ * @version 0.4.0
  */
 public class AnswerFactory {
 
