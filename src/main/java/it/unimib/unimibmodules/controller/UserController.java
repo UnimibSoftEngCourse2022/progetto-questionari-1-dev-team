@@ -86,8 +86,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
             int index = (int) (rand.nextFloat() * saltChars.length());
             salt.append(saltChars.charAt(index));
         }
-        String saltStr = salt.toString();
-        return saltStr;
+        return salt.toString();
     }
 
     /**

@@ -10,7 +10,11 @@ import it.unimib.unimibmodules.model.User;
  * @version 0.4.0
  */
 public class QuestionFactory {
-	
+
+	private QuestionFactory() {
+		//Fixed code-smell
+	}
+
 	/**
 	 * Creates a new instance of Question without image.
 	 * @param   text    	the text of the question
