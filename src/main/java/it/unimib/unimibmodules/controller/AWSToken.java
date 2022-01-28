@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  * @version 0.3.0
  */
 @Component("awsToken")
-public class AWSToken { 
+public class AWSToken {
     public static final Region REGION = Region.getRegion(Regions.EU_CENTRAL_1);
     public static final String ACCESS_KEY_ID = ACCESS_KEY_ID_COGNITO;
     public static final String ACCESS_KEY_VALUE = SECRET_ACESS_KEY_COGNITO;
@@ -29,10 +29,10 @@ public class AWSToken {
     public static final String LOGIN_PROVIDER = "login.progettoquestionari.dev";
     public static final String BUCKET_NAME = "questionari-images";
     /**
-	 * Get the User's token from AWS Cognito
-	 * @param	isUser the id of the logged user.
-	 * @return				GetOpenIdTokenForDeveloperIdentityResult instance
-	 */
+     * Get the User's token from AWS Cognito
+     * @param	idUser the id of the logged user.
+     * @return				GetOpenIdTokenForDeveloperIdentityResult instance
+     */
     public GetOpenIdTokenForDeveloperIdentityResult getToken(int idUser){
         AmazonCognitoIdentity identityClient = new AmazonCognitoIdentityClient(
                 new BasicAWSCredentials(ACCESS_KEY_ID, ACCESS_KEY_VALUE)
