@@ -37,6 +37,17 @@ public interface SurveyRepository {
 	 * @throws NotFoundException 
 	 */
 	Iterable<Survey> getByText(String text) throws NotFoundException;
+	
+	/**
+	 * Finds the Survey in the database where text is contained in the name of the survey 
+	 * with Lazy Loading
+	 * @param	text	the text to be found in the name of the survey
+	 * @param offset 
+	 * @param limit
+	 * @return			a list of Surveys the text is contained in the name of the survey
+	 * @throws NotFoundException 
+	 */
+	Iterable<Survey> getByTextLazy(String text, int offset, int limit) throws NotFoundException;
 
 	/**
 	 * Returns all surveys in the database.
@@ -44,6 +55,15 @@ public interface SurveyRepository {
 	 * @throws NotFoundException 
 	 */
 	Iterable<Survey> getAll() throws NotFoundException;
+	
+	/**
+	 * Returns all surveys in the database with lazy Loading.
+	 * @param offset 
+	 * @param limit
+	 * @return  a Set of Surveys
+	 * @throws NotFoundException 
+	 */
+	Iterable<Survey> getAllLazy(int offset, int limit) throws NotFoundException;
 
 	/**
 	 * Deletes from the database the survey identified by id.

@@ -109,6 +109,25 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 			throw ex;
 		}
 	}
+	
+	/**
+	 * Returns all surveys in the database with Lazy loading.
+	 * @param offset
+	 * @param limit
+	 * @return a Set of Surveys
+	 * @throws NotFoundException
+	 * @see SurveyRepository#getAll()
+	 */
+	@Override
+	public Iterable<Survey> getAllLazy(int offset, int limit) throws NotFoundException {
+		Iterable<Survey> surveys = surveyDAO.findAllLazy(offset, limit);
+		if (IterableUtils.size(surveys) > 0) {
+			return surveys;
+		} else {
+			NotFoundException ex = new NotFoundException("No surveys exist.");
+			throw ex;
+		}
+	}
 
 	/**
 	 * Finds the survey in the database where text is contained in the name of the
@@ -123,6 +142,29 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	public Iterable<Survey> getByText(String text) throws NotFoundException {
 
 		Iterable<Survey> surveys = surveyDAO.findByText(text, text);
+		if (IterableUtils.size(surveys) > 0) {
+			return surveys;
+		} else {
+			NotFoundException ex = new NotFoundException(
+					"No surveys containing " + text + " in their name have been found");
+			throw ex;
+		}
+	}
+	
+	/**
+	 * Finds the survey in the database where text is contained in the name of the
+	 * survey with Lazy Loading.
+	 * 
+	 * @param text the text to search in the name of the survey
+	 * @param offset
+	 * @param limit
+	 * @return a list of Surveys where the text is contained in the name of the
+	 *         survey
+	 * @throws NotFoundException
+	 */
+	@Override
+	public Iterable<Survey> getByTextLazy(String text, int offset, int limit) throws NotFoundException {
+		Iterable<Survey> surveys = surveyDAO.findByTextLazy(text, text , offset, limit);
 		if (IterableUtils.size(surveys) > 0) {
 			return surveys;
 		} else {
@@ -223,4 +265,5 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 			}
 		}
 	}
+
 }
