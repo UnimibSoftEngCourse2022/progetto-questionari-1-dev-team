@@ -237,7 +237,6 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	 * @param	surveyId	the id of the survey
 	 * @param	userId		the id of the user
 	 */
-	@Override
 	public void commitModify(int surveyId, int userId) {
 
 		List<Answer> answerList = uofContext.get(UnitOfWork.MODIFY);
@@ -261,7 +260,6 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	 * @param	surveyId	the id of the survey
 	 * @param	userId		the id of the user
 	 */
-	@Override
 	public void commitDelete(int surveyId, int userId) {
 
 		List<Answer> answerList = uofContext.get(UnitOfWork.DELETE);
@@ -277,5 +275,27 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 					answerList.remove(answer);
 				});
 		logger.debug("Deleted registered answers for user {} and survey {}.", userId, surveyId);
+	}
+
+	/**
+	 * Deletes the registered answers made by the user identified by <code>userId</code> on the survey identified by
+	 * <code>surveyId</code>.
+	 * @param	surveyId	the id of the survey
+	 * @param	userId		the id of the user
+	 */
+	@Override
+	public void clean(int surveyId, int userId) {
+
+		for (List<Answer> answerList : uofContext.values()) {
+
+			if (answerList == null)
+				return;
+
+			answerList.stream()
+					.filter(answer -> answer.getSurvey().getId() == surveyId && answer.getUser().getId() == userId)
+					.collect(Collectors.toList())
+					.forEach(answerList::remove);
+		}
+		logger.debug("Clean registered answers for user {} and survey {}.", userId, surveyId);
 	}
 }

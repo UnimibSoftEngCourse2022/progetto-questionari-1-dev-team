@@ -223,6 +223,20 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	}
 
 	/**
+	 * Cleans all the registered answers made by the user identified by <code>userId</code> on the survey identified by
+	 * <code>surveyId</code>.
+	 * @param	surveyId	the id of the survey
+	 * @param	userId		the id of the user
+	 * @return				an HTTP Response with status 200 if the Unit Of Work has been cleaned, 500 otherwise
+	 */
+	@DeleteMapping(path = "/cleanSurveyAnswers")
+	public ResponseEntity<String> cleanSurveyAnswers(@RequestParam int surveyId, @RequestParam int userId) {
+
+		answerRepository.clean(surveyId, userId);
+		return new ResponseEntity<>("{\"response\":\"Changes saved.\"}", HttpStatus.OK);
+	}
+
+	/**
 	 * Converts an instance of Answer to an instance of AnswerDTO
 	 * @param   answer	an instance of Answer
 	 * @return			an instance of AnswerDTO, containing the serialized data of answer
