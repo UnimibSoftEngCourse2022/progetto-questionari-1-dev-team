@@ -21,12 +21,7 @@ import org.springframework.stereotype.Component;
  */
 @Component("awsToken")
 public class AWSTokenImpl implements AWSToken {
-    public static final Region REGION = Region.getRegion(Regions.EU_CENTRAL_1);
-    public static final String ACCESS_KEY_ID = "ACCESS_KEY_ID_COGNITO";
-    public static final String ACCESS_KEY_VALUE = "SECRET_ACESS_KEY_COGNITO";
-    public static final String IDENTITY_POOL_ID = "eu-central-1:581b95ad-2144-4e38-b112-028abe2bac0a";
-    public static final String LOGIN_PROVIDER = "login.progettoquestionari.dev";
-    public static final String BUCKET_NAME = "questionari-images";
+
     /**
      * Get the User's token from AWS Cognito
      * @param	idUser the id of the logged user.
