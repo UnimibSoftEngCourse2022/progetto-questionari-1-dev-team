@@ -2,12 +2,11 @@ package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Category;
-import it.unimib.unimibmodules.model.Question;
 
 /**
  * Interface for CategoryRepository.
  * @author Lorenzo Occhipinti
- * @version 0.2.0
+ * @version 0.3.0
  */
 public interface CategoryRepository {
 

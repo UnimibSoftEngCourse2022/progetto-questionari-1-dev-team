@@ -9,7 +9,7 @@ import it.unimib.unimibmodules.exception.FormatException;
 /**
  * DTO for the Survey class.
  * @author Luca Milazzo
- * @version 0.2.0
+ * @version 0.3.0
  */
 public class SurveyDTO {
 	
@@ -36,7 +36,7 @@ public class SurveyDTO {
 	/**
 	 * Serialization of the questions of the survey.
 	 */
-	private Set<QuestionDTO> questionsDTO;
+	private Set<SurveyQuestionsDTO> surveyQuestionsDTO;
 	
 	/**
      * Returns the id of the surveyDTO.
@@ -141,15 +141,15 @@ public class SurveyDTO {
      * Returns the questionsDTO related to the survey.
      * @return  the questionsDTO related to the survey
      */
-	public Set<QuestionDTO> getQuestions() {
-		return questionsDTO;
+	public Set<SurveyQuestionsDTO> getQuestions() {
+		return surveyQuestionsDTO;
 	}
 
 	/**
      * Modifies the questionsDTO related to the survey, setting questionsDTO as the new value.
      * @param   questionsDTO  the new questionsDTO value
      */
-	public void setQuestions(Set<QuestionDTO> questionsDTO) {
-		this.questionsDTO = questionsDTO;
+	public void setQuestions(Set<SurveyQuestionsDTO> questionsDTO) {
+		this.surveyQuestionsDTO = questionsDTO;
 	}
 }

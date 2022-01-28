@@ -2,10 +2,20 @@
 # yarn lockfile v1
 
 
+angular-cookies@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.8.2.tgz#0791c37c395d9fba8144781f3b2ed135ca7c5925"
+  integrity sha512-M6fCnsnw1pj1+nXuO28ilJ+h6pFCIXQKSEgy9/PIoN0sZr5FqsE9BK18PdBQa8dif+fnHCAYpPU8MgDzT/sZSg==
+
 angular-route@^1.8.2:
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/angular-route/-/angular-route-1.8.2.tgz#d482bf05a8c9e448300acd8f9989c635d31b5077"
   integrity sha512-49LJYxuaQ/ZDiu9dD2xo1LkazqObkGjw0a7dUF7UKCT8EELgBsMd6QrI6aEVGtI62ppkiFkxqmiV8fcwYdXpug==
+
+angular-ui-bootstrap@^2.5.6:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
+  integrity sha512-yzcHpPMLQl0232nDzm5P4iAFTFQ9dMw0QgFLuKYbDj9M0xJ62z0oudYD/Lvh1pWfRsukiytP4Xj6BHOSrSXP8A==
 
 angular@^1.8.2:
   version "1.8.2"

@@ -6,3 +6,25 @@
     text-decoration-style: initial;
     text-decoration-color: initial;
 }
+
+nav{
+	padding-left: 2%;
+	color:white;
+}
+
+.nav-link{
+	font-size: large;
+}
+
+.navbar-brand{
+	font-size: x-large;
+}
+
+.jumbotron{
+	background-color: #d0d8ef;
+	padding: 1%;
+}
+
+.disabled {
+    cursor: not-allowed;
+}

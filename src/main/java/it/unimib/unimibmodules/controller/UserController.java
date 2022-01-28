@@ -3,7 +3,6 @@ package it.unimib.unimibmodules.controller;
 import it.unimib.unimibmodules.dto.SurveyDTO;
 import it.unimib.unimibmodules.dto.UserDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
-import it.unimib.unimibmodules.factory.UserFactory;
 import it.unimib.unimibmodules.model.Survey;
 import it.unimib.unimibmodules.model.User;
 import org.apache.logging.log4j.LogManager;
@@ -18,20 +17,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * Controller handling HTTP requests from User
  * @author Gianlorenzo Martini
- * @version 0.2.0
+ * @version 0.3.0
  */
 
 @RestController
 @RequestMapping("/api")
 public class UserController extends DTOMapping<User, UserDTO> {
 
-    private static final Logger logger = LogManager.getLogger(User.class);
+    private static final Logger logger = LogManager.getLogger(UserController.class);
 
     /**
      * Instance of UserRepository that will be used to access the db.
@@ -48,7 +46,8 @@ public class UserController extends DTOMapping<User, UserDTO> {
                     mapper.map(User::getId, UserDTO::setId);
                     mapper.map(User::getUsername, UserDTO::setUsername);
                     mapper.map(User::getEmail, UserDTO::setEmail);
-                    mapper.map(User::getName, UserDTO::setName);                 
+                    mapper.map(User::getName, UserDTO::setName);
+                    mapper.map(User::getSurname, UserDTO::setSurname);
                 });
 
         modelMapper.createTypeMap(UserDTO.class, User.class)
@@ -71,15 +70,15 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public ResponseEntity<UserDTO> getUser(@PathVariable int id) throws NotFoundException {
 
         User user = userRepository.get(id);
-        logger.debug("Retrieved User with id " + id + ".");
+        logger.debug("Retrieved User with id: {}.", id);
         return new ResponseEntity<>(convertToDTO(user), HttpStatus.OK);
     }
 
     /**
      * Gets the surveys created by the user identified by the username
-     * @param   username    the username of a user
-     * @return              a list of surveys created by the user identified with username
-     * @throws NotFoundException
+     * @param   username            the username of a user
+     * @return                      a list of surveys created by the user identified with username
+     * @throws NotFoundException    if no user identified by username is found
      */
     @GetMapping("/getSurveysCreated")
     public ResponseEntity<List<SurveyDTO>> getSurveysCreated(@RequestParam (name = "username") String username) throws NotFoundException {
@@ -97,7 +96,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
             surveysDTO.add(surveyDTO);
         }
 
-        logger.debug("Retrieved surveys created by user: " + username + ".");
+        logger.debug("Retrieved surveys created by user with id: {}.", user.getId());
         return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
     }
 
@@ -113,11 +112,11 @@ public class UserController extends DTOMapping<User, UserDTO> {
         User user = userRepository.getByUsername(userDTO.getUsername());
 
         if (bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
-            logger.debug("Successful sign in of user: " + userDTO.getUsername() + ".");
-            return new ResponseEntity<>("{\"response\":\"Login Successful.\"}", HttpStatus.OK);
+            logger.debug("Successful sign in of user with id: {}.", userDTO.getId());
+            return new ResponseEntity<>("{\"idUser\":\""+ user.getId() +"\"}", HttpStatus.OK);
         } else {
-            logger.debug("Failed sign in of user: " + userDTO.getUsername() + ".");
-            return new ResponseEntity<>("{\"response\":\"Login fAILED.\"}", HttpStatus.UNAUTHORIZED);
+            logger.debug("Failed sign in of user with id: {}.", userDTO.getId());
+            return new ResponseEntity<>("{\"response\":\"Login Failed.\"}", HttpStatus.UNAUTHORIZED);
         }
     }
     
@@ -130,9 +129,8 @@ public class UserController extends DTOMapping<User, UserDTO> {
     public ResponseEntity<String> signUpUser(@RequestBody UserDTO userDTO) {
 
         try {
-            System.out.println(userDTO.getUsername());
-            User user = userRepository.getByUsername(userDTO.getUsername());
-            logger.debug("Failed creation of user " + userDTO.getUsername() + ": user already exist.");
+            userRepository.getByUsername(userDTO.getUsername());
+            logger.debug("Failed creation of user: user already exist.");
             return new ResponseEntity<>("{\"response\":\"Username already existing.\"}", HttpStatus.BAD_REQUEST);
         } catch (NotFoundException e) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -140,9 +138,9 @@ public class UserController extends DTOMapping<User, UserDTO> {
             User user = convertToEntity(userDTO);
             user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
-            userRepository.add(user);
-            logger.debug("Successful creation of user " + userDTO.getUsername() + ".");
-            return new ResponseEntity<>("{\"response\":\"User created.\"}", HttpStatus.CREATED);
+            User entity = userRepository.add(user);
+            logger.debug("Successful creation of user.");
+            return new ResponseEntity<>("{\"idUser\":\""+ entity.getId() +"\"}", HttpStatus.CREATED);
         }
     }
 

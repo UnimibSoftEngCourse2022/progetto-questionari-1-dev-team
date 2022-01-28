@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * A DTO representing a user
  * @author Gianlorenzo Martini
- * @version 0.2.0
+ * @version 0.3.0
  */
 
 public class UserDTO {
@@ -44,6 +44,11 @@ public class UserDTO {
      */
 
     private String surname;
+
+    /**
+     * Serialization of the id used to recognize a non-registered user.
+     */
+    private int compilationId;
 
     /**
      * Serialization of the questions created by the user
@@ -169,6 +174,22 @@ public class UserDTO {
     }
 
     /**
+     * Returns the id used to recognize a non-registered user.
+     * @return  the id used to recognize a non-registered user
+     */
+    public int getCompilationId() {
+        return compilationId;
+    }
+
+    /**
+     * Modifies the id used to recognize a non-registered user.
+     * @param compilationId the new id used to recognize a non-registered user.
+     */
+    public void setCompilationId(int compilationId) {
+        this.compilationId = compilationId;
+    }
+
+    /**
      * Returns the DTOs of the questions created by the user.
      * @return  A list of QuestionDTO containing the questions created by the user
      */
@@ -199,4 +220,5 @@ public class UserDTO {
     public void setSurveysCreatedDTO(Set<SurveyDTO> surveysCreatedDTO) {
         this.surveysCreatedDTO = surveysCreatedDTO;
     }
+
 }

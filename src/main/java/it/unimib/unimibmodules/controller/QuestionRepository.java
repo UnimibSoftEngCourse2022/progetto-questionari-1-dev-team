@@ -6,7 +6,7 @@ import it.unimib.unimibmodules.model.Question;
 /**
  * Interface for QuestionRepository.
  * @author Khalil
- * @version 0.2.0
+ * @version 0.3.0
  */
 public interface QuestionRepository {
 
@@ -44,6 +44,20 @@ public interface QuestionRepository {
 	 * @return			an instance of Question if there is a question identified by id, null otherwise
 	 */
 	Iterable<Question> getByText(String text);
+
+	/**
+	 * Finds the question in the database created by a specified user
+	 * @param	userId  	id of the user
+	 * @return			an instance of Question if there is a question identified by id, null otherwise
+	 */
+	Iterable<Question> getByUser(int userId);
+
+	/**
+	 * Finds the question identified by id of the category in the database
+	 * @param	categoryId	the id of the category
+	 * @return				an instance of Question if there is a question identified by id, null otherwise
+	 */
+	Iterable<Question> getByCategory(int categoryId);
 
 	/**
 	 * Deletes from the database the question identified by id.

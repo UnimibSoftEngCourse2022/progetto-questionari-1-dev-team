@@ -19,11 +19,11 @@ import java.util.List;
  * Controller handling HTTP requests related to Category.
  * @author Lorenzo Occhipinti
  * @author Khalil Mohamed Khalil
- * @version 0.2.0
+ * @version 0.3.0
  */
 @RestController
 @RequestMapping("/api")
-public class CategoryController extends DTOMapping<Category, CategoryDTO>{
+public class CategoryController extends DTOListMapping<Category, CategoryDTO>{
 
     /**
      * Instance of AnswerRepository that will be used to access the db.
@@ -78,6 +78,7 @@ public class CategoryController extends DTOMapping<Category, CategoryDTO>{
         return modelMapper.map(dto, Category.class);
     }
 
+    @Override
     public List<CategoryDTO> convertListToDTO(Iterable<Category> categories) {
 
         List<CategoryDTO> categoryList = new ArrayList<>();

@@ -6,7 +6,7 @@ import it.unimib.unimibmodules.model.User;
 /**
  * Interface for UserRepository.
  * @author Gianlorenzo Martini
- * @version 0.2.0
+ * @version 0.3.0
  */
 public interface UserRepository {
 
@@ -14,7 +14,7 @@ public interface UserRepository {
 	 * Inserts an instance of User in the database
 	 * @param   user  an instance of User
 	 */
-	void add(User user);
+	User add(User user);
 
 	/**
 	 * Finds the user identified by id in the database

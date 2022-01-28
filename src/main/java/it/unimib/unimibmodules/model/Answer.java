@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Represents an open-ended answer.
  * @author Davide Costantini
- * @version 0.2.0
+ * @version 0.3.0
  */
 @Entity
 @Table(name = "answer")
@@ -154,9 +154,11 @@ public class Answer {
         if (closeEndedAnswers == null)
             throw new EmptyFieldException("Answers to close-ended questions must contain at least 1 close-ended answer.");
         else if (question.getQuestionType() == QuestionType.SINGLECLOSED && closeEndedAnswers.size() != 1)
-            throw new IncorrectSizeException("Answers to a single-choice close-ended question must contain exactly 1 close-ended answer.");
-        else if (question.getQuestionType() == QuestionType.MULTIPLECLOSED && closeEndedAnswers.size() < 1)
-            throw new IncorrectSizeException("Answers to a multiple-choice close-ended question must contain exactly 1 close-ended answer.");
+            throw new IncorrectSizeException("Answers to a single-choice close-ended question must contain exactly 1 " +
+                    "close-ended answer.");
+        else if (question.getQuestionType() == QuestionType.MULTIPLECLOSED && closeEndedAnswers.isEmpty())
+            throw new IncorrectSizeException("Answers to a multiple-choice close-ended question must contain exactly 1" +
+                    " close-ended answer.");
         this.closeEndedAnswers = closeEndedAnswers;
     }
 }

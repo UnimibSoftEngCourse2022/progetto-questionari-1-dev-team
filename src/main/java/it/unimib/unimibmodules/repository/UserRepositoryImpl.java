@@ -15,7 +15,7 @@ import java.util.Optional;
  * Repository for the User. Adds business logic to User instances before actually accessing
  * the database via DAO.
  * @author Gianlorenzo Martini
- * @version 0.2.0
+ * @version 0.3.0
  */
 @Component("userRepository")
 public class UserRepositoryImpl implements UserRepository {
@@ -36,9 +36,9 @@ public class UserRepositoryImpl implements UserRepository {
      * @see     UserRepository#add
      */
     @Override
-    public void add(User user) {
+    public User add(User user) {
 
-        userDAO.save(user);
+        return userDAO.save(user);
     }
 
     /**

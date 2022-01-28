@@ -5,10 +5,14 @@ import it.unimib.unimibmodules.model.User;
 /**
  * Factory class for User.
  * @author Gianlorenzo Martini
- * @version 0.2.0
+ * @version 0.3.0
  */
 
 public class UserFactory {
+
+    private UserFactory() {
+        //private constructor in order to hide the implicit public one.
+    }
 
     /**
 	 * Creates a new instance of User.

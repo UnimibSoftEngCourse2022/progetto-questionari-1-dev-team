@@ -2,7 +2,7 @@ package it.unimib.unimibmodules.exception;
 /**
  * Exception class for not found entities.
  * @author Luca Milazzo
- * @version 0.2.0
+ * @version 0.3.0
  */
 public class NotFoundException extends Exception{
 	/**

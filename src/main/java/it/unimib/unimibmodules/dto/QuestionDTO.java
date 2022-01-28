@@ -6,7 +6,7 @@ import java.util.Set;
  * DTO for Question.
  * @author Khalil
  * @author Lorenzo Occhipinti
- * @version 0.2.0
+ * @version 0.3.0
  */
 
 public class QuestionDTO {
@@ -49,7 +49,7 @@ public class QuestionDTO {
 	/**
 	 * Serialization of the list of the questions.
 	 */
-	private Set<SurveyDTO> surveyDTO;
+	private Set<SurveyQuestionsDTO> surveyQuestionsDTO;
 
 	/**
 	 * Serialization of the type of the question.
@@ -195,18 +195,18 @@ public class QuestionDTO {
 	 * Returns the surveys where the question is in.
 	 * @return	the survey
 	 */
-	public Set<SurveyDTO> getSurvey() {
+	public Set<SurveyQuestionsDTO> getSurvey() {
 
-		return surveyDTO;
+		return surveyQuestionsDTO;
 	}
 
 	/**
 	 * Modifies the surveys where the question is in, setting <code>surveys</code> as the new value.
 	 * @param	surveyDTOSet	the survey to set
 	 */
-	public void setSurvey(Set<SurveyDTO> surveyDTOSet) {
+	public void setSurvey(Set<SurveyQuestionsDTO> surveyDTOSet) {
 
-		this.surveyDTO = surveyDTOSet;
+		this.surveyQuestionsDTO = surveyDTOSet;
 	}
 
 	/**
