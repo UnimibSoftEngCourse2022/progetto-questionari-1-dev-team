@@ -4,6 +4,7 @@ import it.unimib.unimibmodules.dto.QuestionDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.User;
+import it.unimib.unimibmodules.service.AWSTokenImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -172,9 +173,9 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		logger.debug("Get token for id +" + id + ".");
 		return new ResponseEntity<>("{\"token\":\""+response.getToken()+"\"," +
 				"\"identityToken\":\"" + response.getIdentityId() +"\" , " +
-				"\"region\":\""+ AWSToken.REGION+"\", " +
-				"\"identityPoolId\":\""+ AWSToken.IDENTITY_POOL_ID+"\", " +
-				"\"bucketName\":\""+ AWSToken.BUCKET_NAME+"\"}", HttpStatus.CREATED);
+				"\"region\":\""+ AWSTokenImpl.REGION+"\", " +
+				"\"identityPoolId\":\""+ AWSTokenImpl.IDENTITY_POOL_ID+"\", " +
+				"\"bucketName\":\""+ AWSTokenImpl.BUCKET_NAME+"\"}", HttpStatus.CREATED);
 	}
 
 	/**
@@ -199,9 +200,9 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		return new ResponseEntity<>("{\"idQuestion\":\""+ question.getId() +"\"," +
 				"\"token\":\""+response.getToken()+"\"," +
 				"\"identityToken\":\"" + response.getIdentityId() +"\" , " + 
-				"\"region\":\""+ AWSToken.REGION+"\", " +
-				"\"identityPoolId\":\""+ AWSToken.IDENTITY_POOL_ID+"\", " +
-				"\"bucketName\":\""+ AWSToken.BUCKET_NAME+"\"}", HttpStatus.CREATED);
+				"\"region\":\""+ AWSTokenImpl.REGION+"\", " +
+				"\"identityPoolId\":\""+ AWSTokenImpl.IDENTITY_POOL_ID+"\", " +
+				"\"bucketName\":\""+ AWSTokenImpl.BUCKET_NAME+"\"}", HttpStatus.CREATED);
 	}
 
 	/**
