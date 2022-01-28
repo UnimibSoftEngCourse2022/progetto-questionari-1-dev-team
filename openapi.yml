@@ -753,6 +753,49 @@ paths:
                     type: string
         '500':
           description: Generic server error.
+  /generatePdf:
+    get:
+      summary: Create a pdf of the Answers in the survey by the user
+      parameters:
+        - name: surveyId
+          in: query
+          description: The id of the survey
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+        - name: userId
+          in: query
+          description: The id of the user
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '200':
+          description: Pdf of the answers in the survey by the user
+          content:
+            application/pdf:
+              schema:
+                type : array
+                items: 
+                  type: string
+                  format: byte                  
+        '404':
+          description: Answer not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
   /findCategory/{id}:
     get:
       summary: Gets the Category associated with the given id.
