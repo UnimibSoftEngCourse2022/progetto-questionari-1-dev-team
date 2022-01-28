@@ -33,6 +33,7 @@
 	<span ng-hide="mode === 'INSERT'" >
 		<button ng-click="modify()" class="btn btn-primary">Modify</button>
 		<button ng-click="delete()" class="btn btn-danger">Delete</button>
+		<button ng-click="chooseDownload()" class="btn btn-danger" ng-hide="modified === true">Download</button>
 	</span>
 	<button ng-click="skipQuestion()" class="btn btn-warning" ng-hide="questionIndex === questions.length - 1">
 		Skip question
