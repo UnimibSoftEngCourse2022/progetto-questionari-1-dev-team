@@ -290,7 +290,7 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 				closeEndedAnswerDTO.setId(closeEndedAnswer.getId());
 				closeEndedAnswerDTOSet.add(closeEndedAnswerDTO);
 			}
-			answerDTO.setCloseEndedAnswerDTOSet(closeEndedAnswerDTOSet);
+			answerDTO.setCloseEndedAnswerDTOs(closeEndedAnswerDTOSet);
 		}
 		return answerDTO;
 	}
