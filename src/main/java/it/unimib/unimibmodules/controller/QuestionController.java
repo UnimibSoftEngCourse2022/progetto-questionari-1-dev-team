@@ -91,7 +91,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	public ResponseEntity<QuestionDTO> getQuestion(@PathVariable int id) throws NotFoundException{
 
 		Question question = questionRepository.get(id);
-		logger.debug("Retrieved Question with id "+ id + ".");
+		logger.debug("Retrieved Question with id {}", id);
 		return new ResponseEntity<>(convertToDTO(question), HttpStatus.OK);
 	}
 
@@ -119,7 +119,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No questions for user with id" + id + " was found.\"}");
-		logger.debug("Retrieved all the questions of the user "+id + ".");
+		logger.debug("Retrieved all the questions of the user {}", id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 	
@@ -151,7 +151,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Question with category" + id + " was found.\"}");
-		logger.debug("Retrieved all the questions of the user "+id + ".");
+		logger.debug("Retrieved all the questions of the category {}", id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 	
@@ -168,7 +168,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Question with category" + id + " was found.\"}");
-		logger.debug("Retrieved all the questions of the user "+id + ".");
+		logger.debug("Retrieved all the questions, lazy, of the category {}", id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
@@ -228,7 +228,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	@GetMapping(path = "/getToken/{id}")
 	public ResponseEntity<String> getToken(@PathVariable int id){
 		GetOpenIdTokenForDeveloperIdentityResult response = awsToken.getToken(id);
-		logger.debug("Get token for id +" + id + ".");
+		logger.debug("Get token for user {}", id);
 		return new ResponseEntity<>("{\"token\":\""+response.getToken()+"\"," +
 				"\"identityToken\":\"" + response.getIdentityId() +"\" , " +
 				"\"region\":\""+ AWSTokenImpl.REGION+"\", " +
