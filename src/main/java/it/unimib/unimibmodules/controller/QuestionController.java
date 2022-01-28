@@ -254,7 +254,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		}
 		
 		GetOpenIdTokenForDeveloperIdentityResult response = awsToken.getToken(question.getUser().getId());
-		logger.debug("Added Question with id +" + question.getId() + ".");
+		logger.debug("Added Question with id {}", question.getId());
 		return new ResponseEntity<>("{\"idQuestion\":\""+ question.getId() +"\"," +
 				"\"token\":\""+response.getToken()+"\"," +
 				"\"identityToken\":\"" + response.getIdentityId() +"\" , " + 
