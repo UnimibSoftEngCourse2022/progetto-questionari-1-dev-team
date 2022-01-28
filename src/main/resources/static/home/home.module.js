@@ -1,5 +1,5 @@
 'use strict';
 
 angular.module('home', [
-  'ngRoute'
+  'ngRoute', 'ngCookies'
 ]);

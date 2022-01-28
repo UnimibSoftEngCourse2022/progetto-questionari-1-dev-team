@@ -14,7 +14,7 @@ public interface UserRepository {
 	 * Inserts an instance of User in the database
 	 * @param   user  an instance of User
 	 */
-	void add(User user);
+	User add(User user);
 
 	/**
 	 * Finds the user identified by id in the database
