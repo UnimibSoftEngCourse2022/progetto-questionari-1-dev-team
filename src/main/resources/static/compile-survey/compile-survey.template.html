@@ -29,14 +29,14 @@
 				  ng-value="currentAnswer.answerText" class="form-control"></textarea>
 	</div>
 	<br/>
-	<button ng-click="insert()" ng-hide="mode === 'EDIT'" class="btn btn-warning">Insert</button>
+	<button ng-click="insert()" ng-hide="mode === 'EDIT'" class="btn btn-primary">Insert</button>
 	<span ng-hide="mode === 'INSERT'" >
-		<button ng-click="modify()" class="btn btn-warning">Modify</button>
+		<button ng-click="modify()" class="btn btn-primary">Modify</button>
 		<button ng-click="delete()" class="btn btn-danger">Delete</button>
-		<button ng-click="skipQuestion()" class="btn btn-primary" ng-hide="questionIndex === questions.length - 1">
-			Skip question
-		</button>
 	</span>
+	<button ng-click="skipQuestion()" class="btn btn-warning" ng-hide="questionIndex === questions.length - 1">
+		Skip question
+	</button>
 	<button ng-click="closeSurvey()" class="btn btn-success">
 		Close survey
 	</button>
