@@ -32,11 +32,6 @@ window.routes =
             requireLogin: true
         },
 
-        '/editSurveyAnswer/:surveyId': {
-            template: '<edit-survey-answer></edit-survey-answer>',
-            requireLogin: true
-        },
-
         '/loginUser': {
             template: '<login-user></login-user>',
             requireLogin: false
