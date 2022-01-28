@@ -105,8 +105,8 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 		if (IterableUtils.size(surveys) > 0) {
 			return surveys;
 		} else {
-			NotFoundException ex = new NotFoundException("No surveys exist.");
-			throw ex;
+			throw new NotFoundException("No surveys exist.");
+		
 		}
 	}
 	
@@ -124,8 +124,7 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 		if (IterableUtils.size(surveys) > 0) {
 			return surveys;
 		} else {
-			NotFoundException ex = new NotFoundException("No surveys exist.");
-			throw ex;
+			throw new NotFoundException("No surveys exist.");
 		}
 	}
 
@@ -145,9 +144,9 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 		if (IterableUtils.size(surveys) > 0) {
 			return surveys;
 		} else {
-			NotFoundException ex = new NotFoundException(
+			throw new NotFoundException(
 					"No surveys containing " + text + " in their name have been found");
-			throw ex;
+			
 		}
 	}
 	
@@ -168,9 +167,9 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 		if (IterableUtils.size(surveys) > 0) {
 			return surveys;
 		} else {
-			NotFoundException ex = new NotFoundException(
+			throw new NotFoundException(
 					"No surveys containing " + text + " in their name have been found");
-			throw ex;
+		
 		}
 	}
 
@@ -222,10 +221,24 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 			}
 
 		} else {
-			FormatException ex = new FormatException("The name can't be null", new Throwable("The name can't be null"));
-			throw ex;
+			throw  new FormatException("The name can't be null", new Throwable("The name can't be null"));
+		
 		}
 
+	}
+	
+	public List<Integer> getListToSave(Set<SurveyQuestions> surveyQuestions, int surveyId){
+		List<Integer> idIn = new ArrayList<>();
+		for (SurveyQuestions surveyQuestion : surveyQuestions) {
+			int idQuestion = surveyQuestion.getQuestion().getId();
+			SurveyQuestions result = surveyQuestionsDAO.questionHandler(idQuestion,   surveyId);
+			if (result == null) {
+				surveyQuestionsDAO.save(surveyQuestion);
+			}
+			idIn.add(idQuestion);
+		}
+		
+		return idIn;
 	}
 
 	/**
@@ -236,17 +249,7 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	 */
 	@Override
 	public void modifyQuestions(Set<SurveyQuestions> surveyQuestions, int surveyId) throws FormatException {
-		List<Integer> idIn = new ArrayList<>();
-
-		for (SurveyQuestions surveyQuestion : surveyQuestions) {
-			int idQuestion = surveyQuestion.getQuestion().getId();
-			SurveyQuestions result = surveyQuestionsDAO.questionHandler(idQuestion, surveyId);
-			if (result == null) {
-				surveyQuestionsDAO.save(surveyQuestion);
-			}
-			idIn.add(idQuestion);
-		}
-
+		List<Integer> idIn = getListToSave(surveyQuestions, surveyId);
 		List<SurveyQuestions> result;
 		if ((surveyQuestions == null || surveyQuestions.isEmpty())) {
 			result = (List<SurveyQuestions>) surveyQuestionsDAO.questionBySurvey(surveyId);

@@ -65,9 +65,9 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 			mapper.map(SurveyQuestionsDTO::getSurveyDTO, SurveyQuestions::setSurvey);
 		});
 
-		modelMapper.createTypeMap(SurveyDTO.class, Survey.class).addMappings(mapper -> {
-			mapper.map(SurveyDTO::getId, Survey::setId);
-		});
+		modelMapper.createTypeMap(SurveyDTO.class, Survey.class).addMappings(mapper -> 
+			mapper.map(SurveyDTO::getId, Survey::setId)
+		);
 
 		modelMapper.createTypeMap(User.class, SurveyDTO.class).addMappings(mapper -> {
 			mapper.map(User::getId, (surveyDTO, id) -> surveyDTO.getUserDTO().setId(id));
@@ -89,7 +89,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	@GetMapping("/findSurvey")
 	public ResponseEntity<SurveyDTO> findSurvey(@RequestParam(name = "id") int id) throws NotFoundException {
 		Survey survey = surveyRepository.get(id);
-		logger.debug(String.format("Retreived Survey with id: {0}.", id));
+		logger.debug(String.format("Retreived Survey with id: {}.", id));
 		return new ResponseEntity<>(convertToDTO(survey), HttpStatus.OK);
 	}
 
@@ -106,7 +106,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	@GetMapping(path = "/findSurveyNoQuestion/{id}")
 	public ResponseEntity<SurveyDTO> findSurveyNoQuestion(@PathVariable int id) throws NotFoundException {
 		Survey survey = surveyRepository.get(id);
-		logger.debug(String.format("Retreived Survey with id: {0}.", id));
+		logger.debug(String.format("Retreived Survey with id: {}.", id));
 		return new ResponseEntity<>(convertToDTOAndSkipQuestions(survey), HttpStatus.OK);
 	}
 	
@@ -157,7 +157,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		}
 		if (surveyDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Survey with " + text + " was found.\"}");
-		logger.debug("Retrieved " + surveyDTOList.size() + " surveys containing the text " + text + ".");
+		logger.debug("Retrieved  {0} surveys containing the text  {1}." , surveyDTOList.size(), text);
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
 
@@ -184,7 +184,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		}
 		if (surveyDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Survey with " + text + " was found.\"}");
-		logger.debug("Retrieved " + surveyDTOList.size() + " surveys containing the text " + text + ".");
+		logger.debug("Retrieved  {0} surveys containing the text  {1}." , surveyDTOList.size(), text);
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
 
@@ -205,7 +205,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		for (Survey survey : surveys) {
 			surveysDTO.add(convertToDTO(survey));
 		}
-		logger.debug("Retrieved " + surveysDTO.size() + " surveys.");
+		logger.debug("Retrieved {} surveys.", surveysDTO.size());
 		return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
 	}
 
@@ -226,7 +226,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		for (Survey survey : surveys) {
 			surveysDTO.add(convertToDTOAndSkipQuestions(survey));
 		}
-		logger.debug("Retrieved " + surveysDTO.size() + " surveys.");
+		logger.debug("Retrieved {} surveys.", surveysDTO.size());
 		return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
 	}
 	
@@ -248,7 +248,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		for (Survey survey : surveys) {
 			surveysDTO.add(convertToDTOAndSkipQuestions(survey));
 		}
-		logger.debug("Retrieved " + surveysDTO.size() + " surveys.");
+		logger.debug("Retrieved {} surveys.", surveysDTO.size());
 		return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
 	}
 
@@ -271,7 +271,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 			throws FormatException, NotFoundException, EmptyFieldException {
 		Survey survey = convertToEntity(surveyDTO);
 		surveyRepository.add(survey);
-		logger.debug(String.format("Added Survey with id: {0}.", survey.getId()));
+		logger.debug(String.format("Added Survey with id: {}.", survey.getId()));
 		return new ResponseEntity<>("{\"response\":\"Survey creted.\"}", HttpStatus.CREATED);
 	}
 
@@ -310,9 +310,9 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleNotFoundException
 	 */
 	@DeleteMapping(path = "/deleteSurvey/{id}")
-	public ResponseEntity<String> deleteSurvey(@PathVariable int id) throws NotFoundException, FormatException {
+	public ResponseEntity<String> deleteSurvey(@PathVariable int id) throws FormatException {
 		surveyRepository.remove(id);
-		logger.debug("Removed Survey with id: {0}." + id);
+		logger.debug("Removed Survey with id: {}." + id);
 		return new ResponseEntity<>("{\"response\":\"Survey deleted.\"}", HttpStatus.OK);
 	}
 
