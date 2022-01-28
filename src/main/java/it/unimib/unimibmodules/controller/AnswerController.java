@@ -56,10 +56,15 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	 */
 	private final CloseEndedAnswerRepository closeEndedAnswerRepository;
 
+	/**
+	 * Instance of MailService, that will be used to send an email when the answers are saved.
+	 */
+	private final MailService mailService;
+
 	@Autowired
 	public AnswerController(AnswerRepository answerRepository, ModelMapper modelMapper, UserRepository userRepository,
 							SurveyRepository surveyRepository, QuestionRepository questionRepository,
-							CloseEndedAnswerRepository closeEndedAnswerRepository) {
+							CloseEndedAnswerRepository closeEndedAnswerRepository, MailService mailService) {
 
 		super(modelMapper);
 		this.answerRepository = answerRepository;
@@ -67,6 +72,7 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 		this.surveyRepository = surveyRepository;
 		this.questionRepository = questionRepository;
 		this.closeEndedAnswerRepository = closeEndedAnswerRepository;
+		this.mailService = mailService;
 
 
 		modelMapper.createTypeMap(Answer.class, AnswerDTO.class)
@@ -102,7 +108,8 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	}
 
 	/**
-	 * Finds all the Answer the User associated with <code>userId</code> has created for the Survey associated with <code>surveyId</code>.
+	 * Finds all the Answer the User associated with <code>userId</code> has created for the Survey associated with
+	 * <code>surveyId</code>.
 	 * @param	surveyId			the id of the survey
 	 * @param	userId				the id of the user
 	 * @return						an HTTP response with status 200 and the AnswerDTO if the answer has been found,
@@ -181,20 +188,29 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	/**
 	 * Inserts the registered answers made by the user identified by <code>userId</code> on the survey identified by
 	 * <code>surveyId</code>.
-	 * @param	surveyId	the id of the survey
-	 * @param	userId		the id of the user
-	 * @return				an HTTP Response with status 200 if the answer has been deleted, 500 otherwise
+	 * @param	surveyId			the id of the survey
+	 * @param	userId				the id of the user
+	 * @return						an HTTP Response with status 200 if the answer has been deleted, 500 otherwise
+	 * @throws	NotFoundException	if no user identified by <code>id</code> has been found
 	 */
 	@PostMapping(path = "/saveSurveyAnswers")
-	public ResponseEntity<String> saveNewAnswers(@RequestParam int surveyId, @RequestParam int userId) {
+	public ResponseEntity<String> saveNewAnswers(@RequestParam int surveyId, @RequestParam int userId)
+			throws NotFoundException {
 
 		answerRepository.commitInsert(surveyId, userId);
+		User user = userRepository.get(userId);
+		Survey survey = surveyRepository.get(surveyId);
+		StringBuilder message = new StringBuilder("Hi");
+		if (user.getCompilationId() == null)
+			message.append(" ").append(user.getUsername());
+		message.append(",<br/><br/>thanks for filling out the survey <b>").append(survey.getName()).append("</b>.");
+		mailService.sendMail(user.getEmail(), "Survey completed", message.toString());
 		return new ResponseEntity<>("{\"response\":\"Answers saved.\"}", HttpStatus.OK);
 	}
 
 	/**
 	 * Modifies and deletes the registered answers made by the user identified by <code>userId</code> on the survey
-	 * identified by <code>surveyId</code>
+	 * identified by <code>surveyId</code>.
 	 * @param	surveyId	the id of the survey
 	 * @param	userId		the id of the user
 	 * @return				an HTTP Response with status 200 if the answer has been deleted, 500 otherwise
@@ -202,8 +218,7 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	@PostMapping(path = "/saveModifiedSurveyAnswers")
 	public ResponseEntity<String> saveModifiedAnswers(@RequestParam int surveyId, @RequestParam int userId) {
 
-		answerRepository.commitModify(surveyId, userId);
-		answerRepository.commitDelete(surveyId, userId);
+		answerRepository.commit(surveyId, userId);
 		return new ResponseEntity<>("{\"response\":\"Changes saved.\"}", HttpStatus.OK);
 	}
 
