@@ -1,5 +1,6 @@
 package it.unimib.unimibmodules.controller;
 
+import com.itextpdf.text.DocumentException;
 import it.unimib.unimibmodules.dto.AnswerDTO;
 import it.unimib.unimibmodules.dto.CloseEndedAnswerDTO;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
@@ -60,11 +61,16 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	 * Instance of MailService, that will be used to send an email when the answers are saved.
 	 */
 	private final MailService mailService;
+  
+	/**
+	 * Instance of PdfService that will be used to create the pdf.
+	 */
+	private final PdfService pdfService;
 
 	@Autowired
 	public AnswerController(AnswerRepository answerRepository, ModelMapper modelMapper, UserRepository userRepository,
 							SurveyRepository surveyRepository, QuestionRepository questionRepository,
-							CloseEndedAnswerRepository closeEndedAnswerRepository, MailService mailService) {
+							CloseEndedAnswerRepository closeEndedAnswerRepository, MailService mailService, PdfService pdfService) {
 
 		super(modelMapper);
 		this.answerRepository = answerRepository;
@@ -73,7 +79,7 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 		this.questionRepository = questionRepository;
 		this.closeEndedAnswerRepository = closeEndedAnswerRepository;
 		this.mailService = mailService;
-
+		this.pdfService = pdfService;
 
 		modelMapper.createTypeMap(Answer.class, AnswerDTO.class)
 				.addMappings(mapper -> {
@@ -129,6 +135,31 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 		logger.debug("Retrieved {} answers for survey with id {} and user with id {}.", answerDTOList.size(),
 				surveyId, userId);
 		return new ResponseEntity<>(answerDTOList, HttpStatus.OK);
+	}
+
+	/**
+	 * Create a pdf of the Answer in the survey by the user
+	 * <code>surveyId</code>.
+	 * @param	surveyId			the id of the survey
+	 * @param	userId				the id of the user
+	 * @return						an HTTP response with status 200 and the pdf if the pdf was created,
+	 * 								500 otherwise
+	 * @throws	NotFoundException	if no answer for the survey identified by <code>surveyId</code> and created by the
+	 * 								user identified by <code>userId</code> has been found
+	 */
+	@GetMapping(path = "/generatePdf", produces = MediaType.APPLICATION_PDF_VALUE)
+	public ResponseEntity<byte[]> generatePdf(@RequestParam int surveyId, @RequestParam int userId)
+			throws NotFoundException, DocumentException {
+
+		Iterable<Answer> answer = answerRepository.getSurveyAnswersForUser(surveyId, userId);
+		List<Answer> answerList = new ArrayList<Answer>();
+		answer.forEach(answerList::add);
+		if (answerList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Answers for Survey with id " + surveyId +
+					" was found for User with id " + userId + ".\"}");
+		byte[] pdf = pdfService.createPDF(answerList);
+		logger.debug("created pdf");
+		return new ResponseEntity<>(pdf, HttpStatus.OK);
 	}
 
 	/**
