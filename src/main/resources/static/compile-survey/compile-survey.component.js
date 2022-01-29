@@ -192,7 +192,7 @@ app.component("compileSurvey", {
 						$http.post("/api/saveSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=1")
 							.then(function onFulfilled() {
 
-								modal.close();;
+								modal.close();
                                 self.chooseDownload();
 							}, function errorCallback(response) {
 
