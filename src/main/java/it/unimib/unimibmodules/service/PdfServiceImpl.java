@@ -79,9 +79,8 @@ public class PdfServiceImpl implements PdfService {
             document.add(anchor);
             if (answers.get(i).getQuestion().getUrlImage()!=null)
                 document.newPage();
-            else if (i!=answers.size()-1)
-                if(answers.get(i+1).getQuestion().getUrlImage()!=null)
-                    document.newPage();
+            else if (i!=answers.size()-1 && answers.get(i+1).getQuestion().getUrlImage()!=null)
+                document.newPage();
         }
     }
 
