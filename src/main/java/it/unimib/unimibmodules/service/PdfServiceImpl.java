@@ -1,6 +1,5 @@
 package it.unimib.unimibmodules.service;
 
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -35,11 +34,7 @@ public class PdfServiceImpl implements PdfService {
             Font.BOLD);
     private static Font subFont = new Font(Font.FontFamily.HELVETICA, 16,
             Font.BOLD);
-    private static AWSToken awsToken;
 
-    public PdfServiceImpl (AWSToken awsToken){
-        this.awsToken = awsToken;
-    }
     /**
      * Create A pdf file
      * @param	answers	 the answers given
@@ -66,14 +61,14 @@ public class PdfServiceImpl implements PdfService {
 
     private static void addContent(Document document, List<Answer> answers) throws DocumentException, IOException {
 
-        float scaler = ((document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin()));
+        float scaler = (document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin());
         for (int i=0;i < answers.size();i++)
         {
             Paragraph anchor = new Paragraph();
             if (i==0)
                 addTitle(anchor, answers.get(i).getSurvey().getName());
             anchor.add(new Paragraph(answers.get(i).getQuestion().getText()+" "+answers.get(i).getQuestion().getQuestionType(), subFont));
-            addImage(anchor, answers.get(i).getQuestion().getUrlImage(), answers.get(i).getUser().getId(), scaler);
+            addImage(anchor, answers.get(i).getQuestion().getUrlImage(), scaler);
             if(answers.get(i).getQuestion().getQuestionType()== QuestionType.OPEN) {
                 anchor.add(new Paragraph(answers.get(i).getText()));
             }else if (answers.get(i).getQuestion().getQuestionType() == QuestionType.MULTIPLECLOSED ||
@@ -84,13 +79,12 @@ public class PdfServiceImpl implements PdfService {
             document.add(anchor);
             if (answers.get(i).getQuestion().getUrlImage()!=null)
                 document.newPage();
-            else if (i!=answers.size()-1)
-                if(answers.get(i+1).getQuestion().getUrlImage()!=null)
-                    document.newPage();
+            else if (i!=answers.size()-1 && answers.get(i+1).getQuestion().getUrlImage()!=null)
+                document.newPage();
         }
     }
 
-    private static void addTitle(Paragraph preface, String name) throws DocumentException{
+    private static void addTitle(Paragraph preface, String name){
         addEmptyLine(preface, 1);
         preface.add(new Paragraph(name, catFont));
         addEmptyLine(preface, 1);
@@ -105,7 +99,7 @@ public class PdfServiceImpl implements PdfService {
         }
     }
 
-    private static void addImage(Paragraph anchor, String url, int id, float scaler) throws IOException {
+    private static void addImage(Paragraph anchor, String url, float scaler) throws IOException {
         if (url!=null) {
             AWSCredentials credentials = new BasicAWSCredentials(AWSToken.ACCESS_KEY_ID, AWSToken.ACCESS_KEY_VALUE);
             try {
@@ -120,13 +114,7 @@ public class PdfServiceImpl implements PdfService {
                 image.scalePercent(scaler/image.getPlainWidth()*70);
                 anchor.add(image);
                 fullObject.close();
-            } catch (AmazonServiceException e) {
-                e.printStackTrace();
-            } catch (SdkClientException e) {
-                e.printStackTrace();
-            } catch (BadElementException e) {
-                e.printStackTrace();
-            } catch (DocumentException e) {
+            } catch (SdkClientException | DocumentException e) {
                 e.printStackTrace();
             }
         }
