@@ -4,9 +4,9 @@ angular.
 	module('UNIMIBModules').
 	component('modifySurvey', {
 		templateUrl: 'modify-survey/modify-survey.template.html',
-		controller: ['$location', '$routeParams', '$scope', '$http',
-			function modifySurveyController($location, $routeParams, $scope, $http) {
-				$scope.idUser = 1 //from cookie
+		controller: ['$location', '$routeParams', '$scope', '$http',  "cookieService",
+			function modifySurveyController($location, $routeParams, $scope, $http, cookieService) {
+				$scope.idUser //from cookie
 				$scope.isSurveyCreator = false
 				$scope.idSurvey = $routeParams.idSurvey;
 				//Questions owned by the survey. It changes everytime the user modifies a checkbox.
@@ -38,6 +38,11 @@ angular.
 
 				//start-up function
 				$scope.load = function() {
+					
+					if (cookieService.getCookie() != null) {
+						$scope.idUser = cookieService.getCookie();
+					}
+					
 					$scope.surveyQuestionsId = []
 					$scope.surveyQuestions = []
 					$scope.categories = []
@@ -57,7 +62,7 @@ angular.
 							});
 
 						} else {
-							$scope.showAlert("RESTRICTED AREA")
+							$scope.showAlert("ACCESS DENIED")
 							$location.path('/')
 						}
 					}, function errorCallback(response) {

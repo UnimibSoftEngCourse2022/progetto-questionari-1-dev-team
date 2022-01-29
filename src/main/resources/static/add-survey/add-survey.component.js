@@ -12,16 +12,13 @@ angular.
 				$scope.showMessageErr = false
 				$scope.showMessageConf = false
 				$scope.message = ""
-				
-				$scope.load = function(){
+
+				$scope.load = function() {
 					if (cookieService.getCookie() != null) {
 						$scope.idUser = cookieService.getCookie()
-					}else{
-						$scope.showAlert("ACCESS DENIED")
-						$location.path('/')
 					}
 				}
-				
+
 				//error alert
 				$scope.showAlert = function(text) {
 					alert('ERROR - ' + text)
@@ -49,11 +46,11 @@ angular.
 							$scope.showMessageConf = false
 							$scope.message = "Error - cannot create the survey."
 						});
-						
-					}else{
-							$scope.showMessageErr = true
-							$scope.showMessageConf = false
-							$scope.message = "Error - Please enter the Survey name."
+
+					} else {
+						$scope.showMessageErr = true
+						$scope.showMessageConf = false
+						$scope.message = "Error - Please enter the Survey name."
 					}
 				}
 			}]
