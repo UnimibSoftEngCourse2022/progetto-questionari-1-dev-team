@@ -45,7 +45,11 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	 */
 	private final CategoryRepository categoryRepository;
 
+	/**
+	 * Instance of AWSToken that will be used to acces the aws services.
+	 */
 	private final AWSToken awsToken;
+	
 
 	@Autowired
 	public QuestionController(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper modelMapper,
@@ -118,8 +122,8 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByUser(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No questions for user with id" + id + " was found.\"}");
-		logger.debug("Retrieved all the questions of the user {}", id);
+			throw new NotFoundException("{\"response\":\"No questions found for user with id " + id + "\"}");
+		logger.debug("Retrieved all the questions of the user {} ." , id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 	
@@ -136,8 +140,8 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByUserLazy(id, offset , limit);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No questions for user with id " + id + " was found.\"}");
-		logger.debug("Retrieved all the questions of the user "+id + ".");
+			throw new NotFoundException("{\"response\":\"No questions found for user with id " + id + "\"}");
+		logger.debug("Retrieved all the questions of the user {} ." , id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
@@ -150,8 +154,8 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByCategory(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Question with category" + id + " was found.\"}");
-		logger.debug("Retrieved all the questions of the category {}", id);
+			throw new NotFoundException("{\"response\":\"No Question found with category " + id + "\"}");
+		logger.debug("Retrieved all the questions of the category {} .", id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 	
@@ -167,8 +171,9 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByCategoryLazy(id, offset, limit);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Question with category" + id + " was found.\"}");
-		logger.debug("Retrieved all the questions, lazy, of the category {}", id);
+			throw new NotFoundException("{\"response\":\"No Question found with category " + id + "\"}");
+		logger.debug("Retrieved all the questions, lazy, of the category {} .", id);
+
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
@@ -184,7 +189,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByText(text);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
+			throw new NotFoundException("{\"response\":\"No Question found with " + text + "\"}");
 		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size(), text);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
@@ -204,8 +209,8 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByTextLazy(text, offset, limit);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
-		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size(), text);
+			throw new NotFoundException("{\"response\":\"No Question found with " + text + "\"}");
+		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size());
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
@@ -220,7 +225,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getBySurveyId(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Question for Survey with id " + id + " was found.\"}");
+			throw new NotFoundException("{\"response\":\"No Question found for Survey with id " + id + "\"}");
 		logger.debug("Retrieved {} questions for survey with id {}.", questionDTOList.size(), id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
