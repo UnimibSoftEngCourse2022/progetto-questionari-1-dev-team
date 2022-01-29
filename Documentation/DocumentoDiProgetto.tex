@@ -643,10 +643,63 @@ public class CategoryController extends DTOListMapping<Category, CategoryDTO>{
                     \item {QuestionController}
                 \end{itemize}
             \item \textbf{Scopo}: Gestire l'accesso a risorse protette da parte degli endpoint client, autenticati nel sistema, fornendogli il valet key.
-             \item \textbf{Codice d'esempio} METTIAMO LE CLASSI AWSTOKEN ED UN ESEMPIO CLIENT TIPO LA GET
+             \item \textbf{Codice d'esempio}
+             \begin{lstlisting}
+public interface AWSToken {
+    Region REGION = Region.getRegion(Regions.EU_CENTRAL_1);
+    String ACCESS_KEY_ID = "ACCESS_KEY_ID_COGNITO";
+    String ACCESS_KEY_VALUE = "SECRET_ACESS_KEY_COGNITO";
+    String IDENTITY_POOL_ID = "eu-central-1:581b95ad-2144-4e38-b112-028abe2bac0a";
+    String LOGIN_PROVIDER = "login.progettoquestionari.dev";
+    String BUCKET_NAME = "questionari-images";
+    /**
+     * Get the User's token from AWS Cognito
+     * @param	idUser the id of the logged user.
+     * @return				GetOpenIdTokenForDeveloperIdentityResult instance
+     */
+    GetOpenIdTokenForDeveloperIdentityResult getToken(int idUser);
+}
+
+public class AWSTokenImpl implements AWSToken {
+
+    /**
+     * Get the User's token from AWS Cognito
+     * @param	idUser the id of the logged user.
+     * @return				GetOpenIdTokenForDeveloperIdentityResult instance
+     */
+    @Override
+    public GetOpenIdTokenForDeveloperIdentityResult getToken(int idUser){
+        AmazonCognitoIdentity identityClient = new AmazonCognitoIdentityClient(
+                new BasicAWSCredentials(ACCESS_KEY_ID, ACCESS_KEY_VALUE)
+        );
+        identityClient.setRegion(REGION);
+        GetOpenIdTokenForDeveloperIdentityRequest request =
+                new GetOpenIdTokenForDeveloperIdentityRequest();
+        request.setIdentityPoolId(IDENTITY_POOL_ID);
+        HashMap<String,String> logins = new HashMap<>();
+        logins.put(LOGIN_PROVIDER, ""+idUser);
+        request.setLogins(logins);
+        request.setTokenDuration(60 * 5L);
+        GetOpenIdTokenForDeveloperIdentityResult response =
+                identityClient.getOpenIdTokenForDeveloperIdentity(request);
+        return response;
+    }
+}
+
+@GetMapping(path = "/getToken/{id}")
+public ResponseEntity<String> getToken(@PathVariable int id){
+	GetOpenIdTokenForDeveloperIdentityResult response = awsToken.getToken(id);
+	logger.debug("Get token for user {}", id);
+	return new ResponseEntity<>("{\"token\":\""+response.getToken()+"\"," +
+			"\"identityToken\":\"" + response.getIdentityId() +"\" , " +
+			"\"region\":\""+ AWSToken.REGION+"\", " +
+			"\"identityPoolId\":\""+ AWSToken.IDENTITY_POOL_ID+"\", " +
+			"\"bucketName\":\""+ AWSToken.BUCKET_NAME+"\"}", HttpStatus.CREATED);
+	
+            \end{lstlisting}
              
              \end{itemize}
-             \end{itemize}
+        \end{itemize}
              
 \subsection{Architettura di deployment}
 \subsubsection{Diagramma di deployment}
