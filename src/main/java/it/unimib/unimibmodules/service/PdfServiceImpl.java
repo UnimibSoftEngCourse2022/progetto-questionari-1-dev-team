@@ -61,7 +61,7 @@ public class PdfServiceImpl implements PdfService {
 
     private static void addContent(Document document, List<Answer> answers) throws DocumentException, IOException {
 
-        float scaler = ((document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin()));
+        float scaler = (document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin());
         for (int i=0;i < answers.size();i++)
         {
             Paragraph anchor = new Paragraph();
