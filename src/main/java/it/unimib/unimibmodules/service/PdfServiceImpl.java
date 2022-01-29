@@ -85,7 +85,7 @@ public class PdfServiceImpl implements PdfService {
         }
     }
 
-    private static void addTitle(Paragraph preface, String name) throws DocumentException{
+    private static void addTitle(Paragraph preface, String name){
         addEmptyLine(preface, 1);
         preface.add(new Paragraph(name, catFont));
         addEmptyLine(preface, 1);
