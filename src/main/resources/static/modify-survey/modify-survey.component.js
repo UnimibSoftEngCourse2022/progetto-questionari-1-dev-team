@@ -90,7 +90,7 @@ angular.
 					});
 				}
 
-				$scope.logoutUser = function () {
+				$scope.logoutUser = function() {
 					if (authService.isLoggedIn()) {
 						authService.setUser(undefined);
 						cookieService.removeCookie("userId");
@@ -145,243 +145,259 @@ angular.
 							$scope.filterQuestionByText()
 						} else if ($scope.actualSearch == "categoryQuestions") {
 							$scope.filterQuestionByCategory($scope.lastCategoryIndex)
+						}else if( $scope.actualSearch = "allQuestions"){
+							$scope.filterQuestionAll()
 						}
+					}
 				}
-			}
 
 				$scope.prevPage = function() {
-				if ($scope.isPrevActive) {
-					$scope.offset = $scope.offset - 3
-					if ($scope.offset == 0) {
-						$scope.isPrevActive = false
-					}
-					if ($scope.actualSearch == "surveyQuestions") {
-						$scope.searchForSurvey()
-					} else if ($scope.actualSearch == "userQuestions") {
-						$scope.filterQuestionCreated()
-					} else if ($scope.actualSearch == "textQuestions") {
-						$scope.filterQuestionByText()
-					} else if ($scope.actualSearch == "categoryQuestions") {
-						$scope.filterQuestionByCategory($scope.lastCategoryIndex)
+					if ($scope.isPrevActive) {
+						$scope.offset = $scope.offset - 3
+						if ($scope.offset == 0) {
+							$scope.isPrevActive = false
+						}
+						if ($scope.actualSearch == "surveyQuestions") {
+							$scope.searchForSurvey()
+						} else if ($scope.actualSearch == "userQuestions") {
+							$scope.filterQuestionCreated()
+						} else if ($scope.actualSearch == "textQuestions") {
+							$scope.filterQuestionByText()
+						} else if ($scope.actualSearch == "categoryQuestions") {
+							$scope.filterQuestionByCategory($scope.lastCategoryIndex)
+						}else if( $scope.actualSearch = "allQuestions"){
+							$scope.filterQuestionAll()
+						}
 					}
 				}
-			}
 
 				//Get survey questions that are actually stored inside the DB. This is called at start-up or with reset
 				$scope.searchForSurvey = function() {
-				$scope.actualSearch = "surveyQuestions"
-				$http({ url: "api/findQuestionForSurvey/" + $scope.idSurvey, method: "GET" }).then(function onfulFilled(response) {
-					$scope.isEmptyResult = false;
-					$scope.surveyQuestions = response.data
-					$scope.searchQuestions = response.data
-					angular.forEach($scope.searchQuestions, function(searchQuestion) {
-						searchQuestion.isOnSurvey = true;
-						$scope.surveyQuestionsId.push(searchQuestion.id)
-					})
+					$scope.actualSearch = "surveyQuestions"
+					$http({ url: "api/findQuestionForSurvey/" + $scope.idSurvey, method: "GET" }).then(function onfulFilled(response) {
+						$scope.isEmptyResult = false;
+						$scope.surveyQuestions = response.data
+						$scope.searchQuestions = response.data
+						angular.forEach($scope.searchQuestions, function(searchQuestion) {
+							searchQuestion.isOnSurvey = true;
+							$scope.surveyQuestionsId.push(searchQuestion.id)
+						})
 
-					$scope.setStatusSearch(true)
-					$scope.isNextActive = false
-					$scope.isPrevActive = false
+						$scope.setStatusSearch(true)
+						$scope.isNextActive = false
+						$scope.isPrevActive = false
 
-				}, function errorCallback(response) {
+					}, function errorCallback(response) {
 
-					$scope.setStatusSearch(false)
-				});
-			}
+						$scope.setStatusSearch(false)
+					});
+				}
 
 				//Get only User questions
 				$scope.filterQuestionCreated = function() {
-				$scope.actualSearch = "userQuestions"
-				$http({
-					url: "api/getQuestionByUserLazy/", method: "GET",
-					params: { id: $scope.idUser, offset: $scope.offset, limit: $scope.limit }
-				}).then(function onfulFilled(response) {
-					console.log(response)
-					$scope.setStatusQuestions(response.data)
-					$scope.setStatusSearch(true)
-				}, function errorCallback(response) {
-					$scope.setStatusSearch(false)
-				});
-			}
-
-				//Questions by text
-				$scope.filterQuestionByText = function() {
-				$scope.actualSearch = "textQuestions"
-				if ($scope.textFilterQuestionLast != $scope.textFilterQuestion) {
-					$scope.offset = 0
-				}
-				$scope.textFilterQuestionLast = $scope.textFilterQuestion
-
-				if ($scope.textFilterQuestion !== undefined && $scope.textFilterQuestion != "" && $scope.textFilterQuestion.replace(/\s/g, '').length) {
+					$scope.actualSearch = "userQuestions"
 					$http({
-						url: "api/findQuestionsByTextLazy/", method: "GET",
-						params: { text: $scope.textFilterQuestion, offset: $scope.offset, limit: $scope.limit }
+						url: "api/getQuestionByUserLazy/", method: "GET",
+						params: { id: $scope.idUser, offset: $scope.offset, limit: $scope.limit }
 					}).then(function onfulFilled(response) {
 						$scope.setStatusQuestions(response.data)
 						$scope.setStatusSearch(true)
 					}, function errorCallback(response) {
 						$scope.setStatusSearch(false)
 					});
-				} else {
-					$scope.setStatusSearch(false)
 				}
-			}
+
+				$scope.filterQuestionAll = function() {
+					$scope.actualSearch = "allQuestions"
+					$http({
+						url: "api/getQuestionLazy/", method: "GET",
+						params: {offset: $scope.offset, limit: $scope.limit }
+					}).then(function onfulFilled(response) {
+						$scope.setStatusQuestions(response.data)
+						$scope.setStatusSearch(true)
+					}, function errorCallback(response) {
+						$scope.setStatusSearch(false)
+					});
+				}
+
+				//Questions by text
+				$scope.filterQuestionByText = function() {
+					$scope.actualSearch = "textQuestions"
+					if ($scope.textFilterQuestionLast != $scope.textFilterQuestion) {
+						$scope.offset = 0
+					}
+					$scope.textFilterQuestionLast = $scope.textFilterQuestion
+
+					if ($scope.textFilterQuestion !== undefined && $scope.textFilterQuestion != "" && $scope.textFilterQuestion.replace(/\s/g, '').length) {
+						$http({
+							url: "api/findQuestionsByTextLazy/", method: "GET",
+							params: { text: $scope.textFilterQuestion, offset: $scope.offset, limit: $scope.limit }
+						}).then(function onfulFilled(response) {
+							$scope.setStatusQuestions(response.data)
+							$scope.setStatusSearch(true)
+						}, function errorCallback(response) {
+							$scope.setStatusSearch(false)
+						});
+					} else {
+						$scope.setStatusSearch(false)
+					}
+				}
 
 				$scope.filterQuestionByCategory = function(categoryIndex) {
-				$scope.actualSearch = "categoryQuestions"
-				if ($scope.lastCategoryIndex != categoryIndex) {
-					$scope.offset = 0
+					$scope.actualSearch = "categoryQuestions"
+					if ($scope.lastCategoryIndex != categoryIndex) {
+						$scope.offset = 0
+					}
+					$scope.lastCategoryIndex = categoryIndex
+					$http({
+						url: "api/getQuestionByCategoryLazy/", method: "GET",
+						params: { id: $scope.categories[categoryIndex].id, offset: $scope.offset, limit: $scope.limit }
+					}).then(function onfulFilled(response) {
+						$scope.setStatusQuestions(response.data)
+						$scope.setStatusSearch(true)
+					}, function errorCallback(response) {
+						$scope.setStatusSearch(false)
+					});
 				}
-				$scope.lastCategoryIndex = categoryIndex
-				$http({
-					url: "api/getQuestionByCategoryLazy/", method: "GET",
-					params: { id: $scope.categories[categoryIndex].id, offset: $scope.offset, limit: $scope.limit }
-				}).then(function onfulFilled(response) {
-					$scope.setStatusQuestions(response.data)
-					$scope.setStatusSearch(true)
-				}, function errorCallback(response) {
-					$scope.setStatusSearch(false)
-				});
-			}
 
 				//Get only Survey questions, not from DB but from actual session.
 				$scope.filterQuestionAdded = function() {
-				$scope.actualSearch = ""
-				if ($scope.surveyQuestionsId.length == 0) {
-					$scope.isEmptyResult = true;
-					$scope.isPrevActive = false;
-					$scope.isNextActive = false;
-				} else {
-					$scope.isEmptyResult = false;
-					$scope.searchQuestions = $scope.surveyQuestions
-					$scope.isPrevActive = false;
-					$scope.isNextActive = false;
+					$scope.actualSearch = ""
+					if ($scope.surveyQuestionsId.length == 0) {
+						$scope.isEmptyResult = true;
+						$scope.isPrevActive = false;
+						$scope.isNextActive = false;
+					} else {
+						$scope.isEmptyResult = false;
+						$scope.searchQuestions = $scope.surveyQuestions
+						$scope.isPrevActive = false;
+						$scope.isNextActive = false;
+					}
 				}
-			}
 
 
 				//Reset questions status from DB
 				$scope.resetQuestions = function() {
-				$scope.load()
-			}
+					$scope.load()
+				}
 
 				//Handling checkbox
 				$scope.toggleSelection = function toggleSelection(index) {
-				var question = $scope.searchQuestions[index];
-				if (question.isOnSurvey) {
-					//remove question from surveyQuestions and from surveyQuestionsId
-					for (var i = 0, len = $scope.surveyQuestions.length; i < len; i++) {
-						if ($scope.surveyQuestions[i].id == question.id) {
-							$scope.surveyQuestions.splice(i, 1)
-							$scope.surveyQuestionsId.splice(i, 1)
-							break
+					var question = $scope.searchQuestions[index];
+					if (question.isOnSurvey) {
+						//remove question from surveyQuestions and from surveyQuestionsId
+						for (var i = 0, len = $scope.surveyQuestions.length; i < len; i++) {
+							if ($scope.surveyQuestions[i].id == question.id) {
+								$scope.surveyQuestions.splice(i, 1)
+								$scope.surveyQuestionsId.splice(i, 1)
+								break
+							}
 						}
+						if ($scope.surveyQuestionsId.length == 0) {
+							$scope.setStatusSearch(false)
+						}
+					} else {
+						//add question from surveyQuestions and from surveyQuestionsId
+						$scope.surveyQuestions.push(question)
+						$scope.surveyQuestionsId.push(question.id)
+						$scope.searchQuestions[index].isOnSurvey = true
 					}
-					if ($scope.surveyQuestionsId.length == 0) {
-						$scope.setStatusSearch(false)
-					}
-				} else {
-					//add question from surveyQuestions and from surveyQuestionsId
-					$scope.surveyQuestions.push(question)
-					$scope.surveyQuestionsId.push(question.id)
-					$scope.searchQuestions[index].isOnSurvey = true
+
+				};
+
+				$scope.compileRedirect = function() {
+
+					$location.path('/compileSurvey/' + $scope.idSurvey);
 				}
-
-			};
-
-		$scope.compileRedirect = function() {
-
-			$location.path('/compileSurvey/' + $scope.idSurvey);
-		}
 
 				$scope.editQuestionRoute = function(modalQuestion) {
-			let question = $scope.searchQuestions[modalQuestion]
-			$location.path('/editQuestion/' + question.id);
-		}
+					let question = $scope.searchQuestions[modalQuestion]
+					$location.path('/editQuestion/' + question.id);
+				}
 
 				$scope.createQuestionRoute = function() {
-			$location.path('/addQuestion')
-		}
-		
-
-		$scope.getImage = function(imgName) {
-			$http.get("/api/getToken/" + $scope.idUser)
-				.then(function(risposta) {
-					fileName = imgName;
-					token = risposta.data.token;
-					identityToken = risposta.data.identityToken;
-					region = risposta.data.region;
-					identityPoolId = risposta.data.identityPoolId;
-					bucketName = risposta.data.bucketName;
-					promise = $awsService.getPhoto(token, region, identityToken, identityPoolId, bucketName, fileName);
-					promise.then(photo => {
-						let reader = new FileReader();
-						reader.onload = function(e) {
-							$scope.$apply(function() {
-								$scope.prev_img = e.target.result;
-								$scope.imageView = true;
-							});
-						};
-						reader.readAsDataURL(photo);
-					})
-				});
-
-		}
+					$location.path('/addQuestion')
+				}
 
 
-		$scope.modalManager = function(index) {
-			$scope.prev_img = null
-			if ($scope.displayModal == 'block') {
-				$scope.displayModal = 'none';
-				$scope.displaySearchButton = "block"
-			} else {
-				$scope.displayModal = 'block';
-				$scope.displaySearchButton = "none"
-				if (index > -1) {
-					$scope.modalQuestion = index
-					if ($scope.searchQuestions[index].user.id != $scope.idUser) {
-						$scope.editQuestion = false;
+				$scope.getImage = function(imgName) {
+					$http.get("/api/getToken/" + $scope.idUser)
+						.then(function(risposta) {
+							fileName = imgName;
+							token = risposta.data.token;
+							identityToken = risposta.data.identityToken;
+							region = risposta.data.region;
+							identityPoolId = risposta.data.identityPoolId;
+							bucketName = risposta.data.bucketName;
+							promise = $awsService.getPhoto(token, region, identityToken, identityPoolId, bucketName, fileName);
+							promise.then(photo => {
+								let reader = new FileReader();
+								reader.onload = function(e) {
+									$scope.$apply(function() {
+										$scope.prev_img = e.target.result;
+										$scope.imageView = true;
+									});
+								};
+								reader.readAsDataURL(photo);
+							})
+						});
+
+				}
+
+
+				$scope.modalManager = function(index) {
+					$scope.prev_img = null
+					if ($scope.displayModal == 'block') {
+						$scope.displayModal = 'none';
+						$scope.displaySearchButton = "block"
 					} else {
-						$scope.editQuestion = true;
+						$scope.displayModal = 'block';
+						$scope.displaySearchButton = "none"
+						if (index > -1) {
+							$scope.modalQuestion = index
+							if ($scope.searchQuestions[index].user.id != $scope.idUser) {
+								$scope.editQuestion = false;
+							} else {
+								$scope.editQuestion = true;
+							}
+						}
+						if ($scope.searchQuestions[index].urlImage != null) {
+							$scope.getImage($scope.searchQuestions[index].urlImage)
+						}
+
 					}
 				}
-				if ($scope.searchQuestions[index].urlImage != null) {
-					$scope.getImage($scope.searchQuestions[index].urlImage)
-				}
-
-			}
-		}
 
 				//Delete survey
 				$scope.deleteSurvey = function() {
-			$http.delete("/api/deleteSurvey/" + $scope.idSurvey).then(function onfulFilled(response) {
-				$location.path('/home')
-			}, function errorCallback(response) {
-				$scope.showAlert("CANNOT DELETE SURVEY")
-			});
-		}
+					$http.delete("/api/deleteSurvey/" + $scope.idSurvey).then(function onfulFilled(response) {
+						$location.path('/home')
+					}, function errorCallback(response) {
+						$scope.showAlert("CANNOT DELETE SURVEY")
+					});
+				}
 
 				$scope.modifySurvey = function() {
-			let questions = []
-			angular.forEach($scope.surveyQuestionsId, function(questionId) {
-				questions.push({ 'id': null, 'questionDTO': { 'id': questionId }, 'surveyDTO': { 'id': $scope.survey.id } })
-			});
+					let questions = []
+					angular.forEach($scope.surveyQuestionsId, function(questionId) {
+						questions.push({ 'id': null, 'questionDTO': { 'id': questionId }, 'surveyDTO': { 'id': $scope.survey.id } })
+					});
 
-			let data = angular.copy($scope.survey)
-			data.questions = questions
-			if ($scope.newSurveyName !== undefined && $scope.newSurveyName != "" && $scope.newSurveyName.replace(/\s/g, '').length) {
-				data.surveyName = $scope.newSurveyName
+					let data = angular.copy($scope.survey)
+					data.questions = questions
+					if ($scope.newSurveyName !== undefined && $scope.newSurveyName != "" && $scope.newSurveyName.replace(/\s/g, '').length) {
+						data.surveyName = $scope.newSurveyName
+					}
+
+					data.userDTO = { 'id': $scope.survey.userDTO.id }
+
+					$http.patch("/api/modifySurvey", data).then(function onfulFilled(response) {
+						$scope.load()
+					}, function errorCallback(response) {
+						$scope.showAlert("CANNOT MODIFY SURVEY")
+					});
+
+				}
 			}
-
-			data.userDTO = { 'id': $scope.survey.userDTO.id }
-
-			$http.patch("/api/modifySurvey", data).then(function onfulFilled(response) {
-				$scope.load()
-			}, function errorCallback(response) {
-				$scope.showAlert("CANNOT MODIFY SURVEY")
-			});
-
-		}
-	}
 		]
 	});
