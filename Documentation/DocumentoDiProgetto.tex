@@ -1,7 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % University of Milano Bicocca
 % Created by Davide Costantini, Gianlorenzo Martini, Khalil Mohamed Khalil, Lorenzo Occhipinti, Luca Milazzo
-% LaTeX Template for simple report
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %----------------------------------------------------------------------------------------
@@ -28,7 +27,15 @@
 \usepackage{pifont}
 \usepackage{listings}
 \usepackage{color}
-
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -70,30 +77,14 @@
 \maketitle % Insert the title, author and date
 \newpage
 \tableofcontents \newpage
-\section{Visione sintetica}
-
-Si chiede di progettare un applicazione Web in grado di gestire questionari su vari argomenti.
-Le funzionalit\`{a} richieste sono:
-\begin{itemize}
-\item Creazione di domande (testuali oppure contenenti immagini) con vari tipi di risposta (e.g., aperta con un minimo e massimo di caratteri, chiusa con scelte multiple);
-\item Salvataggio delle domande in un database;
-\item Categorizzazione delle domande nel database (e.g., riguardanti un certo argomento);
-\item Ricerca e visualizzazione delle domande presenti nel database;
-\item Creazione di un questionario partendo da domande gi\`{a} create;
-\item Salvataggio dei questionari nel database;
-\item Scelta, modifica e cancellazione delle domande e dei questionari;
-\item Creazione di un'interfaccia grafica Web per la presentazione dei questionari agli utenti;
-\item Compilazione dei questionari da parte degli utenti, che permette il salvataggio temporaneo intermedio e il salvataggio finale a questionario completato;
-\item Salvataggio dei questionari compilati nel database;
-\item Generazione automatica di un pdf dei questionari completati e notifica via email dell'avvenuta
-compilazione e completamento;
-\item Ricerca di un questionario nel database (in base a un codice, a una parola presente nel questionario, ecc);
-\item Visualizzazione di un questionario presente nel database;
-\item Modifica e cancellazione di un questionario nel database;
-\item L'applicazione Web deve permettere la compilazione dei questionari a tutti gli utenti;
-\item L'applicazione da la possibilit\`{a} agli utenti di registrarsi. Gli utenti registrati possono consultare i questionari che hanno compilato;
-\item Per gli utenti non registrati, il sistema fornisce un codice univoco per ogni questionario compilato che pu\`{o} essere usato per visualizzare, modificare e cancellare il questionario compilato.
-\end{itemize}
+\section{Visione}
+\subsection{Introduzione}
+Prevediamo la realizzazione di un'applicazione web chiamata UNIMIB Questionari, un ambiente all'interno del quale gestire e compilare i questionari, dotata di alta usabilità, tolleranza ai guasti, sicurezza e performance.
+\subsection{Posizionamento}
+\subsubsection{Forumlazione del problema}
+I prodotti già esistenti che propongono servizi di questo tipo spesso mancano della componente comunitaria. Per esempio, non sempre è possibile costruire un questionario a partire dalle domande di altri utenti o creare una vera e propria bacheca pubblica per i questionari stessi.
+\subsubsection{Parti interessate}
+I destinatari del sistema possono appartenere ad una qualsiasi categoria di utente che sia in grado di navigare nel web e questo definisce un ampio spettro di copertura.
 
 \section{Analisi e progettazione}
 \subsection{Glossario}
@@ -118,7 +109,6 @@ compilazione e completamento;
 \endgroup
 \end{adjustbox}
 \end{table}
-
 
 \subsection{Casi d'uso}
 In questa sezione sono presentati gli attori del sistema ed i relativi casi d'uso. Per alcuni di essi sono riportate anche le loro descrizioni dettagliate.
@@ -175,24 +165,23 @@ In questa sezione sono presentati gli attori del sistema ed i relativi casi d'us
 
 \subsection{Requisiti non funzionali}
 
-
 \begin{table}[H]
 \begin{adjustbox}{max width=1.1\textwidth,center}
-\begingroup
-\setlength{\tabcolsep}{10pt} 
-\renewcommand{\arraystretch}{2}
-\begin{tabular}{lllll}     
-\multicolumn{5}{c}{\textbf{{\LARGE Tabella dei fattori e promemoria tecnici}}}                                                                                                                                                                                                                                                                                                                                                                         \\ \hline
+\begin{tabular}{|l|l|l|l|}
+\hline
 \rowcolor[HTML]{3531FF} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{ID}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Descrizione}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Tipo}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Misura}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Approccio}}} \\ \hline
-\multicolumn{1}{|l|}{1}                                                          & \multicolumn{1}{l|}{Il sistema deve essere sempre accessibile.}                          & \multicolumn{1}{l|}{Di prodotto}                                                  & \multicolumn{1}{l|}{Disponibilità}                                                  & \multicolumn{1}{l|}{Istanze multiple}                                                  \\ \hline
-\multicolumn{1}{|l|}{2}                                                          & \multicolumn{1}{l|}{Il sistema deve riuscire a gestire molte connessioni contemporanee.} & \multicolumn{1}{l|}{Di prodotto}                                                  & \multicolumn{1}{l|}{Efficienza}                                                     & \multicolumn{1}{l|}{Load balancing}                                                    \\ \hline
-\multicolumn{1}{|l|}{3}                                                          & \multicolumn{1}{l|}{Il sistema deve garantire la persistenza dei dati.}                  & \multicolumn{1}{l|}{Di prodotto}                                                  & \multicolumn{1}{l|}{Affidabilità}                                                   & \multicolumn{1}{l|}{Replica sets}                                                      \\ \hline
-\multicolumn{1}{|l|}{4}                                                          & \multicolumn{1}{l|}{Il sistema deve garantire la protezione dei dati.}                   & \multicolumn{1}{l|}{Di prodotto}                                                  & \multicolumn{1}{l|}{Sicurezza}                                                      & \multicolumn{1}{l|}{Utilizzo di protocolli di rete sicuri (HTTPS)}                     \\ \hline
+{\color[HTML]{FFFFFF} ID} & {\color[HTML]{FFFFFF} Descrizione}                                                      & {\color[HTML]{FFFFFF} Tipo} & {\color[HTML]{FFFFFF} Misura} \\ \hline
+1                         & Il sistema deve essere sempre raggiungibile                                             & Di prodotto                 & Disponibilità                 \\ \hline
+2                         & Il sistema deve essere in grado di gestire molti utenti contemporaneamente              & Di prodotto                 & Efficienza                    \\ \hline
+3                         & Il sistema deve garantire la persistenza dei dati                                       & Di prodotto                 & Affidabilità                  \\ \hline
+4                         & Il sistema deve garantire la sicurezza dei dati degli utenti                            & Di prodotto                 & Sicurezza                     \\ \hline
+5                         & Il sistema deve garantire brevissime attese agli utenti per l'elaborazione di richieste & Di prodotto                 & Efficienza                    \\ \hline
 \end{tabular}
-\endgroup
 \end{adjustbox}
 \end{table}
+
+
+
 
 
 \subsection{Design Principles}
@@ -699,7 +688,55 @@ public static Answer createAnswerToOpenQuestion(String text, User user, Survey s
             \item \textbf{Scopo}: Rappresenta il sistema complessivo, un oggetto radice, un dispositivo all’interno del quale viene eseguito il software, un punto di accesso al software o un sottosistema principale.
         \end{itemize}
 	\end{itemize}
-\subsection{Diagramma di deployment}
+	
+\subsubsection{Security Patterns}
+	\begin{itemize}
+		\item \textbf{Valet Key}
+    	\begin{itemize}
+            \item \textbf{Nome}: Valet Key
+            \item \textbf{Classificazione}: Security
+            \item \textbf{Applicabilità}: Nel caso di UnimibModules, ogni domanda può contenere un'immagine e, per motivi di performance, è stato affidato al dispositivo client il compito di ottenere o inviare le immagini al service storage. Il valtet key si occupa della sicurezza durante l'interazione tra il client e il data storage.
+            \item \textbf{Partecipanti}: DA SISTEMARE + LINK SEZIONE AWS
+                \begin{itemize}
+                    \item {AWSToken}
+                    \item {AWSTokenImpl}
+                    \item {QuestionController}
+                \end{itemize}
+            \item \textbf{Scopo}: Gestire l'accesso a risorse protette da parte degli endpoint client, autenticati nel sistema, fornendogli il valet key.
+             \item \textbf{Codice d'esempio} METTIAMO LE CLASSI AWSTOKEN ED UN ESEMPIO CLIENT TIPO LA GET
+             
+             \end{itemize}
+             \end{itemize}
+             
+\subsection{Architettura di deployment}
+\subsubsection{Diagramma di deployment}
+\subsubsection{AWS - Amazon Web Services}
+\begin{figure}[H]
+\includegraphics[scale=0.08, left]{aws-logo.png}
+\end{figure}
+L'intera infrastruttura dell'applicazione si basa sui servizi offerti da AWS (Amazon Web Services). AWS offre servizi di cloud computing, on-demand e pay-per-use, che possono appartenere alle classi IAAS (es. EC2, Load balancer), PAAS (es. Cloud9, Elastic Beanstalk) e SAAS (es. SNS). Per poter utilizzare l'aplicazione è necessario connettersi al seguente link: L'applicazione è raggiungibile al segue link: \href{http://unimibquestionari-env.eba-3behr9mi.eu-central-1.elasticbeanstalk.com/}{UnimibModules}. In questa sezione dell'analisi sono descritti i servizi utilizzati applicati al contesto di UnimibModules. 
+\begin{itemize}
+\item \textbf{RDS - Relational Database Service}
+\begin{figure}[H]
+\includegraphics[scale=0.1, left]{rds.png}
+\end{figure}
+RDS con MySql è stato utilizzato come database dell'applicazione. Inoltre, per poter garantire la persistenza dei dati è stato attivato il backup automatico. Un estensione dell'utilizzo attuale consiste nell'abilitazione dei replica sets per poter garantire ancora più affidabilità al sistema.
+\item \textbf{Elastic Beanstalk}
+\begin{figure}[H]
+\includegraphics[scale=0.3, left]{elastic.png}
+\end{figure}
+Elastic Beanstalk si trova al centro dell'intera infrastruttura dell'applicazione. Esso è un servizio PAAS che facilita la distribuzione di applicazioni web andando ad astrarre la gestione delle istanze fisiche EC2 e il processo stesso di installazione e distribuzione delle versioni applicative. Nel caso di UnimibModules il servizio dispone  un ambiente Java con auto scaling e load balancing. Il load balancing permette di distribuire le richieste su diverse istanze EC2 garantendo la disponibilità  e tolleranza del sistema ad eventuali fault delle macchine fisiche. L'auto scaling interagisce con il load balancing andando ad aggiungere o rimuovere elementi dal pool di istanze EC2 per poter minimizzare l'utilizzo di forza computazionale nei momenti di basso carico  e per poter rispondere al meglio nelle situazioni opposte.
+\item \textbf{S3 - Simple Storage Service}
+\begin{figure}[H]
+\includegraphics[scale=0.2, left]{s3.png}
+\end{figure}
+S3 è un servizio che permette l'archiviazione di oggetti all'interno di buckets. Gli oggetti possono essere di qualsiasi tipo, ma nel caso di UnimibModules si tratta solamente di immagini riferite alle domande del sistema. S3 garantisce sicurezza negli accessi, disponibilità e persistenza dei dati tramite i backup automatici. Utilizzando questo servizio non è più necessario archiviare le immagini direttamente nel file system dell'istanza che esegue l'applicazione, ma si dividono le entità per migliorare in generale le performance applicative. Il bucket UnimibModules non è pubblico, quindi è protetto da policy di sicurezza AWS.
+\item \textbf{IAM - Identity and Access Management}
+\begin{figure}[H]
+\includegraphics[scale=0.2, left]{iam.png}
+\end{figure}
+IAM non rientra nell'architettura di deployment dell'applicazione, ma è comunque uno dei servizi principali nel momento in cui si utilizza AWS. Nell'applicazione UnimibModules IAM è stato utilizzato per poter creare la policy di accesso sfruttata dai roles di Cognito, un servizio qui sotto descritto.
+\end{itemize}
 \subsection{Modello E-R}
 \section{Sviluppo}
 \subsection{Piano dello sprint}
@@ -707,7 +744,7 @@ public static Answer createAnswerToOpenQuestion(String text, User user, Survey s
 \begin{itemize}
 \item {\textbf {Sprint meeting}} per la composizione dello sprint backlog;
 \item {\textbf {Analisi e progettazione}}  per aggiornare o creare componenti UML utili al task;
-\item {\textbf {Bulding e testing}}  per sviluppare il task con la tecnica dell'extreme programming (coppia tester-developer);
+\item {\textbf {Bulding e testing}}  per lo sviluppo e testing del task;
 \item {\textbf {Review e refactoring}} per la revisione generale del lavoro effettuato e della qualità del codice (architectural smell, code smell ecc...);
 \item {\textbf {Retrospective meeting}} per chiudere con il team lo sprint presentando problemi, modifiche ecc...
 
