@@ -205,10 +205,9 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 
 		if (name != null && !name.isBlank()){
 			Optional<Survey> surveyOpt = surveyDAO.findById(id);
-			if(surveyOpt == null) {
-				NotFoundException ex = new NotFoundException("The survey with id: " + id + " doesn't exist", 
+			if(! surveyOpt.isPresent()) {
+				throw new NotFoundException("The survey with id: " + id + " doesn't exist", 
 						new Throwable("The survey with id: " + id + " doesn't exist"));
-				throw ex;
 			}else {
 				Survey survey = surveyOpt.get();
 				survey.setName(name);
