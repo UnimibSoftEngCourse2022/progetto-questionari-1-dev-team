@@ -27,7 +27,7 @@ component('editQuestion', {
                 if (authService.isLoggedIn()) {
                     userLogged = cookieService.getCookie("userId");
                     $scope.isLogged = true;
-                } else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
+                } else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
                     userLogged = cookieService.getCookie("userId");
                     $scope.isLogged = true;
                     authService.setUser(userLogged);
@@ -37,7 +37,7 @@ component('editQuestion', {
             $scope.logoutUser = function () {
                 if (authService.isLoggedIn()) {
                     authService.setUser(undefined);
-                    cookieService.removeCookie();
+                    cookieService.removeCookie("userId");
                     $scope.isLogged = false;
                     alert("You have just logged out!");
                 }

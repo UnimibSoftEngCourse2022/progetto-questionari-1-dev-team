@@ -66,12 +66,9 @@ app.config(function config($routeProvider) {
 
         for (let i in window.routes) {
             if (next.indexOf(i) !== -1) {
-                if (!authService.isLoggedIn() && (cookieService.getCookie() === undefined) && window.routes[i].requireLogin) {
-                    console.log('DENY');
+                if (!authService.isLoggedIn() && (cookieService.getCookie("userId") === undefined) && window.routes[i].requireLogin) {
                     event.preventDefault();
                     $location.path('/loginUser');
-                } else {
-                    console.log('ALLOW');
                 }
             }
         }

@@ -12,10 +12,13 @@ import com.amazonaws.util.IOUtils;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import it.unimib.unimibmodules.controller.AWSToken;
+import it.unimib.unimibmodules.controller.AnswerController;
 import it.unimib.unimibmodules.controller.PdfService;
 import it.unimib.unimibmodules.model.Answer;
 import it.unimib.unimibmodules.model.CloseEndedAnswer;
 import it.unimib.unimibmodules.model.QuestionType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
@@ -29,6 +32,8 @@ import java.util.List;
  */
 @Component("pdfService")
 public class PdfServiceImpl implements PdfService {
+
+    private static final Logger logger = LogManager.getLogger(PdfServiceImpl.class);
 
     private static Font catFont = new Font(Font.FontFamily.HELVETICA, 24,
             Font.BOLD);
@@ -77,9 +82,7 @@ public class PdfServiceImpl implements PdfService {
             }
             addEmptyLine(anchor, 1);
             document.add(anchor);
-            if (answers.get(i).getQuestion().getUrlImage()!=null)
-                document.newPage();
-            else if (i!=answers.size()-1 && answers.get(i+1).getQuestion().getUrlImage()!=null)
+            if (answers.get(i).getQuestion().getUrlImage()!=null || (i!=answers.size()-1 && answers.get(i+1).getQuestion().getUrlImage()!=null))
                 document.newPage();
         }
     }
@@ -115,7 +118,7 @@ public class PdfServiceImpl implements PdfService {
                 anchor.add(image);
                 fullObject.close();
             } catch (SdkClientException | DocumentException e) {
-                e.printStackTrace();
+                logger.error("Exception");
             }
         }
     }
