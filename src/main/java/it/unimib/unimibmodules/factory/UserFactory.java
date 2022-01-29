@@ -1,5 +1,6 @@
 package it.unimib.unimibmodules.factory;
 
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.model.User;
 
 /**
@@ -24,7 +25,7 @@ public class UserFactory {
 	 * @return              the new instance of User
 	 */
     
-    public static User createUser(String email, String password, String username, String name, String surname) {
+    public static User createUser(String email, String password, String username, String name, String surname) throws EmptyFieldException {
         
         User user = new User();
         user.setEmail(email);

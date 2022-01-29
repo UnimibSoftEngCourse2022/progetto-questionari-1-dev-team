@@ -2,6 +2,7 @@ package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.SurveyDTO;
 import it.unimib.unimibmodules.dto.UserDTO;
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Survey;
 import it.unimib.unimibmodules.model.User;
@@ -47,17 +48,6 @@ public class UserController extends DTOMapping<User, UserDTO> {
                     mapper.map(User::getName, UserDTO::setName);
                     mapper.map(User::getSurname, UserDTO::setSurname);
                     mapper.map(User::getCompilationId, UserDTO::setCompilationId);
-                });
-
-        modelMapper.createTypeMap(UserDTO.class, User.class)
-                .addMappings(mapper -> {
-                    mapper.map(UserDTO::getId, User::setId);
-                    mapper.map(UserDTO::getUsername, User::setUsername);
-                    mapper.map(UserDTO::getPassword, User::setPassword);
-                    mapper.map(UserDTO::getEmail, User::setEmail);
-                    mapper.map(UserDTO::getName, User::setName);
-                    mapper.map(UserDTO::getSurname, User::setSurname);
-                    mapper.map(UserDTO::getCompilationId, User::setCompilationId);
                 });
     }
 
@@ -152,7 +142,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
      * @return                  an HTTP response with status 200 and the UserDTO if the user has been created, 500 otherwise
      */
     @PostMapping(path = "/signUpUser", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> signUpUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> signUpUser(@RequestBody UserDTO userDTO) throws EmptyFieldException {
 
         try {
             userRepository.getByUsername(userDTO.getUsername());
@@ -188,7 +178,17 @@ public class UserController extends DTOMapping<User, UserDTO> {
 	 * @see DTOMapping#convertToEntity
 	 */
 	@Override
-	public User convertToEntity(UserDTO userDTO) {
-        return modelMapper.getTypeMap(UserDTO.class, User.class).map(userDTO);
+	public User convertToEntity(UserDTO userDTO) throws EmptyFieldException {
+
+        User user = modelMapper.map(userDTO, User.class);
+        user.setId(userDTO.getId());
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+        user.setEmail(userDTO.getEmail());
+        user.setName(userDTO.getName());
+        user.setSurname(userDTO.getSurname());
+        user.setCompilationId(userDTO.getCompilationId());
+
+        return user;
 	}
 }
