@@ -4,21 +4,29 @@ angular.
 	module('UNIMIBModules').
 	component('addSurvey', {
 		templateUrl: 'add-survey/add-survey.template.html',
-		controller: ['$location', '$routeParams', '$scope', '$http', 'cookieService',
-			function addSurveyController($location, $routeParams, $scope, $http, cookieService) {
+		controller: ['$location', '$scope', '$http', 'cookieService',
+			function addSurveyController($location, $scope, $http, cookieService) {
 
-				$scope.idUser = ""
+				$scope.idUser
 				$scope.name = ""
 				$scope.showMessageErr = false
 				$scope.showMessageConf = false
 				$scope.message = ""
+				
+				$scope.load = function(){
+					if (cookieService.getCookie() != null) {
+						$scope.idUser = cookieService.getCookie()
+					}else{
+						$scope.showAlert("ACCESS DENIED")
+					}
+				}
+				
+				//error alert
+				$scope.showAlert = function(text) {
+					alert('ERROR - ' + text)
+				}
 
 				$scope.addSurvey = function() {
-
-					if (cookieService.getCookie() != null) {
-						$scope.idUser = cookieService.getCookie();
-					}
-
 					if ($scope.name !== undefined && $scope.name != "" && $scope.name.replace(/\s/g, '').length) {
 						let data = {
 							surveyName: $scope.name,
