@@ -47,7 +47,7 @@ angular.
 						$scope.categories = response.data;
 					});
 
-				$http.get("/api/getUser/" + cookieService.getCookie())
+				$http.get("/api/getUser/" + cookieService.getCookie("userId"))
 					.then(function(response) {
 						user = response.data;
 					});

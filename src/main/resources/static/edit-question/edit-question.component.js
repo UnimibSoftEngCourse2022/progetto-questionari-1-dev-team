@@ -20,7 +20,7 @@ component('editQuestion', {
             let region;
             let identityPoolId;
             let bucketName;
-            let userLogged = cookieService.getCookie();
+            let userLogged = cookieService.getCookie("userId");
 
 
             $scope.file_changed = function(element) {
