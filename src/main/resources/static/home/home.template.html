@@ -1,3 +1,4 @@
+<ng-include src="'../template/navbar.template.html'"></ng-include>
 <div class="jumbotron">
 	<h1>Home</h1>
 </div>
@@ -16,7 +17,7 @@
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<button type="button" class="btn btn-outline-primary"
-						ng-click="findSurveyByText()">Search</button>
+						ng-click="findSurveyByText()" ng-style="{'display': displaySearchButton}">Search</button>
 				</div>
 				<input type="text" ng-model="textSearch" class="form-control"
 					id="searchSurvey" placeholder="Enter search text">
@@ -74,7 +75,7 @@
 
 
 	</div>
-	<div class="row mt-4 p-5 " ng-hide="isEmptyResult"
+	<div class="row mt-4 p-5 justify-content-center" ng-hide="isEmptyResult"
 		id="surveyCardContainer">
 		<div class="col-sm-3 d-flex justify-content-center mb-4"
 			ng-repeat="survey in result">

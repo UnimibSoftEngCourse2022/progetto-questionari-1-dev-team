@@ -7,6 +7,24 @@ angular.module('UNIMIBModules').component('loginUser', {
 
             $scope.username = "";
             $scope.password = "";
+            $scope.isLogged = false;
+
+            $scope.load = function() {
+                if (authService.isLoggedIn()) {
+                    $scope.isLogged = true;
+                } else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
+                    $scope.isLogged = true;
+                }
+            }
+
+            $scope.logoutUser = function () {
+                if (authService.isLoggedIn()) {
+                    authService.setUser(undefined);
+                    cookieService.removeCookie();
+                    $scope.isLogged = false;
+                    alert("You have just logged out!");
+                }
+            }
 
             $scope.loginUser = function () {
 
@@ -24,7 +42,6 @@ angular.module('UNIMIBModules').component('loginUser', {
 
                 $http.post("/api/logInUser", data).then(function onFulfilled(response) {
 
-                    console.log(response);
                     alert("Login Successful!");
                     authService.setUser($scope.username);
                     $scope.cookiesHandler(response.data.idUser);
@@ -32,7 +49,6 @@ angular.module('UNIMIBModules').component('loginUser', {
 
                 }, function errorCallback(response) {
 
-                    console.error(response);
                     $scope.resetForm();
                     alert("Invalid username and password. Please try again.");
 
@@ -47,6 +63,11 @@ angular.module('UNIMIBModules').component('loginUser', {
             $scope.cookiesHandler = function (idUser) {
                 if (cookieService.getCookie("userId") == null) {
                     cookieService.setCookie("userId", idUser);
+                }
+
+                if ((cookieService.getCookie() != null) && (cookieService.getCookie() !== idUser)) {
+                    cookieService.removeCookie();
+                    cookieService.setCookie(idUser);
                 }
             }
         }

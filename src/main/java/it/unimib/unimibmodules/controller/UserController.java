@@ -2,6 +2,7 @@ package it.unimib.unimibmodules.controller;
 
 import it.unimib.unimibmodules.dto.SurveyDTO;
 import it.unimib.unimibmodules.dto.UserDTO;
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Survey;
 import it.unimib.unimibmodules.model.User;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.*;
 
 /**
@@ -29,13 +32,15 @@ public class UserController extends DTOMapping<User, UserDTO> {
 
     private static final Logger logger = LogManager.getLogger(UserController.class);
 
+    private Random rand = SecureRandom.getInstanceStrong();
+
     /**
      * Instance of UserRepository that will be used to access the db.
      */
     private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository, ModelMapper modelMapper) {
+    public UserController(UserRepository userRepository, ModelMapper modelMapper) throws NoSuchAlgorithmException {
     	super(modelMapper);
         this.userRepository = userRepository;
 
@@ -47,17 +52,6 @@ public class UserController extends DTOMapping<User, UserDTO> {
                     mapper.map(User::getName, UserDTO::setName);
                     mapper.map(User::getSurname, UserDTO::setSurname);
                     mapper.map(User::getCompilationId, UserDTO::setCompilationId);
-                });
-
-        modelMapper.createTypeMap(UserDTO.class, User.class)
-                .addMappings(mapper -> {
-                    mapper.map(UserDTO::getId, User::setId);
-                    mapper.map(UserDTO::getUsername, User::setUsername);
-                    mapper.map(UserDTO::getPassword, User::setPassword);
-                    mapper.map(UserDTO::getEmail, User::setEmail);
-                    mapper.map(UserDTO::getName, User::setName);
-                    mapper.map(UserDTO::getSurname, User::setSurname);
-                    mapper.map(UserDTO::getCompilationId, User::setCompilationId);
                 });
     }
 
@@ -78,13 +72,11 @@ public class UserController extends DTOMapping<User, UserDTO> {
     protected String getSaltString() {
         String saltChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
-        Random rnd = new Random();
         while (salt.length() < 18) { // length of the random string.
-            int index = (int) (rnd.nextFloat() * saltChars.length());
+            int index = (int) (rand.nextFloat() * saltChars.length());
             salt.append(saltChars.charAt(index));
         }
-        String saltStr = salt.toString();
-        return saltStr;
+        return salt.toString();
     }
 
     /**
@@ -152,7 +144,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
      * @return                  an HTTP response with status 200 and the UserDTO if the user has been created, 500 otherwise
      */
     @PostMapping(path = "/signUpUser", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> signUpUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> signUpUser(@RequestBody UserDTO userDTO) throws EmptyFieldException {
 
         try {
             userRepository.getByUsername(userDTO.getUsername());
@@ -188,7 +180,17 @@ public class UserController extends DTOMapping<User, UserDTO> {
 	 * @see DTOMapping#convertToEntity
 	 */
 	@Override
-	public User convertToEntity(UserDTO userDTO) {
-        return modelMapper.getTypeMap(UserDTO.class, User.class).map(userDTO);
+	public User convertToEntity(UserDTO userDTO) throws EmptyFieldException {
+
+        User user = modelMapper.map(userDTO, User.class);
+        user.setId(userDTO.getId());
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+        user.setEmail(userDTO.getEmail());
+        user.setName(userDTO.getName());
+        user.setSurname(userDTO.getSurname());
+        user.setCompilationId(userDTO.getCompilationId());
+
+        return user;
 	}
 }

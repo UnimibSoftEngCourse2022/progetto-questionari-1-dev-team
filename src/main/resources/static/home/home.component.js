@@ -4,8 +4,9 @@ angular.
 	module('UNIMIBModules').
 	component('home', {
 		templateUrl: 'home/home.template.html',
-		controller: ['$location', '$routeParams', '$scope', '$http', "cookieService",
-			function homeController($location, $routeParams, $scope, $http, cookieService) {
+		controller: ['$location', '$scope', '$http', "cookieService",
+			function homeController($location, $scope, $http, cookieService, authService) {
+
 				$scope.idUser = undefined;
 				$scope.isLogged = false
 				$scope.isEmptyResult = true
@@ -32,13 +33,23 @@ angular.
 				$scope.load = function() {
 
 					$scope.searchSurvey()
-					if (cookieService.getCookie("userId")) {
-                        $scope.idUser = cookieService.getCookie("userId");
-                        $scope.isLogged = true;
-                    }
-                    $http.get("/api/findAllSurveysNoQuestion").then(function onfulFilled(response) {
-                        $scope.handleSurveys(response)
-                    })
+					if (authService.isLoggedIn()) {
+					  	$scope.idUser = cookieService.getCookie("userId");
+					  	$scope.isLogged = true;
+				  	} else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
+					  	$scope.idUser = cookieService.getCookie("userId");
+					  	$scope.isLogged = true;
+					  	authService.setUser($scope.idUser);
+					}
+				}
+
+				$scope.logoutUser = function () {
+					if (authService.isLoggedIn()) {
+						authService.setUser(undefined);
+						cookieService.removeCookie("userId");
+						$scope.isLogged = false;
+						alert("You have just logged out!");
+					}
 				}
 
 				$scope.setStatusSearch = function(isFull) {
@@ -71,7 +82,7 @@ angular.
 						$scope.isPrevActive = true
 						if ($scope.actualSearch == "survey") {
 							$scope.searchSurvey()
-						}else if($scope.actualSearch == "text"){
+						} else if ($scope.actualSearch == "text") {
 							$scope.findSurveyByText()
 						}
 					}
@@ -85,7 +96,7 @@ angular.
 						}
 						if ($scope.actualSearch == "survey") {
 							$scope.searchSurvey()
-						}else if($scope.actualSearch == "text"){
+						} else if ($scope.actualSearch == "text") {
 							$scope.findSurveyByText()
 						}
 					}
@@ -121,7 +132,7 @@ angular.
 						$scope.setStatusSearch(false)
 					});
 				}
-        
+
 				//compile by code for no-registered users
 				$scope.compileByCode = function() {
 					if ($scope.compilationCode !== undefined && $scope.compilationCode != "" && $scope.compilationCode.replace(/\s/g, '').length) {
@@ -134,17 +145,17 @@ angular.
 
 				// find survey by text : its code or name
 				$scope.findSurveyByText = function() {
-					if($scope.lastTextSearch != $scope.textSearch){
+					if ($scope.lastTextSearch != $scope.textSearch) {
 						$scope.lastTextSearch = $scope.textSearch
 						$scope.offset = 0
 					}
-					
+
 					$scope.actualSearch = "text"
-					
+
 					if ($scope.textSearch !== undefined && $scope.textSearch != "" && $scope.textSearch.replace(/\s/g, '').length) {
 						$http({
 							url: "/api/findSurveyByTextNoQuestionLazy", method: "GET",
-							params: { text: $scope.textSearch , offset: $scope.offset, limit: $scope.limit }
+							params: { text: $scope.textSearch, offset: $scope.offset, limit: $scope.limit }
 						}).then(function onfulFilled(response) {
 							$scope.setStatusSearch(true)
 							$scope.handleSurveys(response)
@@ -162,9 +173,9 @@ angular.
 					$scope.modalQuestion = idx;
 					$scope.errorEmail = false;
 
-					if(cookieService.getCookie("userId"))
-						$location.path('/compileSurvey/' +  $scope.result[idx].id)
-					else{
+					if (cookieService.getCookie("userId"))
+						$location.path('/compileSurvey/' + $scope.result[idx].id)
+					else {
 						$http.get("/api/getNewCode").then(function onfulFilled(response) {
 							$scope.randomCode = response.data.compilationCode;
 						});
@@ -220,10 +231,10 @@ angular.
 					}
 				}
 
-				$scope.compileSurveyGuest = function (idx){
-					if($scope.emailGuest == null || $scope.emailGuest === "") {
+				$scope.compileSurveyGuest = function(idx) {
+					if ($scope.emailGuest == null || $scope.emailGuest === "") {
 						$scope.errorEmail = true;
-					}else{
+					} else {
 						let data = {
 							username: $scope.randomCode,
 							name: null,
@@ -240,7 +251,7 @@ angular.
 							cookieService.setCookie("userId", response.data.idUser);
 							cookieService.setCookie("compilationId", $scope.randomCode);
 							console.log(response.data.idUser);
-							$location.path('/compileSurvey/' +  $scope.result[idx].id)
+							$location.path('/compileSurvey/' + $scope.result[idx].id)
 
 						}, function errorCallback(response) {
 

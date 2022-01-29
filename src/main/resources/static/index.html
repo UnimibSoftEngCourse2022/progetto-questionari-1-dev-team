@@ -9,28 +9,6 @@
 		<link rel="stylesheet" href="styles/style.css">
 	</head>
 	<body>
-
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-		<a class="navbar-brand" href="#">UNIMIB-Survey</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse"
-				data-target="#navbarSupportedContent"
-				aria-controls="navbarSupportedContent" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item "><a class="nav-link" href="/">Home</a></li>
-				</ul>
-			</div>
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item "><a class="nav-link" href="/#!/loginUser">Login</a></li>
-			</ul>
-			<ul class="navbar-nav mr-auto" ng-controller="logoutUserCtrl">
-				<li class="nav-item "><a class="nav-link" href="/"
-										 ng-class="{disabled: !authService.isLoggedIn()}" ng-click="logoutUser()">Logout</a></li>
-			</ul>
-		</nav>
 		<div ng-view></div>
 	</body>
 
@@ -46,7 +24,6 @@
 	<script src="service/authService.js"></script>
 	<script src="service/cookieService.js"></script>
 	<script src="factory/AnswerFactory.js"></script>
-	<script src="controller/navbarCtrl.js"></script>
 	<script src="app.config.js"></script>
 	<script src="home/home.component.js"></script>
 	<script src="home/home.module.js"></script>

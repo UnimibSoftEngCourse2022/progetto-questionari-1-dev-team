@@ -3,7 +3,7 @@
 app.component("compileSurvey", {
 	templateUrl: "compile-survey/compile-survey.template.html",
 	controller: function($scope, $http, $routeParams, $uibModal, $location, cookieService, awsService, AnswerFactory,
-						 FileSaver) {
+						 FileSaver, authService) {
 
 		$scope.userId = undefined;
 		$scope.model = {};
@@ -18,6 +18,7 @@ app.component("compileSurvey", {
 		$scope.questionMode = "INSERT";
         $scope.answered = false;
         $scope.modified = false;
+		$scope.isLogged = false;
 
 		$scope.$on('$routeChangeStart', function() {
 
@@ -37,10 +38,15 @@ app.component("compileSurvey", {
 
 		$scope.load = function() {
 
-			if ($routeParams.userId)
+			if (authService.isLoggedIn()) {
+				$scope.userId = cookieService.getCookie();
+				$scope.isLogged = true;
+			} else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
+				$scope.userId = cookieService.getCookie();
+				$scope.isLogged = true;
+				authService.setUser($scope.userId);
+			} else if ($routeParams.userId)
 				$scope.userId = $routeParams.userId;
-			else
-				$scope.userId = cookieService.getCookie("userId");
 
 			$http.get("/api/findSurvey?id=" + $routeParams.surveyId).then(function onFulfilled(response) {
 
@@ -85,6 +91,15 @@ app.component("compileSurvey", {
 					console.error(response);
 				}
 			});
+		}
+
+		$scope.logoutUser = function () {
+			if (authService.isLoggedIn()) {
+				authService.setUser(undefined);
+				cookieService.removeCookie();
+				$scope.isLogged = false;
+				alert("You have just logged out!");
+			}
 		}
 
 		$scope.selectQuestion = function() {

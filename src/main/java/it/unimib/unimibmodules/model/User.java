@@ -1,5 +1,6 @@
 package it.unimib.unimibmodules.model;
 
+import it.unimib.unimibmodules.exception.EmptyFieldException;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
@@ -37,8 +38,7 @@ public class User {
     /**
      * The username of the user.
      */
-    @Nullable
-    @Getter	@Setter private String username;
+    @Getter private String username;
 
     /**
      * The name of the user.
@@ -84,5 +84,17 @@ public class User {
     public User() {
 
         // Empty constructor; use UserFactory.createUser.
+    }
+
+    /**
+     * Modifies the username of a user, setting username as the new value
+     * @param username              the new username value
+     * @throws EmptyFieldException  if the username is empty
+     */
+    public void setUsername(String username) throws EmptyFieldException {
+        if (username == null || username.isEmpty()) {
+            throw new EmptyFieldException("The username of a user must not be empty.");
+        }
+        this.username = username;
     }
 }

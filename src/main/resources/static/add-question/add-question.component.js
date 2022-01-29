@@ -4,8 +4,8 @@ angular.
 	module('UNIMIBModules').
 	component('addQuestion', {
 		templateUrl: 'add-question/add-question.template.html',
-		controller: ['$location', '$routeParams', '$scope', '$http', 'awsService',
-			function addQuestionController($location, $routeParams, $scope, $http, $awsService) {
+		controller: ['$location', '$routeParams', '$scope', '$http', 'awsService', 'cookieService', 'authService',
+			function addQuestionController($location, $routeParams, $scope, $http, $awsService, cookieService, authService) {
 				let tmpObj = {};
 				let tmpAnswer = {};
 				let user;
@@ -15,9 +15,30 @@ angular.
 				let start = true;
 				let check;
 				let photofile;
+				$scope.idUser;
+				$scope.isLogged = false
 				$scope.imageView = false;
 				$scope.prova = ""
 
+				$scope.load = function () {
+					if (authService.isLoggedIn()) {
+						$scope.idUser = cookieService.getCookie();
+						$scope.isLogged = true;
+					} else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
+						$scope.idUser = cookieService.getCookie();
+						$scope.isLogged = true;
+						authService.setUser($scope.idUser);
+					}
+				}
+
+				$scope.logoutUser = function () {
+					if (authService.isLoggedIn()) {
+						authService.setUser(undefined);
+						cookieService.removeCookie();
+						$scope.isLogged = false;
+						alert("You have just logged out!");
+					}
+				}
 
 				$scope.file_changed = function(element) {
 
@@ -47,7 +68,8 @@ angular.
 						$scope.categories = response.data;
 					});
 
-				$http.get("/api/getUser/1")
+
+				$http.get("/api/getUser/" + cookieService.getCookie("userId"))
 					.then(function(response) {
 						user = response.data;
 					});

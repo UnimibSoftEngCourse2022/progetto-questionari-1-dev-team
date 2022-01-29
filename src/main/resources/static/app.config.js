@@ -61,12 +61,12 @@ app.config(function config($routeProvider) {
 
     $routeProvider.otherwise({redirectTo: "/home"})
 
-}).run(['$rootScope', '$location', 'authService', function ($rootScope, $location, authService) {
+}).run(['$rootScope', '$location', 'cookieService', 'authService', function ($rootScope, $location, cookieService, authService) {
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
 
         for (let i in window.routes) {
             if (next.indexOf(i) !== -1) {
-                if (!authService.isLoggedIn() && window.routes[i].requireLogin) {
+                if (!authService.isLoggedIn() && (cookieService.getCookie() === undefined) && window.routes[i].requireLogin) {
                     console.log('DENY');
                     event.preventDefault();
                     $location.path('/loginUser');

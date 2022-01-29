@@ -2,8 +2,8 @@
 
 angular.module('UNIMIBModules').component('signupUser', {
     templateUrl: 'signup-user/signup-user.template.html',
-    controller: ['$location', '$routeParams', '$scope', '$http',
-        function signupUserController($location, $routeParams, $scope, $http) {
+    controller: ['$location', '$routeParams', '$scope', '$http', 'cookieService',
+        function signupUserController($location, $routeParams, $scope, $http, cookieService) {
 
             $scope.username = "";
             $scope.name = "";
@@ -29,7 +29,8 @@ angular.module('UNIMIBModules').component('signupUser', {
 
                 $http.post("/api/signUpUser", data).then(function onFulfilled(response) {
 
-                    console.log(response);
+                    alert("User created! Proceed to login in order to navigate across the site.");
+                    $location.path("/loginUser");
 
                 }, function errorCallback(response) {
 

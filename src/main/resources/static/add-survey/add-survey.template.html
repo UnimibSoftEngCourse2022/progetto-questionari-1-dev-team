@@ -1,7 +1,8 @@
-<div class="jumbotron">
+<ng-include src="'../template/navbar.template.html'"></ng-include>
+<div class="jumbotron" ng-init="load()">
 	<h1>Create Survey</h1>
 </div>
-<div class="container-fluid mt-4">
+<div class="container-fluid mt-4" ng-init="load()">
 	<div class="row">
 		<div class="col-md-4 pl-4">
 			<div class="form-group">
