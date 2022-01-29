@@ -4,8 +4,8 @@ angular.
 module('UNIMIBModules').
 component('editQuestion', {
     templateUrl: 'edit-question/edit-question.template.html',
-    controller: ['$location', '$routeParams', '$scope', '$http', 'awsService',
-        function editQuestionController($location, $routeParams, $scope, $http, $awsService) {
+    controller: ['$location', '$routeParams', '$scope', '$http', 'awsService', "cookieService",
+        function editQuestionController($location, $routeParams, $scope, $http, $awsService, cookieService) {
             let v;
             let start;
             let counter;
@@ -20,6 +20,7 @@ component('editQuestion', {
             let region;
             let identityPoolId;
             let bucketName;
+            let userLogged = cookieService.getCookie("userId");
 
 
             $scope.file_changed = function(element) {
@@ -48,6 +49,9 @@ component('editQuestion', {
 
             $http.get("http://localhost:5000/api/getQuestion/" + $routeParams.idQuestion)
                 .then(function(response) {
+                    if(userLogged !== ""+response.data.user.id)
+                        $location.path('/home');
+
                     $scope.question =  response.data;
                     $scope.questiontext = $scope.question.text;
 
