@@ -4,8 +4,8 @@ angular.
 module('UNIMIBModules').
 component('editQuestion', {
     templateUrl: 'edit-question/edit-question.template.html',
-    controller: ['$location', '$routeParams', '$scope', '$http', 'awsService',
-        function editQuestionController($location, $routeParams, $scope, $http, $awsService) {
+    controller: ['$location', '$routeParams', '$scope', '$http', 'awsService', 'cookieService', 'authService',
+        function editQuestionController($location, $routeParams, $scope, $http, $awsService, cookieService, authService) {
             let v;
             let start;
             let counter;
@@ -20,7 +20,28 @@ component('editQuestion', {
             let region;
             let identityPoolId;
             let bucketName;
+            $scope.idUser;
+            $scope.isLogged = false;
 
+            $scope.load = function () {
+                if (authService.isLoggedIn()) {
+                    $scope.idUser = cookieService.getCookie();
+                    $scope.isLogged = true;
+                } else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
+                    $scope.idUser = cookieService.getCookie();
+                    $scope.isLogged = true;
+                    authService.setUser($scope.idUser);
+                }
+            }
+
+            $scope.logoutUser = function () {
+                if (authService.isLoggedIn()) {
+                    authService.setUser(undefined);
+                    cookieService.removeCookie();
+                    $scope.isLogged = false;
+                    alert("You have just logged out!");
+                }
+            }
 
             $scope.file_changed = function(element) {
 

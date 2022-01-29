@@ -7,6 +7,24 @@ angular.module('UNIMIBModules').component('loginUser', {
 
             $scope.username = "";
             $scope.password = "";
+            $scope.isLogged = false;
+
+            $scope.load = function() {
+                if (authService.isLoggedIn()) {
+                    $scope.isLogged = true;
+                } else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
+                    $scope.isLogged = true;
+                }
+            }
+
+            $scope.logoutUser = function () {
+                if (authService.isLoggedIn()) {
+                    authService.setUser(undefined);
+                    cookieService.removeCookie();
+                    $scope.isLogged = false;
+                    alert("You have just logged out!");
+                }
+            }
 
             $scope.loginUser = function () {
 

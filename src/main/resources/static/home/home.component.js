@@ -34,7 +34,12 @@ angular.
 					if (authService.isLoggedIn()) {
                         $scope.idUser = cookieService.getCookie();
                         $scope.isLogged = true;
-                    }
+                    } else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
+						$scope.idUser = cookieService.getCookie();
+						$scope.isLogged = true;
+						authService.setUser($scope.idUser);
+					}
+
                     $http.get("/api/findAllSurveysNoQuestion").then(function onfulFilled(response) {
                         $scope.handleSurveys(response)
                     })
@@ -43,6 +48,7 @@ angular.
 				$scope.logoutUser = function () {
 					if (authService.isLoggedIn()) {
 						authService.setUser(undefined);
+						cookieService.removeCookie();
 						$scope.isLogged = false;
 						alert("You have just logged out!");
 					}

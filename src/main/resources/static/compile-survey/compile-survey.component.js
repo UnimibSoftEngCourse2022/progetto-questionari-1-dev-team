@@ -2,7 +2,8 @@
 
 app.component("compileSurvey", {
 	templateUrl: "compile-survey/compile-survey.template.html",
-	controller: function($scope, $http, $routeParams, $uibModal, $location, AnswerFactory, FileSaver) {
+	controller: function($scope, $http, $routeParams, $uibModal, $location, AnswerFactory,
+						 FileSaver, cookieService, authService) {
 
 		$scope.model = {};
 		$scope.options = [];
@@ -15,8 +16,19 @@ app.component("compileSurvey", {
 		$scope.questionMode = "INSERT";
         $scope.answered = false;
         $scope.modified = false;
+		$scope.idUser;
+		$scope.isLogged = false;
 
 		$scope.load = function() {
+
+			if (authService.isLoggedIn()) {
+				$scope.idUser = cookieService.getCookie();
+				$scope.isLogged = true;
+			} else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
+				$scope.idUser = cookieService.getCookie();
+				$scope.isLogged = true;
+				authService.setUser($scope.idUser);
+			}
 
 			$http.get("/api/findSurvey?id=" + $routeParams.surveyId).then(function onFulfilled(response) {
 
@@ -62,6 +74,15 @@ app.component("compileSurvey", {
 					console.error(response);
 				}
 			});
+		}
+
+		$scope.logoutUser = function () {
+			if (authService.isLoggedIn()) {
+				authService.setUser(undefined);
+				cookieService.removeCookie();
+				$scope.isLogged = false;
+				alert("You have just logged out!");
+			}
 		}
 
 		$scope.selectQuestion = function() {
