@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-
 /**
  * Represents a survey.
  * @author Luca Milazzo
