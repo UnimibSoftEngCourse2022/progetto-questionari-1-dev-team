@@ -20,17 +20,17 @@ component('editQuestion', {
             let region;
             let identityPoolId;
             let bucketName;
-            $scope.idUser;
+            let userLogged
             $scope.isLogged = false;
 
             $scope.load = function () {
                 if (authService.isLoggedIn()) {
-                    $scope.idUser = cookieService.getCookie();
+                    userLogged = cookieService.getCookie("userId");
                     $scope.isLogged = true;
                 } else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
-                    $scope.idUser = cookieService.getCookie();
+                    userLogged = cookieService.getCookie("userId");
                     $scope.isLogged = true;
-                    authService.setUser($scope.idUser);
+                    authService.setUser(userLogged);
                 }
             }
 
@@ -69,6 +69,9 @@ component('editQuestion', {
 
             $http.get("http://localhost:5000/api/getQuestion/" + $routeParams.idQuestion)
                 .then(function(response) {
+                    if(userLogged !== ""+response.data.user.id)
+                        $location.path('/home');
+
                     $scope.question =  response.data;
                     $scope.questiontext = $scope.question.text;
 

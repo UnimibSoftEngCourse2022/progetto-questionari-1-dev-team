@@ -62,12 +62,6 @@ public class Question {
     /**
      * The surveys where the question is in.
      */
-    /*@ManyToMany(mappedBy="questions", cascade = CascadeType.DETACH)
-    @JoinTable(
-      name = "survey_question", 
-      joinColumns = @JoinColumn(name = "question_id"), 
-      inverseJoinColumns = @JoinColumn(name = "survey_id"))
-    private Set<Survey> survey;*/
 
 	@OneToMany(mappedBy="question", cascade = CascadeType.REMOVE)
 	@Getter	@Setter private Set<SurveyQuestions> surveyQuestions;
@@ -83,5 +77,6 @@ public class Question {
      * @see it.unimib.unimibmodules.factory.QuestionFactory#createQuestion
      */
 	public Question() {
+		//Do nothing
 	}
 }

@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -149,10 +150,10 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	 */
 	@GetMapping(path = "/generatePdf", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<byte[]> generatePdf(@RequestParam int surveyId, @RequestParam int userId)
-			throws NotFoundException, DocumentException {
+			throws NotFoundException, DocumentException, IOException {
 
 		Iterable<Answer> answer = answerRepository.getSurveyAnswersForUser(surveyId, userId);
-		List<Answer> answerList = new ArrayList<Answer>();
+		List<Answer> answerList = new ArrayList<>();
 		answer.forEach(answerList::add);
 		if (answerList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Answers for Survey with id " + surveyId +

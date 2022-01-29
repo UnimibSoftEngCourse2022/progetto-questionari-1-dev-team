@@ -3,6 +3,7 @@ package it.unimib.unimibmodules.controller;
 import com.itextpdf.text.DocumentException;
 import it.unimib.unimibmodules.model.Answer;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -17,5 +18,5 @@ public interface PdfService {
      * @param	answers	 the answers given
      * @return           the generated pdf
      */
-    byte[] createPDF(List<Answer> answers) throws DocumentException;
+    byte[] createPDF(List<Answer> answers) throws DocumentException, IOException;
 }

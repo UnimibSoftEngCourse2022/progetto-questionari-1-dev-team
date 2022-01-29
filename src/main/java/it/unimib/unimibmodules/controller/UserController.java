@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.*;
 
 /**
@@ -30,13 +32,15 @@ public class UserController extends DTOMapping<User, UserDTO> {
 
     private static final Logger logger = LogManager.getLogger(UserController.class);
 
+    private Random rand = SecureRandom.getInstanceStrong();
+
     /**
      * Instance of UserRepository that will be used to access the db.
      */
     private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository, ModelMapper modelMapper) {
+    public UserController(UserRepository userRepository, ModelMapper modelMapper) throws NoSuchAlgorithmException {
     	super(modelMapper);
         this.userRepository = userRepository;
 
@@ -68,13 +72,11 @@ public class UserController extends DTOMapping<User, UserDTO> {
     protected String getSaltString() {
         String saltChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
-        Random rnd = new Random();
         while (salt.length() < 18) { // length of the random string.
-            int index = (int) (rnd.nextFloat() * saltChars.length());
+            int index = (int) (rand.nextFloat() * saltChars.length());
             salt.append(saltChars.charAt(index));
         }
-        String saltStr = salt.toString();
-        return saltStr;
+        return salt.toString();
     }
 
     /**

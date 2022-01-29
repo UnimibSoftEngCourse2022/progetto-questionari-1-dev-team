@@ -40,10 +40,12 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	}
 
 	/**
-	 * Inserts an instance of Survey in the database
+	 * Inserts a new instance of Survey in the database
 	 * 
 	 * @param survey an instance of Survey
 	 * @throws FormatException
+	 * @see it.unimib.unimibmodules.exception.FormatException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 * @see SurveyRepository#add
 	 */
 	@Override
@@ -56,10 +58,13 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	}
 
 	/**
-	 * Inserts a Set of surveys in the database
+	 * Inserts a new Set of surveys in the database
 	 * 
 	 * @param surveySet a Set of Survey
 	 * @throws FormatException
+	 * @see it.unimib.unimibmodules.exception.FormatException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
+	 * @see SurveyRepository#addAll
 	 */
 	public void addAll(List<Survey> surveySet) throws FormatException {
 		try {
@@ -73,9 +78,11 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	 * Finds the survey identified by id in the database
 	 * 
 	 * @param id the id of the survey to be found
-	 * @return an instance of Survey if there is a survey identified by id, null
-	 *         otherwise
-	 * @throws NotFoundException
+	 * @return an instance of Survey if there is a survey identified by id
+	 * @throws NotFoundException if the survey doesn't exist
+	 * @see it.unimib.unimibmodules.exception.NotFoundException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
+	 * @see SurveyRepository#get
 	 */
 	@Override
 	public Survey get(int id) throws NotFoundException {
@@ -88,11 +95,13 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	}
 
 	/**
-	 * Returns all surveys in the database.
+	 * Returns all surveys from the database.
 	 * 
 	 * @return a Set of Surveys
-	 * @throws NotFoundException
-	 * @see SurveyRepository#getAll()
+	 * @throws NotFoundException if no survey exists
+	 * @see it.unimib.unimibmodules.exception.NotFoundException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
+	 * @see SurveyRepository#getAll
 	 */
 	@Override
 	public Iterable<Survey> getAll() throws NotFoundException {
@@ -106,12 +115,15 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	}
 	
 	/**
-	 * Returns all surveys in the database with Lazy loading.
-	 * @param offset
-	 * @param limit
+	 * Returns all surveys from the database with Lazy Loading
+	 * parameters.
+	 * @param offset offset for lazy loading
+	 * @param limit for limiting the result length
 	 * @return a Set of Surveys
-	 * @throws NotFoundException
-	 * @see SurveyRepository#getAll()
+	 * @throws NotFoundException if no survey exists
+	 * @see it.unimib.unimibmodules.exception.NotFoundException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
+	 * @see SurveyRepository#getAllLazy
 	 */
 	@Override
 	public Iterable<Survey> getAllLazy(int offset, int limit) throws NotFoundException {
@@ -124,13 +136,15 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	}
 
 	/**
-	 * Finds the survey in the database where text is contained in the name of the
-	 * survey
+	 * Finds all the surveys in the database where text is contained in 
+	 * their names or in their identifier.
 	 * 
-	 * @param text the text to search in the name of the survey
-	 * @return a list of Surveys where the text is contained in the name of the
-	 *         survey
-	 * @throws NotFoundException
+	 * @param text the text to search
+	 * @return a list of Surveys where the text has been matched
+	 * @throws NotFoundException if no survey has been found
+	 * @see it.unimib.unimibmodules.exception.NotFoundException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
+	 * @see SurveyRepository#getByText
 	 */
 	@Override
 	public Iterable<Survey> getByText(String text) throws NotFoundException {
@@ -146,15 +160,17 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	}
 	
 	/**
-	 * Finds the survey in the database where text is contained in the name of the
-	 * survey with Lazy Loading.
+	 * Finds all the surveys in the database where text is contained in 
+	 * their names or in their identifier with Lazy Loading parameters.
 	 * 
-	 * @param text the text to search in the name of the survey
-	 * @param offset
-	 * @param limit
-	 * @return a list of Surveys where the text is contained in the name of the
-	 *         survey
-	 * @throws NotFoundException
+	 * @param text the text to search
+	 * @param offset offset for lazy loading
+	 * @param limit for limiting the result length
+	 * @return a list of Surveys where the text has been matched
+	 * @throws NotFoundException if no survey has been found
+	 * @see it.unimib.unimibmodules.exception.NotFoundException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
+	 * @see SurveyRepository#getByTextLazy
 	 */
 	@Override
 	public Iterable<Survey> getByTextLazy(String text, int offset, int limit) throws NotFoundException {
@@ -172,8 +188,10 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	 * Deletes from the database the survey identified by id.
 	 * 
 	 * @param id the id of the survey to be deleted
-	 * @throws NotFoundException
-	 * @see SurveyRepository#remove(int id)
+	 * @throws FormatException
+	 * @see it.unimib.unimibmodules.exception.FormatException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
+	 * @see SurveyRepository#remove
 	 */
 	@Override
 	public void remove(int id) throws FormatException {
@@ -185,7 +203,9 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	}
 
 	/**
-	 * Deletes all surveys in the database.
+	 * Deletes all the surveys in the database.
+	 * 
+	 * @see SurveyRepository#removeAll
 	 */
 	public void removeAll() {
 		surveyDAO.deleteAll();
@@ -197,18 +217,21 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	 * @param id   survey id
 	 * @param name new name
 	 * @throws FormatException
-	 * @throws NotFoundException 
+	 * @throws NotFoundException
 	 * @throws EmptyFieldException
+	 * @see it.unimib.unimibmodules.exception.FormatException
+	 * @see it.unimib.unimibmodules.exception.NotFoundException
+	 * @see it.unimib.unimibmodules.exception.EmptyFieldException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
 	@Override
 	public void modifyName(String name, int id) throws FormatException, NotFoundException, EmptyFieldException {
 
 		if (name != null && !name.isBlank()){
 			Optional<Survey> surveyOpt = surveyDAO.findById(id);
-			if(surveyOpt == null) {
-				NotFoundException ex = new NotFoundException("The survey with id: " + id + " doesn't exist", 
+			if(! surveyOpt.isPresent()) {
+				throw new NotFoundException("The survey with id: " + id + " doesn't exist", 
 						new Throwable("The survey with id: " + id + " doesn't exist"));
-				throw ex;
 			}else {
 				Survey survey = surveyOpt.get();
 				survey.setName(name);
@@ -222,6 +245,17 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 
 	}
 	
+	/**
+	 * It's used by modifyQuestions in order to find all the questions
+	 * to create or maintain
+	 * 
+	 * @param surveyQuestions the new questions list of Survey
+	 * @param surveyId the survey id
+	 * @throws FormatException
+	 * @see it.unimib.unimibmodules.exception.FormatException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
+	 * @see it.unimib.unimibmodules.repository.SurveyRespositoryImpl#modifyQuestions
+	 */
 	public List<Integer> getListToSave(Set<SurveyQuestions> surveyQuestions, int surveyId){
 		List<Integer> idIn = new ArrayList<>();
 		for (SurveyQuestions surveyQuestion : surveyQuestions) {
@@ -237,10 +271,13 @@ public class SurveyRepositoryImpl implements SurveyRepository {
 	}
 
 	/**
-	 * Updates a survey in the database using a new instance of Survey.
+	 * Updates the questions list of the survey.
 	 * 
-	 * @param survey the new instance of Survey
+	 * @param surveyQuestions the new questions list of Survey
+	 * @param surveyId the survey id
 	 * @throws FormatException
+	 * @see it.unimib.unimibmodules.exception.FormatException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 */
 	@Override
 	public void modifyQuestions(Set<SurveyQuestions> surveyQuestions, int surveyId) throws FormatException {

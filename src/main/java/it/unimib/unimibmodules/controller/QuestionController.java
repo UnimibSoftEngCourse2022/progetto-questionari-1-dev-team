@@ -4,7 +4,6 @@ import it.unimib.unimibmodules.dto.QuestionDTO;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Question;
 import it.unimib.unimibmodules.model.User;
-import it.unimib.unimibmodules.service.AWSTokenImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -45,7 +44,11 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	 */
 	private final CategoryRepository categoryRepository;
 
+	/**
+	 * Instance of AWSToken that will be used to acces the aws services.
+	 */
 	private final AWSToken awsToken;
+	
 
 	@Autowired
 	public QuestionController(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper modelMapper,
@@ -91,7 +94,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	public ResponseEntity<QuestionDTO> getQuestion(@PathVariable int id) throws NotFoundException{
 
 		Question question = questionRepository.get(id);
-		logger.debug("Retrieved Question with id "+ id + ".");
+		logger.debug("Retrieved Question with id {}", id);
 		return new ResponseEntity<>(convertToDTO(question), HttpStatus.OK);
 	}
 
@@ -118,8 +121,8 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByUser(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No questions for user with id" + id + " was found.\"}");
-		logger.debug("Retrieved all the questions of the user "+id + ".");
+			throw new NotFoundException("{\"response\":\"No questions found for user with id " + id + "\"}");
+		logger.debug("Retrieved all the questions of the user {} ." , id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 	
@@ -136,8 +139,8 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByUserLazy(id, offset , limit);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No questions for user with id " + id + " was found.\"}");
-		logger.debug("Retrieved all the questions of the user "+id + ".");
+			throw new NotFoundException("{\"response\":\"No questions found for user with id " + id + "\"}");
+		logger.debug("Retrieved all the questions of the user {} ." , id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
@@ -150,8 +153,8 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByCategory(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Question with category" + id + " was found.\"}");
-		logger.debug("Retrieved all the questions of the user "+id + ".");
+			throw new NotFoundException("{\"response\":\"No Question found with category " + id + "\"}");
+		logger.debug("Retrieved all the questions of the category {} .", id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 	
@@ -167,8 +170,9 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByCategoryLazy(id, offset, limit);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Question with category" + id + " was found.\"}");
-		logger.debug("Retrieved all the questions of the user "+id + ".");
+			throw new NotFoundException("{\"response\":\"No Question found with category " + id + "\"}");
+		logger.debug("Retrieved all the questions, lazy, of the category {} .", id);
+
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
@@ -184,7 +188,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByText(text);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
+			throw new NotFoundException("{\"response\":\"No Question found with " + text + "\"}");
 		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size(), text);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
@@ -204,8 +208,8 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getByTextLazy(text, offset, limit);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Question with " + text + " was found.\"}");
-		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size(), text);
+			throw new NotFoundException("{\"response\":\"No Question found with " + text + "\"}");
+		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size());
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
@@ -220,7 +224,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Iterable<Question> questionList = questionRepository.getBySurveyId(id);
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Question for Survey with id " + id + " was found.\"}");
+			throw new NotFoundException("{\"response\":\"No Question found for Survey with id " + id + "\"}");
 		logger.debug("Retrieved {} questions for survey with id {}.", questionDTOList.size(), id);
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
@@ -228,12 +232,12 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	@GetMapping(path = "/getToken/{id}")
 	public ResponseEntity<String> getToken(@PathVariable int id){
 		GetOpenIdTokenForDeveloperIdentityResult response = awsToken.getToken(id);
-		logger.debug("Get token for id +" + id + ".");
+		logger.debug("Get token for user {}", id);
 		return new ResponseEntity<>("{\"token\":\""+response.getToken()+"\"," +
 				"\"identityToken\":\"" + response.getIdentityId() +"\" , " +
-				"\"region\":\""+ AWSTokenImpl.REGION+"\", " +
-				"\"identityPoolId\":\""+ AWSTokenImpl.IDENTITY_POOL_ID+"\", " +
-				"\"bucketName\":\""+ AWSTokenImpl.BUCKET_NAME+"\"}", HttpStatus.CREATED);
+				"\"region\":\""+ AWSToken.REGION+"\", " +
+				"\"identityPoolId\":\""+ AWSToken.IDENTITY_POOL_ID+"\", " +
+				"\"bucketName\":\""+ AWSToken.BUCKET_NAME+"\"}", HttpStatus.CREATED);
 	}
 
 	/**
@@ -254,13 +258,13 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		}
 		
 		GetOpenIdTokenForDeveloperIdentityResult response = awsToken.getToken(question.getUser().getId());
-		logger.debug("Added Question with id +" + question.getId() + ".");
+		logger.debug("Added Question with id {}", question.getId());
 		return new ResponseEntity<>("{\"idQuestion\":\""+ question.getId() +"\"," +
 				"\"token\":\""+response.getToken()+"\"," +
 				"\"identityToken\":\"" + response.getIdentityId() +"\" , " + 
-				"\"region\":\""+ AWSTokenImpl.REGION+"\", " +
-				"\"identityPoolId\":\""+ AWSTokenImpl.IDENTITY_POOL_ID+"\", " +
-				"\"bucketName\":\""+ AWSTokenImpl.BUCKET_NAME+"\"}", HttpStatus.CREATED);
+				"\"region\":\""+ AWSToken.REGION+"\", " +
+				"\"identityPoolId\":\""+ AWSToken.IDENTITY_POOL_ID+"\", " +
+				"\"bucketName\":\""+ AWSToken.BUCKET_NAME+"\"}", HttpStatus.CREATED);
 	}
 
 	/**
@@ -275,7 +279,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		Question question = convertToEntity(questionDTO);
 
 		questionRepository.modify(question);
-		logger.debug("Modified Question with id " + question.getId() + ".");
+		logger.debug("Modified Question with id {}", question.getId());
 		return new ResponseEntity<>("Question modified.", HttpStatus.OK);
 	}
 
@@ -289,7 +293,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	public ResponseEntity<String> deleteQuestion(@PathVariable int id) throws NotFoundException {
 
 		questionRepository.remove(id);
-		logger.debug("Removed Question with id " + id + ".");
+		logger.debug("Removed Question with id {}", id);
 		return new ResponseEntity<>("Question deleted", HttpStatus.OK);
 	}
 
