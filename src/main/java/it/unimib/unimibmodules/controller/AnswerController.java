@@ -236,6 +236,11 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 		if (user.getCompilationId() == null)
 			message.append(" ").append(user.getUsername());
 		message.append(",<br/><br/>thanks for filling out the survey <b>").append(survey.getName()).append("</b>.");
+		if (user.getCompilationId() != null)
+			message.append("<br/>").append("You can modify your answers <a href=\"")
+					.append("http://unimibquestionari-env.eba-3behr9mi.eu-central-1.elasticbeanstalk.com/#!/compileSurvey/")
+					.append(surveyId).append("/").append(user.getId()).append("\">here</a>.");
+		message.append("<br/><br/>UNIMIB Modules");
 		mailService.sendMail(user.getEmail(), "Survey completed", message.toString());
 		return new ResponseEntity<>("{\"response\":\"Answers saved.\"}", HttpStatus.OK);
 	}
