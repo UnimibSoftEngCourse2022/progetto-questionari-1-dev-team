@@ -68,7 +68,7 @@ public class PdfServiceImpl implements PdfService {
             if (i==0)
                 addTitle(anchor, answers.get(i).getSurvey().getName());
             anchor.add(new Paragraph(answers.get(i).getQuestion().getText()+" "+answers.get(i).getQuestion().getQuestionType(), subFont));
-            addImage(anchor, answers.get(i).getQuestion().getUrlImage(), answers.get(i).getUser().getId(), scaler);
+            addImage(anchor, answers.get(i).getQuestion().getUrlImage(), scaler);
             if(answers.get(i).getQuestion().getQuestionType()== QuestionType.OPEN) {
                 anchor.add(new Paragraph(answers.get(i).getText()));
             }else if (answers.get(i).getQuestion().getQuestionType() == QuestionType.MULTIPLECLOSED ||
@@ -100,7 +100,7 @@ public class PdfServiceImpl implements PdfService {
         }
     }
 
-    private static void addImage(Paragraph anchor, String url, int id, float scaler) throws IOException {
+    private static void addImage(Paragraph anchor, String url, float scaler) throws IOException {
         if (url!=null) {
             AWSCredentials credentials = new BasicAWSCredentials(AWSToken.ACCESS_KEY_ID, AWSToken.ACCESS_KEY_VALUE);
             try {
