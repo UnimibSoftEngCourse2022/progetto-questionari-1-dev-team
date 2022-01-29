@@ -35,11 +35,7 @@ public class PdfServiceImpl implements PdfService {
             Font.BOLD);
     private static Font subFont = new Font(Font.FontFamily.HELVETICA, 16,
             Font.BOLD);
-    private static AWSToken awsToken;
 
-    public PdfServiceImpl (AWSToken awsToken){
-        this.awsToken = awsToken;
-    }
     /**
      * Create A pdf file
      * @param	answers	 the answers given
