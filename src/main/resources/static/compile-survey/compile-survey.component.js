@@ -5,6 +5,7 @@ app.component("compileSurvey", {
 	controller: function($scope, $http, $routeParams, $uibModal, $location, cookieService, awsService, AnswerFactory,
 						 FileSaver) {
 
+		$scope.userId = undefined;
 		$scope.model = {};
 		$scope.options = [];
 		$scope.survey = {};
@@ -20,15 +21,13 @@ app.component("compileSurvey", {
 
 		$scope.$on('$routeChangeStart', function() {
 
-			$http.delete("/api/cleanSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=" +
-				cookieService.getCookie("userId"))
+			$http.delete("/api/cleanSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=" + $scope.userId)
 				.then(function onFulfilled() {
 
 					if (cookieService.getCookie("compilationId")) {
 						cookieService.removeCookie("userId");
 						cookieService.removeCookie("compilationId");
 					}
-					$location.path("/");
 				}, function errorCallback(response) {
 
 					alert("Error");
@@ -37,6 +36,11 @@ app.component("compileSurvey", {
 		});
 
 		$scope.load = function() {
+
+			if ($routeParams.userId)
+				$scope.userId = $routeParams.userId;
+			else
+				$scope.userId = cookieService.getCookie("userId");
 
 			$http.get("/api/findSurvey?id=" + $routeParams.surveyId).then(function onFulfilled(response) {
 
@@ -55,11 +59,9 @@ app.component("compileSurvey", {
 
 				$scope.questions = response.data;
 
-				$http.get("/api/findSurveyAnswersForUser/?surveyId=" + $routeParams.surveyId + "&userId=" +
-					cookieService.getCookie("userId"))
+				$http.get("/api/findSurveyAnswersForUser/?surveyId=" + $routeParams.surveyId + "&userId=" + $scope.userId)
 					.then(function onFulfilled(response) {
 
-						$scope.mode = "EDIT";
 						$scope.surveyMode = "EDIT";
 						$scope.answered = true;
 						$scope.answers = response.data;
@@ -67,8 +69,8 @@ app.component("compileSurvey", {
 					}, function errorCallback(response) {
 
 						if (response.status === 404) {
-							$scope.mode = "INSERT";
 							$scope.surveyMode = "INSERT";
+							$scope.selectQuestion();
 						} else {
 							alert("Error");
 							console.error(response);
@@ -113,7 +115,7 @@ app.component("compileSurvey", {
 				$scope.mode = "INSERT";
 
 			if ($scope.questions[$scope.questionIndex].urlImage) {
-				$http.get("/api/getToken/" + cookieService.getCookie("userId"))
+				$http.get("/api/getToken/" + $scope.userId)
 					.then(function (response) {
 						awsService.getPhoto(response.data.token, response.data.region, response.data.identityToken,
 							response.data.identityPoolId, response.data.bucketName,
@@ -136,6 +138,7 @@ app.component("compileSurvey", {
 
 			if ($scope.questionIndex !== $scope.questions.length - 1) {
 				$scope.questionIndex += 1;
+				$scope.openended_answer = "";
 				$scope.selectQuestion();
 			} else {
 				$scope.closeSurvey();
@@ -174,14 +177,15 @@ app.component("compileSurvey", {
 
 		$scope.insert = function() {
 
-			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, cookieService.getCookie("userId"),
-				$routeParams.surveyId, $scope.questions[$scope.questionIndex].id);
+			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, $scope.userId, $routeParams.surveyId,
+				$scope.questions[$scope.questionIndex].id);
 
 			$scope.getInputValues(data);
 
 			$http.post("/api/addAnswer", data).then(function onFulfilled() {
 
                 $scope.answered = true;
+				$scope.modified = true;
 				$scope.skipQuestion();
 			}, function errorCallback(response) {
 
@@ -192,8 +196,8 @@ app.component("compileSurvey", {
 
 		$scope.modify = function() {
 
-			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, cookieService.getCookie("userId"),
-				$routeParams.surveyId, $scope.questions[$scope.questionIndex].id);
+			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, $scope.userId, $routeParams.surveyId,
+				$scope.questions[$scope.questionIndex].id);
 
 			$scope.getInputValues(data);
 
@@ -212,6 +216,7 @@ app.component("compileSurvey", {
 
 			$http.delete("/api/deleteAnswer/" + $scope.currentAnswer.id).then(function onFulfilled() {
 
+				$scope.modified = true;
 				$scope.skipQuestion();
 			}, function errorCallback(response) {
 
@@ -221,6 +226,7 @@ app.component("compileSurvey", {
 		}
 
 		$scope.saveAnswers = function() {
+
             let self = this;
 			let modal = $uibModal.open({
 				animation: true,
@@ -231,7 +237,7 @@ app.component("compileSurvey", {
 					$scope.submit = function() {
 
 						$http.post("/api/saveSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=" +
-							cookieService.getCookie("userId"), {responseType:"blob"})
+							self.userId)
 							.then(function onFulfilled() {
 
 								modal.close();
@@ -264,7 +270,7 @@ app.component("compileSurvey", {
 					$scope.submit = function() {
 
 						$http.post("/api/saveModifiedSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=" +
-							cookieService.getCookie("userId"), {responseType:"blob"})
+							self.userId)
 							.then(function onFulfilled() {
 
 								modal.close();
@@ -286,22 +292,24 @@ app.component("compileSurvey", {
 		}
 
 		$scope.chooseDownload = function() {
+
+			let self = this;
             if($scope.answered){
                 let modal = $uibModal.open({
                     animation: true,
                     windowClass: "show",
                     templateUrl: "template/download-survey.template.html",
-                    controller: function($scope, $http, $location) {
+                    controller: function($scope, $http, $location, cookieService) {
 
                         $scope.download = function() {
 
-                            $http.get("/api/generatePdf?surveyId=" + $routeParams.surveyId + "&userId=" +
-								cookieService.getCookie("userId"), {responseType:"blob"})
+                            $http.get("/api/generatePdf?surveyId=" + $routeParams.surveyId + "&userId=" + self.userId,
+								{responseType:"blob"})
 								.then(function onFulfilled(response) {
 
                                     modal.close();
                                     FileSaver.saveAs(response.data, "survey.pdf");
-									if (!cookieService.getCookie("compilationId"))
+									if (self.surveyMode === "INSERT" || self.modified || cookieService.getCookie("compilationId"))
 	                                    $location.path("/");
                                 }, function errorCallback(response) {
 
@@ -313,13 +321,13 @@ app.component("compileSurvey", {
 
                         $scope.ignore = function() {
 							modal.close();
-							if (!cookieService.getCookie("compilationId"))
+							if (self.surveyMode === "INSERT" || self.modified || cookieService.getCookie("compilationId"))
 								$location.path("/");
                         }
                     }
                 });
             }else{
-				if (!cookieService.getCookie("compilationId"))
+				if (self.surveyMode === "INSERT" || self.modified || cookieService.getCookie("compilationId"))
                 	$location.path("/");
             }
         }

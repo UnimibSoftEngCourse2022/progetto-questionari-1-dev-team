@@ -162,7 +162,7 @@ angular.
 					$scope.modalQuestion = idx;
 					$scope.errorEmail = false;
 
-					if($scope.idUser !== undefined)
+					if(cookieService.getCookie("userId"))
 						$location.path('/compileSurvey/' +  $scope.result[idx].id)
 					else{
 						$http.get("/api/getNewCode").then(function onfulFilled(response) {
@@ -198,7 +198,6 @@ angular.
 
 					if (index > -1) {
 						$scope.modalQuestion = index
-						$scope.editQuestion = $scope.searchQuestions[index].user.id === $scope.idUser;
 					}
 				}
 

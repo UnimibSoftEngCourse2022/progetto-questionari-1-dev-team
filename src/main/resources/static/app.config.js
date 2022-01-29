@@ -32,6 +32,11 @@ window.routes =
             requireLogin: true
         },
 
+        '/compileSurvey/:surveyId/:userId': {
+            template: '<compile-survey></compile-survey>',
+            requireLogin: false
+        },
+
         '/loginUser': {
             template: '<login-user></login-user>',
             requireLogin: false
