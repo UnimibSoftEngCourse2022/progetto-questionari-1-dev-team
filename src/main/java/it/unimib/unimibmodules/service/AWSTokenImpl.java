@@ -1,8 +1,6 @@
 package it.unimib.unimibmodules.service;
 
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentity;
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentityClient;
 import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityRequest;
@@ -44,5 +42,4 @@ public class AWSTokenImpl implements AWSToken {
                 identityClient.getOpenIdTokenForDeveloperIdentity(request);
         return response;
     }
-
 }
