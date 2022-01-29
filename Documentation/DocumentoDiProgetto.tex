@@ -27,15 +27,6 @@
 \usepackage{pifont}
 \usepackage{listings}
 \usepackage{color}
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-    pdftitle={Overleaf Example},
-    pdfpagemode=FullScreen,
-    }
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -629,57 +620,6 @@ public class CategoryController extends DTOListMapping<Category, CategoryDTO>{
             \end{lstlisting}
         \end{itemize}
 		
-		
-		\item \textbf{Abstract factory}
-		\begin{itemize}
-		\item \textbf{Nome}: Abstract Factory
-            \item \textbf{Classificazione}: Data
-            \item \textbf{Applicabilità}: Nel caso di UnimibModules, le interfacce Factory permettono la creazione degli oggetti delle classi principali nel dominio.
-            \item \textbf{Partecipanti}:
-                \begin{itemize}
-                    \item RispostaFactory
-                    \item Risposta
-                    \item DomandaFactory
-                    \item Domanda
-                    \item QuestionarioFactory
-                    \item Questionario
-                    \item UtenteFactory
-                    \item Utente
-                \end{itemize}
-            \item \textbf{Scopo}: Interfaccia che permette di creare famiglie di oggetti connessi o dipendenti tra loro
-            \item \textbf{Codice d'esempio}
-            \begin{lstlisting}
-public class AnswerFactory {
-
-private AnswerFactory() {
-
-    throw new IllegalStateException("Utility class");
-}
-
-/**
-* Creates a new instance of Answer.
-* @param	text				the text of the answer
-* @param	user				the instance of the user who created the answer
-* @param	survey				the instance of the survey related to this answer
-* @param	question			the instance of the question related to this answer
-* @return						the newly created instance of Answer
-* @throws	EmptyFieldException	if the answer is empty
-*/
-public static Answer createAnswerToOpenQuestion(String text, User user, Survey survey, Question question)
-    throws EmptyFieldException {
-    
-    Answer answer = new Answer();
-    answer.setUser(user);
-    answer.setSurvey(survey);
-    answer.setQuestion(question);
-    answer.setText(text);
-    return answer;
-    }
-}
-            \end{lstlisting}
-        \end{itemize}
-		
-		
 		\item \textbf{Façade}
 		\begin{itemize}
 		\item \textbf{Nome}: Façade
@@ -751,7 +691,84 @@ IAM non rientra nell'architettura di deployment dell'applicazione, ma è comunqu
 \end{itemize}
 
 \subsection{Workflow per la Continuos Integration}
+\subsection{Best Practices}
+Durante la realizzazione del progetto, per la scrittura del codice sono state applicate diverse best practices per migliorare la qualità del codice e per renderlo più flessibile, riutilizzabile e mantenibile.
+\subsubsection{Lombok}
+Lombok è una libreria Java che sostituisce pezzi di codice ridondanti attraverso l'ausilio di annotazioni. Nel caso di UnimibModules, Lombok è stato utilizzato per evitare di scrivere getter e setter per ogni attributo all'interno delle varie classi implementate.
+ \begin{lstlisting}
+public class Question {
+	
+	 /**
+     * The id of the answer.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	@Getter	@Setter private int id;
+	
+    /**
+     * The image's url of the question.
+     */
+	@Getter	@Setter private String urlImage;
+	
+	/**
+     * The text of the question.
+     */
+	@Getter	@Setter private String text;
+}
+\end{lstlisting}
 
+\subsubsection{Enum instead of int constants}
+L'enum è un tipo di dato che permette ad una variabile di poter assumere un valore tra quelli predefiniti nell'insieme di costanti. Nel caso di UnimibModules, gli enum sono stati usati in 2 casi particolari:
+\begin{itemize}
+    \item \textbf{Question type}: Il sito permette agli utenti registrati di poter creare domande che possono essere aperte, chiuse a scelta singola oppure chiuse a scelta multipla. L'enum, quindi, ha 3 valori: ENUM, MULTIPLECLOSED, MULTIPLEOPEN.
+    \item \textbf{UnitOfWork operation}: L'enum in questione definisce le operazioni della Unit Of Work. Ogni operazione corrisponde ad un valore tra: CREATE, MODIFY, DELETE.
+\end{itemize}
+ \begin{lstlisting}
+public enum QuestionType {
+    OPEN,
+    MULTIPLECLOSED,
+    SINGLECLOSED
+}
+
+public enum UnitOfWorkOperations {
+
+	INSERT("INSERT"),
+	DELETE("DELETE"),
+	MODIFY("MODIFY");
+
+	@Getter	private final String value;
+
+	UnitOfWorkOperations(String value) {
+
+		this.value = value;
+	}
+}
+\end{lstlisting}
+
+\subsubsection{Lambdas e Streams}
+Alcune parti del codice sono state implementate attraverso l'utilizzo delle lambda expressions e degli stream. La soluzione è stata adottata per i principali vantaggi che offrono: 
+\begin{itemize}
+    \item Iterare su una sequenza mentre si eseguono operazioni, in una linea
+    \item Filtrare facilmente gli elementi di una sequenza
+\end{itemize}
+ \begin{lstlisting}
+public void commitInsert(int surveyId, int userId) {
+
+	if (uofContext.size() == 0 || !uofContext.containsKey(UnitOfWork.INSERT)) {
+		return;
+	}
+
+	List<Answer> answerList = uofContext.get(UnitOfWork.INSERT);
+	answerList.stream()
+			.filter(answer -> answer.getSurvey().getId() == surveyId && answer.getUser().getId() == userId)
+			.collect(Collectors.toList())
+			.forEach(answer -> {
+				add(answer);
+				answerList.remove(answer);
+			});
+	logger.debug("Inserted registered answers for user {} and survey {}.", userId, surveyId);
+}
+\end{lstlisting}
 
 %----------------------------------------------------------------------------------------
 
