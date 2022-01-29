@@ -4,9 +4,10 @@ angular.
 	module('UNIMIBModules').
 	component('home', {
 		templateUrl: 'home/home.template.html',
-		controller: ['$location', '$scope', '$http', "cookieService", "authService",
+		controller: ['$location', '$scope', '$http', "cookieService",
 			function homeController($location, $scope, $http, cookieService, authService) {
-				$scope.idUser;
+
+				$scope.idUser = undefined;
 				$scope.isLogged = false
 				$scope.isEmptyResult = true
 				$scope.searchResult = []
@@ -22,9 +23,10 @@ angular.
 				$scope.actualSearch = ""
 				$scope.lastTextSearch = ""
 				$scope.textSearch = ""
+
 				//error alert
-				$scope.showAlert = function(text) {
-					alert('ERROR - ' + text)
+				$scope.showAlert = function (text) {
+				  alert('ERROR - ' + text)
 				}
 
 				//Start-up function
@@ -32,12 +34,12 @@ angular.
 
 					$scope.searchSurvey()
 					if (authService.isLoggedIn()) {
-              $scope.idUser = cookieService.getCookie("userId");
-              $scope.isLogged = true;
-          } else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
-						  $scope.idUser = cookieService.getCookie("userId");
-						  $scope.isLogged = true;
-						  authService.setUser($scope.idUser);
+					  	$scope.idUser = cookieService.getCookie("userId");
+					  	$scope.isLogged = true;
+				  	} else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
+					  	$scope.idUser = cookieService.getCookie("userId");
+					  	$scope.isLogged = true;
+					  	authService.setUser($scope.idUser);
 					}
 				}
 
@@ -171,7 +173,7 @@ angular.
 					$scope.modalQuestion = idx;
 					$scope.errorEmail = false;
 
-					if ($scope.idUser !== undefined)
+					if (cookieService.getCookie("userId"))
 						$location.path('/compileSurvey/' + $scope.result[idx].id)
 					else {
 						$http.get("/api/getNewCode").then(function onfulFilled(response) {
@@ -207,7 +209,6 @@ angular.
 
 					if (index > -1) {
 						$scope.modalQuestion = index
-						$scope.editQuestion = $scope.searchQuestions[index].user.id === $scope.idUser;
 					}
 				}
 
@@ -246,7 +247,9 @@ angular.
 						}
 
 						$http.post("/api/signUpUser", data).then(function onFulfilled(response) {
-							//settare cookie response.data.idUser
+
+							cookieService.setCookie("userId", response.data.idUser);
+							cookieService.setCookie("compilationId", $scope.randomCode);
 							console.log(response.data.idUser);
 							$location.path('/compileSurvey/' + $scope.result[idx].id)
 

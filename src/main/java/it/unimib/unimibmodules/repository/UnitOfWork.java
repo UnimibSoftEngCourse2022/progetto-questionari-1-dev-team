@@ -7,12 +7,6 @@ package it.unimib.unimibmodules.repository;
  */
 public interface UnitOfWork<T> {
 
-	String INSERT = "INSERT";
-
-	String DELETE = "DELETE";
-
-	String MODIFY = "MODIFY";
-
 	/**
 	 * Adds <code>entity</code> to the elements to be inserted.
 	 * @param	entity	a new entity of type T

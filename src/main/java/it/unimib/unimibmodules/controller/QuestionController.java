@@ -37,12 +37,12 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	/**
 	 * Instance of UserRepository that will be used to access the db.
 	 */
-	private final UserRepository userRepository;
+	private final UserRepositoryReadOnly userRepository;
 
 	/**
 	 * Instance of CategoryRepository that will be used to access the db.
 	 */
-	private final CategoryRepository categoryRepository;
+	private final CategoryRepositoryReadOnly categoryRepository;
 
 	/**
 	 * Instance of AWSToken that will be used to acces the aws services.
@@ -51,8 +51,8 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 	
 
 	@Autowired
-	public QuestionController(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper modelMapper,
-							  CategoryRepository categoryRepository, AWSToken awsToken) {
+	public QuestionController(QuestionRepository questionRepository, UserRepositoryReadOnly userRepository,
+							  ModelMapper modelMapper, CategoryRepositoryReadOnly categoryRepository, AWSToken awsToken) {
 
 		super(modelMapper);
 		this.questionRepository = questionRepository;

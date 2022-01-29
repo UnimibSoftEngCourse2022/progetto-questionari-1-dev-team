@@ -24,13 +24,4 @@ public class CloseEndedAnswerDTO {
 	 * Serialization of the question to which this answer belongs.
 	 */
 	@Getter	@Setter private QuestionDTO questionDTO;
-//
-//	/**
-//	 * Modifies the id of the close-ended answer, setting <code>id</code> as the new value.
-//	 * @param	id	the new id value
-//	 */
-//	public void setId(Object id) {
-//
-//		this.id = (int) id;
-//	}
 }

@@ -15,12 +15,12 @@ angular.
 
 				$scope.load = function () {
 					if (authService.isLoggedIn()) {
-						$scope.idUser = cookieService.getCookie();
+						$scope.idUser = cookieService.getCookie("userId");
 						$scope.isLogged = true;
-					} else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
-						$scope.idUser = cookieService.getCookie();
+					} else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
+						$scope.idUser = cookieService.getCookie("userId");
 						$scope.isLogged = true;
-						authService.setUser($scope.idUser);
+
 					}
 				}
 

@@ -1,6 +1,7 @@
 package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.controller.CloseEndedAnswerRepository;
+import it.unimib.unimibmodules.controller.CloseEndedAnswerRepositoryReadOnly;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.CloseEndedAnswer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.Optional;
  * @version 0.4.0
  */
 @Component("closeEndedAnswerRepository")
-public class CloseEndedAnswerRepositoryImpl implements CloseEndedAnswerRepository {
+public class CloseEndedAnswerRepositoryImpl implements CloseEndedAnswerRepository, CloseEndedAnswerRepositoryReadOnly {
 
 	/**
 	 * The instance of CloseEndedAnswerDAO that will be used to perform actions to the DB

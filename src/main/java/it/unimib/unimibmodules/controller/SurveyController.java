@@ -36,7 +36,7 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	/**
 	 * Instance of UserRepository. It's used to access the Repository layer.
 	 */
-	private final UserRepository userRepository;
+	private final UserRepositoryReadOnly userRepository;
 	
 	/**
 	 * Logger instance for debug purpose
@@ -50,9 +50,9 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	private final String retrivedNSurveys = "Retrieved {} surveys.";
 
 	@Autowired
-	public SurveyController(UserRepository userRepository, SurveyRepository surveyRepository,
+	public SurveyController(UserRepositoryReadOnly userRepository, SurveyRepository surveyRepository,
+							ModelMapper modelMapper) {
 
-			ModelMapper modelMapper) {
 		super(modelMapper);
 		this.surveyRepository = surveyRepository;
 		this.userRepository = userRepository;

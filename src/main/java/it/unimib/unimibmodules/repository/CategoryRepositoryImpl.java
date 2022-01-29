@@ -1,6 +1,7 @@
 package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.controller.CategoryRepository;
+import it.unimib.unimibmodules.controller.CategoryRepositoryReadOnly;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.util.Optional;
  * @version 0.4.0
  */
 @Component("categoryRepository")
-public class CategoryRepositoryImpl implements CategoryRepository {
+public class CategoryRepositoryImpl implements CategoryRepository, CategoryRepositoryReadOnly {
 
     /**
      * The instance of categoryDAO that will be used to perform actions to the DB

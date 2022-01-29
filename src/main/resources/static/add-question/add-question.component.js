@@ -169,7 +169,7 @@ angular.
 									angular.forEach($scope.questionAnswer, function(question, key) {
 										question["questionDTO"] = { "id": response.data.idQuestion };
 
-										$http.post("http://localhost:5000/api/addCloseEndedAnswer", question, 'application/json; charset=utf-8')
+										$http.post("/api/addCloseEndedAnswer", question, 'application/json; charset=utf-8')
 											.then(function(response) {
 												$scope.prova = "Domanda inserita con successo!";
 											});

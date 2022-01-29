@@ -158,7 +158,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	public void registerNew(Answer answer) {
 
 		logger.debug("Registering Answer with id {} for insert in context.", answer.getId());
-		register(answer, UnitOfWork.INSERT);
+		register(answer, UnitOfWorkOperations.INSERT.getValue());
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	public void registerModified(Answer answer) {
 
 		logger.debug("Registering Answer with id {} for modify in context.", answer.getId());
-		register(answer, UnitOfWork.MODIFY);
+		register(answer, UnitOfWorkOperations.MODIFY.getValue());
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	public void registerDeleted(Answer answer) {
 
 		logger.debug("Registering Answer with id {} for delete in context.", answer.getId());
-		register(answer, UnitOfWork.DELETE);
+		register(answer, UnitOfWorkOperations.DELETE.getValue());
 	}
 
 	/**
@@ -199,11 +199,11 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 			return;
 		}
 
-		if (uofContext.containsKey(UnitOfWork.INSERT))
+		if (uofContext.containsKey(UnitOfWorkOperations.INSERT.getValue()))
 			commitInsert(surveyId, userId);
-		if (uofContext.containsKey(UnitOfWork.MODIFY))
+		if (uofContext.containsKey(UnitOfWorkOperations.MODIFY.getValue()))
 			commitModify(surveyId, userId);
-		if (uofContext.containsKey(UnitOfWork.DELETE))
+		if (uofContext.containsKey(UnitOfWorkOperations.DELETE.getValue()))
 			commitDelete(surveyId, userId);
 	}
 
@@ -216,11 +216,11 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	@Override
 	public void commitInsert(int surveyId, int userId) {
 
-		if (uofContext.size() == 0 || !uofContext.containsKey(UnitOfWork.INSERT)) {
+		if (uofContext.size() == 0 || !uofContext.containsKey(UnitOfWorkOperations.INSERT.getValue())) {
 			return;
 		}
 
-		List<Answer> answerList = uofContext.get(UnitOfWork.INSERT);
+		List<Answer> answerList = uofContext.get(UnitOfWorkOperations.INSERT.getValue());
 		answerList.stream()
 				.filter(answer -> answer.getSurvey().getId() == surveyId && answer.getUser().getId() == userId)
 				.collect(Collectors.toList())
@@ -239,7 +239,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	 */
 	public void commitModify(int surveyId, int userId) {
 
-		List<Answer> answerList = uofContext.get(UnitOfWork.MODIFY);
+		List<Answer> answerList = uofContext.get(UnitOfWorkOperations.MODIFY.getValue());
 
 		if (answerList == null)
 			return;
@@ -262,7 +262,7 @@ public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer
 	 */
 	public void commitDelete(int surveyId, int userId) {
 
-		List<Answer> answerList = uofContext.get(UnitOfWork.DELETE);
+		List<Answer> answerList = uofContext.get(UnitOfWorkOperations.DELETE.getValue());
 
 		if (answerList == null)
 			return;

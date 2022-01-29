@@ -1,6 +1,7 @@
 package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.controller.QuestionRepository;
+import it.unimib.unimibmodules.controller.QuestionRepositoryReadOnly;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.util.Optional;
  * @version 0.4.0
  */
 @Component("questionRepository")
-public class QuestionRepositoryImpl implements QuestionRepository {
+public class QuestionRepositoryImpl implements QuestionRepository, QuestionRepositoryReadOnly {
 	
 	/**
      * The instance of questionDAO that will be used to perform actions to the DB
@@ -95,7 +96,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 	
 	/**
 	 * Finds the question in the database where text is contained in the text of the question for lazy loading
-	 * @param	surveyId	the id of the survey
+	 * @param	text	the id of the survey
 	 * @param offset initial position for the query
 	 * @param limit limiting query results
 	 * @return			a list of Questions where the text is contained in the text of the question

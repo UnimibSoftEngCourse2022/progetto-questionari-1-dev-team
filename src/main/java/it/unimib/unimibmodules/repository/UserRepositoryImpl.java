@@ -1,6 +1,7 @@
 package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.controller.UserRepository;
+import it.unimib.unimibmodules.controller.UserRepositoryReadOnly;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.Optional;
  * @version 0.4.0
  */
 @Component("userRepository")
-public class UserRepositoryImpl implements UserRepository {
+public class UserRepositoryImpl implements UserRepository, UserRepositoryReadOnly {
     
     /**
      * The instance of UserDAO that will be used to perform actions to the DB

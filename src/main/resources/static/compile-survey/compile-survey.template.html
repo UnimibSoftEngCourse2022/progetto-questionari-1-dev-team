@@ -7,7 +7,11 @@
 	<br/>
 	Survey by: {{ survey.userDTO.username }}
 	<br/><br/>
-	<p>{{ questions[questionIndex].text }}</p>
+	<p>
+		{{ questions[questionIndex].text }}
+		<br/>
+		<img src="{{questionImage}}" alt="Question image" ng-hide="!questionImage"/>
+	</p>
 	<div ng-hide="questions[questionIndex].questionType != 'SINGLECLOSED'">
 		<div ng-repeat="answer in questions[questionIndex].closeEndedAnswerDTOSet">
 			<label>
@@ -31,10 +35,9 @@
 	</div>
 	<br/>
 	<button ng-click="insert()" ng-hide="mode === 'EDIT'" class="btn btn-primary">Insert</button>
-	<span ng-hide="mode === 'INSERT'" >
+	<span ng-hide="mode === 'INSERT'">
 		<button ng-click="modify()" class="btn btn-primary">Modify</button>
 		<button ng-click="delete()" class="btn btn-danger">Delete</button>
-		<button ng-click="chooseDownload()" class="btn btn-danger" ng-hide="modified === true">Download</button>
 	</span>
 	<button ng-click="skipQuestion()" class="btn btn-warning" ng-hide="questionIndex === questions.length - 1">
 		Skip question
@@ -42,4 +45,5 @@
 	<button ng-click="closeSurvey()" class="btn btn-success">
 		Close survey
 	</button>
+	<button ng-click="chooseDownload()" class="btn btn-danger" ng-hide="surveyMode === 'INSERT' || modified">Download</button>
 </div>

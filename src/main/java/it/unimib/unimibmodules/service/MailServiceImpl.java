@@ -59,11 +59,11 @@ public class MailServiceImpl implements MailService {
 					Transport.send(message);
 					logger.debug("Email sent.");
 				} catch (MessagingException e) {
-					e.printStackTrace();
+					logger.error("MessagingException: error sending email.");
 				}
 			}).start();
 		} catch (MessagingException e) {
-			e.printStackTrace();
+			logger.error("MessagingException: error sending email.");
 		}
 	}
 }
