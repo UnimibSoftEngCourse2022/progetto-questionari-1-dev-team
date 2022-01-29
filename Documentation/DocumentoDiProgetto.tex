@@ -12,7 +12,7 @@
 \usepackage[left=3cm, right=3cm]{geometry} % insert here document layout options
 \usepackage{natbib} % Required to change bibliography style to APA 
 \usepackage{tabularx,booktabs,tabulary,array,graphicx,url}
-\usepackage{graphicx}
+\usepackage{graphicx,wrapfig,lipsum}
 \graphicspath{ {./images/} }
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{multirow}
@@ -620,6 +620,57 @@ public class CategoryController extends DTOListMapping<Category, CategoryDTO>{
             \end{lstlisting}
         \end{itemize}
 		
+		
+		\item \textbf{Abstract factory}
+		\begin{itemize}
+		\item \textbf{Nome}: Abstract Factory
+            \item \textbf{Classificazione}: Data
+            \item \textbf{Applicabilità}: Nel caso di UnimibModules, le interfacce Factory permettono la creazione degli oggetti delle classi principali nel dominio.
+            \item \textbf{Partecipanti}:
+                \begin{itemize}
+                    \item RispostaFactory
+                    \item Risposta
+                    \item DomandaFactory
+                    \item Domanda
+                    \item QuestionarioFactory
+                    \item Questionario
+                    \item UtenteFactory
+                    \item Utente
+                \end{itemize}
+            \item \textbf{Scopo}: Interfaccia che permette di creare famiglie di oggetti connessi o dipendenti tra loro
+            \item \textbf{Codice d'esempio}
+            \begin{lstlisting}
+public class AnswerFactory {
+
+private AnswerFactory() {
+
+    throw new IllegalStateException("Utility class");
+}
+
+/**
+* Creates a new instance of Answer.
+* @param	text				the text of the answer
+* @param	user				the instance of the user who created the answer
+* @param	survey				the instance of the survey related to this answer
+* @param	question			the instance of the question related to this answer
+* @return						the newly created instance of Answer
+* @throws	EmptyFieldException	if the answer is empty
+*/
+public static Answer createAnswerToOpenQuestion(String text, User user, Survey survey, Question question)
+    throws EmptyFieldException {
+    
+    Answer answer = new Answer();
+    answer.setUser(user);
+    answer.setSurvey(survey);
+    answer.setQuestion(question);
+    answer.setText(text);
+    return answer;
+    }
+}
+            \end{lstlisting}
+        \end{itemize}
+		
+		
 		\item \textbf{Façade}
 		\begin{itemize}
 		\item \textbf{Nome}: Façade
@@ -643,63 +694,10 @@ public class CategoryController extends DTOListMapping<Category, CategoryDTO>{
                     \item {QuestionController}
                 \end{itemize}
             \item \textbf{Scopo}: Gestire l'accesso a risorse protette da parte degli endpoint client, autenticati nel sistema, fornendogli il valet key.
-             \item \textbf{Codice d'esempio}
-             \begin{lstlisting}
-public interface AWSToken {
-    Region REGION = Region.getRegion(Regions.EU_CENTRAL_1);
-    String ACCESS_KEY_ID = "ACCESS_KEY_ID_COGNITO";
-    String ACCESS_KEY_VALUE = "SECRET_ACESS_KEY_COGNITO";
-    String IDENTITY_POOL_ID = "eu-central-1:581b95ad-2144-4e38-b112-028abe2bac0a";
-    String LOGIN_PROVIDER = "login.progettoquestionari.dev";
-    String BUCKET_NAME = "questionari-images";
-    /**
-     * Get the User's token from AWS Cognito
-     * @param	idUser the id of the logged user.
-     * @return				GetOpenIdTokenForDeveloperIdentityResult instance
-     */
-    GetOpenIdTokenForDeveloperIdentityResult getToken(int idUser);
-}
-
-public class AWSTokenImpl implements AWSToken {
-
-    /**
-     * Get the User's token from AWS Cognito
-     * @param	idUser the id of the logged user.
-     * @return				GetOpenIdTokenForDeveloperIdentityResult instance
-     */
-    @Override
-    public GetOpenIdTokenForDeveloperIdentityResult getToken(int idUser){
-        AmazonCognitoIdentity identityClient = new AmazonCognitoIdentityClient(
-                new BasicAWSCredentials(ACCESS_KEY_ID, ACCESS_KEY_VALUE)
-        );
-        identityClient.setRegion(REGION);
-        GetOpenIdTokenForDeveloperIdentityRequest request =
-                new GetOpenIdTokenForDeveloperIdentityRequest();
-        request.setIdentityPoolId(IDENTITY_POOL_ID);
-        HashMap<String,String> logins = new HashMap<>();
-        logins.put(LOGIN_PROVIDER, ""+idUser);
-        request.setLogins(logins);
-        request.setTokenDuration(60 * 5L);
-        GetOpenIdTokenForDeveloperIdentityResult response =
-                identityClient.getOpenIdTokenForDeveloperIdentity(request);
-        return response;
-    }
-}
-
-@GetMapping(path = "/getToken/{id}")
-public ResponseEntity<String> getToken(@PathVariable int id){
-	GetOpenIdTokenForDeveloperIdentityResult response = awsToken.getToken(id);
-	logger.debug("Get token for user {}", id);
-	return new ResponseEntity<>("{\"token\":\""+response.getToken()+"\"," +
-			"\"identityToken\":\"" + response.getIdentityId() +"\" , " +
-			"\"region\":\""+ AWSToken.REGION+"\", " +
-			"\"identityPoolId\":\""+ AWSToken.IDENTITY_POOL_ID+"\", " +
-			"\"bucketName\":\""+ AWSToken.BUCKET_NAME+"\"}", HttpStatus.CREATED);
-	
-            \end{lstlisting}
+             \item \textbf{Codice d'esempio} METTIAMO LE CLASSI AWSTOKEN ED UN ESEMPIO CLIENT TIPO LA GET
              
              \end{itemize}
-        \end{itemize}
+             \end{itemize}
              
 \subsection{Architettura di deployment}
 \subsubsection{Diagramma di deployment}
@@ -707,18 +705,18 @@ public ResponseEntity<String> getToken(@PathVariable int id){
 \begin{figure}[H]
 \includegraphics[scale=0.08, left]{aws-logo.png}
 \end{figure}
-L'intera infrastruttura dell'applicazione si basa sui servizi offerti da AWS (Amazon Web Services). AWS offre servizi di cloud computing, on-demand e pay-per-use, che possono appartenere alle classi IAAS (es. EC2, Load balancer), PAAS (es. Cloud9, Elastic Beanstalk) e SAAS (es. SNS). Per poter utilizzare l'aplicazione è necessario connettersi al seguente link: L'applicazione è raggiungibile al segue link: \href{http://unimibquestionari-env.eba-3behr9mi.eu-central-1.elasticbeanstalk.com/}{UnimibModules}. In questa sezione dell'analisi sono descritti i servizi utilizzati applicati al contesto di UnimibModules. 
+L'intera infrastruttura dell'applicazione si basa sui servizi offerti da AWS (Amazon Web Services). AWS offre servizi di cloud computing, on-demand e pay-per-use, che possono appartenere alle classi IAAS (es. EC2, Load balancer), PAAS (es. Cloud9, Elastic Beanstalk) e SAAS (es. SNS). L'applicazione è raggiungibile al segue link: \textcolor{blue}{\href{http://unimibquestionari-env.eba-3behr9mi.eu-central-1.elasticbeanstalk.com/}{UnimibModules}}. In questa sezione dell'analisi sono descritti i servizi utilizzati in UnimibModules. 
 \begin{itemize}
 \item \textbf{RDS - Relational Database Service}
 \begin{figure}[H]
 \includegraphics[scale=0.1, left]{rds.png}
 \end{figure}
-RDS con MySql è stato utilizzato come database dell'applicazione. Inoltre, per poter garantire la persistenza dei dati è stato attivato il backup automatico. Un estensione dell'utilizzo attuale consiste nell'abilitazione dei replica sets per poter garantire ancora più affidabilità al sistema.
+RDS è stato utilizzato come database dell'applicazione. Inoltre, per poter garantire la persistenza dei dati è stato attivato il backup automatico. Un estensione dell'utilizzo attuale consiste nell'abilitazione dei replica sets per poter garantire ancora più affidabilità al sistema.
 \item \textbf{Elastic Beanstalk}
 \begin{figure}[H]
 \includegraphics[scale=0.3, left]{elastic.png}
 \end{figure}
-Elastic Beanstalk si trova al centro dell'intera infrastruttura dell'applicazione. Esso è un servizio PAAS che facilita la distribuzione di applicazioni web andando ad astrarre la gestione delle istanze fisiche EC2 e il processo stesso di installazione e distribuzione delle versioni applicative. Nel caso di UnimibModules il servizio dispone  un ambiente Java con auto scaling e load balancing. Il load balancing permette di distribuire le richieste su diverse istanze EC2 garantendo la disponibilità  e tolleranza del sistema ad eventuali fault delle macchine fisiche. L'auto scaling interagisce con il load balancing andando ad aggiungere o rimuovere elementi dal pool di istanze EC2 per poter minimizzare l'utilizzo di forza computazionale nei momenti di basso carico  e per poter rispondere al meglio nelle situazioni opposte.
+Elastic Beanstalk si trova al centro dell'intera infrastruttura dell'applicazione. Esso è un servizio PAAS che facilita la distribuzione di applicazioni web andando ad astrarre la gestione delle istanze fisiche EC2 e il processo stesso di installazione e distribuzione delle versioni applicative. Nel caso di UnimibModules il servizio dispone  un ambiente Java con auto scaling e load balancing. Il load balancing permette di distribuire le richieste su diverse istanze EC2 garantendo la disponibilità  e tolleranza del sistema ad eventuali fault delle macchine fisiche. L'auto scaling interagisce con il load balancing andando ad aggiungere o rimuovere elementi dal pool di istanze EC2 per poter minimizzare l'utilizzo di forza computazionale nei momenti di basso carico  e per poter rispondere al meglio nelle situazioni di carico opposte.
 \item \textbf{S3 - Simple Storage Service}
 \begin{figure}[H]
 \includegraphics[scale=0.2, left]{s3.png}
@@ -728,100 +726,62 @@ S3 è un servizio che permette l'archiviazione di oggetti all'interno di buckets
 \begin{figure}[H]
 \includegraphics[scale=0.2, left]{iam.png}
 \end{figure}
-IAM non rientra nell'architettura di deployment dell'applicazione, ma è comunque uno dei servizi principali nel momento in cui si utilizza AWS. Nell'applicazione UnimibModules IAM è stato utilizzato per poter creare la policy di accesso sfruttata dai roles di Cognito, un servizio qui sotto descritto.
+Nell'applicazione UnimibModules, IAM è stato utilizzato per poter creare la policy di accesso ad S3, sfruttata dal role associato all'identity pool di Cognito. La policy concede l'accesso al bucket S3 per le operaazioni di PUT, GET e DELETE.
+\item \textbf{Cognito}
+\begin{figure}[H]
+\includegraphics[scale=0.2, left]{cognito.png}
+\end{figure}
+Cognito permette di aggiungere strumenti di registrazione degli utenti, accesso e controllo degli accessi alle app Web e per dispositivi mobili. Tutto questo integrandosi con vari identity provider come google, facebook o costum. Un'altra sua applicazione riguarda la gestione degli accessi da parte degli utenti e risorse remote. Questo ultimo caso riguarda proprio il campo di utilizzo del servizio in UnimibModules. Per permettere agli utenti di comunicare direttamente con il bucket S3, per poter applicare il valet key, è necessario utilizzare Cognito come access manager. Si definisce quindi la differenza tra user-pool e identity-pool. Il primo è una directory che permette il login e signup degli utenti, come descritto precedentemente. Il secondo è utilizzato per gestire gli accessi  degli user  ai servizi AWS, appartenenti all'applicazione stessa, con credenziali temporanee. L'identity pool, identificato dall'identityPoolID, possiede un IAM role a cui è stata associata la policy precedentemente descritta. Questo ruolo rappresenta una matrice dalla quale andare a generare nuovi utenti temporanei. Per poter ottenere l'accesso diretto a un servizio è necessario eseguire il seguente work-flow:
+\begin{itemize}
+\item \textbf{1.} Autenticazione dello user con il server
+\item \textbf{2.} Server: Comunicazione dell'avvenuto logging dello user a Cognito per ottenere l'identity ID e il token di accesso OpenID settandone la durata.
+\item \textbf{3.} Per ottenere le vere e proprie credenziali lo user scambia il token ricevuto(token openID e identityID) con Cognito.
+\item \textbf{4.} Le credenziali sono utilizzate per accedere direttamente ai servizi AWS secondo i termini della policy dell'Identity pool. 
 \end{itemize}
+\begin{figure}[H]
+\includegraphics[scale=0.7, center]{idus.png}
+\caption{Utilizzo combinato di user e identity pool}
+\end{figure}
+\item \textbf{STS - Security Token Service}
+\begin{figure}[H]
+\includegraphics[scale=0.5, left]{sts.png}
+\end{figure}
+STS viene utilizzato per l'effettiva generazione di chiavi di accesso temporanee a servizi AWS. Nel caso specifico viene sfruttato da Cognito per la creazione delle credenziali temporanee di S3.
+
+\end{itemize}
+\subsubsection{Valet Key - Gestione immagini}
+Il Valet Key, introdotto nel capitolo dei pattern architetturali, è strettamente legato ai servizi AWS appena elencati.
+\begin{figure}[H]
+\includegraphics[scale=0.5, left]{diapAWS.png}
+\caption{Valet Key- Flusso operativo}
+\end{figure}
+Il pattern è stato scelto per deresponsabilizzare l'applicazione dal compito di gestire gli stream di dati (upload e download) inerenti alle immagini andando a mantenere la completa sicurezza dello storage remoto, cioè S3.\\
+Viene definito il seguente flusso operativo:
+\begin{itemize}
+\item Login - Lo user deve essere loggato nell'applicazione per poter richiedere il valet key;
+\item Quando il codice client necessita, per esempio, di caricare un'immagine allegata ad una nuova domanda invia la prima richiesta all'API dell'applicazione chiamata GetToken, allegando l'ID utente per dimostrare l'effettivo passaggio dal punto precedente;
+\item Il server elabora la richiesta ed esegue la chiamata al metodo getOpenIdTokenForDeveloperIdentity tramite l'AWS SDK. Il server possiede le credenziali root dell'intero sistema quindi è in grado di avviare quest'ultima funzione passando come parametri l'ID dell'identity pool a cui si fa riferimento, la regione AWS di appartenenza e la durata del token.
+\item Il client ottiene dal server l'identityID (identifica un'istanza di un ruolo Cognito creato in AWS) e il token di accesso.
+\item Il client esegue la richiesta delle effettive credenziali temporanee direttamente a Cognito.
+\item Cognito delega il compito della creazione delle credenziali con policy pre-generata ad AWS STS.
+\item Il client utilizza le credenziali per interagire con il bucket S3.
+\end{itemize}
+
 \subsection{Modello E-R}
 \section{Sviluppo}
 \subsection{Piano dello sprint}
-\`{E} adottato un metodo di processo di sviluppo Agile seguendo le direttive dell' Unified Process. Il Product backlog contiene i task, normalmente associati ad un caso d'uso,  da sviluppare nei vari sprint. Ogni sprint prevede le seguenti fasi:
+\`{E} stato adottato un metodo di processo di sviluppo Agile seguendo le direttive dell' Unified Process. Il Product backlog contiene i task, normalmente associati ad un caso d'uso,  da sviluppare nei vari sprint. Ogni sprint prevede le seguenti fasi:
 \begin{itemize}
 \item {\textbf {Sprint meeting}} per la composizione dello sprint backlog;
 \item {\textbf {Analisi e progettazione}}  per aggiornare o creare componenti UML utili al task;
 \item {\textbf {Bulding e testing}}  per lo sviluppo e testing del task;
 \item {\textbf {Review e refactoring}} per la revisione generale del lavoro effettuato e della qualità del codice (architectural smell, code smell ecc...);
 \item {\textbf {Retrospective meeting}} per chiudere con il team lo sprint presentando problemi, modifiche ecc...
-
 \end{itemize}
-
+\subsection{Linguaggi}
+L'applicazione web è interamente basata sul framework Java Spring. Per quanto riguarda il codice client è stato utilizzato AngularJs come middleware tra il DOM HTML e il server.
 \subsection{Workflow per la Continuos Integration}
-\subsection{Best Practices}
-Durante la realizzazione del progetto, per la scrittura del codice sono state applicate diverse best practices per migliorare la qualità del codice e per renderlo più flessibile, riutilizzabile e mantenibile.
-\subsubsection{Lombok}
-Lombok è una libreria Java che sostituisce pezzi di codice ridondanti attraverso l'ausilio di annotazioni. Nel caso di UnimibModules, Lombok è stato utilizzato per evitare di scrivere getter e setter per ogni attributo all'interno delle varie classi implementate.
- \begin{lstlisting}
-public class Question {
-	
-	 /**
-     * The id of the answer.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-	@Getter	@Setter private int id;
-	
-    /**
-     * The image's url of the question.
-     */
-	@Getter	@Setter private String urlImage;
-	
-	/**
-     * The text of the question.
-     */
-	@Getter	@Setter private String text;
-}
-\end{lstlisting}
 
-\subsubsection{Enum instead of int constants}
-L'enum è un tipo di dato che permette ad una variabile di poter assumere un valore tra quelli predefiniti nell'insieme di costanti. Nel caso di UnimibModules, gli enum sono stati usati in 2 casi particolari:
-\begin{itemize}
-    \item \textbf{Question type}: Il sito permette agli utenti registrati di poter creare domande che possono essere aperte, chiuse a scelta singola oppure chiuse a scelta multipla. L'enum, quindi, ha 3 valori: ENUM, MULTIPLECLOSED, MULTIPLEOPEN.
-    \item \textbf{UnitOfWork operation}: L'enum in questione definisce le operazioni della Unit Of Work. Ogni operazione corrisponde ad un valore tra: CREATE, MODIFY, DELETE.
-\end{itemize}
- \begin{lstlisting}
-public enum QuestionType {
-    OPEN,
-    MULTIPLECLOSED,
-    SINGLECLOSED
-}
-
-public enum UnitOfWorkOperations {
-
-	INSERT("INSERT"),
-	DELETE("DELETE"),
-	MODIFY("MODIFY");
-
-	@Getter	private final String value;
-
-	UnitOfWorkOperations(String value) {
-
-		this.value = value;
-	}
-}
-\end{lstlisting}
-
-\subsubsection{Lambdas e Streams}
-Alcune parti del codice sono state implementate attraverso l'utilizzo delle lambda expressions e degli stream. La soluzione è stata adottata per i principali vantaggi che offrono: 
-\begin{itemize}
-    \item Iterare su una sequenza mentre si eseguono operazioni, in una linea
-    \item Filtrare facilmente gli elementi di una sequenza
-\end{itemize}
- \begin{lstlisting}
-public void commitInsert(int surveyId, int userId) {
-
-	if (uofContext.size() == 0 || !uofContext.containsKey(UnitOfWork.INSERT)) {
-		return;
-	}
-
-	List<Answer> answerList = uofContext.get(UnitOfWork.INSERT);
-	answerList.stream()
-			.filter(answer -> answer.getSurvey().getId() == surveyId && answer.getUser().getId() == userId)
-			.collect(Collectors.toList())
-			.forEach(answer -> {
-				add(answer);
-				answerList.remove(answer);
-			});
-	logger.debug("Inserted registered answers for user {} and survey {}.", userId, surveyId);
-}
-\end{lstlisting}
 
 %----------------------------------------------------------------------------------------
 
