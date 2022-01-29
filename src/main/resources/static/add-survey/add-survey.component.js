@@ -18,6 +18,7 @@ angular.
 						$scope.idUser = cookieService.getCookie()
 					}else{
 						$scope.showAlert("ACCESS DENIED")
+						$location.path('/')
 					}
 				}
 				
