@@ -114,13 +114,7 @@ public class PdfServiceImpl implements PdfService {
                 image.scalePercent(scaler/image.getPlainWidth()*70);
                 anchor.add(image);
                 fullObject.close();
-            } catch (AmazonServiceException e) {
-                e.printStackTrace();
-            } catch (SdkClientException e) {
-                e.printStackTrace();
-            } catch (BadElementException e) {
-                e.printStackTrace();
-            } catch (DocumentException e) {
+            } catch (SdkClientException | DocumentException e) {
                 e.printStackTrace();
             }
         }
