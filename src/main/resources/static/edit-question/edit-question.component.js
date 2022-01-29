@@ -46,7 +46,7 @@ component('editQuestion', {
                 }
             };
 
-            $http.get("http://localhost:5000/api/getQuestion/" + $routeParams.idQuestion)
+            $http.get("/api/getQuestion/" + $routeParams.idQuestion)
                 .then(function(response) {
                     $scope.question =  response.data;
                     $scope.questiontext = $scope.question.text;
@@ -121,9 +121,9 @@ component('editQuestion', {
                 var deletedQuestion = $scope.questionAnswer.splice($index, 1)[0];
 
                 if(deletedQuestion.id !== null && !angular.isUndefined(deletedQuestion.id)) {
-                    $http.delete("http://localhost:5000/api/deleteCloseEndedAnswer/"+deletedQuestion.id)
+                    $http.delete("/api/deleteCloseEndedAnswer/"+deletedQuestion.id)
                         .then(function(response) {
-                            $scope.prova = "http://localhost:5000/api/deleteCloseEndedAnswer/"+deletedQuestion.id;
+                            $scope.prova = "/api/deleteCloseEndedAnswer/"+deletedQuestion.id;
                         });
                 }
 
@@ -200,7 +200,7 @@ component('editQuestion', {
                     }
 
 
-                    $http.patch("http://localhost:5000/api/modifyQuestion", tmpObj, 'application/json; charset=utf-8')
+                    $http.patch("/api/modifyQuestion", tmpObj, 'application/json; charset=utf-8')
                         .then(function (response) {
                             $scope.prova = "ok";
                         });
@@ -211,12 +211,12 @@ component('editQuestion', {
                             answer["questionDTO"] = {"id": $scope.question.id};
 
                             if(answer.id !== null && !angular.isUndefined(answer.id)){
-                                $http.patch("http://localhost:5000/api/modifyCloseEndedAnswer", answer, 'application/json; charset=utf-8')
+                                $http.patch("/api/modifyCloseEndedAnswer", answer, 'application/json; charset=utf-8')
                                     .then(function (response) {
                                         $scope.prova = "Domanda modificata con successo!";
                                     });
                             }else {
-                                $http.post("http://localhost:5000/api/addCloseEndedAnswer", answer, 'application/json; charset=utf-8')
+                                $http.post("/api/addCloseEndedAnswer", answer, 'application/json; charset=utf-8')
                                     .then(function (response) {
                                         $scope.prova = "Domanda modificata con successo!";
                                     });
@@ -225,7 +225,7 @@ component('editQuestion', {
                     }else{
                         angular.forEach($scope.questionAnswer, function (question, key) {
                             if(question.id !== null && !angular.isUndefined(question.id))
-                                $http.delete("http://localhost:5000/api/deleteCloseEndedAnswer/"+question.id)
+                                $http.delete("/api/deleteCloseEndedAnswer/"+question.id)
                                     .then(function (response) {
                                         $scope.prova = "Domanda inserita con successo!";
 
@@ -238,14 +238,14 @@ component('editQuestion', {
             };
 
             $scope.removeQuestion = function(){
-                $http.delete("http://localhost:5000/api/deleteQuestion/" + $scope.question.id)
+                $http.delete("/api/deleteQuestion/" + $scope.question.id)
                     .then(function (response) {
                         $scope.prova = "Domanda eliminata con successo!";
                     });
 
                 angular.forEach($scope.questionAnswer, function (answer, key) {
                     if(answer.id !== null && !angular.isUndefined(answer.id))
-                        $http.delete("http://localhost:5000/api/deleteCloseEndedAnswer/"+answer.id)
+                        $http.delete("/api/deleteCloseEndedAnswer/"+answer.id)
                             .then(function (response) {
                                 $scope.prova = "Risposta eliminata con successo!";
                             });
