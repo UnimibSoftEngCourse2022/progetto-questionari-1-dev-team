@@ -1,3 +1,4 @@
+<ng-include src="'../template/navbar.template.html'"></ng-include>
 <div class="jumbotron">
 	<h1>Home</h1>
 </div>
@@ -74,7 +75,7 @@
 
 
 	</div>
-	<div class="row mt-4 p-5 " ng-hide="isEmptyResult"
+	<div class="row mt-4 p-5 justify-content-center" ng-hide="isEmptyResult"
 		id="surveyCardContainer">
 		<div class="col-sm-3 d-flex justify-content-center mb-4"
 			ng-repeat="survey in result">

@@ -4,8 +4,8 @@ angular.
 	module('UNIMIBModules').
 	component('home', {
 		templateUrl: 'home/home.template.html',
-		controller: ['$location', '$routeParams', '$scope', '$http', "cookieService",
-			function homeController($location, $routeParams, $scope, $http, cookieService) {
+		controller: ['$location', '$routeParams', '$scope', '$http', "cookieService", "authService",
+			function homeController($location, $routeParams, $scope, $http, cookieService, authService) {
 				$scope.idUser;
 				$scope.isLogged = false
 				$scope.isEmptyResult = true
@@ -31,13 +31,21 @@ angular.
 				$scope.load = function() {
 
 					$scope.searchSurvey()
-					if (cookieService.getCookie() != null) {
+					if (authService.isLoggedIn()) {
                         $scope.idUser = cookieService.getCookie();
                         $scope.isLogged = true;
                     }
                     $http.get("/api/findAllSurveysNoQuestion").then(function onfulFilled(response) {
                         $scope.handleSurveys(response)
                     })
+				}
+
+				$scope.logoutUser = function () {
+					if (authService.isLoggedIn()) {
+						authService.setUser(undefined);
+						$scope.isLogged = false;
+						alert("You have just logged out!");
+					}
 				}
 
 				$scope.setStatusSearch = function(isFull) {

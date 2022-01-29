@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">UNIMIB-Survey</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item "><a class="nav-link" href="/">Home</a></li>
+        </ul>
+    </div>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item "><a class="nav-link" href="/#!/loginUser"
+                                 ng-if="!isLogged">Login</a></li>
+    </ul>
+    <ul class="navbar-nav mr-auto" ng-if="isLogged">
+        <li class="nav-item"><a class="nav-link" href="/"
+                                ng-click="logoutUser()">Logout</a></li>
+    </ul>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item "><a class="nav-link" href="/#!/signupUser"
+                                 ng-if="!isLogged">SignUp</a></li>
+    </ul>
+</nav>
