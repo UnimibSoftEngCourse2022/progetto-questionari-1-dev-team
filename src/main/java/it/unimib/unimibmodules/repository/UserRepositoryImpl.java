@@ -80,7 +80,7 @@ public class UserRepositoryImpl implements UserRepository {
     public boolean getByCode(String code) throws NotFoundException {
         Optional<User> user = userDAO.findByCompilationCode(code);
         try {
-            User userR = user.orElseThrow();
+            user.orElseThrow();
             return true;
         }catch (NoSuchElementException e) {
             return false;
