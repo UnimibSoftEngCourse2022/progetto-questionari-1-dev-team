@@ -3,7 +3,7 @@ package it.unimib.unimibmodules.exception;
 /**
  * Exception class for Survey.
  * @author Luca Milazzo
- * @version 0.4.0
+ * @version 0.4.1
  */
 public class SurveyException extends Throwable {
 	

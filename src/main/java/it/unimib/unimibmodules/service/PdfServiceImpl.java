@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Service for sending emails.
  * @author Lorenzo Occhipinti
- * @version 0.4.0
+ * @version 0.4.1
  */
 @Component("pdfService")
 public class PdfServiceImpl implements PdfService {

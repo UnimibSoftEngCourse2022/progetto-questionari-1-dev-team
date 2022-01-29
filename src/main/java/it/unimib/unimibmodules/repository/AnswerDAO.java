@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 /**
  * DAO for the Answer class.
  * @author Davide Costantini
- * @version 0.4.0
+ * @version 0.4.1
  */
 public interface AnswerDAO extends CrudRepository<Answer, Integer> {
 

@@ -6,7 +6,7 @@ import lombok.Setter;
 /**
  * DTO for CloseEndedAnswer.
  * @author Davide Costantini
- * @version 0.4.0
+ * @version 0.4.1
  */
 public class CloseEndedAnswerDTO {
 

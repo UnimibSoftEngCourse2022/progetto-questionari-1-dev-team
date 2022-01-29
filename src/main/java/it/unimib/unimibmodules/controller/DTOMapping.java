@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * DTO) and vice versa.
  * @author Davide Costantini
  * @author Luca Milazzo
- * @version 0.4.0
+ * @version 0.4.1
  */
 public abstract class DTOMapping<M, T> {
 	

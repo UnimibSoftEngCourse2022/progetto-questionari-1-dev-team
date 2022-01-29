@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * Service class used to get an User's token from AWS Cognito.
  * @author Khalil Mohamed
  * @author Luca Milazzo
- * @version 0.4.0
+ * @version 0.4.1
  */
 @Component("awsToken")
 public class AWSTokenImpl implements AWSToken {

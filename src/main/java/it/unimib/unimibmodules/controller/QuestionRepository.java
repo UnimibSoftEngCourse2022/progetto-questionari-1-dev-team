@@ -6,7 +6,7 @@ import it.unimib.unimibmodules.model.Question;
 /**
  * Interface for QuestionRepository.
  * @author Khalil
- * @version 0.4.0
+ * @version 0.4.1
  */
 public interface QuestionRepository {
 

@@ -3,7 +3,7 @@ package it.unimib.unimibmodules.model;
 /**
  * Enum of the types of the question.
  * @author Khalil
- * @version 0.4.0
+ * @version 0.4.1
  */
 
 public enum QuestionType {

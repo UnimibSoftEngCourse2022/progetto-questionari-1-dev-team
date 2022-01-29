@@ -25,7 +25,7 @@ import java.util.Set;
 /**
  * Controller handling HTTP requests related to Answer and ClosedEndedAnswer.
  * @author Davide Costantini
- * @version 0.4.0
+ * @version 0.4.1
  */
 @RestController
 @RequestMapping("/api")

@@ -8,7 +8,7 @@ import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperId
  * Service class used to get a User's token from AWS Cognito.
  * @author Khalil Mohamed
  * @author Luca Milazzo
- * @version 0.4.0
+ * @version 0.4.1
  */
 public interface AWSToken {
     Region REGION = Region.getRegion(Regions.EU_CENTRAL_1);

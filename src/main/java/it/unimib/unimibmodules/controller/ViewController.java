@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 /**
  * Controller handling views.
  * @author Davide Costantini
- * @version 0.4.0
+ * @version 0.4.1
  */
 @Controller
 public class ViewController {

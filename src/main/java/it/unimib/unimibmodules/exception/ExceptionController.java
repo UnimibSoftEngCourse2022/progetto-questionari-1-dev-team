@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 /**
  * Exception handler class. It handles the HTTP response for an exception.
  * @author Luca Milazzo
- * @version 0.4.0
+ * @version 0.4.1
  */
 @ControllerAdvice
 public class ExceptionController {

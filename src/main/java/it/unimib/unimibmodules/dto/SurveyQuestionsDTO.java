@@ -6,7 +6,7 @@ import lombok.Setter;
 /**
  * DTO for the surveyQuestion relationship
  * @author Khalil Mohamed Khalil
- * @version 0.4.0
+ * @version 0.4.1
  */
 public class SurveyQuestionsDTO {
 
