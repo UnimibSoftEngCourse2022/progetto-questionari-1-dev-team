@@ -18,6 +18,24 @@ app.component("compileSurvey", {
         $scope.answered = false;
         $scope.modified = false;
 
+		$scope.$on('$routeChangeStart', function() {
+
+			$http.delete("/api/cleanSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=" +
+				cookieService.getCookie("userId"))
+				.then(function onFulfilled() {
+
+					if (cookieService.getCookie("compilationId")) {
+						cookieService.removeCookie("userId");
+						cookieService.removeCookie("compilationId");
+					}
+					$location.path("/");
+				}, function errorCallback(response) {
+
+					alert("Error");
+					console.error(response);
+				});
+		});
+
 		$scope.load = function() {
 
 			$http.get("/api/findSurvey?id=" + $routeParams.surveyId).then(function onFulfilled(response) {
@@ -283,7 +301,8 @@ app.component("compileSurvey", {
 
                                     modal.close();
                                     FileSaver.saveAs(response.data, "survey.pdf");
-                                    $location.path("/");
+									if (!cookieService.getCookie("compilationId"))
+	                                    $location.path("/");
                                 }, function errorCallback(response) {
 
                                     modal.close();
@@ -293,13 +312,15 @@ app.component("compileSurvey", {
                         }
 
                         $scope.ignore = function() {
-                        modal.close();
-                        $location.path("/");
+							modal.close();
+							if (!cookieService.getCookie("compilationId"))
+								$location.path("/");
                         }
                     }
                 });
             }else{
-                $location.path("/");
+				if (!cookieService.getCookie("compilationId"))
+                	$location.path("/");
             }
         }
 	}

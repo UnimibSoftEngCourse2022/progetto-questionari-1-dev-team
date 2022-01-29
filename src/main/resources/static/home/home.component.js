@@ -237,7 +237,9 @@ angular.
 						}
 
 						$http.post("/api/signUpUser", data).then(function onFulfilled(response) {
-							//settare cookie response.data.idUser
+
+							cookieService.setCookie("userId", response.data.idUser);
+							cookieService.setCookie("compilationId", $scope.randomCode);
 							console.log(response.data.idUser);
 							$location.path('/compileSurvey/' +  $scope.result[idx].id)
 
