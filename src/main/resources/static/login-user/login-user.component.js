@@ -12,7 +12,7 @@ angular.module('UNIMIBModules').component('loginUser', {
             $scope.load = function() {
                 if (authService.isLoggedIn()) {
                     $scope.isLogged = true;
-                } else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
+                } else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
                     $scope.isLogged = true;
                 }
             }
@@ -20,7 +20,7 @@ angular.module('UNIMIBModules').component('loginUser', {
             $scope.logoutUser = function () {
                 if (authService.isLoggedIn()) {
                     authService.setUser(undefined);
-                    cookieService.removeCookie();
+                    cookieService.removeCookie("userId");
                     $scope.isLogged = false;
                     alert("You have just logged out!");
                 }
@@ -65,9 +65,9 @@ angular.module('UNIMIBModules').component('loginUser', {
                     cookieService.setCookie("userId", idUser);
                 }
 
-                if ((cookieService.getCookie() != null) && (cookieService.getCookie() !== idUser)) {
-                    cookieService.removeCookie();
-                    cookieService.setCookie(idUser);
+                if ((cookieService.getCookie("userId") != null) && (cookieService.getCookie("userId") !== idUser)) {
+                    cookieService.removeCookie("userId");
+                    cookieService.setCookie("userId", idUser);
                 }
             }
         }

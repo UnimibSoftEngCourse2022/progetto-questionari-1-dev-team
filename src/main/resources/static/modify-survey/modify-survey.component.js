@@ -48,9 +48,9 @@ angular.
 				//start-up function
 				$scope.load = function() {
 
-					if (cookieService.getCookie() != null) {
-						$scope.idUser = cookieService.getCookie();
-					}
+					/*if (cookieService.getCookie("userId") != null) {
+					//	$scope.idUser = cookieService.getCookie("userId");
+					}*/
 
 					$scope.surveyQuestionsId = []
 					$scope.surveyQuestions = []
@@ -58,8 +58,12 @@ angular.
 					$scope.offset = 0
 
 					if (authService.isLoggedIn()) {
-						$scope.idUser = cookieService.getCookie();
+						$scope.idUser = cookieService.getCookie("userId");
 						$scope.isLogged = true;
+					} else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
+						$scope.idUser = cookieService.getCookie("userId");
+						$scope.isLogged = true;
+						authService.setUser($scope.idUser);
 					}
 
 					$http.get("api/findSurveyNoQuestion/" + $scope.idSurvey).then(function onfulFilled(response) {
@@ -89,7 +93,7 @@ angular.
 				$scope.logoutUser = function () {
 					if (authService.isLoggedIn()) {
 						authService.setUser(undefined);
-						cookieService.removeCookie();
+						cookieService.removeCookie("userId");
 						$scope.isLogged = false;
 						alert("You have just logged out!");
 					}

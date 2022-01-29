@@ -7,11 +7,11 @@ angular.
 		controller: ['$location', '$scope', '$http', 'cookieService', 'authService',
 			function addSurveyController($location, $scope, $http, cookieService, authService) {
 
-				$scope.idUser
-				$scope.name = ""
-				$scope.showMessageErr = false
-				$scope.showMessageConf = false
-				$scope.message = ""
+				$scope.idUser;
+				$scope.name = "";
+				$scope.showMessageErr = false;
+				$scope.showMessageConf = false;
+				$scope.message = "";
 
 				$scope.load = function () {
 					if (authService.isLoggedIn()) {
@@ -27,7 +27,7 @@ angular.
 				$scope.logoutUser = function () {
 					if (authService.isLoggedIn()) {
 						authService.setUser(undefined);
-						cookieService.removeCookie();
+						cookieService.removeCookie("userId");
 						$scope.isLogged = false;
 						alert("You have just logged out!");
 					}

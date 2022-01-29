@@ -39,10 +39,10 @@ app.component("compileSurvey", {
 		$scope.load = function() {
 
 			if (authService.isLoggedIn()) {
-				$scope.userId = cookieService.getCookie();
+				$scope.userId = cookieService.getCookie("userId");
 				$scope.isLogged = true;
-			} else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
-				$scope.userId = cookieService.getCookie();
+			} else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
+				$scope.userId = cookieService.getCookie("userId");
 				$scope.isLogged = true;
 				authService.setUser($scope.userId);
 			} else if ($routeParams.userId)
@@ -96,7 +96,7 @@ app.component("compileSurvey", {
 		$scope.logoutUser = function () {
 			if (authService.isLoggedIn()) {
 				authService.setUser(undefined);
-				cookieService.removeCookie();
+				cookieService.removeCookie("userId");
 				$scope.isLogged = false;
 				alert("You have just logged out!");
 			}

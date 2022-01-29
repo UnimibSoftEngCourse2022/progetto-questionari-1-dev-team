@@ -2,8 +2,8 @@
 
 angular.module('UNIMIBModules').component('signupUser', {
     templateUrl: 'signup-user/signup-user.template.html',
-    controller: ['$location', '$routeParams', '$scope', '$http', 'cookieService',
-        function signupUserController($location, $routeParams, $scope, $http, cookieService) {
+    controller: ['$location', '$routeParams', '$scope', '$http',
+        function signupUserController($location, $routeParams, $scope, $http) {
 
             $scope.username = "";
             $scope.name = "";
@@ -24,8 +24,6 @@ angular.module('UNIMIBModules').component('signupUser', {
                     surveysCreatedDTO: null
 
                 }
-
-                console.log(data);
 
                 $http.post("/api/signUpUser", data).then(function onFulfilled(response) {
 
