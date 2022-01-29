@@ -4,9 +4,10 @@ angular.
 	module('UNIMIBModules').
 	component('modifySurvey', {
 		templateUrl: 'modify-survey/modify-survey.template.html',
-		controller: ['$location', '$routeParams', '$scope', '$http', "cookieService", 'awsService',
-			function modifySurveyController($location, $routeParams, $scope, $http, cookieService, $awsService) {
-				$scope.idUser //from cookie
+		controller: ['$location', '$routeParams', '$scope', '$http', 'cookieService', 'authService', 'awsService',
+			function modifySurveyController($location, $routeParams, $scope, $http, cookieService, authService, $awsService) {
+				$scope.idUser;
+				$scope.isLogged = false;
 				$scope.isSurveyCreator = false
 				$scope.idSurvey = $routeParams.idSurvey;
 				//Questions owned by the survey. It changes everytime the user modifies a checkbox.
@@ -55,6 +56,12 @@ angular.
 					$scope.surveyQuestions = []
 					$scope.categories = []
 					$scope.offset = 0
+
+					if (authService.isLoggedIn()) {
+						$scope.idUser = cookieService.getCookie();
+						$scope.isLogged = true;
+					}
+
 					$http.get("api/findSurveyNoQuestion/" + $scope.idSurvey).then(function onfulFilled(response) {
 						$scope.survey = response.data;
 						if ($scope.survey.userDTO.id == $scope.idUser) {
@@ -77,6 +84,15 @@ angular.
 						$scope.showAlert("This survey doesn't exist")
 						$location.path('/')
 					});
+				}
+
+				$scope.logoutUser = function () {
+					if (authService.isLoggedIn()) {
+						authService.setUser(undefined);
+						cookieService.removeCookie();
+						$scope.isLogged = false;
+						alert("You have just logged out!");
+					}
 				}
 
 				$scope.setStatusSearch = function(isFull) {

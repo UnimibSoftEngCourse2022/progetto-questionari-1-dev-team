@@ -4,8 +4,8 @@ angular.
 	module('UNIMIBModules').
 	component('addSurvey', {
 		templateUrl: 'add-survey/add-survey.template.html',
-		controller: ['$location', '$scope', '$http', 'cookieService',
-			function addSurveyController($location, $scope, $http, cookieService) {
+		controller: ['$location', '$scope', '$http', 'cookieService', 'authService',
+			function addSurveyController($location, $scope, $http, cookieService, authService) {
 
 				$scope.idUser
 				$scope.name = ""
@@ -13,9 +13,23 @@ angular.
 				$scope.showMessageConf = false
 				$scope.message = ""
 
-				$scope.load = function() {
-					if (cookieService.getCookie() != null) {
-						$scope.idUser = cookieService.getCookie()
+				$scope.load = function () {
+					if (authService.isLoggedIn()) {
+						$scope.idUser = cookieService.getCookie();
+						$scope.isLogged = true;
+					} else if (!authService.isLoggedIn() && cookieService.getCookie() !== undefined) {
+						$scope.idUser = cookieService.getCookie();
+						$scope.isLogged = true;
+						authService.setUser($scope.idUser);
+					}
+				}
+
+				$scope.logoutUser = function () {
+					if (authService.isLoggedIn()) {
+						authService.setUser(undefined);
+						cookieService.removeCookie();
+						$scope.isLogged = false;
+						alert("You have just logged out!");
 					}
 				}
 

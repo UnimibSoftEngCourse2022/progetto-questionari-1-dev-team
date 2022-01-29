@@ -6,6 +6,9 @@ app.service('cookieService', ['$cookies', function ($cookies) {
         },
         getCookie: function () {
             return $cookies.get('userId');
+        },
+        removeCookie: function () {
+            $cookies.remove('userId');
         }
     }
 }]);
