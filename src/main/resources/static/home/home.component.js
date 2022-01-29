@@ -214,7 +214,6 @@ angular.
 
 				//Utility function for showing surveys and setting permissions
 				$scope.handleSurveys = function(response) {
-					console.log(response.data)
 					if (response.data.length > 0) {
 						$scope.isEmptyResult = false;
 						$scope.result = response.data;
