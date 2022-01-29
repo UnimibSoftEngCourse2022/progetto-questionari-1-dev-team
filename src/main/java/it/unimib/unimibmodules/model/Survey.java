@@ -58,7 +58,7 @@ public class Survey {
 	/**
 	 * The answer of the survey.
 	 */
-	@OneToMany(mappedBy = "survey")
+	@OneToMany(mappedBy = "survey", cascade = CascadeType.REMOVE)
 	@Getter	@Setter private Set<Answer> answer;
 
 	/**
