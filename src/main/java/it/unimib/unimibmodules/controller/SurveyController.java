@@ -36,13 +36,13 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	/**
 	 * Instance of UserRepository that will be used to access the db.
 	 */
-	private final UserRepository userRepository;
+	private final UserRepositoryReadOnly userRepository;
 
 	private static final Logger logger = LogManager.getLogger(SurveyController.class);
 
 	@Autowired
 
-	public SurveyController(UserRepository userRepository, SurveyRepository surveyRepository,
+	public SurveyController(UserRepositoryReadOnly userRepository, SurveyRepository surveyRepository,
 
 			ModelMapper modelMapper) {
 		super(modelMapper);

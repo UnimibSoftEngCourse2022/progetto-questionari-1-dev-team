@@ -34,12 +34,12 @@ public class CloseEndedAnswerController extends DTOMapping<CloseEndedAnswer, Clo
 	/**
 	 * Instance of QuestionRepository that will be used to access the db.
 	 */
-	private final QuestionRepository questionRepository;
+	private final QuestionRepositoryReadOnly questionRepository;
 
 
 	@Autowired
 	public CloseEndedAnswerController(CloseEndedAnswerRepository closeEndedAnswerRepository, ModelMapper modelMapper,
-									  QuestionRepository questionRepository) {
+									  QuestionRepositoryReadOnly questionRepository) {
 
 		super(modelMapper);
 		this.closeEndedAnswerRepository = closeEndedAnswerRepository;

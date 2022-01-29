@@ -40,22 +40,22 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	/**
 	 * Instance of AnswerRepository that will be used to access the db.
 	 */
-	private final UserRepository userRepository;
+	private final UserRepositoryReadOnly userRepository;
 
 	/**
 	 * Instance of AnswerRepository that will be used to access the db.
 	 */
-	private final SurveyRepository surveyRepository;
+	private final SurveyRepositoryReadOnly surveyRepository;
 
 	/**
 	 * Instance of AnswerRepository that will be used to access the db.
 	 */
-	private final QuestionRepository questionRepository;
+	private final QuestionRepositoryReadOnly questionRepository;
 
 	/**
 	 * Instance of AnswerRepository that will be used to access the db.
 	 */
-	private final CloseEndedAnswerRepository closeEndedAnswerRepository;
+	private final CloseEndedAnswerRepositoryReadOnly closeEndedAnswerRepository;
 
 	/**
 	 * Instance of MailService, that will be used to send an email when the answers are saved.
@@ -68,9 +68,10 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	private final PdfService pdfService;
 
 	@Autowired
-	public AnswerController(AnswerRepository answerRepository, ModelMapper modelMapper, UserRepository userRepository,
-							SurveyRepository surveyRepository, QuestionRepository questionRepository,
-							CloseEndedAnswerRepository closeEndedAnswerRepository, MailService mailService, PdfService pdfService) {
+	public AnswerController(AnswerRepository answerRepository, UserRepositoryReadOnly userRepository,
+							SurveyRepositoryReadOnly surveyRepository, QuestionRepositoryReadOnly questionRepository,
+							CloseEndedAnswerRepositoryReadOnly closeEndedAnswerRepository, MailService mailService,
+							PdfService pdfService, ModelMapper modelMapper) {
 
 		super(modelMapper);
 		this.answerRepository = answerRepository;

@@ -1,6 +1,7 @@
 package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.controller.SurveyRepository;
+import it.unimib.unimibmodules.controller.SurveyRepositoryReadOnly;
 import it.unimib.unimibmodules.exception.EmptyFieldException;
 import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
@@ -20,7 +21,7 @@ import java.util.*;
  * @version 0.4.0
  */
 @Component("surveyRepository")
-public class SurveyRepositoryImpl implements SurveyRepository {
+public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryReadOnly {
 
 	/**
 	 * The instance of SurveyDAO that will be used to perform actions to the DB
