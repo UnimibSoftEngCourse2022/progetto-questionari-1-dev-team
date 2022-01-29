@@ -52,7 +52,6 @@ public class PdfServiceImpl implements PdfService {
         PdfWriter writer = PdfWriter.getInstance(document, baos);
         document.open();
         addMetaData(document, answers.get(0).getSurvey().getName());
-        addTitle(document, answers.get(0).getSurvey().getName());
         addContent(document, answers);
         document.close();
         writer.close();
@@ -65,20 +64,14 @@ public class PdfServiceImpl implements PdfService {
         document.addCreator("Unimib Modules");
     }
 
-    private static void addTitle(Document document, String name) throws DocumentException{
-        Paragraph preface = new Paragraph();
-        addEmptyLine(preface, 1);
-        preface.add(new Paragraph(name, catFont));
-        addEmptyLine(preface, 1);
-        document.add(preface);
-    }
-
     private static void addContent(Document document, List<Answer> answers) throws DocumentException, IOException {
 
         float scaler = ((document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin()));
         for (int i=0;i < answers.size();i++)
         {
             Paragraph anchor = new Paragraph();
+            if (i==0)
+                addTitle(anchor, answers.get(i).getSurvey().getName());
             anchor.add(new Paragraph(answers.get(i).getQuestion().getText()+" "+answers.get(i).getQuestion().getQuestionType(), subFont));
             addImage(anchor, answers.get(i).getQuestion().getUrlImage(), answers.get(i).getUser().getId(), scaler);
             if(answers.get(i).getQuestion().getQuestionType()== QuestionType.OPEN) {
@@ -89,7 +82,18 @@ public class PdfServiceImpl implements PdfService {
             }
             addEmptyLine(anchor, 1);
             document.add(anchor);
+            if (answers.get(i).getQuestion().getUrlImage()!=null)
+                document.newPage();
+            else if (i!=answers.size()-1)
+                if(answers.get(i+1).getQuestion().getUrlImage()!=null)
+                    document.newPage();
         }
+    }
+
+    private static void addTitle(Paragraph preface, String name) throws DocumentException{
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph(name, catFont));
+        addEmptyLine(preface, 1);
     }
 
     private static void addClosedAnswers(Paragraph paragraph, Answer answer) {
