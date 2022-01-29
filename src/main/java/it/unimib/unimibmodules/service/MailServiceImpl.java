@@ -29,7 +29,7 @@ public class MailServiceImpl implements MailService {
 	@Override
 	public void sendMail(String recipientAddress, String subject, String text) {
 
-		final String username = "EMAIL_USERNAME";
+		final String username = "EMAIL_USERNAME@gmail.com";
 		final String password = "EMAIL_PASSWORD";
 
 		Properties properties = System.getProperties();
