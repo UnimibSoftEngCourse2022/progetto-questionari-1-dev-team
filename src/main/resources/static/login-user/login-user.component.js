@@ -24,7 +24,6 @@ angular.module('UNIMIBModules').component('loginUser', {
 
                 $http.post("/api/logInUser", data).then(function onFulfilled(response) {
 
-                    console.log(response);
                     alert("Login Successful!");
                     authService.setUser($scope.username);
                     $scope.cookiesHandler(response.data.idUser);
@@ -32,7 +31,6 @@ angular.module('UNIMIBModules').component('loginUser', {
 
                 }, function errorCallback(response) {
 
-                    console.error(response);
                     $scope.resetForm();
                     alert("Invalid username and password. Please try again.");
 
@@ -46,6 +44,11 @@ angular.module('UNIMIBModules').component('loginUser', {
 
             $scope.cookiesHandler = function (idUser) {
                 if (cookieService.getCookie() == null) {
+                    cookieService.setCookie(idUser);
+                }
+
+                if ((cookieService.getCookie() != null) && (cookieService.getCookie() !== idUser)) {
+                    cookieService.removeCookie();
                     cookieService.setCookie(idUser);
                 }
             }
