@@ -38,7 +38,7 @@ app.component("compileSurvey", {
 				$scope.questions = response.data;
 
 				$http.get("/api/findSurveyAnswersForUser/?surveyId=" + $routeParams.surveyId + "&userId=" +
-					cookieService.getCookie())
+					cookieService.getCookie("userId"))
 					.then(function onFulfilled(response) {
 
 						$scope.mode = "EDIT";
@@ -95,7 +95,7 @@ app.component("compileSurvey", {
 				$scope.mode = "INSERT";
 
 			if ($scope.questions[$scope.questionIndex].urlImage) {
-				$http.get("/api/getToken/" + cookieService.getCookie())
+				$http.get("/api/getToken/" + cookieService.getCookie("userId"))
 					.then(function (response) {
 						awsService.getPhoto(response.data.token, response.data.region, response.data.identityToken,
 							response.data.identityPoolId, response.data.bucketName,
@@ -156,7 +156,7 @@ app.component("compileSurvey", {
 
 		$scope.insert = function() {
 
-			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, cookieService.getCookie(),
+			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, cookieService.getCookie("userId"),
 				$routeParams.surveyId, $scope.questions[$scope.questionIndex].id);
 
 			$scope.getInputValues(data);
@@ -174,7 +174,7 @@ app.component("compileSurvey", {
 
 		$scope.modify = function() {
 
-			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, cookieService.getCookie(),
+			let data = AnswerFactory.createAnswer($scope.currentAnswer.id, cookieService.getCookie("userId"),
 				$routeParams.surveyId, $scope.questions[$scope.questionIndex].id);
 
 			$scope.getInputValues(data);
@@ -213,7 +213,7 @@ app.component("compileSurvey", {
 					$scope.submit = function() {
 
 						$http.post("/api/saveSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=" +
-							cookieService.getCookie(), {responseType:"blob"})
+							cookieService.getCookie("userId"), {responseType:"blob"})
 							.then(function onFulfilled() {
 
 								modal.close();
@@ -246,7 +246,7 @@ app.component("compileSurvey", {
 					$scope.submit = function() {
 
 						$http.post("/api/saveModifiedSurveyAnswers?surveyId=" + $routeParams.surveyId + "&userId=" +
-							cookieService.getCookie(), {responseType:"blob"})
+							cookieService.getCookie("userId"), {responseType:"blob"})
 							.then(function onFulfilled() {
 
 								modal.close();
@@ -278,7 +278,7 @@ app.component("compileSurvey", {
                         $scope.download = function() {
 
                             $http.get("/api/generatePdf?surveyId=" + $routeParams.surveyId + "&userId=" +
-								cookieService.getCookie(), {responseType:"blob"})
+								cookieService.getCookie("userId"), {responseType:"blob"})
 								.then(function onFulfilled(response) {
 
                                     modal.close();

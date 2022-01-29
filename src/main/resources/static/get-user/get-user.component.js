@@ -21,7 +21,7 @@ angular.module('UNIMIBModules').component('getUser', {
                     $scope.email = $scope.result.email;
                 }
 
-                $http.get("/api/getUser/" + cookieService.getCookie()).then(function onFulFilled(response) {
+                $http.get("/api/getUser/" + cookieService.getCookie("userId")).then(function onFulFilled(response) {
 
                     console.log(response);
                     $scope.handleUser(response);

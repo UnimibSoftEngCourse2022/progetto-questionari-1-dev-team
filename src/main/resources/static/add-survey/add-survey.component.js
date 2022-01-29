@@ -15,8 +15,8 @@ angular.
 
 				$scope.addSurvey = function() {
 
-					if (cookieService.getCookie() != null) {
-						$scope.idUser = cookieService.getCookie();
+					if (cookieService.getCookie("userId") != null) {
+						$scope.idUser = cookieService.getCookie("userId");
 					}
 
 					if ($scope.name !== undefined && $scope.name != "" && $scope.name.replace(/\s/g, '').length) {

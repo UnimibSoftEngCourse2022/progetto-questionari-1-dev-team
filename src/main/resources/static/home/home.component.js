@@ -6,7 +6,7 @@ angular.
 		templateUrl: 'home/home.template.html',
 		controller: ['$location', '$routeParams', '$scope', '$http', "cookieService",
 			function homeController($location, $routeParams, $scope, $http, cookieService) {
-				$scope.idUser;
+				$scope.idUser = undefined;
 				$scope.isLogged = false
 				$scope.isEmptyResult = true
 				$scope.searchResult = []
@@ -22,17 +22,18 @@ angular.
 				$scope.actualSearch = ""
 				$scope.lastTextSearch = ""
 				$scope.textSearch = ""
-            //error alert
-        $scope.showAlert = function (text) {
-          alert('ERROR - ' + text)
-        }
+
+				//error alert
+				$scope.showAlert = function (text) {
+				  alert('ERROR - ' + text)
+				}
 
 				//Start-up function
 				$scope.load = function() {
 
 					$scope.searchSurvey()
-					if (cookieService.getCookie() != null) {
-                        $scope.idUser = cookieService.getCookie();
+					if (cookieService.getCookie("userId")) {
+                        $scope.idUser = cookieService.getCookie("userId");
                         $scope.isLogged = true;
                     }
                     $http.get("/api/findAllSurveysNoQuestion").then(function onfulFilled(response) {
@@ -162,7 +163,7 @@ angular.
 					$scope.errorEmail = false;
 
 					if($scope.idUser !== undefined)
-					$location.path('/compileSurvey/' +  $scope.result[idx].id)
+						$location.path('/compileSurvey/' +  $scope.result[idx].id)
 					else{
 						$http.get("/api/getNewCode").then(function onfulFilled(response) {
 							$scope.randomCode = response.data.compilationCode;

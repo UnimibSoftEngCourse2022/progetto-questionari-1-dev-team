@@ -1,11 +1,14 @@
 app.service('cookieService', ['$cookies', function ($cookies) {
 
     return {
-        setCookie: function (val) {
-            $cookies.put('userId', val);
+        setCookie: function (key, val) {
+            $cookies.put(key, val);
         },
-        getCookie: function () {
-            return $cookies.get('userId');
+        getCookie: function (key) {
+            return $cookies.get(key);
+        },
+        removeCookie: function (key) {
+            $cookies.remove(key);
         }
     }
 }]);

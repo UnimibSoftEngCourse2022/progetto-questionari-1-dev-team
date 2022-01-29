@@ -45,8 +45,8 @@ angular.module('UNIMIBModules').component('loginUser', {
             }
 
             $scope.cookiesHandler = function (idUser) {
-                if (cookieService.getCookie() == null) {
-                    cookieService.setCookie(idUser);
+                if (cookieService.getCookie("userId") == null) {
+                    cookieService.setCookie("userId", idUser);
                 }
             }
         }
