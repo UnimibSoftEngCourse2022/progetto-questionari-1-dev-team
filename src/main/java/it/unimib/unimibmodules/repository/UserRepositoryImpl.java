@@ -71,7 +71,7 @@ public class UserRepositoryImpl implements UserRepository, UserRepositoryReadOnl
     }
 
     /**
-     * Finds the user identified by compilationCode in the database
+     * Tells if  the user identified by compilationCode exists in the database.
      * @param   code                    the code of the user to be found
      * @return                          an instance of User if there is a user identified by code, null otherwise
      * @throws  NotFoundException       if no user identified by the id has been found
@@ -86,6 +86,19 @@ public class UserRepositoryImpl implements UserRepository, UserRepositoryReadOnl
         }catch (NoSuchElementException e) {
             return false;
         }
+    }
+    
+    /**
+     * Finds the user identified by compilationCode in the database
+     * @param   code                    the code of the user to be found
+     * @return                          an instance of User if there is a user identified by code, null otherwise
+     * @throws  NotFoundException       if no user identified by the id has been found
+     * @see     UserRepository#getByCode(String code)
+     */
+    @Override
+    public  User  getByCodeEntity(String code) {
+        Optional<User> user = userDAO.findByCompilationCode(code);
+        return  user.orElseThrow();   
     }
 
     /**

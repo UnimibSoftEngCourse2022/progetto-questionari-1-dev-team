@@ -1,6 +1,9 @@
 package it.unimib.unimibmodules.repository;
 
 import it.unimib.unimibmodules.model.Survey;
+
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +24,7 @@ public interface SurveyDAO extends CrudRepository<Survey, Integer>{
     
     @Query( nativeQuery = true, value ="SELECT * FROM Survey s ORDER BY s.id LIMIT :limit OFFSET :offset")
 	Iterable<Survey> findAllLazy(@Param("offset") int offset, @Param("limit") int limit);
+
+    @Query( nativeQuery = true, value = "SELECT s.* FROM Answer as a JOIN Survey as s on a.survey_id = s.id WHERE a.user_id = :id")
+	Optional<Survey> findByCompilationCode(@Param("id") int id);
 }

@@ -40,4 +40,13 @@ public interface UserRepository {
 	 * @throws  NotFoundException       if no user identified by the id has been found
 	 */
 	User getByUsername(String username) throws NotFoundException;
+
+	/**
+	 * Finds the user identified by compilationCode in the database
+	 * @param   code                    the code of the user to be found
+	 * @return                          an instance of User if there is a user identified by code, null otherwise
+	 * @throws  NotFoundException       if no user identified by the id has been found
+	 * @see     UserRepository#getByCode(String code)
+	 */
+	User getByCodeEntity(String code) throws NotFoundException;
 }
