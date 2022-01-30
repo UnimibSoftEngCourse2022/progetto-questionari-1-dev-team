@@ -33,10 +33,18 @@ public interface SurveyRepository {
 	/**
 	 * Finds the Survey in the database where text is contained in the name of the survey
 	 * @param	text	the text to be found in the name of the survey
-	 * @return			a list of Surveys the text is contained in the name of the survey
+	 * @return			a list of Surveys where the text is contained in the name of the survey
 	 * @throws NotFoundException 
 	 */
 	Iterable<Survey> getByText(String text) throws NotFoundException;
+
+	/**
+	 * Finds the Surveys in the database created by the user identified with userId
+	 * @param userId	the id of the user who created the survey
+	 * @return			a list of Surveys created by the user identified with userId
+	 * @throws NotFoundException
+	 */
+	Iterable<Survey> getByCreator(int userId) throws NotFoundException;
 	
 	/**
 	 * Finds the Survey in the database where text is contained in the name of the survey 

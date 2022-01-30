@@ -142,6 +142,21 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
 
+	@GetMapping("/findSurveyByCreator")
+	public ResponseEntity<List<SurveyDTO>> findSurveyByCreator(@RequestParam int userId)
+			throws NotFoundException {
+
+		Iterable<Survey> surveyList = surveyRepository.getByCreator(userId);
+		List<SurveyDTO> surveyDTOList = new ArrayList<>();
+		for (Survey survey : surveyList) {
+			surveyDTOList.add(convertToDTO(survey));
+		}
+		if (surveyDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No Surveys created by the user identified with id:" + userId + "were found\"}");
+		logger.debug("Retrieved {} Surveys", surveyDTOList.size());
+		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
+	}
+
 	/**
 	 * Finds the surveys where text is contained in their names  
 	 * or in their identifiers without their questions list 

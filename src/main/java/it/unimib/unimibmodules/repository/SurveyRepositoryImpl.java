@@ -159,7 +159,27 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 			
 		}
 	}
-	
+
+	/**
+	 * Finds the Surveys in the database created by the user identified with userId
+	 * @param userId	the id of the user who created the survey
+	 * @return			a list of Surveys created by the user identified with userId
+	 * @throws NotFoundException	if no surveys created by user with userId have been found
+	 * @see it.unimib.unimibmodules.exception.NotFoundException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
+	 * @see SurveyRepository#getByCreator
+	 */
+	@Override
+	public Iterable<Survey> getByCreator(int userId) throws NotFoundException {
+		Iterable<Survey> surveys = surveyDAO.findByCreator(userId);
+		if (IterableUtils.size(surveys) > 0) {
+			return surveys;
+		} else {
+			throw new NotFoundException(
+					"No surveys created by user with id: " + userId + "have been found");
+		}
+	}
+
 	/**
 	 * Finds all the surveys in the database where text is contained in 
 	 * their names or in their identifier with Lazy Loading parameters.

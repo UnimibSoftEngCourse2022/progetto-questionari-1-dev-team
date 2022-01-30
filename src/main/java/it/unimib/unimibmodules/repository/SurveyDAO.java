@@ -21,4 +21,7 @@ public interface SurveyDAO extends CrudRepository<Survey, Integer>{
     
     @Query( nativeQuery = true, value ="SELECT * FROM Survey s ORDER BY s.id LIMIT :limit OFFSET :offset")
 	Iterable<Survey> findAllLazy(@Param("offset") int offset, @Param("limit") int limit);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM Survey Where user_id = :user_id")
+    Iterable<Survey> findByCreator(@Param("user_id") int userId);
 }
