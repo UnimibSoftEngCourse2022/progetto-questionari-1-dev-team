@@ -375,6 +375,138 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/ArrayOfQuestions'                
+  /getQuestionByUser/{id}:
+    get:
+      summary: Return all the questions of the user
+      parameters:
+        - name: id
+          in: path
+          description: The id of the user
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: Question not found.
+        '200':
+          description: All the questions of the specified user in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfQuestions'           
+  /getQuestionByCategory/{id}:
+    get:
+      summary: Return all the questions with the specified category
+      parameters:
+        - name: id
+          in: path
+          description: The id of the category
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: Question not found.
+        '200':
+          description: All the questions with the specified category in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfQuestions' 
+  /getQuestionByCategoryLazy:
+    get:
+      summary: Gets questions by category in the database without limiting the result by limit. The search with start with the offset required.
+      parameters:
+        - name: id
+          in: path
+          description: The id of the category
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+        - name: offset
+          in: query
+          description: the offset to apply.
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+        - name: limit
+          in: query
+          description: limit of results to send.
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: No questions found.
+        '200':
+          description: Questions by the category in the database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfQuestions'
+  /getQuestionByUserLazy:
+    get:
+      summary: Gets questions of the user in the database without limiting the result by limit. The search with start with the offset required.
+      parameters:
+        - name: id
+          in: path
+          description: The id of the user
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+        - name: offset
+          in: query
+          description: the offset to apply.
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+        - name: limit
+          in: query
+          description: limit of results to send.
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: No questions found.
+        '200':
+          description: Questions of the user in the database
+          content:
+            application/json:
+              schema:
                 $ref: '#/components/schemas/ArrayOfQuestions'
   /findQuestionsByText/{text}:
     get:
@@ -428,6 +560,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ArrayOfQuestions'
+  /getToken/{id}:
+    get:
+      summary: Returns a AWS token for the specified user
+      parameters:
+        - name: id
+          in: path
+          description: The id of the user
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: Token not created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+        '200':
+          description: The values of the AWS object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AWSToken'
   /addQuestion:
     post:
       summary: Creates a question, with the given text and id
