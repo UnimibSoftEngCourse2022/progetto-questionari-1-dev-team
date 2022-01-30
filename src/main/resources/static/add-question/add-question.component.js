@@ -7,7 +7,6 @@ angular.
 		controller: ['$location', '$routeParams', '$scope', '$http', 'awsService', 'cookieService', 'authService',
 			function addQuestionController($location, $routeParams, $scope, $http, $awsService, cookieService, authService) {
 				let tmpObj = {};
-				let tmpAnswer = {};
 				let user;
 				let qType;
 				let v;
@@ -21,6 +20,7 @@ angular.
 				$scope.prova = ""
 
 				$scope.load = function () {
+
 					if (authService.isLoggedIn()) {
 						$scope.idUser = cookieService.getCookie("userId");
 						$scope.isLogged = true;
@@ -174,7 +174,6 @@ angular.
 												$scope.prova = "Domanda inserita con successo!";
 											});
 									});
-
 								}
 									$scope.token = response.data.token
 									$scope.identityToken = response.data.identityToken
@@ -188,6 +187,8 @@ angular.
 										$awsService.addPhoto($scope.token, $scope.region, $scope.identityToken,
 											$scope.identityPoolId, $scope.bucketName, photofile, fileName);
 									}
+									$scope.prova = "Domanda inserita con successo!";
+									$location.path('/home');
 							});
 					}
 				};
