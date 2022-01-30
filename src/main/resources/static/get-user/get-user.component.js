@@ -9,7 +9,7 @@ angular.module('UNIMIBModules').component('getUser', {
             $scope.surname = "";
             $scope.username = "";
             $scope.email = "";
-            $scope.isEmptyResult = true;
+            $scope.emptyResult = true;
             $scope.result;
             $scope.idUser;
             $scope.isLogged = false;
@@ -36,7 +36,7 @@ angular.module('UNIMIBModules').component('getUser', {
                     params: { userId : cookieService.getCookie("userId") }
                 }).then(function onFulFilled(response) {
                     console.log(response);
-                    $scope.handleSurveys(response)
+                    $scope.handleSurveysCreated(response)
 
                 }, function errorCallback(response) {
                     console.error(response);
@@ -74,12 +74,12 @@ angular.module('UNIMIBModules').component('getUser', {
                 $scope.email = $scope.result.email;
             }
 
-            $scope.handleSurveys = function(response) {
+            $scope.handleSurveysCreated = function(response) {
                 if (response.data.length > 0) {
-                    $scope.isEmptyResult = false;
+                    $scope.emptyResult = false;
                     $scope.result = response.data;
                 } else {
-                    $scope.isEmptyResult = true;
+                    $scope.emptyResult = true;
                     $scope.result = [];
                 }
             }

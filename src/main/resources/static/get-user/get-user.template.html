@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="row mt-4 p-5 justify-content-center" id="surveyCardContainer"
-         ng-hide="isEmptyResult">
+         ng-hide="emptyResult">
         <div class="col-sm-3 d-flex justify-content-center mb-4"
              ng-repeat="survey in result">
             <div class="card">
@@ -48,9 +48,9 @@
         </div>
     </div>
 </div>
-<div class="row m-2" ng-hide="! isEmptyResult">
+<div class="row m-2" ng-hide="! emptyResult">
     <div class="col-md-12 d-flex justify-content-center">
-        <h2>No results found...</h2>
+        <h3>No surveys created...</h3>
     </div>
 </div>
 </div>

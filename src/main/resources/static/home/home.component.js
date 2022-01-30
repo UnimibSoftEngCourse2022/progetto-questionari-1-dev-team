@@ -4,8 +4,8 @@ angular.
 	module('UNIMIBModules').
 	component('home', {
 		templateUrl: 'home/home.template.html',
-		controller: ['$location', '$scope', '$http', "cookieService", "authService",
-			function homeController($location, $scope, $http, cookieService, authService) {
+		controller: ['$location', '$scope', '$http', '$route', "cookieService", "authService",
+			function homeController($location, $scope, $http, $route, cookieService, authService) {
 
 				$scope.idUser = undefined;
 				$scope.isLogged = false
@@ -53,7 +53,7 @@ angular.
 						cookieService.removeCookie("userId");
 						$scope.isLogged = false;
 						$scope.modalManagerLogout(2);
-						$location.path("/home");
+						$route.reload();
 					}
 				}
 
