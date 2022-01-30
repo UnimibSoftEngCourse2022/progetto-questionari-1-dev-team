@@ -43,12 +43,25 @@ angular.
 					}
 				}
 
+				$scope.displayDialog = function (index) {
+					$scope.modalManagerLogout(index);
+				}
+
 				$scope.logoutUser = function () {
 					if (authService.isLoggedIn()) {
 						authService.setUser(undefined);
 						cookieService.removeCookie("userId");
 						$scope.isLogged = false;
-						alert("You have just logged out!");
+						$scope.modalManagerLogout(2);
+						$location.path("/home");
+					}
+				}
+
+				$scope.modalManagerLogout = function (index) {
+					if (index == 1) {
+						$scope.displayModalLogout = 'block';
+					} else if (index == 2) {
+						$scope.displayModalLogout = 'none';
 					}
 				}
 
