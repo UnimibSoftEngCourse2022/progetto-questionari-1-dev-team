@@ -9,6 +9,8 @@ angular.module('UNIMIBModules').component('getUser', {
             $scope.surname = "";
             $scope.username = "";
             $scope.email = "";
+            $scope.isEmptyResult = true;
+            $scope.result;
             $scope.idUser;
             $scope.isLogged = false;
 
@@ -22,22 +24,24 @@ angular.module('UNIMIBModules').component('getUser', {
                     authService.setUser($scope.idUser);
                 }
 
-                    $scope.handleUser = function (response) {
+                $http.get("/api/getUser/" + cookieService.getCookie("userId")).then(function onFulFilled(response) {
+                    $scope.handleUser(response);
 
-                        $scope.result = response.data;
-                        $scope.name = $scope.result.name;
-                        $scope.surname = $scope.result.surname;
-                        $scope.username = $scope.result.username;
-                        $scope.email = $scope.result.email;
-                    }
+                }, function errorCallback(response) {
+                    console.error(response);
+                });
 
-                    $http.get("/api/getUser/" + cookieService.getCookie("userId")).then(function onFulFilled(response) {
-                        $scope.handleUser(response);
+                $http({
+                    url: "/api/findSurveyByCreator", method: "GET",
+                    params: { userId : cookieService.getCookie("userId") }
+                }).then(function onFulFilled(response) {
+                    console.log(response);
+                    $scope.handleSurveys(response)
 
-                    }, function errorCallback(response) {
-                        console.error(response);
-                    });
-                }
+                }, function errorCallback(response) {
+                    console.error(response);
+                });
+            }
 
             $scope.displayDialog = function (index) {
                 $scope.modalManagerLogout(index);
@@ -59,6 +63,29 @@ angular.module('UNIMIBModules').component('getUser', {
                 } else if (index == 2) {
                     $scope.displayModalLogout = 'none';
                 }
+            }
+
+            $scope.handleUser = function (response) {
+
+                $scope.result = response.data;
+                $scope.name = $scope.result.name;
+                $scope.surname = $scope.result.surname;
+                $scope.username = $scope.result.username;
+                $scope.email = $scope.result.email;
+            }
+
+            $scope.handleSurveys = function(response) {
+                if (response.data.length > 0) {
+                    $scope.isEmptyResult = false;
+                    $scope.result = response.data;
+                } else {
+                    $scope.isEmptyResult = true;
+                    $scope.result = [];
+                }
+            }
+
+            $scope.modifySurvey = function(idx) {
+                $location.path('/modifySurvey/' + $scope.result[idx].id);
             }
         }
     ]

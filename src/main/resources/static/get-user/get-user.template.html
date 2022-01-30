@@ -25,4 +25,32 @@
             </form>
         </div>
     </div>
+    <div class="row mt-4 p-5 justify-content-center" id="surveyCardContainer"
+         ng-hide="isEmptyResult">
+        <div class="col-sm-3 d-flex justify-content-center mb-4"
+             ng-repeat="survey in result">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ survey.surveyName }}</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Survey Code:</b> {{ survey.id
+                        }}
+                    </li>
+                    <li class="list-group-item"><b>Creation Date:</b> {{
+                        survey.creationDate }}
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <button class="btn btn-primary" ng-click="modifySurvey($index)">Modify</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row m-2" ng-hide="! isEmptyResult">
+    <div class="col-md-12 d-flex justify-content-center">
+        <h2>No results found...</h2>
+    </div>
+</div>
 </div>
