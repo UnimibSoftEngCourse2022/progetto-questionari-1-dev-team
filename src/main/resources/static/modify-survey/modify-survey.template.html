@@ -91,10 +91,15 @@
 					<div class="card mb-4" ng-repeat="question in searchQuestions">
 						<div class="card-body"></div>
 						<ul class="list-group list-group-flush">
-							<li class="list-group-item"><input type="checkbox"
-								value="{{ $index }}" name="surveyQuestions[]"
-								ng-checked="question.isOnSurvey"
-								ng-click="toggleSelection($index)"> <b>Selected</b></li>
+							<li class="list-group-item">
+								<label>
+									<input type="checkbox"
+									value="{{ $index }}" name="surveyQuestions[]"
+									ng-checked="question.isOnSurvey"
+									ng-click="toggleSelection($index)">
+									<b>Selected</b>
+								</label>
+							</li>
 							<li class="list-group-item"><b>Category:</b> {{
 								question.category.name }}</li>
 							<li class="list-group-item"><b>User creator:</b> {{
