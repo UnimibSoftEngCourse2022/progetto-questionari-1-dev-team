@@ -166,6 +166,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ArrayOfSurveys'
+  /findSurveyByCreator:
+    get:
+      summary: Gets all surveys in the database created by the user identified by the given id
+      parameters:
+        - name: userId
+          in: query
+          description: the id of the user
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: No surveys found.
+        '200':
+          description: Surveys
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfSurveys'
+  /findSurveyByCompilationCode:
+    get:
+      summary: Gets the survey in the database compiled by the guest user with compilationId equals to code
+      parameters:
+        - name: code
+          in: query
+          description: the compilationId of the guest user associated to a survey
+          required: true
+          schema:
+            type : string
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: No surveys found.
+        '200':
+          description: Survey
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Survey'
   /findSurveyByTextNoQuestion:
     get:
       summary: Gets all surveys in the database where text is contained in their name or ID without their questions.
