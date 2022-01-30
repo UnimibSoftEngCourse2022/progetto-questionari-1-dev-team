@@ -49,20 +49,18 @@
 							<input type="text" ng-model="textFilterQuestion"
 								class="form-control" name="textFilterQuestion"
 								placeholder="Enter search text">
-
-
-
 						</div>
 
 						<button ng-click="filterQuestionAdded()" class="btn btn-primary">Show
 							Survey Questions</button>
 						<button ng-click="filterQuestionCreated()" class="btn btn-primary">Show
 							Your Questions</button>
-
 						<button type="button" class="btn btn-primary m-1"
 							ng-click="resetQuestions()">Reset Questions</button>
 						<button type="button" class="btn btn-success m-1"
 							ng-click="createQuestionRoute()">New Question</button>
+						<button type="button" class="btn btn-primary m-1"
+							ng-click="filterQuestionAll()">Show All</button>
 						<div class="dropdown">
 							<button class="btn btn-outline-primary dropdown-toggle"
 								type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
@@ -78,20 +76,14 @@
 					</div>
 				</div>
 				<div class="row">
-
 					<div class="col-sm-6 d-flex flex-row-reverse">
 						<a href="" ng-hide=" ! isPrevActive" ng-click="prevPage()"
 							class="link-primary"> < Previuos Page</a>
-
 					</div>
-
 					<div class="col-sm-6 d-flex flex-row">
-
 						<a href="" ng-hide=" ! isNextActive" ng-click="nextPage()"
 							class="link-primary ">Next Page > </a>
 					</div>
-
-
 				</div>
 				<div class="container-fluid  pt-4 overflow-auto"
 					id="questionCardContainer" ng-hide="isEmptyResult">
@@ -150,8 +142,9 @@
 				<p ng-hide=" ! searchQuestions[modalQuestion].urlImage">
 					<b>Image:</b>
 				</p>
-				 <img ng-hide=" ! searchQuestions[modalQuestion].urlImage" src="{{prev_img}}" alt="200x200" style="width: 200px; height:200px"
-                     ng-show="imageView"/>
+				<img ng-hide=" ! searchQuestions[modalQuestion].urlImage"
+					src="{{prev_img}}" alt="200x200"
+					style="width: 200px; height: 200px" ng-show="imageView" />
 				<p>
 					<b>Closed answers</b>
 				</p>

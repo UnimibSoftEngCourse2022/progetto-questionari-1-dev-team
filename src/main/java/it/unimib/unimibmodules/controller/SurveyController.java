@@ -46,8 +46,8 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	/**
 	 * Common strings used by the logger
 	 */
-	private final String retrivedAllSurveys = "Retreived all Surveys";
-	private final String retrivedNSurveys = "Retrieved {} surveys.";
+	private static final String retrivedAllSurveys = "Retreived all Surveys";
+	private static final String retrivedNSurveys = "Retrieved {} surveys.";
 
 	@Autowired
 	public SurveyController(UserRepositoryReadOnly userRepository, SurveyRepository surveyRepository,
@@ -136,8 +136,6 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		for (Survey survey : surveyList) {
 			surveyDTOList.add(convertToDTO(survey));
 		}
-		if (surveyDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Surveys were found with " + text + "\"}");
 		logger.debug("Retrieved {} Surveys containing the text", surveyDTOList.size());
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
@@ -161,8 +159,6 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		for (Survey survey : surveyList) {
 			surveyDTOList.add(convertToDTOAndSkipQuestions(survey));
 		}
-		if (surveyDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Surveys were found with " + text + "\"}");
 		logger.debug("Retrieved  {} surveys containing the text." , surveyDTOList.size());
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
@@ -189,8 +185,6 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		for (Survey survey : surveyList) {
 			surveyDTOList.add(convertToDTOAndSkipQuestions(survey));
 		}
-		if (surveyDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Surveys were found with " + text + "\"}");
 		logger.debug("Retrieved  {} surveys containing the text." , surveyDTOList.size());
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
