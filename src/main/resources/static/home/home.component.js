@@ -25,8 +25,8 @@ angular.
 				$scope.textSearch = ""
 
 				//error alert
-				$scope.showAlert = function (text) {
-				  alert('ERROR - ' + text)
+				$scope.showAlert = function(text) {
+					alert('ERROR - ' + text)
 				}
 
 				//Start-up function
@@ -43,11 +43,11 @@ angular.
 					}
 				}
 
-				$scope.displayDialog = function (index) {
+				$scope.displayDialog = function(index) {
 					$scope.modalManagerLogout(index);
 				}
 
-				$scope.logoutUser = function () {
+				$scope.logoutUser = function() {
 					if (authService.isLoggedIn()) {
 						authService.setUser(undefined);
 						cookieService.removeCookie("userId");
@@ -57,7 +57,7 @@ angular.
 					}
 				}
 
-				$scope.modalManagerLogout = function (index) {
+				$scope.modalManagerLogout = function(index) {
 					if (index == 1) {
 						$scope.displayModalLogout = 'block';
 					} else if (index == 2) {
@@ -149,7 +149,15 @@ angular.
 				//compile by code for no-registered users
 				$scope.compileByCode = function() {
 					if ($scope.compilationCode !== undefined && $scope.compilationCode != "" && $scope.compilationCode.replace(/\s/g, '').length) {
-						$location.path('/compileSurvey/')
+						$http({
+							url: "/api/findSurveyByCompilationCode", method: "GET",
+							params: { code: $scope.compilationCode}
+						}).then(function onfulFilled(response) {
+							$location.path("compileSurvey/" +response.data.id + "/ " +  response.data.userDTO.id)
+						}, function errorCallback(response) {
+							$scope.messageError = "ERROR - This code doesn't exist'."
+							$scope.showMessageError = true
+						});
 					} else {
 						$scope.messageError = "ERROR - This field cannot be empty."
 						$scope.showMessageError = true
