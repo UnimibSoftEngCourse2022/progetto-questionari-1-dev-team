@@ -227,7 +227,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Question found with " + text + "\"}");
-		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size());
+		logger.debug("Retrieved {} Questions containing the text.", questionDTOList.size());
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 
