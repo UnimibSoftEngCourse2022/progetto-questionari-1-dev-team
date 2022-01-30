@@ -4,8 +4,8 @@ angular.
 	module('UNIMIBModules').
 	component('home', {
 		templateUrl: 'home/home.template.html',
-		controller: ['$location', '$scope', '$http', "cookieService", "authService",
-			function homeController($location, $scope, $http, cookieService, authService) {
+		controller: ['$location', '$scope', '$http', '$route', "cookieService", "authService",
+			function homeController($location, $scope, $http, $route, cookieService, authService) {
 
 				$scope.idUser = undefined;
 				$scope.isLogged = false
@@ -34,12 +34,12 @@ angular.
 
 					$scope.searchSurvey()
 					if (authService.isLoggedIn()) {
-						$scope.idUser = cookieService.getCookie("userId");
-						$scope.isLogged = true;
-					} else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
-						$scope.idUser = cookieService.getCookie("userId");
-						$scope.isLogged = true;
-						authService.setUser($scope.idUser);
+					  	$scope.idUser = cookieService.getCookie("userId");
+					  	$scope.isLogged = true;
+				  	} else if (cookieService.getCookie("compilationId") === undefined && !authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
+					  	$scope.idUser = cookieService.getCookie("userId");
+					  	$scope.isLogged = true;
+					  	authService.setUser($scope.idUser);
 					}
 				}
 
@@ -53,7 +53,7 @@ angular.
 						cookieService.removeCookie("userId");
 						$scope.isLogged = false;
 						$scope.modalManagerLogout(2);
-						$location.path("/home");
+						$route.reload();
 					}
 				}
 
@@ -270,7 +270,6 @@ angular.
 
 							cookieService.setCookie("userId", response.data.idUser);
 							cookieService.setCookie("compilationId", $scope.randomCode);
-							console.log(response.data.idUser);
 							$location.path('/compileSurvey/' + $scope.result[idx].id)
 
 						}, function errorCallback(response) {

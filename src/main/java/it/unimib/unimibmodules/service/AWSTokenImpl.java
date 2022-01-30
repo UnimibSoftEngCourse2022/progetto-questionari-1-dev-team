@@ -38,8 +38,6 @@ public class AWSTokenImpl implements AWSToken {
         logins.put(LOGIN_PROVIDER, ""+idUser);
         request.setLogins(logins);
         request.setTokenDuration(60 * 5L);
-        GetOpenIdTokenForDeveloperIdentityResult response =
-                identityClient.getOpenIdTokenForDeveloperIdentity(request);
-        return response;
+        return identityClient.getOpenIdTokenForDeveloperIdentity(request);
     }
 }
