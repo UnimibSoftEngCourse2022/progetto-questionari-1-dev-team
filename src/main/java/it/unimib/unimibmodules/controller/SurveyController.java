@@ -46,8 +46,8 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	/**
 	 * Common strings used by the logger
 	 */
-	private final String RETRIVEDALLSURVEYS = "Retreived all Surveys";
-	private final String RETRIVEDNSURVEYS = "Retrieved {} surveys.";
+	private static final String RETRIVEDALLSURVEYS = "Retreived all Surveys";
+	private static final String RETRIVEDNSURVEYS = "Retrieved {} surveys.";
 
 	@Autowired
 	public SurveyController(UserRepositoryReadOnly userRepository, SurveyRepository surveyRepository,
