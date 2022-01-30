@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"it.unimib.unimibmodules"},{"l":"it.unimib.unimibmodules.controller"},{"l":"it.unimib.unimibmodules.dto"},{"l":"it.unimib.unimibmodules.exception"},{"l":"it.unimib.unimibmodules.model"},{"l":"it.unimib.unimibmodules.repository"},{"l":"it.unimib.unimibmodules.service"}];updateSearchResults();

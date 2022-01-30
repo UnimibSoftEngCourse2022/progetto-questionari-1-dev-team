@@ -3,4 +3,5 @@
 *.out
 *.gz
 *.toc
+*.blg
 swagger-yaml-to-html.py
