@@ -32,7 +32,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
 
     private static final Logger logger = LogManager.getLogger(UserController.class);
 
-    private Random rand = SecureRandom.getInstanceStrong();
+    private Random rand;
 
     /**
      * Instance of UserRepository that will be used to access the db.
@@ -51,6 +51,7 @@ public class UserController extends DTOMapping<User, UserDTO> {
         super(modelMapper);
         this.userRepository = userRepository;
         this.mailService = mailService;
+        rand = SecureRandom.getInstanceStrong();
 
         modelMapper.createTypeMap(User.class, UserDTO.class)
                 .addMappings(mapper -> {
