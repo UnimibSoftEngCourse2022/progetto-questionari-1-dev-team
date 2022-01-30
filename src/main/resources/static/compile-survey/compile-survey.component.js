@@ -112,9 +112,9 @@ app.component("compileSurvey", {
 		}
 
 		$scope.modalManagerLogout = function (index) {
-			if (index == 1) {
+			if (index === 1) {
 				$scope.displayModalLogout = 'block';
-			} else if (index == 2) {
+			} else if (index === 2) {
 				$scope.displayModalLogout = 'none';
 			}
 		}
