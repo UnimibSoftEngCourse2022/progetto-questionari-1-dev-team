@@ -1,7 +1,15 @@
 # UNIMIB Modules
 
+![Version](https://img.shields.io/badge/version-1.0.0-success)
+![License](https://img.shields.io/github/license/UnimibSoftEngCourse2022/progetto-questionari-1-dev-team)
+![Stars](https://img.shields.io/github/stars/UnimibSoftEngCourse2022/progetto-questionari-1-dev-team)
+![Build](https://github.com/UnimibSoftEngCourse2022/progetto-questionari-1-dev-team/actions/workflows/build.yml/badge.svg)
+
+Il progetto UNIMIB Modules è un progetto all'interno del quale gestire e compilari i questionari, dotata di alta usabilità, tolleranza ai guasti e performance.
+
 [Documentazione OpenAPI](https://unimibsoftengcourse2022.github.io/progetto-questionari-1-dev-team/)   
 [Documentazione tecnica](https://github.com/UnimibSoftEngCourse2022/progetto-questionari-1-dev-team/blob/documentation/Documentation/DocumentoDiProgetto.pdf)  
+[Documentazione JavaDOC](https://unimibsoftengcourse2022.github.io/progetto-questionari-1-dev-team/javadoc.html)  
 [Elenco release](https://github.com/UnimibSoftEngCourse2022/progetto-questionari-1-dev-team/releases)
 
 ## Struttura repository
@@ -23,12 +31,28 @@
 
 ## Istruzioni per l'installazione
 
-1. Creare un database per il progetto (chiamarlo, per esempio, unimibdb);
-2. Aprire il file `application.properties` e impostare le seguenti proprietà:
-    * `spring.datasource.url`: inserire l'url nel formato JDBC per il database (esempio: `jdbc:mysql://indirizzodatabase:porta/nomedatabase?eventualiparametri=valore`);
-    * `spring.datasource.username`: nome utente per l'accesso al database;
-    * `spring.datasource.password`: password per l'accesso al database.
-3. Per avviare l'esecuzione da binario, è sufficiente utilzzare il comando `java -jar unimibmodules-1.0.0-SNAPSHOT.jar`;
+- Avvio da codice sorgente
+   1. Creare un database per il progetto (chiamarlo, per esempio, unimibdb);
+   2. Aprire il file `/src/main/resources/application.properties` e impostare le seguenti proprietà:
+       * `spring.datasource.url`: inserire l'url nel formato JDBC per il database (esempio: `jdbc:mysql://indirizzodatabase:porta/nomedatabase?eventualiparametri=valore`);
+       * `spring.datasource.username`: nome utente per l'accesso al database;
+       * `spring.datasource.password`: password per l'accesso al database.
+   3. Aprire il file `/src/main/java/it/unimib/unimibmodules/controller/AWSToken.java` e impostare le seguenti chiavi:
+       * `ACCESS_KEY_ID`: inserire l'username della route fornita dal servizio AWS;
+       * `ACCESS_KEY_VALUE`: inserire la passsword della route fornita dal servizio AWS.
+   4. Aprire il file `src/main/java/it/unimib/unimibmodules/service/MailServiceImpl.java` e impostare le seguenti informazioni:
+       * `EMAIL_USERNAME`: l'indirizzo email;
+       * `EMAIL_PASSWORD`: la password per accedere all'indirizzo email;
+       * `EMAIL_SMTP_HOST`: l'indirizzo dell'host SMTP;
+       * `EMAIL_SMTP_AUTH`: `true` se è richiesta l'autenticazione, `false` altrimenti;
+       * `EMAIL_SMTP_PORT`: la porta del server SMTP;
+       * `EMAIL_SMTP_TLS`: `true` se è richiesto TLS, `false` altrimenti.  
+      Potrebbe essere necessario abilitare le applicazioni non sicure sul proprio provider email.
+   6. Avviare il progetto.
+
+- Avvio da binario:
+   1. Per avviare l'esecuzione da binario, è sufficiente utilzzare il comando `java -jar unimibmodules-1.0.0-SHANPSHOT.jar`;
+   
 
 Attenzione: se dovesse essere necessario riavviare il programma è consigliabile impostare la proprietà `spring.jpa.hibernate.ddl-auto` a `none`.  
 Al primo avvio potrebbero verificarsi errori del tipo `SQLException`; questi sono causati da errori di Hibernate durante la creazione del database. In questo caso è sufficiente lanciare nuovamente l'applicazione.  
