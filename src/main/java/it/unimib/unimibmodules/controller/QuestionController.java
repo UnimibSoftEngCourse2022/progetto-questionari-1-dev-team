@@ -110,6 +110,24 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		logger.debug("Retrieved all the questions.");
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
+	
+	/**
+	 * Gets all the questions with Lazy Loading
+	 * @param id user id
+	 * @param offset 
+	 * @param limit
+	 * @return		an HTTP response with status 200, 404 otherwise
+	 * @throws NotFoundException 
+	 */
+	@GetMapping(path = "/getQuestionLazy")
+	public ResponseEntity<List<QuestionDTO>> getQuestionsLazy(@RequestParam int offset , @RequestParam int limit) throws NotFoundException{
+		Iterable<Question> questionList = questionRepository.getAllLazy(offset, limit);
+		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
+		if (questionDTOList.isEmpty())
+			throw new NotFoundException("{\"response\":\"No questions found\"}");
+		logger.debug("Retrieved all the questions.");
+		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
+	}
 
 	/**
 	 * Gets all the questions of the user
@@ -209,7 +227,7 @@ public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
 		List<QuestionDTO> questionDTOList = convertListToDTO(questionList);
 		if (questionDTOList.isEmpty())
 			throw new NotFoundException("{\"response\":\"No Question found with " + text + "\"}");
-		logger.debug("Retrieved {} Questions containing the text {}.", questionDTOList.size());
+		logger.debug("Retrieved {} Questions containing the text.", questionDTOList.size());
 		return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
 	}
 

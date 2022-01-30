@@ -30,6 +30,14 @@ public interface QuestionRepository {
 	 * @return      all the instances of Question, null otherwise
 	 */
 	Iterable<Question> getAll() throws NotFoundException;
+	
+	/**
+	 * Finds all the questions in the database with lazy loading
+	 * @param offset initial position for the query
+	 * @param limit limiting query results
+	 * @return      all the instances of Question, null otherwise
+	 */
+	Iterable<Question> getAllLazy(int offset, int limit);
 
 	/**
 	 * Finds the question identified by id in the database 

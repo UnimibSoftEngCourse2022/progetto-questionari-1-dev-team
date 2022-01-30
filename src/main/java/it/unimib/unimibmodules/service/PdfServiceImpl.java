@@ -12,7 +12,6 @@ import com.amazonaws.util.IOUtils;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import it.unimib.unimibmodules.controller.AWSToken;
-import it.unimib.unimibmodules.controller.AnswerController;
 import it.unimib.unimibmodules.controller.PdfService;
 import it.unimib.unimibmodules.model.Answer;
 import it.unimib.unimibmodules.model.CloseEndedAnswer;

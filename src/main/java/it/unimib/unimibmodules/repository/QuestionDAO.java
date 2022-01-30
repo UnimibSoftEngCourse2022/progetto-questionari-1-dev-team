@@ -33,6 +33,9 @@ public interface QuestionDAO extends CrudRepository<Question, Integer> {
 
 	@Query( nativeQuery = true, value ="SELECT * FROM Question q   where q.category_id = :categoryId ORDER BY q.id LIMIT :limit OFFSET :offset")
 	Iterable<Question> findByCategoryLazy(@Param("categoryId")  int categoryId, @Param("offset")  int offset, @Param("limit")  int limit);
+	
+	@Query( nativeQuery = true, value ="SELECT * FROM Question q ORDER BY q.id LIMIT :limit OFFSET :offset")
+	Iterable<Question> findAllLazy(@Param("offset") int offset, @Param("limit") int limit);
 
 	
 
