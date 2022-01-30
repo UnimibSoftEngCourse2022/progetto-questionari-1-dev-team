@@ -35,6 +35,7 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 	 */
 	private final SurveyQuestionsDAO surveyQuestionsDAO;
 	
+	private static final String NOSURVEYEXISTMESSAGE = "No survey exists with id: ";
 	
 	/**
 	 * The instance of SurveyDAO that will be used to perform actions to the DB
@@ -100,7 +101,7 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 		try {
 			return survey.orElseThrow();
 		} catch (NoSuchElementException ex) {
-			throw new NotFoundException("The survey with id = " + id + " doesn't exists.", ex);
+			throw new NotFoundException(NOSURVEYEXISTMESSAGE + id , ex);
 		}
 	}
 
@@ -197,17 +198,11 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 		try {
 			User user = userRepository.getByCodeEntity(code);
 			Optional<Survey> survey = surveyDAO.findByCompilationCode(user.getId());
-			try {	
 				Survey surveyS = survey.orElseThrow();
 				surveyS.setUser(user);
 				return surveyS;
-			} catch (NoSuchElementException ex) {
-				throw new NotFoundException("The survey with compilation code = " 
-			+ code + " doesn't exists.", ex);
-			}
 		} catch (NoSuchElementException ex) {
-			throw new NotFoundException("The user with compilation code = " 
-		+ code + " doesn't exists.", ex);
+			throw new NotFoundException("No survey exists with compilation code = " + code , ex);
 		}
 	}
 
@@ -257,8 +252,8 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 		if (name != null && !name.isBlank()) {
 			Optional<Survey> surveyOpt = surveyDAO.findById(id);
 			if (!surveyOpt.isPresent()) {
-				throw new NotFoundException("The survey with id: " + id + " doesn't exist",
-						new Throwable("The survey with id: " + id + " doesn't exist"));
+				throw new NotFoundException(NOSURVEYEXISTMESSAGE + id ,
+						new Throwable(NOSURVEYEXISTMESSAGE + id));
 			} else {
 				Survey survey = surveyOpt.get();
 				survey.setName(name);
