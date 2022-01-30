@@ -90,4 +90,6 @@ public interface SurveyRepository {
 	 * @see SurveyRepository#modify
 	 */
 	void modifyName(String name, int id) throws FormatException, NotFoundException, EmptyFieldException;
+
+	Survey getByCompilationCode(String code) throws NotFoundException;
 }

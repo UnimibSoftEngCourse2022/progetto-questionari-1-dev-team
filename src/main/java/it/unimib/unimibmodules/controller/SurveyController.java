@@ -46,8 +46,8 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	/**
 	 * Common strings used by the logger
 	 */
-	private final String RETRIVEDALLSURVEYS = "Retreived all Surveys";
-	private final String RETRIVEDNSURVEYS = "Retrieved {} surveys.";
+	private static final String RETRIVEDALLSURVEYS = "Retreived all Surveys";
+	private static final String RETRIVEDNSURVEYS = "Retrieved {} surveys.";
 
 	@Autowired
 	public SurveyController(UserRepositoryReadOnly userRepository, SurveyRepository surveyRepository,
@@ -82,6 +82,22 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 			mapper.map(User::getUsername, (surveyDTO, username) -> surveyDTO.getUserDTO().setUsername(username));
 		});
 
+	}
+	
+	/**
+	 * Finds the survey associated with the given id.
+	 * 
+	 * @param id the id of the Survey
+	 * @return If the survey has been found: an HTTP response with status 200 and the SurveyDTO 
+	 * @throws NotFoundException if the survey doesn't exists
+	 * @see it.unimib.unimibmodules.exception.NotFoundException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleNotFoundException
+	 */
+	@GetMapping("/findSurveyByCompilationCode")
+	public ResponseEntity<SurveyDTO> findSurveyByCompilationCode(@RequestParam(name = "code") String code) throws NotFoundException {
+		Survey survey = surveyRepository.getByCompilationCode(code);
+		logger.debug("Retreived Survey with compilation code.");
+		return new ResponseEntity<>(convertToDTO(survey), HttpStatus.OK);
 	}
 
 	/**

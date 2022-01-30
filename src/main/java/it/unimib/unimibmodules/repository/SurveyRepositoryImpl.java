@@ -7,6 +7,8 @@ import it.unimib.unimibmodules.exception.FormatException;
 import it.unimib.unimibmodules.exception.NotFoundException;
 import it.unimib.unimibmodules.model.Survey;
 import it.unimib.unimibmodules.model.SurveyQuestions;
+import it.unimib.unimibmodules.model.User;
+
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,12 +34,19 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 	 * The instance of SurveyDAO that will be used to perform actions to the DB
 	 */
 	private final SurveyQuestionsDAO surveyQuestionsDAO;
+	
+	
+	/**
+	 * The instance of SurveyDAO that will be used to perform actions to the DB
+	 */
+	private final UserRepositoryImpl userRepository;
 
 	@Autowired
-	public SurveyRepositoryImpl(SurveyDAO surveyDAO, SurveyQuestionsDAO surveyQuestionsDAO) {
+	public SurveyRepositoryImpl(SurveyDAO surveyDAO, SurveyQuestionsDAO surveyQuestionsDAO, UserRepositoryImpl userRepository) {
 
 		this.surveyDAO = surveyDAO;
 		this.surveyQuestionsDAO = surveyQuestionsDAO;
+		this.userRepository = userRepository;
 	}
 
 	/**
@@ -111,15 +120,15 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 			return surveys;
 		} else {
 			throw new NotFoundException("No surveys exist.");
-		
+
 		}
 	}
-	
+
 	/**
-	 * Returns all surveys from the database with Lazy Loading
-	 * parameters.
+	 * Returns all surveys from the database with Lazy Loading parameters.
+	 * 
 	 * @param offset offset for lazy loading
-	 * @param limit for limiting the result length
+	 * @param limit  for limiting the result length
 	 * @return a Set of Surveys
 	 * @throws NotFoundException if no survey exists
 	 * @see it.unimib.unimibmodules.exception.NotFoundException
@@ -137,8 +146,8 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 	}
 
 	/**
-	 * Finds all the surveys in the database where text is contained in 
-	 * their names or in their identifier.
+	 * Finds all the surveys in the database where text is contained in their names
+	 * or in their identifier.
 	 * 
 	 * @param text the text to search
 	 * @return a list of Surveys where the text has been matched
@@ -154,19 +163,18 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 		if (IterableUtils.size(surveys) > 0) {
 			return surveys;
 		} else {
-			throw new NotFoundException(
-					"No surveys containing " + text + " in their name have been found");
-			
+			throw new NotFoundException("No surveys containing " + text + " in their name have been found");
+
 		}
 	}
-	
+
 	/**
-	 * Finds all the surveys in the database where text is contained in 
-	 * their names or in their identifier with Lazy Loading parameters.
+	 * Finds all the surveys in the database where text is contained in their names
+	 * or in their identifier with Lazy Loading parameters.
 	 * 
-	 * @param text the text to search
+	 * @param text   the text to search
 	 * @param offset offset for lazy loading
-	 * @param limit for limiting the result length
+	 * @param limit  for limiting the result length
 	 * @return a list of Surveys where the text has been matched
 	 * @throws NotFoundException if no survey has been found
 	 * @see it.unimib.unimibmodules.exception.NotFoundException
@@ -175,13 +183,31 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 	 */
 	@Override
 	public Iterable<Survey> getByTextLazy(String text, int offset, int limit) throws NotFoundException {
-		Iterable<Survey> surveys = surveyDAO.findByTextLazy(text, text , offset, limit);
+		Iterable<Survey> surveys = surveyDAO.findByTextLazy(text, text, offset, limit);
 		if (IterableUtils.size(surveys) > 0) {
 			return surveys;
 		} else {
-			throw new NotFoundException(
-					"No surveys containing " + text + " in their name have been found");
-		
+			throw new NotFoundException("No surveys containing " + text + " in their name have been found");
+
+		}
+	}
+
+	@Override
+	public Survey getByCompilationCode(String code) throws  NotFoundException{
+		try {
+			User user = userRepository.getByCodeEntity(code);
+			Optional<Survey> survey = surveyDAO.findByCompilationCode(user.getId());
+			try {	
+				Survey surveyS = survey.orElseThrow();
+				surveyS.setUser(user);
+				return surveyS;
+			} catch (NoSuchElementException ex) {
+				throw new NotFoundException("The survey with compilation code = " 
+			+ code + " doesn't exists.", ex);
+			}
+		} catch (NoSuchElementException ex) {
+			throw new NotFoundException("The user with compilation code = " 
+		+ code + " doesn't exists.", ex);
 		}
 	}
 
@@ -228,46 +254,46 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 	@Override
 	public void modifyName(String name, int id) throws FormatException, NotFoundException, EmptyFieldException {
 
-		if (name != null && !name.isBlank()){
+		if (name != null && !name.isBlank()) {
 			Optional<Survey> surveyOpt = surveyDAO.findById(id);
-			if(! surveyOpt.isPresent()) {
-				throw new NotFoundException("The survey with id: " + id + " doesn't exist", 
+			if (!surveyOpt.isPresent()) {
+				throw new NotFoundException("The survey with id: " + id + " doesn't exist",
 						new Throwable("The survey with id: " + id + " doesn't exist"));
-			}else {
+			} else {
 				Survey survey = surveyOpt.get();
 				survey.setName(name);
 				surveyDAO.save(survey);
 			}
 
 		} else {
-			throw  new FormatException("The name can't be null", new Throwable("The name can't be null"));
-		
+			throw new FormatException("The name can't be null", new Throwable("The name can't be null"));
+
 		}
 
 	}
-	
+
 	/**
-	 * It's used by modifyQuestions in order to find all the questions
-	 * to create or maintain
+	 * It's used by modifyQuestions in order to find all the questions to create or
+	 * maintain
 	 * 
 	 * @param surveyQuestions the new questions list of Survey
-	 * @param surveyId the survey id
+	 * @param surveyId        the survey id
 	 * @throws FormatException
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
 	 * @see it.unimib.unimibmodules.repository.SurveyRespositoryImpl#modifyQuestions
 	 */
-	public List<Integer> getListToSave(Set<SurveyQuestions> surveyQuestions, int surveyId){
+	public List<Integer> getListToSave(Set<SurveyQuestions> surveyQuestions, int surveyId) {
 		List<Integer> idIn = new ArrayList<>();
 		for (SurveyQuestions surveyQuestion : surveyQuestions) {
 			int idQuestion = surveyQuestion.getQuestion().getId();
-			SurveyQuestions result = surveyQuestionsDAO.questionHandler(idQuestion,   surveyId);
+			SurveyQuestions result = surveyQuestionsDAO.questionHandler(idQuestion, surveyId);
 			if (result == null) {
 				surveyQuestionsDAO.save(surveyQuestion);
 			}
 			idIn.add(idQuestion);
 		}
-		
+
 		return idIn;
 	}
 
@@ -275,7 +301,7 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 	 * Updates the questions list of the survey.
 	 * 
 	 * @param surveyQuestions the new questions list of Survey
-	 * @param surveyId the survey id
+	 * @param surveyId        the survey id
 	 * @throws FormatException
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
@@ -301,5 +327,4 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 			}
 		}
 	}
-
 }
