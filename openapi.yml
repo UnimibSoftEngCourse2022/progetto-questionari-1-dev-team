@@ -97,13 +97,13 @@ paths:
             application/json:
               schema:
                 type: string
-  /findSurvey/{id}:
+  /findSurvey/:
     get:
       summary: Returns the survey associated with the given id.
       parameters:
         - name: id
           in: query
-          description: The id of the Survey
+          description: The id of the Survey.
           required: true
           schema:
             type : integer
@@ -119,27 +119,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Survey'
-  /findSurveyNoQuestions/:
+        '404':
+            description: Survey not found.
+  /findSurveyNoQuestion/{id}:
     get:
-      summary: Returns the survey associated with the given id.
+      summary: Returns the survey associated with the given id without its questions.
+      parameters:
+        - name: id
+          in: path
+          description: The id of the Survey.
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
       responses:
         '500':
           description: Server Error.
         '404':
-          description: No Survey without questions found.
+          description: Survey not found.
         '200':
-          description: Surveys with no questions.
+          description: Survey with no questions.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ArrayOfSurveys'
-  /findSurveyByText/{text}:
+                $ref: '#/components/schemas/Survey'
+  /findSurveyByText:
     get:
-      summary: Gets the survey in the database where text is contained in the name of the survey
+      summary: Gets all surveys in the database where text is contained in their name or ID
       parameters:
         - name: text
-          in: path
-          description: the text to be found in the name of the survey
+          in: query
+          description: the text to be found in the name or id of the surveys
           required: true
           schema:
             type : string
@@ -147,22 +159,131 @@ paths:
         '500':
           description: Server Error.
         '404':
-          description: Survey not found.
+          description: No surveys found.
         '200':
-          description: Survey with the text in the name
+          description: Surveys
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfSurveys'
+  /findSurveyByTextNoQuestion:
+    get:
+      summary: Gets all surveys in the database where text is contained in their name or ID without their questions.
+      parameters:
+        - name: text
+          in: query
+          description: the text to be found in the name or id of the surveys
+          required: true
+          schema:
+            type : string
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: No Surveys found.
+        '200':
+          description: Surveys
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfSurveys'
+  /findSurveyByTextNoQuestionLazy:
+    get:
+      summary: Gets surveys in the database where text is contained in their name or ID without their questions and 
+                limiting the result by limit. The search with start with the offset required.
+      parameters:
+        - name: text
+          in: query
+          description: the text to be found in the name or id of the surveys.
+          required: true
+          schema:
+            type : string
+        - name: offset
+          in: query
+          description: the offset to apply.
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+        - name: limit
+          in: query
+          description: limit of results to send.
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: No surveys found.
+        '200':
+          description: Surveys
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ArrayOfSurveys'
   /findAllSurveys:
     get:
+      summary: Gets all the surveys in the database.
       responses:
         '500':
           description: Server Error.
         '404':
-          description: Survey not found.
+          description: No surveys found.
         '200':
           description: All Surveys in the database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfSurveys'
+  /findAllSurveysNoQuestions:
+    get:
+      summary: Gets all the surveys in the database without their questions.
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: No surveys found.
+        '200':
+          description: All Surveys in the database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfSurveys'
+  /findAllSurveysNoQuestionLazy:
+    get:
+      summary: Gets surveys in the database without their questions limiting the result by limit. The search with start with the offset required.
+      parameters:
+        - name: offset
+          in: query
+          description: the offset to apply.
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+        - name: limit
+          in: query
+          description: limit of results to send.
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+            maximum: 1
+      responses:
+        '500':
+          description: Server Error.
+        '404':
+          description: No surveys found.
+        '200':
+          description: Surveys
           content:
             application/json:
               schema:
@@ -184,7 +305,7 @@ paths:
           description: Survey Created
   /modifySurvey:
     patch:
-      summary: Modifies the survey's name associated with the given surveyDTO.
+      summary: Modifies the survey associated with the given surveyDTO.
       requestBody:
         required: true
         description: the DTO of a survey
@@ -913,10 +1034,21 @@ components:
         name:
           type: string
           description: The name of the survey
-          example: Users name survey
+          example: Survey42
+        questionDTOs:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+                description: The id of the question
+                example: 1
+              text:
+                type: string
+                description: The text of the question
+                example: What's your name?
       required:  
         - id
-        - name
     Question:
       type: object
       properties:
