@@ -55,7 +55,7 @@ public class QuestionRepositoryImpl implements QuestionRepository, QuestionRepos
 	 * @param offset initial position for the query
 	 * @param limit limiting query results
 	 * @return     a list of Questions
-     * @see QuestionRepository#getAllLazy(int id)
+     * @see QuestionRepository#getAllLazy
      */
 	@Override
 	public Iterable<Question> getAllLazy(int offset, int limit) {

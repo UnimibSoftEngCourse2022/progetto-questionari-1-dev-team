@@ -74,7 +74,6 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 	 * @throws FormatException
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
-	 * @see SurveyRepository#addAll
 	 */
 	public void addAll(List<Survey> surveySet) throws FormatException {
 		try {
@@ -231,8 +230,6 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 
 	/**
 	 * Deletes all the surveys in the database.
-	 * 
-	 * @see SurveyRepository#removeAll
 	 */
 	public void removeAll() {
 		surveyDAO.deleteAll();
@@ -281,7 +278,6 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 	 * @throws FormatException
 	 * @see it.unimib.unimibmodules.exception.FormatException
 	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleFormatException
-	 * @see it.unimib.unimibmodules.repository.SurveyRespositoryImpl#modifyQuestions
 	 */
 	public List<Integer> getListToSave(Set<SurveyQuestions> surveyQuestions, int surveyId) {
 		List<Integer> idIn = new ArrayList<>();

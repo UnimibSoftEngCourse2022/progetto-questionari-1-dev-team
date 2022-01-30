@@ -74,7 +74,6 @@ public class Question {
 
 	/**
      * Creates an empty question.
-     * @see it.unimib.unimibmodules.factory.QuestionFactory#createQuestion
      */
 	public Question() {
 		//Do nothing

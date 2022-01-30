@@ -79,11 +79,10 @@ public class User {
 
     /**
      * Creates an empty user.
-     * @see it.unimib.unimibmodules.factory.UserFactory#createUser
      */
     public User() {
 
-        // Empty constructor; use UserFactory.createUser.
+        // Empty constructor
     }
 
     /**

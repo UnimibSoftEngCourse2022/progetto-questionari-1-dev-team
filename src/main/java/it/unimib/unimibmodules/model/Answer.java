@@ -62,11 +62,10 @@ public class Answer {
 
     /**
      * Creates an empty answer.
-     * @see it.unimib.unimibmodules.factory.AnswerFactory#createAnswerToOpenQuestion
      */
     public Answer() {
 
-        // Empty constructor; use Answerfactory.createAnswer.
+        // Empty constructor
     }
 
     /**
