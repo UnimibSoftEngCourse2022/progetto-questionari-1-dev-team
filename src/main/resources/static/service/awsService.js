@@ -44,7 +44,7 @@ app.service('awsService', function () {
             let promise = upload.promise();
 
             promise.then(function(data) {
-                    alert("OK")
+                    console.log("Immagine caricata");
                 },
                 function(err) {
                     alert(err.message)

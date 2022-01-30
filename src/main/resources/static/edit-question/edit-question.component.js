@@ -239,7 +239,7 @@ component('editQuestion', {
 
                     $http.patch("/api/modifyQuestion", tmpObj, 'application/json; charset=utf-8')
                         .then(function (response) {
-                            $scope.prova = "ok";
+                            $scope.prova = "Domanda modificata con successo!";
                         });
 
                     if(v!==0){
@@ -250,12 +250,12 @@ component('editQuestion', {
                             if(answer.id !== null && !angular.isUndefined(answer.id)){
                                 $http.patch("/api/modifyCloseEndedAnswer", answer, 'application/json; charset=utf-8')
                                     .then(function (response) {
-                                        $scope.prova = "Domanda modificata con successo!";
+                                        console.log("Risposte vecchie modificate");
                                     });
                             }else {
                                 $http.post("/api/addCloseEndedAnswer", answer, 'application/json; charset=utf-8')
                                     .then(function (response) {
-                                        $scope.prova = "Domanda modificata con successo!";
+                                        console.log("Risposte nuove aggiunte");
                                     });
                             }
                         });
@@ -264,11 +264,12 @@ component('editQuestion', {
                             if(question.id !== null && !angular.isUndefined(question.id))
                                 $http.delete("/api/deleteCloseEndedAnswer/"+question.id)
                                     .then(function (response) {
-                                        $scope.prova = "Domanda inserita con successo!";
-
+                                        console.log("Risposte vecchie rimosse!");
                                     });
                         });
                     }
+
+                    $scope.prova = "Domanda modificata con successo!";
                 }
 
 
@@ -279,14 +280,6 @@ component('editQuestion', {
                     .then(function (response) {
                         $scope.prova = "Domanda eliminata con successo!";
                     });
-
-                angular.forEach($scope.questionAnswer, function (answer, key) {
-                    if(answer.id !== null && !angular.isUndefined(answer.id))
-                        $http.delete("/api/deleteCloseEndedAnswer/"+answer.id)
-                            .then(function (response) {
-                                $scope.prova = "Risposta eliminata con successo!";
-                            });
-                });
 
                 if(fileName !== undefined) {
                     $http.get("/api/getToken/" + $scope.question.user.id)
