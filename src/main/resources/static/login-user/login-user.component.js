@@ -9,7 +9,7 @@ angular.module('UNIMIBModules').component('loginUser', {
             $scope.password = "";
             $scope.isLogged = false;
 
-            $scope.load = function() {
+            $scope.load = function () {
                 if (authService.isLoggedIn()) {
                     $scope.isLogged = true;
                 } else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
@@ -17,12 +17,25 @@ angular.module('UNIMIBModules').component('loginUser', {
                 }
             }
 
+            $scope.displayDialog = function (index) {
+                $scope.modalManagerLogout(index);
+            }
+
             $scope.logoutUser = function () {
                 if (authService.isLoggedIn()) {
                     authService.setUser(undefined);
                     cookieService.removeCookie("userId");
                     $scope.isLogged = false;
-                    alert("You have just logged out!");
+                    $scope.modalManagerLogout(2);
+                    $location.path("/home");
+                }
+            }
+
+            $scope.modalManagerLogout = function (index) {
+                if (index == 1) {
+                    $scope.displayModalLogout = 'block';
+                } else if (index == 2) {
+                    $scope.displayModalLogout = 'none';
                 }
             }
 
@@ -42,22 +55,20 @@ angular.module('UNIMIBModules').component('loginUser', {
 
                 $http.post("/api/logInUser", data).then(function onFulfilled(response) {
 
-                    alert("Login Successful!");
                     authService.setUser($scope.username);
+                    $scope.modalManager(1);
                     $scope.cookiesHandler(response.data.idUser);
-                    $location.path("/home");
 
                 }, function errorCallback(response) {
-
-                    $scope.resetForm();
-                    alert("Invalid username and password. Please try again.");
-
+                    console.error(response);
+                    $scope.modalManager(2);
                 });
             }
 
             $scope.resetForm = function () {
                 $scope.username = "";
                 $scope.password = "";
+                $scope.modalManager(-2);
             }
 
             $scope.cookiesHandler = function (idUser) {
@@ -69,6 +80,20 @@ angular.module('UNIMIBModules').component('loginUser', {
                     cookieService.removeCookie("userId");
                     cookieService.setCookie("userId", idUser);
                 }
+            }
+
+            $scope.modalManager = function (index) {
+                if (index == 1) {
+                    $scope.displayModal1 = 'block';
+                } else if (index == 2) {
+                    $scope.displayModal2 = 'block';
+                } else if (index == -2) {
+                    $scope.displayModal2 = 'none'
+                }
+            }
+
+            $scope.changePage = function () {
+                $location.path("/home");
             }
         }
     ]
