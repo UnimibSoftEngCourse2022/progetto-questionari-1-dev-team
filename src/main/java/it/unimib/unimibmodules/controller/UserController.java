@@ -39,10 +39,18 @@ public class UserController extends DTOMapping<User, UserDTO> {
      */
     private final UserRepository userRepository;
 
+    /**
+     * Instance of MailService, that will be used to send an email when the answers are saved.
+     */
+    private final MailService mailService;
+
     @Autowired
-    public UserController(UserRepository userRepository, ModelMapper modelMapper) throws NoSuchAlgorithmException {
-    	super(modelMapper);
+    public UserController(UserRepository userRepository, ModelMapper modelMapper, MailService mailService)
+            throws NoSuchAlgorithmException {
+
+        super(modelMapper);
         this.userRepository = userRepository;
+        this.mailService = mailService;
 
         modelMapper.createTypeMap(User.class, UserDTO.class)
                 .addMappings(mapper -> {
@@ -158,6 +166,9 @@ public class UserController extends DTOMapping<User, UserDTO> {
 
             User entity = userRepository.add(user);
             logger.debug("Successful creation of user.");
+            String message = "Hi " + user.getUsername() +
+                    ",<br/><br/>thanks for signing up to UNIMIB Modules.<br/><br/>UNIMIB Modules";
+            mailService.sendMail(user.getEmail(), "Thanks for signing up", message);
             return new ResponseEntity<>("{\"idUser\":\""+ entity.getId() +"\"}", HttpStatus.CREATED);
         }
     }

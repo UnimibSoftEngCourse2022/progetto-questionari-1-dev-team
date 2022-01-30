@@ -3,9 +3,11 @@
 	<h1>Compile survey</h1>
 </div>
 <div class="container-fluid mb-4" ng-init="load()">
-	Survey: {{ survey.surveyName }}
-	<br/>
-	Survey by: {{ survey.userDTO.username }}
+	<h4>
+		Survey: {{ survey.surveyName }}
+		<br/>
+		Survey by: {{ survey.userDTO.username }}
+	</h4>
 	<br/><br/>
 	<p>
 		{{ questions[questionIndex].text }}

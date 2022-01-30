@@ -46,8 +46,8 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	/**
 	 * Common strings used by the logger
 	 */
-	private final String retrivedAllSurveys = "Retreived all Surveys";
-	private final String retrivedNSurveys = "Retrieved {} surveys.";
+	private final String RETRIVEDALLSURVEYS = "Retreived all Surveys";
+	private final String RETRIVEDNSURVEYS = "Retrieved {} surveys.";
 
 	@Autowired
 	public SurveyController(UserRepositoryReadOnly userRepository, SurveyRepository surveyRepository,
@@ -136,8 +136,6 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		for (Survey survey : surveyList) {
 			surveyDTOList.add(convertToDTO(survey));
 		}
-		if (surveyDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Surveys were found with " + text + "\"}");
 		logger.debug("Retrieved {} Surveys containing the text", surveyDTOList.size());
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
@@ -176,8 +174,6 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		for (Survey survey : surveyList) {
 			surveyDTOList.add(convertToDTOAndSkipQuestions(survey));
 		}
-		if (surveyDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Surveys were found with " + text + "\"}");
 		logger.debug("Retrieved  {} surveys containing the text." , surveyDTOList.size());
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
@@ -204,8 +200,6 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 		for (Survey survey : surveyList) {
 			surveyDTOList.add(convertToDTOAndSkipQuestions(survey));
 		}
-		if (surveyDTOList.isEmpty())
-			throw new NotFoundException("{\"response\":\"No Surveys were found with " + text + "\"}");
 		logger.debug("Retrieved  {} surveys containing the text." , surveyDTOList.size());
 		return new ResponseEntity<>(surveyDTOList, HttpStatus.OK);
 	}
@@ -222,12 +216,12 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	public ResponseEntity<List<SurveyDTO>> findAllSurveys() throws NotFoundException {
 
 		Iterable<Survey> surveys = surveyRepository.getAll();
-		logger.debug(retrivedAllSurveys);
+		logger.debug(RETRIVEDALLSURVEYS);
 		List<SurveyDTO> surveysDTO = new ArrayList<>();
 		for (Survey survey : surveys) {
 			surveysDTO.add(convertToDTO(survey));
 		}
-		logger.debug(retrivedNSurveys, surveysDTO.size());
+		logger.debug(RETRIVEDNSURVEYS, surveysDTO.size());
 		return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
 	}
 
@@ -243,12 +237,12 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 	public ResponseEntity<List<SurveyDTO>> findAllSurveysNoQuestion() throws NotFoundException {
 
 		Iterable<Survey> surveys = surveyRepository.getAll();
-		logger.debug(retrivedAllSurveys);
+		logger.debug(RETRIVEDALLSURVEYS);
 		List<SurveyDTO> surveysDTO = new ArrayList<>();
 		for (Survey survey : surveys) {
 			surveysDTO.add(convertToDTOAndSkipQuestions(survey));
 		}
-		logger.debug(retrivedNSurveys, surveysDTO.size());
+		logger.debug(RETRIVEDNSURVEYS, surveysDTO.size());
 		return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
 	}
 	
@@ -265,12 +259,12 @@ public class SurveyController extends DTOMapping<Survey, SurveyDTO> {
 			@RequestParam int limit) throws NotFoundException {
 
 		Iterable<Survey> surveys = surveyRepository.getAllLazy(offset, limit);
-		logger.debug(retrivedAllSurveys);
+		logger.debug(RETRIVEDALLSURVEYS);
 		List<SurveyDTO> surveysDTO = new ArrayList<>();
 		for (Survey survey : surveys) {
 			surveysDTO.add(convertToDTOAndSkipQuestions(survey));
 		}
-		logger.debug(retrivedNSurveys, surveysDTO.size());
+		logger.debug(RETRIVEDNSURVEYS, surveysDTO.size());
 		return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
 	}
 
