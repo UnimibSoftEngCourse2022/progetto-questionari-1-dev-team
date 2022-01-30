@@ -27,13 +27,36 @@ angular.module('UNIMIBModules').component('signupUser', {
 
                 $http.post("/api/signUpUser", data).then(function onFulfilled(response) {
 
-                    alert("User created! Proceed to login in order to navigate across the site.");
-                    $location.path("/loginUser");
+                    $scope.modalManager(1);
 
                 }, function errorCallback(response) {
 
                     console.error(response);
+                    $scope.modalManager(2);
                 });
+            }
+
+            $scope.resetForm = function () {
+                $scope.username = "";
+                $scope.name = "";
+                $scope.surname = "";
+                $scope.email = "";
+                $scope.password = "";
+                $scope.modalManager(-2);
+            }
+
+            $scope.modalManager = function (index) {
+                if (index == 1) {
+                    $scope.displayModal1 = 'block';
+                } else if (index == 2) {
+                    $scope.displayModal2 = 'block';
+                } else if (index == -2) {
+                    $scope.displayModal2 = 'none'
+                }
+            }
+
+            $scope.changePage = function () {
+                $location.path("/loginUser");
             }
         }
     ]

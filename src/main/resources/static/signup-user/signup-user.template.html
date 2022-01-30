@@ -45,4 +45,34 @@
             </form>
         </div>
     </div>
+    <div class="modal" tabindex="-1" role="dialog" ng-style="{'display': displayModal1}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User created!</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Proceed to login in order to navigate across the site.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="changePage()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" ng-style="{'display': displayModal2}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">SignUp Error!</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Username already exist. Please choose another one.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="resetForm()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
