@@ -35,7 +35,6 @@ angular.module('UNIMIBModules').component('getUser', {
                     url: "/api/findSurveyByCreator", method: "GET",
                     params: { userId : cookieService.getCookie("userId") }
                 }).then(function onFulFilled(response) {
-                    console.log(response);
                     $scope.handleSurveysCreated(response)
 
                 }, function errorCallback(response) {

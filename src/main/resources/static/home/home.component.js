@@ -36,7 +36,7 @@ angular.
 					if (authService.isLoggedIn()) {
 					  	$scope.idUser = cookieService.getCookie("userId");
 					  	$scope.isLogged = true;
-				  	} else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
+				  	} else if (cookieService.getCookie("compilationId") === undefined && !authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
 					  	$scope.idUser = cookieService.getCookie("userId");
 					  	$scope.isLogged = true;
 					  	authService.setUser($scope.idUser);
@@ -262,7 +262,6 @@ angular.
 
 							cookieService.setCookie("userId", response.data.idUser);
 							cookieService.setCookie("compilationId", $scope.randomCode);
-							console.log(response.data.idUser);
 							$location.path('/compileSurvey/' + $scope.result[idx].id)
 
 						}, function errorCallback(response) {

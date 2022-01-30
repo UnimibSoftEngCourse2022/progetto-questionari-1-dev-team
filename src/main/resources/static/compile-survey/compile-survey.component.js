@@ -28,6 +28,8 @@ app.component("compileSurvey", {
 					if (cookieService.getCookie("compilationId")) {
 						cookieService.removeCookie("userId");
 						cookieService.removeCookie("compilationId");
+						authService.setUser(undefined);
+						$scope.isLogged = false;
 					}
 				}, function errorCallback(response) {
 
@@ -43,8 +45,10 @@ app.component("compileSurvey", {
 				$scope.isLogged = true;
 			} else if (!authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
 				$scope.userId = cookieService.getCookie("userId");
-				$scope.isLogged = true;
-				authService.setUser($scope.userId);
+				if (cookieService.getCookie("compilationId") === undefined) {
+					$scope.isLogged = true;
+					authService.setUser($scope.userId);
+				}
 			} else if ($routeParams.userId)
 				$scope.userId = $routeParams.userId;
 
