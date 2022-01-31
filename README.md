@@ -11,7 +11,7 @@ Il progetto UNIMIB Modules è un progetto all'interno del quale gestire e compil
 
 [Documentazione OpenAPI](https://unimibsoftengcourse2022.github.io/progetto-questionari-1-dev-team/)   
 [Documentazione tecnica](https://github.com/UnimibSoftEngCourse2022/progetto-questionari-1-dev-team/blob/documentation/Documentation/DocumentoDiProgetto.pdf)  
-[Documentazione JavaDOC](https://unimibsoftengcourse2022.github.io/progetto-questionari-1-dev-team/javadoc.html)  
+[Documentazione JavaDOC](https://unimibsoftengcourse2022.github.io/progetto-questionari-1-dev-team/javadoc/)  
 [Elenco release](https://github.com/UnimibSoftEngCourse2022/progetto-questionari-1-dev-team/releases)
 
 ## Struttura repository
