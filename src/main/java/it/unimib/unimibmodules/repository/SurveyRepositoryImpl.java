@@ -212,6 +212,15 @@ public class SurveyRepositoryImpl implements SurveyRepository, SurveyRepositoryR
 		}
 	}
 
+	/**
+	 * Finds the Survey in the database compiled by the guest user with compilationId equals to code
+	 * @param code	the compilationId of the guest user associated to a survey
+	 * @return		the survey compiled by the guest user with compilationId equals to code
+	 * @throws NotFoundException if no survey has been found
+	 * @see it.unimib.unimibmodules.exception.NotFoundException
+	 * @see it.unimib.unimibmodules.exception.ExceptionController#handleNotFoundException
+	 * @see SurveyRepository#getByCompilationCode
+	 */
 	@Override
 	public Survey getByCompilationCode(String code) throws  NotFoundException{
 		try {
