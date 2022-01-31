@@ -90,6 +90,7 @@ app.component("compileSurvey", {
 
 				if (response.status === 404) {
 					alert("No questions found.");
+					$location.path("/");
 				} else {
 					alert("Error");
 					console.error(response);

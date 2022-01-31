@@ -38,6 +38,8 @@ public class PdfServiceImpl implements PdfService {
             Font.BOLD);
     private static Font subFont = new Font(Font.FontFamily.HELVETICA, 16,
             Font.BOLD);
+    private static Font errorFont = new Font(Font.FontFamily.HELVETICA, 10,
+            Font.UNDERLINE);
 
     /**
      * Create A pdf file
@@ -45,7 +47,7 @@ public class PdfServiceImpl implements PdfService {
      * @return           the generated pdf
      */
     @Override
-    public byte[] createPDF(List<Answer> answers) throws DocumentException, IOException {
+    public byte[] createPDF(List<Answer> answers) throws DocumentException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, baos);
@@ -63,7 +65,7 @@ public class PdfServiceImpl implements PdfService {
         document.addCreator("Unimib Modules");
     }
 
-    private static void addContent(Document document, List<Answer> answers) throws DocumentException, IOException {
+    private static void addContent(Document document, List<Answer> answers) throws DocumentException {
 
         float scaler = (document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin());
         for (int i=0;i < answers.size();i++)
@@ -101,7 +103,7 @@ public class PdfServiceImpl implements PdfService {
         }
     }
 
-    private static void addImage(Paragraph anchor, String url, float scaler) throws IOException {
+    private static void addImage(Paragraph anchor, String url, float scaler) {
         if (url!=null) {
             AWSCredentials credentials = new BasicAWSCredentials(AWSToken.ACCESS_KEY_ID, AWSToken.ACCESS_KEY_VALUE);
             try {
@@ -116,8 +118,10 @@ public class PdfServiceImpl implements PdfService {
                 image.scalePercent(scaler/image.getPlainWidth()*70);
                 anchor.add(image);
                 fullObject.close();
-            } catch (SdkClientException | DocumentException e) {
-                logger.error("Exception");
+            } catch (SdkClientException | DocumentException | IOException e) {
+                addEmptyLine(anchor, 2);
+                anchor.add(new Paragraph("Error loading image", errorFont));
+                addEmptyLine(anchor, 2);
             }
         }
     }

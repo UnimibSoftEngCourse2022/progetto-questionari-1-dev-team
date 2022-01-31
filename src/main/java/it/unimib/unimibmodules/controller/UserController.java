@@ -167,9 +167,16 @@ public class UserController extends DTOMapping<User, UserDTO> {
 
             User entity = userRepository.add(user);
             logger.debug("Successful creation of user.");
-            String message = "Hi " + user.getUsername() +
-                    ",<br/><br/>thanks for signing up to UNIMIB Modules.<br/><br/>UNIMIB Modules";
-            mailService.sendMail(user.getEmail(), "Thanks for signing up", message);
+            StringBuilder stringBuilder = new StringBuilder("Hi");
+            if (user.getCompilationId() == null)
+                stringBuilder.append(" ").append(user.getUsername())
+                        .append(",<br/><br/>thanks for signing up to UNIMIB Modules.");
+            else
+                stringBuilder.append(",<br/><br/>your compilation code is: ").append(user.getCompilationId())
+                        .append(".<br/>Please remember that you won't be able to use this code to resume where you ")
+                        .append("left if you didn't save your answers clicking on \"Close survey\".");
+            stringBuilder.append("<br/><br/>UNIMIB Modules");
+            mailService.sendMail(user.getEmail(), "Thanks for signing up", stringBuilder.toString());
             return new ResponseEntity<>("{\"idUser\":\""+ entity.getId() +"\"}", HttpStatus.CREATED);
         }
     }
