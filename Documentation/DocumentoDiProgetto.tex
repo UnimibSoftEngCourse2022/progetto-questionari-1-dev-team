@@ -101,7 +101,7 @@
 			\endgroup
 		\end{adjustbox}
 	\end{table}
-	
+
 	\subsection{Casi d'uso}
 	In questa sezione sono presentati gli attori del sistema ed i relativi casi d'uso. Per uno di essi è anche riportata la sua descrizione dettagliata.
 	
@@ -227,7 +227,7 @@
 	
 	
 	
-	
+	\newpage
 	\subsection{SSD}
 	Qui di seguito sono presenti gli SSD riguardanti i seguenti scenari:
 	\begin{itemize}
@@ -292,16 +292,23 @@
 		\includegraphics[scale=0.5]{UNIMIBModule_LogicalArchitectureDiagram.png}
 		\caption{Diagramma dell'architettura software}
 	\end{figure}
+	\newpage
 	\subsection{Design Principles}
 	I Design Principles utilizzati durante la creazione del progetto.
 	\begin{itemize}
+		\item \textbf{Principio reuse/release equivalency}: L'unità di riutilizzo è l'unità di rilascio. I componenti rilasciati vengono seguiti da un sistema di tracking attraverso le versioni.
+		\item \textbf{Principio di separazione degli interessi}: Ogni sezione del programma si occupa del suo interesse senza occuparsi di interessi non suoi.
+		\item \textbf{Principio delle dipendenze acicliche}: Il grafo delle dipendenze di pacchetti non presenta cicli.
+		\subsubsection{Principi SOLID}
 		\item \textbf{Principio di singola responsabilità}: Ogni elemento del programma ha una sola responsabilità.
 		\item \textbf{Principio aperto/chiuso}: Ogni modulo è aperto ad estensioni ma chiuso a modifiche.
 		\item \textbf{Principio di sostituzione di Liskov}: Gli oggetti di un sottotipo di un oggetto possono essere sostituiti dall'oggetto di cui sono sottotipo senza alterare la correttezza del programma.
 		\item \textbf{Principio di segregazione delle interfacce}: Il client utilizza interfacce piccole e specifiche ma numerose per evitare dipendenza da metodi non utilizzati.
 		\item \textbf{Principio di inversione delle dipendenze}: I moduli di alto e basso livello non dipendono tra di loro ma dipendono da astrazioni.
-		\item \textbf{Principio delle dipendenze acicliche}: Il grafo delle dipendenze di pacchetti non presenta cicli.
-		\item \textbf{Principio reuse/release}: L'unità di riutilizzo è l'unità di rilascio. I componenti rilasciati vengono seguiti da un sistema di tracking attraverso le versioni.
+		\subsubsection{Principi PHAME}
+		\item \textbf{Principio di astrazione}: Alcune entità sono state generalizzate identificando caratteristiche importanti e comuni e ridotte eliminando dettagli non necessari
+		\item \textbf{Principio di modularizzazione}: Il progetto è stato diviso in moduli che si occupano ciascuno della propria parte di processo 
+		 \item \textbf{Principio di incapsulamento}: Sono stati nascosti i dettagli dell'implementazione e incapsulate le parti che potrebbero variare
 	\end{itemize}
 	\subsection{Design Patterns}
 	Design Patterns utilizzati durante la creazione del progetto.
@@ -465,6 +472,7 @@
 			}
 		\end{lstlisting}
 	\end{itemize}
+	\newpage
 	\subsubsection{Data Transfer Object}
 	\begin{itemize}
 		\item \textbf{Nome}: Data Transfer Object
@@ -557,7 +565,8 @@
 			}
 		\end{lstlisting}
 	\end{itemize}
-	
+
+	\newpage
 	\subsubsection{Data Access Object}
 	\begin{itemize}
 		\item \textbf{Nome}: Data Access Object
@@ -777,9 +786,18 @@
 				\end{lstlisting}
 				
 			\end{itemize}
+			\newpage
+			\subsection{Anti-patterns}
+			Usando il tool Understand abbiamo rilevato 2 external butterflies, nei package exception e in model. Non le abbiamo eliminate perchè ci avrebbe portato a creare codice duplicato.
 			
+			Abbiamo in oltre rilevato un external breakable nel package controller che non abbiamo eliminato per lo stesso motivo delle external butterflies
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.47]{Antipattern.png}
+				\caption{Antipattern}
+			\end{figure}
+			\newpage
 			\subsection{Architettura di deployment}
-			\subsubsection{Diagramma di deployment}
 			\subsubsection{AWS - Amazon Web Services}
 			\begin{figure}[H]
 				\includegraphics[scale=0.08, left]{aws-logo.png}
@@ -830,7 +848,7 @@
 				
 			\end{itemize}
 			
-			
+			\newpage
 			\subsubsection{Valet Key - Gestione immagini}
 			\label{sec:valet}
 			Il Valet Key, introdotto nel capitolo dei pattern architetturali, è strettamente legato ai servizi AWS appena elencati.
@@ -928,7 +946,7 @@
 					}
 				}
 			\end{lstlisting}
-			
+			\newpage
 			\subsubsection{Lambdas e Streams}
 			Alcune parti del codice sono state implementate attraverso l'utilizzo delle lambda expressions e degli stream. La soluzione è stata adottata per i principali vantaggi che offrono: 
 			\begin{itemize}
