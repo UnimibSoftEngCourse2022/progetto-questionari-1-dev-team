@@ -11,7 +11,7 @@ import lombok.Setter;
 /**
  * DTO for the Survey class.
  * @author Luca Milazzo
- * @version 0.4.1
+ * @version 1.0.0
  */
 public class SurveyDTO {
 	

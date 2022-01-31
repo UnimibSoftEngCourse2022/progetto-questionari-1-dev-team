@@ -6,7 +6,7 @@ import it.unimib.unimibmodules.model.CloseEndedAnswer;
 /**
  * Interface for CloseEndedAnswerRepository.
  * @author Davide Costantini
- * @version 0.4.1
+ * @version 1.0.0
  */
 public interface CloseEndedAnswerRepository {
 

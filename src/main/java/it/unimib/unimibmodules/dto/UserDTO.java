@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * A DTO representing a user
  * @author Gianlorenzo Martini
- * @version 0.4.1
+ * @version 1.0.0
  */
 public class UserDTO {
 

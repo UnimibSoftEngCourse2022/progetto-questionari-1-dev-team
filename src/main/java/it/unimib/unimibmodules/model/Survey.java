@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * Represents a survey.
  * @author Luca Milazzo
- * @version 0.4.1
+ * @version 1.0.0
  */
 @Entity
 @Table(name = "Survey")

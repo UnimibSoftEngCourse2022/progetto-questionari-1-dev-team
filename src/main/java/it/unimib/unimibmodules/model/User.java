@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Representation of a user in a general website way.
  * @author Gianlorenzo Martini
- * @version 0.4.1
+ * @version 1.0.0
  */
 @Entity
 @Table(name = "User")

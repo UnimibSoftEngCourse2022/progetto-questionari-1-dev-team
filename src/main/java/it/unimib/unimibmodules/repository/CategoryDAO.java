@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * DAO for the Category class.
  * @author Lorenzo Occhipinti
- * @version 0.4.1
+ * @version 1.0.0
  */
 public interface CategoryDAO extends CrudRepository<Category, Integer> {
 

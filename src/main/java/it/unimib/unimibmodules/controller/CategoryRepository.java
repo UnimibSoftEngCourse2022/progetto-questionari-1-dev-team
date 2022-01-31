@@ -6,7 +6,7 @@ import it.unimib.unimibmodules.model.Category;
 /**
  * Interface for CategoryRepository.
  * @author Lorenzo Occhipinti
- * @version 0.4.1
+ * @version 1.0.0
  */
 public interface CategoryRepository {
 

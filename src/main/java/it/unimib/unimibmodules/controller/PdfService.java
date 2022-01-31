@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Service for sending emails.
  * @author Lorenzo Occhipinti
- * @version 0.4.1
+ * @version 1.0.0
  */
 public interface PdfService {
 

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * Controller handling HTTP requests related to ClosedEndedAnswer.
  * @author Davide Costantini
  * @author Khalil Mohamed Khalil
- * @version 0.4.1
+ * @version 1.0.0
  */
 @RestController
 @RequestMapping("/api")

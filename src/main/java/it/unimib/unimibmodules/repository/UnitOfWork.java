@@ -3,7 +3,7 @@ package it.unimib.unimibmodules.repository;
 /**
  * Defines the method that will be used by controllers to implement a Unit of Work
  * @author Davide Costantini
- * @version 0.4.1
+ * @version 1.0.0
  */
 public interface UnitOfWork<T> {
 

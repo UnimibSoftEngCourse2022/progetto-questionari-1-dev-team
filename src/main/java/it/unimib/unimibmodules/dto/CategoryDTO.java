@@ -6,7 +6,7 @@ import lombok.Setter;
 /**
  * DTO for the Category class.
  * @author Lorenzo Occhipinti
- * @version 0.4.1
+ * @version 1.0.0
  */
 public class CategoryDTO {
 

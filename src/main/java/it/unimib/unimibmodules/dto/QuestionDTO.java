@@ -9,7 +9,7 @@ import java.util.Set;
  * DTO for Question.
  * @author Khalil
  * @author Lorenzo Occhipinti
- * @version 0.4.1
+ * @version 1.0.0
  */
 public class QuestionDTO {
 

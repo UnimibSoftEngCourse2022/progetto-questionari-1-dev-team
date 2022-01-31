@@ -16,7 +16,7 @@ import java.util.Optional;
  * Repository for the User. Adds business logic to User instances before actually accessing
  * the database via DAO.
  * @author Gianlorenzo Martini
- * @version 0.4.1
+ * @version 1.0.0
  */
 @Component("userRepository")
 public class UserRepositoryImpl implements UserRepository, UserRepositoryReadOnly {

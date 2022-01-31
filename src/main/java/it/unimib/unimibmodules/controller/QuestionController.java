@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Controller handling HTTP requests related to Question.
  * @author Khalil
- * @version 0.4.1
+ * @version 1.0.0
  */
 
 @RestController

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Repository for the Answers. Adds business logic to Answer instances before actually accessing
  * the database via DAO.
  * @author Davide Costantini
- * @version 0.4.1
+ * @version 1.0.0
  */
 @Component("answerRepository")
 public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer>  {

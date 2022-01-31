@@ -3,7 +3,7 @@ package it.unimib.unimibmodules.exception;
 /**
  * Exception for collections with an incorrect amount of items.
  * @author Davide Costantini
- * @version 0.4.1
+ * @version 1.0.0
  */
 public class IncorrectSizeException extends Exception {
 
