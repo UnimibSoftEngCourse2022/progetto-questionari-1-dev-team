@@ -16,8 +16,6 @@ import it.unimib.unimibmodules.controller.PdfService;
 import it.unimib.unimibmodules.model.Answer;
 import it.unimib.unimibmodules.model.CloseEndedAnswer;
 import it.unimib.unimibmodules.model.QuestionType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
@@ -31,8 +29,6 @@ import java.util.List;
  */
 @Component("pdfService")
 public class PdfServiceImpl implements PdfService {
-
-    private static final Logger logger = LogManager.getLogger(PdfServiceImpl.class);
 
     private static Font catFont = new Font(Font.FontFamily.HELVETICA, 24,
             Font.BOLD);
