@@ -18,5 +18,5 @@ public interface PdfService {
      * @param	answers	 the answers given
      * @return           the generated pdf
      */
-    byte[] createPDF(List<Answer> answers) throws DocumentException, IOException;
+    byte[] createPDF(List<Answer> answers) throws DocumentException;
 }

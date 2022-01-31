@@ -47,7 +47,7 @@ public class PdfServiceImpl implements PdfService {
      * @return           the generated pdf
      */
     @Override
-    public byte[] createPDF(List<Answer> answers) throws DocumentException, IOException {
+    public byte[] createPDF(List<Answer> answers) throws DocumentException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, baos);
@@ -65,7 +65,7 @@ public class PdfServiceImpl implements PdfService {
         document.addCreator("Unimib Modules");
     }
 
-    private static void addContent(Document document, List<Answer> answers) throws DocumentException, IOException {
+    private static void addContent(Document document, List<Answer> answers) throws DocumentException {
 
         float scaler = (document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin());
         for (int i=0;i < answers.size();i++)

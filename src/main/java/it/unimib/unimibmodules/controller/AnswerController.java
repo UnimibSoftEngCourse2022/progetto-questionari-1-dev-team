@@ -151,7 +151,7 @@ public class AnswerController extends DTOListMapping<Answer, AnswerDTO> {
 	 */
 	@GetMapping(path = "/generatePdf", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<byte[]> generatePdf(@RequestParam int surveyId, @RequestParam int userId)
-			throws NotFoundException, DocumentException, IOException {
+			throws NotFoundException, DocumentException {
 
 		Iterable<Answer> answer = answerRepository.getSurveyAnswersForUser(surveyId, userId);
 		List<Answer> answerList = new ArrayList<>();
