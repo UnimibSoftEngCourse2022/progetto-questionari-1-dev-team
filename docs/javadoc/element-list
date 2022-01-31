@@ -1,0 +1,7 @@
+it.unimib.unimibmodules
+it.unimib.unimibmodules.controller
+it.unimib.unimibmodules.dto
+it.unimib.unimibmodules.exception
+it.unimib.unimibmodules.model
+it.unimib.unimibmodules.repository
+it.unimib.unimibmodules.service
