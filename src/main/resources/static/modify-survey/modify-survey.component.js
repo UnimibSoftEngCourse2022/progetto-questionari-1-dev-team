@@ -123,9 +123,14 @@ angular.
 						$scope.isEmptyResult = false
 					} else {
 						if ($scope.offset > 0) {
-							$scope.isEmptyResult = true
+							$scope.isEmptyResult = false;
+							$scope.result = [];
+							$scope.offset = 3;
+							$scope.isEmptyResult = false
 							$scope.isPrevActive = true
-							$scope.isNextActive = false
+							$scope.isNextActive = true
+							$scope.prevPage();
+							$scope.isPrevActive = false
 						} else {
 							$scope.isEmptyResult = true
 							$scope.isNextActive = false
