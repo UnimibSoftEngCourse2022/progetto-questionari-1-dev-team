@@ -30,7 +30,11 @@
 			<button ng-click="deleteSurvey()" class="btn btn-danger">Delete
 				Survey</button>
 			<button ng-click="compileRedirect()" class="btn btn-success">Compile</button>
-
+			
+			<p ng-show="showMessageErr" class="messageError mt-4">{{message}}</p>
+			
+			<p ng-show="showMessageConf" class="messageConfirm mt-4">{{message}}</p>
+			
 		</div>
 
 		<div class="col-md-8">
@@ -78,7 +82,7 @@
 				<div class="row">
 					<div class="col-sm-6 d-flex flex-row-reverse">
 						<a href="" ng-hide=" ! isPrevActive" ng-click="prevPage()"
-							class="link-primary"> < Previuos Page</a>
+							class="link-primary"> < Previous Page</a>
 					</div>
 					<div class="col-sm-6 d-flex flex-row">
 						<a href="" ng-hide=" ! isNextActive" ng-click="nextPage()"
