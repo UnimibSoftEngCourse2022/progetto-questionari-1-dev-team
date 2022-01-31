@@ -34,12 +34,12 @@ angular.
 
 					$scope.searchSurvey()
 					if (authService.isLoggedIn()) {
-					  	$scope.idUser = cookieService.getCookie("userId");
-					  	$scope.isLogged = true;
-				  	} else if (cookieService.getCookie("compilationId") === undefined && !authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
-					  	$scope.idUser = cookieService.getCookie("userId");
-					  	$scope.isLogged = true;
-					  	authService.setUser($scope.idUser);
+						$scope.idUser = cookieService.getCookie("userId");
+						$scope.isLogged = true;
+					} else if (cookieService.getCookie("compilationId") === undefined && !authService.isLoggedIn() && cookieService.getCookie("userId") !== undefined) {
+						$scope.idUser = cookieService.getCookie("userId");
+						$scope.isLogged = true;
+						authService.setUser($scope.idUser);
 					}
 				}
 
@@ -76,9 +76,14 @@ angular.
 						$scope.isEmptyResult = false
 					} else {
 						if ($scope.offset > 0) {
-							$scope.isEmptyResult = true
+							$scope.isEmptyResult = false;
+							$scope.result = [];
+							$scope.offset = 8;
+							$scope.isEmptyResult = false
 							$scope.isPrevActive = true
-							$scope.isNextActive = false
+							$scope.isNextActive = true
+							$scope.prevPage();
+							$scope.isPrevActive = false
 						} else {
 							$scope.isEmptyResult = true
 							$scope.isNextActive = false
@@ -151,9 +156,9 @@ angular.
 					if ($scope.compilationCode !== undefined && $scope.compilationCode != "" && $scope.compilationCode.replace(/\s/g, '').length) {
 						$http({
 							url: "/api/findSurveyByCompilationCode", method: "GET",
-							params: { code: $scope.compilationCode}
+							params: { code: $scope.compilationCode }
 						}).then(function onfulFilled(response) {
-							$location.path("compileSurvey/" +response.data.id + "/ " +  response.data.userDTO.id)
+							$location.path("compileSurvey/" + response.data.id + "/ " + response.data.userDTO.id)
 						}, function errorCallback(response) {
 							$scope.messageError = "ERROR - This code doesn't exist'."
 							$scope.showMessageError = true

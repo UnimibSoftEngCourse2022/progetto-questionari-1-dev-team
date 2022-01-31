@@ -32,6 +32,9 @@ angular.
 				$scope.textFilterQuestion = ""
 				$scope.textFilterQuestionLast = ""
 				$scope.lastCategoryIndex = ""
+				$scope.message = ""
+				$scope.showMessageErr = false
+				$scope.showMessageConf = false
 				let fileName
 				let photoFile
 				let promise
@@ -123,9 +126,14 @@ angular.
 						$scope.isEmptyResult = false
 					} else {
 						if ($scope.offset > 0) {
-							$scope.isEmptyResult = true
+							$scope.isEmptyResult = false;
+							$scope.result = [];
+							$scope.offset = 3;
+							$scope.isEmptyResult = false
 							$scope.isPrevActive = true
-							$scope.isNextActive = false
+							$scope.isNextActive = true
+							$scope.prevPage();
+							$scope.isPrevActive = false
 						} else {
 							$scope.isEmptyResult = true
 							$scope.isNextActive = false
@@ -406,8 +414,13 @@ angular.
 
 					$http.patch("/api/modifySurvey", data).then(function onfulFilled(response) {
 						$scope.load()
+						$scope.showMessageConf = true
+						$scope.showMessageErr = false
+						$scope.message = "Your survey has been modified"
 					}, function errorCallback(response) {
-						$scope.showAlert("CANNOT MODIFY SURVEY")
+						$scope.showMessageConf = false
+						$scope.showMessageErr = true
+						$scope.message = "Cannot modify your survey"
 					});
 
 				}

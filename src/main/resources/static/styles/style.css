@@ -9,11 +9,36 @@
 
 nav{
 	padding-left: 2%;
+	padding-right: 2%;
 	color:white;
+}
+
+
+@keyframes pulse {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+	}
 }
 
 .nav-link{
 	font-size: large;
+	color:white !important;
+}
+
+.nav-link:hover{
+	transform: scale(1.09) !important;
+	animation: pulse 2s infinite !important;
 }
 
 .navbar-brand{
@@ -23,4 +48,8 @@ nav{
 .jumbotron{
 	background-color: #d0d8ef;
 	padding: 1%;
+}
+
+#logoutLink{
+	cursor : pointer;
 }
