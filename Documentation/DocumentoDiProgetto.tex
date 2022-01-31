@@ -33,20 +33,20 @@
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
 \lstset{frame=tb,
-  language=Java,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3
+	language=Java,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
 }
 \usepackage{hyperref} % \usepackage[hidelinks]{hyperref} use the 'hidelinks' option to remove red boxes from links
 \newcommand*\rot{\rotatebox{90}} % custom command to rotate columns/rows names in tables
@@ -65,885 +65,895 @@
 \date{30/01/2022} % Date for the report
 
 \begin{document}
-
-\maketitle % Insert the title, author and date
-\newpage
-\tableofcontents \newpage
-\section{Visione}
-\subsection{Introduzione}
-Il progetto UNIMIB Modules è un ambiente all'interno del quale gestire e compilare i questionari, dotata di alta usabilità, tolleranza ai guasti e performance.
-\subsection{Posizionamento}
-\subsubsection{Formulazione del problema}
-I prodotti già esistenti che propongono servizi di questo tipo spesso mancano della componente comunitaria. Per esempio, non sempre è possibile costruire un questionario a partire dalle domande di altri utenti o creare una vera e propria bacheca pubblica per i questionari stessi.
-\subsubsection{Parti interessate}
-I destinatari del sistema possono appartenere ad una qualsiasi categoria di utente che sia in grado di navigare nel web e questo definisce un ampio spettro di copertura.
-
-\section{Analisi e progettazione}
-\subsection{Glossario}
-
-\begin{table}[H]
-\begin{adjustbox}{max width=1.1\textwidth,center}
-\begingroup
-\setlength{\tabcolsep}{10pt} 
-\renewcommand{\arraystretch}{2}
-\begin{tabular}{llll}
-\multicolumn{3}{c}{\textbf{Glossario}}                                                                                                                                                                                                                                                                                                                                     \\ \hline
-\rowcolor[HTML]{3531FF} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{ID}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Termine}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Definizione}}}                                                                                                         \\ \hline
-\multicolumn{1}{|l|}{1}                                                          & \multicolumn{1}{l|}{Utente}                                                          & \multicolumn{1}{l|}{Un qualsiasi utente che utilizza il sistema.}                                                                                                                                \\ \hline
-\multicolumn{1}{|l|}{2}                                                          & \multicolumn{1}{l|}{Utente registrato}                                               & \multicolumn{1}{l|}{Un utente che possiede un account.}                                                                                                                                          \\ \hline
-\multicolumn{1}{|l|}{3}                                                          & \multicolumn{1}{l|}{Utente non registrato}                                           & \multicolumn{1}{l|}{Un utente che non possiede un account.}                                                                                                                                      \\ \hline
-\multicolumn{1}{|l|}{4}                                                          & \multicolumn{1}{l|}{Servizio email}                                                  & \multicolumn{1}{l|}{Il sottosistema che permette l'invio di email.}                                                                                                                    \\ \hline
-\multicolumn{1}{|l|}{5}                                                          & \multicolumn{1}{l|}{Domanda}                                                         & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Un elemento testuale, con eventuale immagine. Può essere:\\ - Aperta \\ - Chiusa con scelta singola\\ - Chiusa con scelta multipla\end{tabular}}                                                                                                   \\ \hline
-\multicolumn{1}{|l|}{6}                                                          & \multicolumn{1}{l|}{Riposta}                                                         & \multicolumn{1}{l|}{Un elemento testuale associato ad una domanda} \\ \hline
-\multicolumn{1}{|l|}{7}                                                          & \multicolumn{1}{l|}{Questionario}                                                    & \multicolumn{1}{l|}{Insieme di domande a cui gli utenti possono rispondere }                                                                                                                   \\ \hline
-\end{tabular}
-\endgroup
-\end{adjustbox}
-\end{table}
-
-\subsection{Casi d'uso}
-In questa sezione sono presentati gli attori del sistema ed i relativi casi d'uso. Per uno di essi è anche riportata la sua descrizione dettagliata.
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{lll}
-\multicolumn{3}{c}{\textbf{{\large Attori del sistema}}}                                                                                                                                                                                                          \\ \hline
-\rowcolor[HTML]{3531FF} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{ID}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Nome}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Tipo}}} \\ \hline                                                   
-\multicolumn{1}{|l|}{1}                                                          & \multicolumn{1}{l|}{Utente registrato}                                            & \multicolumn{1}{l|}{Primario}             
-
-										\\ \hline
-\multicolumn{1}{|l|}{2}                                                          & \multicolumn{1}{l|}{Utente non registrato}                                        & \multicolumn{1}{l|}{Primario}                                                     \\ \hline
-\multicolumn{1}{|l|}{3}                                                          & \multicolumn{1}{l|}{Servizio email}                                        & \multicolumn{1}{l|}{Di Supporto}   
-										\\ \hline
-\end{tabular}
-\end{table}
-
-
-\begin{table}[H]
-\begin{adjustbox}{max width=1.1\textwidth,center}
-\begingroup
-\setlength{\tabcolsep}{10pt} 
-\renewcommand{\arraystretch}{2}
-\begin{tabular}{llll}
-\multicolumn{4}{c}{\textbf{{\LARGE Casi d'uso - Formato breve}}}                                                                                                                                                                                                                                                                                                                                                                                                                                                            \\ \hline
-\rowcolor[HTML]{3531FF} 
-\multicolumn{1}{|l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{ID}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Nome}}}                             & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Attore}}}                    & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Descrizione}}}                                                                                                               \\ \hline
-\multicolumn{1}{|l|}{1}                                                          & \multicolumn{1}{l|}{Effettua Login}                                                                           & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}L'utente, dopo aver inserito le sue credenziali verificate dal sistema, \\ effettua l'accesso all'applicazione.\end{tabular}}                           \\ \hline
-\multicolumn{1}{|l|}{2}                                                          & \multicolumn{1}{l|}{Effettua Logout}                                                                          & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente registrato effettua il logout dal sistema.}                                                                                                                               \\ \hline
-\multicolumn{1}{|l|}{3}                                                          & \multicolumn{1}{l|}{Creazione domanda}                                                                        & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}L'utente registrato crea domande, testuali o contenenti immagini,\\  con risposte chiuse o aperte ed il sistema le memorizza .\end{tabular}}            \\ \hline
-\multicolumn{1}{|l|}{4}                                                          & \multicolumn{1}{l|}{Ricerca domanda}                                                                          & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente cerca le domande presenti nel sistema e le visualizza.}                                                                                                                   \\ \hline
-\multicolumn{1}{|l|}{5}                                                          & \multicolumn{1}{l|}{Creazione questionario}                                                                   & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}L'utente registrato crea un questionario, poi memorizzato dal sistema, \\ partendo da domande gi\`{a} create.\end{tabular}}                                 \\ \hline
-\multicolumn{1}{|l|}{6}                                                          & \multicolumn{1}{l|}{Modifica domanda}                                                                         & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente registrato modifica una domanda che ha creato.}                                                                                                                           \\ \hline
-\multicolumn{1}{|l|}{7}                                                          & \multicolumn{1}{l|}{Cancellazione domanda}                                                                    & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente registrato cancella la domanda che ha creato.}                                                                                                                            \\ \hline
-\multicolumn{1}{|l|}{8}                                                          & \multicolumn{1}{l|}{Modifica questionario}                                                                    & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente registrato modifica un questionario che ha creato.}                                                                                                                       \\ \hline
-\multicolumn{1}{|l|}{9}                                                          & \multicolumn{1}{l|}{Cancellazione questionario}                                                               & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente registrato cancella i questionari che ha creato.}                                                                                                                         \\ \hline
-\multicolumn{1}{|l|}{10}                                                         & \multicolumn{1}{l|}{Modifica risposta}                                                                        & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente modifica le sue risposte ai questionari.}                                                                                                                                 \\ \hline
-\multicolumn{1}{|l|}{11}                                                         & \multicolumn{1}{l|}{Cancellazione risposta}                                                                   & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente elimina le sue risposte ai questionari.}                                                                                                                                  \\ \hline
-\multicolumn{1}{|l|}{12}                                                         & \multicolumn{1}{l|}{Compilazione questionario}                                                                & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente compila i questionari inserendo delle risposte.}                                                                                                                          \\ \hline
-\multicolumn{1}{|l|}{13}                                                         & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Notifica del completamento \\ di un questionario\end{tabular}} & \multicolumn{1}{l|}{Servizio email}                                                                       & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Il sistema invia una email all'utente in cui lo avvisa del\\ completamento di un questionario con un PDF delle risposte date.\end{tabular}}     \\ \hline
-\multicolumn{1}{|l|}{14}                                                         & \multicolumn{1}{l|}{Ricerca di un questionario}                                                               & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Utente registrato\\ Utente non registrato\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}L'utente può cercare un questionario tra quelli presenti nel sistema \\ in base a un codice, a una parola presente nel questionario, ecc…\end{tabular}} \\ \hline
-\multicolumn{1}{|l|}{15}                                                         & \multicolumn{1}{l|}{Effettua registrazione}                                                                   & \multicolumn{1}{l|}{Utente non registrato}                                                             & \multicolumn{1}{l|}{L'utente effettua la registrazione nel sistema.}                                                                                                                                   \\ \hline
-\end{tabular}
-\endgroup
-\end{adjustbox}
-\end{table}
-
-\begin{figure}[H]
-\includegraphics[scale=0.45, left]{fig_usecase_diagram.png}
-\caption{Diagramma dei casi d'uso}
-\end{figure}
-
-\subsubsection{Compila questionario come utente guest}
-\begin{itemize}
-	\item Nome: Compila questionario come utente guest
-\end{itemize}
-\begin{itemize}
-	\item Portata: Applicazione UNIMIBModules
-\end{itemize}
-\begin{itemize}
-\item Livello: Obiettivo utente
-\end{itemize}
-\begin{itemize}
-\item Attore primario: Utente non registrato
-\end{itemize}
-\begin{itemize}
-\item Parti interessate:
-\begin{itemize}
-	\item Utente non registrato: Vuole compilare un questionario senza il bisogno di creare un account nel sistema. Vuole 
-un codice utilizzabile per poter reprendere a compilare lo stesso questionario in un qualsiasi momento.
-\end{itemize}
-\end{itemize}
-\begin{itemize}
-\item Pre-condizioni: L'utente non ha effettuato l'accesso al sistema e si trova nella pagina Home.
-\end{itemize}
-\begin{itemize}
-\item Garanzia di successo: La compilazione del questionario viene salvata nel sistema. L'utente ottiene un codice da utilizzare 
-nella pagina Home per poter riprendere la stessa compilazione.
-\end{itemize}
-\begin{itemize}
-\item Scenario principale di successo: 
-\begin{itemize}
-	\item Il sistema carica i questionari
-	\item L'utente non registrato tramite l'interfaccia grafica della HomePage preme il pulsante "Compile" da uno dei questionari caricati.
-\item Il sistema mostra all'utente non registrato un modale.
-\item Il sistema restituisce all'utente non registrato il codice univoco del questionario che si vuole compilare.
-\item L'utente non registrato inserisce l'email nell'apposito campo di testo che viene fornito nel modale
-\item L'utente non registrato preme "Continue as Guest"
-\item Il sistema registra l'email e il codice univoco in una nuova utenza nel database
-\item Il sistema mostra all'utente non registrato la pagina di compilazione del questionario
-\item All'avvenuta conferma della compilazione, il sistema invia una notifica di completamento all'email salvata precedentemente
-\item Il sistema permette all'utente non registrato di poter scaricare il pdf riepilogativo del questionario compilato
-\item Il sistema riporta l'utente non registrato alla HomePage
-\end{itemize}
-\end{itemize}
-\begin{itemize}
-\item Requestiti speciali: Il sistema deve essere completamente funzionante.
-\end{itemize}
-\begin{itemize}
-\item Frequenza di ripetizione: Media
-\end{itemize}
-
-\subsection{Requisiti non funzionali}
-
-\begin{table}[H]
-\begin{adjustbox}{max width=1.1\textwidth,center}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\rowcolor[HTML]{3531FF} 
-{\color[HTML]{FFFFFF} ID} & {\color[HTML]{FFFFFF} Descrizione}                                                      & {\color[HTML]{FFFFFF} Tipo} & {\color[HTML]{FFFFFF} Misura} \\ \hline
-1                         & Il sistema deve essere sempre raggiungibile                                             & Di prodotto                 & Disponibilità                 \\ \hline
-2                         & Il sistema deve essere in grado di gestire molti utenti contemporaneamente              & Di prodotto                 & Efficienza                    \\ \hline
-3                         & Il sistema deve garantire la persistenza dei dati                                       & Di prodotto                 & Affidabilità                  \\ \hline
-4                         & Il sistema deve garantire la sicurezza dei dati degli utenti                            & Di prodotto                 & Sicurezza                     \\ \hline
-5                         & Il sistema deve garantire brevissime attese agli utenti per l'elaborazione di richieste & Di prodotto                 & Efficienza                    \\ \hline
-\end{tabular}
-\end{adjustbox}
-\end{table}
-
-
-
-
-
-
-
-\subsection{SSD}
-Qui di seguito sono presenti gli SSD riguardanti i seguenti scenari:
-\begin{itemize}
-\item Creazione del questionario
-\end{itemize}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.47]{UNIMIBModule_CreazionequestionarioSequenceDiagram.png}
-\caption{SSD - Creazione del questionario}
-\end{figure}
-
-
-
-\subsection{Modello di dominio}
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.5]{UNIMIBModule_UniMiBModuleDomainLayer.png}
-\caption{Modello di dominio}
-\end{figure}
-\subsection{Diagramma delle classi di progettazione}
-\centering
-\includegraphics[scale=0.18]{UNIMIBModule_UniMibClassDiagram.png}
-\caption{Diagramma delle classi di progettazione}
-\subsection{Diagrammi di sequenza}
-\subsubsection{aggiugiDomanda}
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.7]{UNIMIBModule_aggiungiDomandaQuestionarioSequenceDiagram.png}
-\caption{Diagramma di sequenza aggiungiDomanda}
-\end{figure}
-\subsubsection{eliminaDomanda}
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.7]{UNIMIBModule_EliminaDomandaSequenceDiagram.png}
-\caption{Diagramma di sequenza eliminaDomanda}
-\end{figure}
-\subsection{Diagrammi di stato}
-\subsubsection{StateMachine Creazione Questionario}
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.40]{UNIMIBModule_StatemachineDiagramCreazioneQuestionario.png}
-\caption{Diagrammi di stato creazioneQuestionario}
-\end{figure}
-\subsection{Diagrammi di attivit\`{a}}
-\subsubsection{Creazione Questionario}
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.47]{UNIMIBModule_CompilazioneQuestionarioActivityDiagram.png}
-\caption{Diagramma di attività creazioneQuestionario}
-\end{figure}
-\subsection{Modello E-R}
-\begin{figure}[H]
-\includegraphics[scale=0.5, center]{ER.png}
-\caption{Modello E-R}
-\end{figure}
-\subsection{Diagramma dell'architettura software}
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.5]{UNIMIBModule_LogicalArchitectureDiagram.png}
-\caption{Diagramma dell'architettura software}
-\end{figure}
-\subsection{Design Principles}
-I Design Principles utilizzati durante la creazione del progetto.
-\begin{itemize}
-	\item \textbf{Principio di singola responsabilità}: Ogni elemento del programma ha una sola responsabilità.
-	\item \textbf{Principio aperto/chiuso}: Ogni modulo è aperto ad estensioni ma chiuso a modifiche.
-	\item \textbf{Principio di sostituzione di Liskov}: Gli oggetti di un sottotipo di un oggetto possono essere sostituiti dall'oggetto di cui sono sottotipo senza alterare la correttezza del programma.
-	\item \textbf{Principio di segregazione delle interfacce}: Il client utilizza interfacce piccole e specifiche ma numerose per evitare dipendenza da metodi non utilizzati.
-	\item \textbf{Principio di inversione delle dipendenze}: I moduli di alto e basso livello non dipendono tra di loro ma dipendono da astrazioni.
-	\item \textbf{Principio delle dipendenze acicliche}: Il grafo delle dipendenze di pacchetti non presenta cicli.
-	\item \textbf{Principio reuse/release}: L'unità di riutilizzo è l'unità di rilascio. I componenti rilasciati vengono seguiti da un sistema di tracking attraverso le versioni.
-\end{itemize}
-\subsection{Design Patterns}
-Design Patterns utilizzati durante la creazione del progetto.
+	
+	\maketitle % Insert the title, author and date
+	\newpage
+	\tableofcontents \newpage
+	\section{Visione}
+	\subsection{Introduzione}
+	Il progetto UNIMIB Modules è un ambiente all'interno del quale gestire e compilare i questionari, dotata di alta usabilità, tolleranza ai guasti e performance.
+	\subsection{Posizionamento}
+	\subsubsection{Formulazione del problema}
+	I prodotti già esistenti che propongono servizi di questo tipo spesso mancano della componente comunitaria. Per esempio, non sempre è possibile costruire un questionario a partire dalle domande di altri utenti o creare una vera e propria bacheca pubblica per i questionari stessi.
+	\subsubsection{Parti interessate}
+	I destinatari del sistema possono appartenere ad una qualsiasi categoria di utente che sia in grado di navigare nel web e questo definisce un ampio spettro di copertura.
+	
+	\section{Analisi e progettazione}
+	\subsection{Glossario}
+	
+	\begin{table}[H]
+		\begin{adjustbox}{max width=1.1\textwidth,center}
+			\begingroup
+			\setlength{\tabcolsep}{10pt} 
+			\renewcommand{\arraystretch}{2}
+			\begin{tabular}{llll}
+				\multicolumn{3}{c}{\textbf{Glossario}}                                                                                                                                                                                                                                                                                                                                     \\ \hline
+				\rowcolor[HTML]{3531FF} 
+				\multicolumn{1}{|l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{ID}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Termine}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Definizione}}}                                                                                                         \\ \hline
+				\multicolumn{1}{|l|}{1}                                                          & \multicolumn{1}{l|}{Utente}                                                          & \multicolumn{1}{l|}{Un qualsiasi utente che utilizza il sistema.}                                                                                                                                \\ \hline
+				\multicolumn{1}{|l|}{2}                                                          & \multicolumn{1}{l|}{Utente registrato}                                               & \multicolumn{1}{l|}{Un utente che possiede un account.}                                                                                                                                          \\ \hline
+				\multicolumn{1}{|l|}{3}                                                          & \multicolumn{1}{l|}{Utente non registrato}                                           & \multicolumn{1}{l|}{Un utente che non possiede un account.}                                                                                                                                      \\ \hline
+				\multicolumn{1}{|l|}{4}                                                          & \multicolumn{1}{l|}{Servizio email}                                                  & \multicolumn{1}{l|}{Il sottosistema che permette l'invio di email.}                                                                                                                    \\ \hline
+				\multicolumn{1}{|l|}{5}                                                          & \multicolumn{1}{l|}{Domanda}                                                         & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Un elemento testuale, con eventuale immagine. Può essere:\\ - Aperta \\ - Chiusa con scelta singola\\ - Chiusa con scelta multipla\end{tabular}}                                                                                                   \\ \hline
+				\multicolumn{1}{|l|}{6}                                                          & \multicolumn{1}{l|}{Riposta}                                                         & \multicolumn{1}{l|}{Un elemento testuale associato ad una domanda} \\ \hline
+				\multicolumn{1}{|l|}{7}                                                          & \multicolumn{1}{l|}{Questionario}                                                    & \multicolumn{1}{l|}{Insieme di domande a cui gli utenti possono rispondere }                                                                                                                   \\ \hline
+			\end{tabular}
+			\endgroup
+		\end{adjustbox}
+	\end{table}
+	
+	\subsection{Casi d'uso}
+	In questa sezione sono presentati gli attori del sistema ed i relativi casi d'uso. Per uno di essi è anche riportata la sua descrizione dettagliata.
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{lll}
+			\multicolumn{3}{c}{\textbf{{\large Attori del sistema}}}                                                                                                                                                                                                          \\ \hline
+			\rowcolor[HTML]{3531FF} 
+			\multicolumn{1}{|l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{ID}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Nome}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Tipo}}} \\ \hline                                                   
+			\multicolumn{1}{|l|}{1}                                                          & \multicolumn{1}{l|}{Utente registrato}                                            & \multicolumn{1}{l|}{Primario}             
+			
+			\\ \hline
+			\multicolumn{1}{|l|}{2}                                                          & \multicolumn{1}{l|}{Utente non registrato}                                        & \multicolumn{1}{l|}{Primario}                                                     \\ \hline
+			\multicolumn{1}{|l|}{3}                                                          & \multicolumn{1}{l|}{Servizio email}                                        & \multicolumn{1}{l|}{Di Supporto}   
+			\\ \hline
+		\end{tabular}
+	\end{table}
+	
+	
+	\begin{table}[H]
+		\begin{adjustbox}{max width=1.1\textwidth,center}
+			\begingroup
+			\setlength{\tabcolsep}{10pt} 
+			\renewcommand{\arraystretch}{2}
+			\begin{tabular}{llll}
+				\multicolumn{4}{c}{\textbf{{\LARGE Casi d'uso - Formato breve}}}                                                                                                                                                                                                                                                                                                                                                                                                                                                            \\ \hline
+				\rowcolor[HTML]{3531FF} 
+				\multicolumn{1}{|l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{ID}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Nome}}}                             & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Attore}}}                    & \multicolumn{1}{l|}{\cellcolor[HTML]{3531FF}{\color[HTML]{FFFFFF} \textbf{Descrizione}}}                                                                                                               \\ \hline
+				\multicolumn{1}{|l|}{1}                                                          & \multicolumn{1}{l|}{Effettua Login}                                                                           & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}L'utente, dopo aver inserito le sue credenziali verificate dal sistema, \\ effettua l'accesso all'applicazione.\end{tabular}}                           \\ \hline
+				\multicolumn{1}{|l|}{2}                                                          & \multicolumn{1}{l|}{Effettua Logout}                                                                          & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente registrato effettua il logout dal sistema.}                                                                                                                               \\ \hline
+				\multicolumn{1}{|l|}{3}                                                          & \multicolumn{1}{l|}{Creazione domanda}                                                                        & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}L'utente registrato crea domande, testuali o contenenti immagini,\\  con risposte chiuse o aperte ed il sistema le memorizza .\end{tabular}}            \\ \hline
+				\multicolumn{1}{|l|}{4}                                                          & \multicolumn{1}{l|}{Ricerca domanda}                                                                          & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente cerca le domande presenti nel sistema e le visualizza.}                                                                                                                   \\ \hline
+				\multicolumn{1}{|l|}{5}                                                          & \multicolumn{1}{l|}{Creazione questionario}                                                                   & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}L'utente registrato crea un questionario, poi memorizzato dal sistema, \\ partendo da domande gi\`{a} create.\end{tabular}}                                 \\ \hline
+				\multicolumn{1}{|l|}{6}                                                          & \multicolumn{1}{l|}{Modifica domanda}                                                                         & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente registrato modifica una domanda che ha creato.}                                                                                                                           \\ \hline
+				\multicolumn{1}{|l|}{7}                                                          & \multicolumn{1}{l|}{Cancellazione domanda}                                                                    & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente registrato cancella la domanda che ha creato.}                                                                                                                            \\ \hline
+				\multicolumn{1}{|l|}{8}                                                          & \multicolumn{1}{l|}{Modifica questionario}                                                                    & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente registrato modifica un questionario che ha creato.}                                                                                                                       \\ \hline
+				\multicolumn{1}{|l|}{9}                                                          & \multicolumn{1}{l|}{Cancellazione questionario}                                                               & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente registrato cancella i questionari che ha creato.}                                                                                                                         \\ \hline
+				\multicolumn{1}{|l|}{10}                                                         & \multicolumn{1}{l|}{Modifica risposta}                                                                        & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente modifica le sue risposte ai questionari.}                                                                                                                                 \\ \hline
+				\multicolumn{1}{|l|}{11}                                                         & \multicolumn{1}{l|}{Cancellazione risposta}                                                                   & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente elimina le sue risposte ai questionari.}                                                                                                                                  \\ \hline
+				\multicolumn{1}{|l|}{12}                                                         & \multicolumn{1}{l|}{Compilazione questionario}                                                                & \multicolumn{1}{l|}{Utente registrato}                                                                 & \multicolumn{1}{l|}{L'utente compila i questionari inserendo delle risposte.}                                                                                                                          \\ \hline
+				\multicolumn{1}{|l|}{13}                                                         & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Notifica del completamento \\ di un questionario\end{tabular}} & \multicolumn{1}{l|}{Servizio email}                                                                       & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Il sistema invia una email all'utente in cui lo avvisa del\\ completamento di un questionario con un PDF delle risposte date.\end{tabular}}     \\ \hline
+				\multicolumn{1}{|l|}{14}                                                         & \multicolumn{1}{l|}{Ricerca di un questionario}                                                               & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Utente registrato\\ Utente non registrato\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}L'utente può cercare un questionario tra quelli presenti nel sistema \\ in base a un codice, a una parola presente nel questionario, ecc…\end{tabular}} \\ \hline
+				\multicolumn{1}{|l|}{15}                                                         & \multicolumn{1}{l|}{Effettua registrazione}                                                                   & \multicolumn{1}{l|}{Utente non registrato}                                                             & \multicolumn{1}{l|}{L'utente effettua la registrazione nel sistema.}                                                                                                                                   \\ \hline
+			\end{tabular}
+			\endgroup
+		\end{adjustbox}
+	\end{table}
+	
+	\begin{figure}[H]
+		\includegraphics[scale=0.45, left]{fig_usecase_diagram.png}
+		\caption{Diagramma dei casi d'uso}
+	\end{figure}
+	
+	\subsubsection{Compila questionario come utente guest}
+	\begin{itemize}
+		\item Nome: Compila questionario come utente guest
+	\end{itemize}
+	\begin{itemize}
+		\item Portata: Applicazione UNIMIBModules
+	\end{itemize}
+	\begin{itemize}
+		\item Livello: Obiettivo utente
+	\end{itemize}
+	\begin{itemize}
+		\item Attore primario: Utente non registrato
+	\end{itemize}
+	\begin{itemize}
+		\item Parti interessate:
+		\begin{itemize}
+			\item Utente non registrato: Vuole compilare un questionario senza il bisogno di creare un account nel sistema. Vuole 
+			un codice utilizzabile per poter reprendere a compilare lo stesso questionario in un qualsiasi momento.
+		\end{itemize}
+	\end{itemize}
+	\begin{itemize}
+		\item Pre-condizioni: L'utente non ha effettuato l'accesso al sistema e si trova nella pagina Home.
+	\end{itemize}
+	\begin{itemize}
+		\item Garanzia di successo: La compilazione del questionario viene salvata nel sistema. L'utente ottiene un codice da utilizzare 
+		nella pagina Home per poter riprendere la stessa compilazione.
+	\end{itemize}
+	\begin{itemize}
+		\item Scenario principale di successo: 
+		\begin{itemize}
+			\item Il sistema carica i questionari
+			\item L'utente non registrato tramite l'interfaccia grafica della HomePage preme il pulsante "Compile" da uno dei questionari caricati.
+			\item Il sistema mostra all'utente non registrato un modale.
+			\item Il sistema restituisce all'utente non registrato il codice univoco del questionario che si vuole compilare.
+			\item L'utente non registrato inserisce l'email nell'apposito campo di testo che viene fornito nel modale
+			\item L'utente non registrato preme "Continue as Guest"
+			\item Il sistema registra l'email e il codice univoco in una nuova utenza nel database
+			\item Il sistema mostra all'utente non registrato la pagina di compilazione del questionario
+			\item All'avvenuta conferma della compilazione, il sistema invia una notifica di completamento all'email salvata precedentemente
+			\item Il sistema permette all'utente non registrato di poter scaricare il pdf riepilogativo del questionario compilato
+			\item Il sistema riporta l'utente non registrato alla HomePage
+		\end{itemize}
+	\end{itemize}
+	\begin{itemize}
+		\item Requestiti speciali: Il sistema deve essere completamente funzionante.
+	\end{itemize}
+	\begin{itemize}
+		\item Frequenza di ripetizione: Media
+	\end{itemize}
+	
+	\subsection{Requisiti non funzionali}
+	
+	\begin{table}[H]
+		\begin{adjustbox}{max width=1.1\textwidth,center}
+			\begin{tabular}{|l|l|l|l|}
+				\hline
+				\rowcolor[HTML]{3531FF} 
+				{\color[HTML]{FFFFFF} ID} & {\color[HTML]{FFFFFF} Descrizione}                                                      & {\color[HTML]{FFFFFF} Tipo} & {\color[HTML]{FFFFFF} Misura} \\ \hline
+				1                         & Il sistema deve essere sempre raggiungibile                                             & Di prodotto                 & Disponibilità                 \\ \hline
+				2                         & Il sistema deve essere in grado di gestire molti utenti contemporaneamente              & Di prodotto                 & Efficienza                    \\ \hline
+				3                         & Il sistema deve garantire la persistenza dei dati                                       & Di prodotto                 & Affidabilità                  \\ \hline
+				4                         & Il sistema deve garantire la sicurezza dei dati degli utenti                            & Di prodotto                 & Sicurezza                     \\ \hline
+				5                         & Il sistema deve garantire brevissime attese agli utenti per l'elaborazione di richieste & Di prodotto                 & Efficienza                    \\ \hline
+			\end{tabular}
+		\end{adjustbox}
+	\end{table}
+	
+	
+	
+	
+	
+	
+	
+	\subsection{SSD}
+	Qui di seguito sono presenti gli SSD riguardanti i seguenti scenari:
+	\begin{itemize}
+		\item Creazione del questionario
+	\end{itemize}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.47]{UNIMIBModule_CreazionequestionarioSequenceDiagram.png}
+		\caption{SSD - Creazione del questionario}
+	\end{figure}
+	
+	
+	
+	\subsection{Modello di dominio}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.5]{UNIMIBModule_UniMiBModuleDomainLayer.png}
+		\caption{Modello di dominio}
+	\end{figure}
+	\subsection{Diagramma delle classi di progettazione}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.18]{UNIMIBModule_UniMibClassDiagram.png}
+		\caption{Diagramma delle classi di progettazione}
+	\end{figure}
+	\subsection{Diagrammi di sequenza}
+	\subsubsection{aggiugiDomanda}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.7]{UNIMIBModule_aggiungiDomandaQuestionarioSequenceDiagram.png}
+		\caption{Diagramma di sequenza aggiungiDomanda}
+	\end{figure}
+	\subsubsection{eliminaDomanda}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.7]{UNIMIBModule_EliminaDomandaSequenceDiagram.png}
+		\caption{Diagramma di sequenza eliminaDomanda}
+	\end{figure}
+	\subsection{Diagrammi di stato}
+	\subsubsection{StateMachine Creazione Questionario}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.40]{UNIMIBModule_StatemachineDiagramCreazioneQuestionario.png}
+		\caption{Diagrammi di stato creazioneQuestionario}
+	\end{figure}
+	\subsection{Diagrammi di attivit\`{a}}
+	\subsubsection{Creazione Questionario}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.47]{UNIMIBModule_CompilazioneQuestionarioActivityDiagram.png}
+		\caption{Diagramma di attività creazioneQuestionario}
+	\end{figure}
+	\subsection{Modello E-R}
+	\begin{figure}[H]
+		\includegraphics[scale=0.5, center]{ER.png}
+		\caption{Modello E-R}
+	\end{figure}
+	\subsection{Diagramma dell'architettura software}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.5]{UNIMIBModule_LogicalArchitectureDiagram.png}
+		\caption{Diagramma dell'architettura software}
+	\end{figure}
+	\subsection{Design Principles}
+	I Design Principles utilizzati durante la creazione del progetto.
+	\begin{itemize}
+		\item \textbf{Principio di singola responsabilità}: Ogni elemento del programma ha una sola responsabilità.
+		\item \textbf{Principio aperto/chiuso}: Ogni modulo è aperto ad estensioni ma chiuso a modifiche.
+		\item \textbf{Principio di sostituzione di Liskov}: Gli oggetti di un sottotipo di un oggetto possono essere sostituiti dall'oggetto di cui sono sottotipo senza alterare la correttezza del programma.
+		\item \textbf{Principio di segregazione delle interfacce}: Il client utilizza interfacce piccole e specifiche ma numerose per evitare dipendenza da metodi non utilizzati.
+		\item \textbf{Principio di inversione delle dipendenze}: I moduli di alto e basso livello non dipendono tra di loro ma dipendono da astrazioni.
+		\item \textbf{Principio delle dipendenze acicliche}: Il grafo delle dipendenze di pacchetti non presenta cicli.
+		\item \textbf{Principio reuse/release}: L'unità di riutilizzo è l'unità di rilascio. I componenti rilasciati vengono seguiti da un sistema di tracking attraverso le versioni.
+	\end{itemize}
+	\subsection{Design Patterns}
+	Design Patterns utilizzati durante la creazione del progetto.
 	\subsubsection{Unit of Work}
-    	\begin{itemize}
-            \item \textbf{Nome}: Unit of Work
-            \item \textbf{Classificazione}: Object-relational behavioural pattern
-            \item \textbf{Applicabilità}: Quando l'utente sta compilando un questionario, le risposte non vengono inserite/modificate/eliminate appena l'utente conferma; vengono inserite nella Unit Of Work e vengono poi salvate quando l'utente termina la compilazione.
-            \item \textbf{Partecipanti}:
-                \begin{itemize}
-                    \item {UnitOfWork}
-                    \item {RispostaRepositoryImpl}
-                    
-                \end{itemize}
-            \item \textbf{Scopo}: Tenere traccia di ciò che possa modificare il database durante una transazione business e quando è terminata si occupa di applicare tutte le modifiche.
-             \item \textbf{Codice d'esempio}
-            \begin{lstlisting}
-/**
-* The context of the UnitOfWork
- */
-private final Map<String, List<Answer>> uofContext;
-
-/**
-* Registers <code>answer</code> on the specified <code>operation</code>.
-* @param	answer		the answer to be registered
-* @param	operation	the operation to be performed on answer
-*/
-private void register(Answer answer, String operation) {
-
-	List<Answer> answerToOperate = uofContext.computeIfAbsent(operation, k -> new ArrayList<>());
-	answerToOperate.add(answer);
-}
-
-/**
-* Adds <code>answer</code> to the elements to be inserted.
-* @param	answer	the new Answer
-* @see UnitOfWork#registerNew
-*/
-@Override
-public void registerNew(Answer answer) {
-
-	register(answer, UnitOfWork.INSERT);
-}
-
-/**
-* Inserts the registered answers made by the user identified by <code>userId</code> on the survey identified by
-* <code>surveyId</code>.
-* @param    surveyId    the id of the survey
-* @param    userId        the id of the user
-*/
-@Override
-public void commitInsert(int surveyId, int userId) {
-	
-	if (uofContext.size() == 0 || !uofContext.containsKey(UnitOfWorkOperations.INSERT.getValue())) {
-		return;
-	}
-	
-	List<Answer> answerList = uofContext.get(UnitOfWorkOperations.INSERT.getValue());
-	answerList.stream()
-	.filter(answer -> answer.getSurvey().getId() == surveyId && answer.getUser().getId() == userId)
-	.collect(Collectors.toList())
-	.forEach(answer -> {
-		add(answer);
-		answerList.remove(answer);
-	});
-}
-            \end{lstlisting}
-        \end{itemize}
-        
-        
-		\subsubsection{Data Mapper}
+	\begin{itemize}
+		\item \textbf{Nome}: Unit of Work
+		\item \textbf{Classificazione}: Object-relational behavioural pattern
+		\item \textbf{Applicabilità}: Quando l'utente sta compilando un questionario, le risposte non vengono inserite/modificate/eliminate appena l'utente conferma; vengono inserite nella Unit Of Work e vengono poi salvate quando l'utente termina la compilazione.
+		\item \textbf{Partecipanti}:
 		\begin{itemize}
-            \item \textbf{Nome}: Data Mapper
-            \item \textbf{Classificazione}: Data-source Architectural pattern
-            \item \textbf{Applicabilità}: Si effettua il mapping tra le classi del modello e le tabelle del database
-            \item \textbf{Partecipanti}:
-                \begin{itemize}
-                    \item CategoriaDAO
-                    \item Categoria
-                    \item RispostaDAO
-                    \item Risposta
-                    \item DomandaDAO
-                    \item Domanda
-                    \item QuestionarioDAO
-                    \item Questionario
-                    \item UtenteDAO
-                    \item Utente
-                    \item RispostaChiusaDAO
-                    \item RispostaChiusa
-                \end{itemize}
-            \item \textbf{Scopo}: Creare una relazione tra i dati del database e del dominio
-        \end{itemize}
-		
-		\subsubsection{Page Controller} 
-		\begin{itemize}
-			\item \textbf{Nome}: Page Controller
-			\item \textbf{Classificazione}: Web presentation pattern
-			\item \textbf{Applicabilità}: Si crea un oggetto che si occupa di gestire le richieste specifiche per ogni pagina del sito web.
-			\item \textbf{Partecipanti}:
-			\begin{itemize}
-				\item add-question.component
-				\item add-survey.component
-				\item compile-survey.component
-				\item edit-question.component
-				\item get-user.component
-				\item home.component
-				\item login-user.component
-				\item modify-survey.component
-				\item signup-user.component
-			\end{itemize}
-			\item \textbf{Scopo}: Fare da tramite tra il back-end e la pagina web.
+			\item {UnitOfWork}
+			\item {RispostaRepositoryImpl}
+			
 		\end{itemize}
-		\subsubsection{Lazy Loading}
+		\item \textbf{Scopo}: Tenere traccia di ciò che possa modificare il database durante una transazione business e quando è terminata si occupa di applicare tutte le modifiche.
+		\item \textbf{Codice d'esempio}
+		\begin{lstlisting}
+			/**
+			* The context of the UnitOfWork
+			*/
+			private final Map<String, List<Answer>> uofContext;
+			
+			/**
+			* Registers <code>answer</code> on the specified <code>operation</code>.
+			* @param	answer		the answer to be registered
+			* @param	operation	the operation to be performed on answer
+			*/
+			private void register(Answer answer, String operation) {
+				
+				List<Answer> answerToOperate = uofContext.computeIfAbsent(operation, k -> new ArrayList<>());
+				answerToOperate.add(answer);
+			}
+			
+			/**
+			* Adds <code>answer</code> to the elements to be inserted.
+			* @param	answer	the new Answer
+			* @see UnitOfWork#registerNew
+			*/
+			@Override
+			public void registerNew(Answer answer) {
+				
+				register(answer, UnitOfWork.INSERT);
+			}
+			
+			/**
+			* Inserts the registered answers made by the user identified by <code>userId</code> on the survey identified by
+			* <code>surveyId</code>.
+			* @param    surveyId    the id of the survey
+			* @param    userId        the id of the user
+			*/
+			@Override
+			public void commitInsert(int surveyId, int userId) {
+				
+				if (uofContext.size() == 0 || !uofContext.containsKey(UnitOfWorkOperations.INSERT.getValue())) {
+					return;
+				}
+				
+				List<Answer> answerList = uofContext.get(UnitOfWorkOperations.INSERT.getValue());
+				answerList.stream()
+				.filter(answer -> answer.getSurvey().getId() == surveyId && answer.getUser().getId() == userId)
+				.collect(Collectors.toList())
+				.forEach(answer -> {
+					add(answer);
+					answerList.remove(answer);
+				});
+			}
+		\end{lstlisting}
+	\end{itemize}
+	
+	
+	\subsubsection{Data Mapper}
+	\begin{itemize}
+		\item \textbf{Nome}: Data Mapper
+		\item \textbf{Classificazione}: Data-source Architectural pattern
+		\item \textbf{Applicabilità}: Si effettua il mapping tra le classi del modello e le tabelle del database
+		\item \textbf{Partecipanti}:
 		\begin{itemize}
-            \item \textbf{Nome}: Lazy Loading
-            \item \textbf{Classificazione}: Object-relational behavioural pattern
-            \item \textbf{Applicabilità}: Quando si desidera caricare tutti i questionari o tutte le domande di un questionario, queste non verranno mostrate tutte contemporaneamente ma si applicherà il lazy loading. Attraverso un offset si recupereranno un numero definito di domande alla volta.
-            \item \textbf{Partecipanti}:
-                \begin{itemize}
-                    \item QuestionarioController
-                    \item QuestionarioRepositoryImpl
-                    \item DomandaController
-                    \item DomandaRepositoryImpl
-                \end{itemize}
-            \item \textbf{Scopo}: Rinvia l'inizializzazione di un oggeto fino a quando non è necessario
-            \item \textbf{Codice d'esempio}
-            \begin{lstlisting}
-/**
-* Finds all surveys without their questions.
-* 
-* @return an HTTP response with status 200 if one survey exists at least.
-* @throws NotFoundException
-*/
-@GetMapping("/findAllSurveysNoQuestionLazy")
-public ResponseEntity<List<SurveyDTO>> findAllSurveysNoQuestionLazy(@RequestParam int offset, 
-	@RequestParam int limit) throws NotFoundException {
-
-	Iterable<Survey> surveys = surveyRepository.getAllLazy(offset, limit);
-	List<SurveyDTO> surveysDTO = new ArrayList<>();
-	for (Survey survey : surveys) {
-		surveysDTO.add(convertToDTOAndSkipQuestions(survey));
-	}
-	return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
-}
-
-/**
-* Returns all surveys in the database with Lazy loading.
-* @param offset
-* @param limit
-* @return a Set of Surveys
-* @throws NotFoundException
-*/
-@Override
-public Iterable<Survey> getAllLazy(int offset, int limit) throws NotFoundException {
-Iterable<Survey> surveys = surveyDAO.findAllLazy(offset, limit);
-	if (IterableUtils.size(surveys) > 0) {
-		return surveys;
-	} else {
-		throw new NotFoundException("No surveys exist.");
-	}
-}
-            \end{lstlisting}
-        \end{itemize}
-\subsubsection{Data Transfer Object}
+			\item CategoriaDAO
+			\item Categoria
+			\item RispostaDAO
+			\item Risposta
+			\item DomandaDAO
+			\item Domanda
+			\item QuestionarioDAO
+			\item Questionario
+			\item UtenteDAO
+			\item Utente
+			\item RispostaChiusaDAO
+			\item RispostaChiusa
+		\end{itemize}
+		\item \textbf{Scopo}: Creare una relazione tra i dati del database e del dominio
+	\end{itemize}
+	
+	\subsubsection{Page Controller} 
+	\begin{itemize}
+		\item \textbf{Nome}: Page Controller
+		\item \textbf{Classificazione}: Web presentation pattern
+		\item \textbf{Applicabilità}: Si crea un oggetto che si occupa di gestire le richieste specifiche per ogni pagina del sito web.
+		\item \textbf{Partecipanti}:
 		\begin{itemize}
+			\item add-question.component
+			\item add-survey.component
+			\item compile-survey.component
+			\item edit-question.component
+			\item get-user.component
+			\item home.component
+			\item login-user.component
+			\item modify-survey.component
+			\item signup-user.component
+		\end{itemize}
+		\item \textbf{Scopo}: Fare da tramite tra il back-end e la pagina web.
+	\end{itemize}
+	\subsubsection{Lazy Loading}
+	\begin{itemize}
+		\item \textbf{Nome}: Lazy Loading
+		\item \textbf{Classificazione}: Object-relational behavioural pattern
+		\item \textbf{Applicabilità}: Quando si desidera caricare tutti i questionari o tutte le domande di un questionario, queste non verranno mostrate tutte contemporaneamente ma si applicherà il lazy loading. Attraverso un offset si recupereranno un numero definito di domande alla volta.
+		\item \textbf{Partecipanti}:
+		\begin{itemize}
+			\item QuestionarioController
+			\item QuestionarioRepositoryImpl
+			\item DomandaController
+			\item DomandaRepositoryImpl
+		\end{itemize}
+		\item \textbf{Scopo}: Rinvia l'inizializzazione di un oggeto fino a quando non è necessario
+		\item \textbf{Codice d'esempio}
+		\begin{lstlisting}
+			/**
+			* Finds all surveys without their questions.
+			* 
+			* @return an HTTP response with status 200 if one survey exists at least.
+			* @throws NotFoundException
+			*/
+			@GetMapping("/findAllSurveysNoQuestionLazy")
+			public ResponseEntity<List<SurveyDTO>> findAllSurveysNoQuestionLazy(@RequestParam int offset, 
+			@RequestParam int limit) throws NotFoundException {
+				
+				Iterable<Survey> surveys = surveyRepository.getAllLazy(offset, limit);
+				List<SurveyDTO> surveysDTO = new ArrayList<>();
+				for (Survey survey : surveys) {
+					surveysDTO.add(convertToDTOAndSkipQuestions(survey));
+				}
+				return new ResponseEntity<>(surveysDTO, HttpStatus.OK);
+			}
+			
+			/**
+			* Returns all surveys in the database with Lazy loading.
+			* @param offset
+			* @param limit
+			* @return a Set of Surveys
+			* @throws NotFoundException
+			*/
+			@Override
+			public Iterable<Survey> getAllLazy(int offset, int limit) throws NotFoundException {
+				Iterable<Survey> surveys = surveyDAO.findAllLazy(offset, limit);
+				if (IterableUtils.size(surveys) > 0) {
+					return surveys;
+				} else {
+					throw new NotFoundException("No surveys exist.");
+				}
+			}
+		\end{lstlisting}
+	\end{itemize}
+	\subsubsection{Data Transfer Object}
+	\begin{itemize}
 		\item \textbf{Nome}: Data Transfer Object
-            \item \textbf{Classificazione}: Data
-            \item \textbf{Applicabilità}: Quando si vogliono inviare dati al client o si ricevono dati dal client, questi vengono serializzati e trasmessi usando il corrispondente DTO.
-            \item \textbf{Partecipanti}:
-                \begin{itemize}
-                    \item DTOMapping
-                    \item DTOListMapping
-                    \item UtenteDTO
-                    \item UtenteController
-                    \item QuestionarioDTO
-                    \item QuestionarioController
-                    \item DomandaDTO
-                    \item Domanda Controller
-                    \item RispostaDTO
-                    \item RispostaController
-                    \item RispostaChiusaDTO
-                    \item RispostaChiusaController
-                    \item CategoriaDTO
-                    \item QuestionarioDomandeDTO
-                \end{itemize}
-            \item \textbf{Scopo}: Serializzare e trasmettere i dati tra il client e il server per ridurre il numero di chiamate ai metodi
-            \item \textbf{Codice d'esempio}
-            \begin{lstlisting}
-public class QuestionDTO {
-
-	/**
-	 * Serialization of the id of the question.
-	 */
-	@Getter	private int id;
-
-	/**
-	 * Serialization of the category of the question.
-	 */
-	@Getter	@Setter private CategoryDTO category;
-	
-	/**
-	 * Serialization of the image's url of the question.
-	 */
-	@Getter	@Setter private String urlImage;
-	
-	/**
-	 * Serialization of the text of the question.
-	 */
-	@Getter	@Setter private String text;
-
-	/**
-	 * Modifies the id of the question, setting <code>id</code> as the new value.
-	 * @param	id	the new id value
-	 */
-	public void setId(int id) {
-
-		this.id = id;
-	}
-
-	/**
-	 * Modifies the id of the question, setting <code>id</code> as the new value.
-	 * @param	id	the new id value
-	 */
-	public void setId(Object id) {
-
-		this.id = (int) id;
-	}
-}
-
-public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
-
-	public QuestionController(QuestionRepository questionRepository) {
-
-		super(modelMapper);
-
-		modelMapper.createTypeMap(Question.class, QuestionDTO.class)
-				.addMappings(mapper -> {
-					mapper.map(Question::getId, QuestionDTO::setId);
-					mapper.map(Question::getUrlImage, QuestionDTO::setUrlImage);
-					mapper.map(Question::getText, QuestionDTO::setText);
-					mapper.map(Question::getCategory, QuestionDTO::setCategory);
-				});
-
-		modelMapper.createTypeMap(QuestionDTO.class, Question.class)
-				.addMappings(mapper -> {
-					mapper.map(QuestionDTO::getId, Question::setId);
-					mapper.map(QuestionDTO::getUrlImage, Question::setUrlImage);
-					mapper.map(QuestionDTO::getText, Question::setText);
-					mapper.map(QuestionDTO::getQuestionType, Question::setQuestionType);
-				});
-	}
-...
-}
-            \end{lstlisting}
+		\item \textbf{Classificazione}: Data
+		\item \textbf{Applicabilità}: Quando si vogliono inviare dati al client o si ricevono dati dal client, questi vengono serializzati e trasmessi usando il corrispondente DTO.
+		\item \textbf{Partecipanti}:
+		\begin{itemize}
+			\item DTOMapping
+			\item DTOListMapping
+			\item UtenteDTO
+			\item UtenteController
+			\item QuestionarioDTO
+			\item QuestionarioController
+			\item DomandaDTO
+			\item Domanda Controller
+			\item RispostaDTO
+			\item RispostaController
+			\item RispostaChiusaDTO
+			\item RispostaChiusaController
+			\item CategoriaDTO
+			\item QuestionarioDomandeDTO
 		\end{itemize}
-		
-		\subsubsection{Data Access Object}
-		\begin{itemize}
+		\item \textbf{Scopo}: Serializzare e trasmettere i dati tra il client e il server per ridurre il numero di chiamate ai metodi
+		\item \textbf{Codice d'esempio}
+		\begin{lstlisting}
+			public class QuestionDTO {
+				
+				/**
+				* Serialization of the id of the question.
+				*/
+				@Getter	private int id;
+				
+				/**
+				* Serialization of the category of the question.
+				*/
+				@Getter	@Setter private CategoryDTO category;
+				
+				/**
+				* Serialization of the image's url of the question.
+				*/
+				@Getter	@Setter private String urlImage;
+				
+				/**
+				* Serialization of the text of the question.
+				*/
+				@Getter	@Setter private String text;
+				
+				/**
+				* Modifies the id of the question, setting <code>id</code> as the new value.
+				* @param	id	the new id value
+				*/
+				public void setId(int id) {
+					
+					this.id = id;
+				}
+				
+				/**
+				* Modifies the id of the question, setting <code>id</code> as the new value.
+				* @param	id	the new id value
+				*/
+				public void setId(Object id) {
+					
+					this.id = (int) id;
+				}
+			}
+			
+			public class QuestionController extends DTOListMapping<Question, QuestionDTO>{
+				
+				public QuestionController(QuestionRepository questionRepository) {
+					
+					super(modelMapper);
+					
+					modelMapper.createTypeMap(Question.class, QuestionDTO.class)
+					.addMappings(mapper -> {
+						mapper.map(Question::getId, QuestionDTO::setId);
+						mapper.map(Question::getUrlImage, QuestionDTO::setUrlImage);
+						mapper.map(Question::getText, QuestionDTO::setText);
+						mapper.map(Question::getCategory, QuestionDTO::setCategory);
+					});
+					
+					modelMapper.createTypeMap(QuestionDTO.class, Question.class)
+					.addMappings(mapper -> {
+						mapper.map(QuestionDTO::getId, Question::setId);
+						mapper.map(QuestionDTO::getUrlImage, Question::setUrlImage);
+						mapper.map(QuestionDTO::getText, Question::setText);
+						mapper.map(QuestionDTO::getQuestionType, Question::setQuestionType);
+					});
+				}
+				...
+			}
+		\end{lstlisting}
+	\end{itemize}
+	
+	\subsubsection{Data Access Object}
+	\begin{itemize}
 		\item \textbf{Nome}: Data Access Object
-            \item \textbf{Classificazione}: Data
-            \item \textbf{Applicabilità}: Quando si vogliono effettuare operazioni su entità di una o più tabelle, lo si può fare attraverso i DAO, dove oltre le operazioni base sono state aggiunte in alcuni casi operazioni custom per interagire con il database.
-            \item \textbf{Partecipanti}:
-                \begin{itemize}
-                    \item CategoriaDAO
-                    \item CategoriaRepositoryImpl
-                    \item RispostaDAO
-                    \item RispostaRepositoryImpl
-                    \item DomandaDAO
-                    \item DomandaRepositoryImpl
-                    \item QuestionarioDAO
-                    \item QuestionarioRepositoryImpl
-                    \item UtenteDAO
-                    \item UtenteRepositoryImpl
-                    \item RispostaChiusaDAO
-                    \item RispostaChiusaRepositoryImpl
-                \end{itemize}
-            \item \textbf{Scopo}: Rappresentare un'entità di una tabella di un database usato per stratificare e isolare l'accesso ad una tabella
-            \item \textbf{Codice d'esempio}
-            \begin{lstlisting}
-public interface AnswerDAO extends CrudRepository<Answer, Integer> {
-
-	@Query("SELECT a FROM Answer a WHERE a.survey.id = :surveyId AND a.user.id = :userId")
-	Iterable<Answer> findSurveyAnswersForUser(@Param("surveyId") int surveyId, @Param("userId") int userId);
-}
-
-public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer>  {
-
-	/**
-	 * The instance of AnswerDAO that will be used to perform actions to the DB
-	 */
-	private final AnswerDAO answerDAO;
-	
-	public Iterable<Answer> getSurveyAnswersForUser(int surveyId, int userId) {
-	
-		return answerDAO.findSurveyAnswersForUser(surveyId, userId);
-    }
-}
-            \end{lstlisting}
-        \end{itemize}
-		
-		\subsubsection{Repository}
+		\item \textbf{Classificazione}: Data
+		\item \textbf{Applicabilità}: Quando si vogliono effettuare operazioni su entità di una o più tabelle, lo si può fare attraverso i DAO, dove oltre le operazioni base sono state aggiunte in alcuni casi operazioni custom per interagire con il database.
+		\item \textbf{Partecipanti}:
 		\begin{itemize}
+			\item CategoriaDAO
+			\item CategoriaRepositoryImpl
+			\item RispostaDAO
+			\item RispostaRepositoryImpl
+			\item DomandaDAO
+			\item DomandaRepositoryImpl
+			\item QuestionarioDAO
+			\item QuestionarioRepositoryImpl
+			\item UtenteDAO
+			\item UtenteRepositoryImpl
+			\item RispostaChiusaDAO
+			\item RispostaChiusaRepositoryImpl
+		\end{itemize}
+		\item \textbf{Scopo}: Rappresentare un'entità di una tabella di un database usato per stratificare e isolare l'accesso ad una tabella
+		\item \textbf{Codice d'esempio}
+		\begin{lstlisting}
+			public interface AnswerDAO extends CrudRepository<Answer, Integer> {
+				
+				@Query("SELECT a FROM Answer a WHERE a.survey.id = :surveyId AND a.user.id = :userId")
+				Iterable<Answer> findSurveyAnswersForUser(@Param("surveyId") int surveyId, @Param("userId") int userId);
+			}
+			
+			public class AnswerRepositoryImpl implements AnswerRepository, UnitOfWork<Answer>  {
+				
+				/**
+				* The instance of AnswerDAO that will be used to perform actions to the DB
+				*/
+				private final AnswerDAO answerDAO;
+				
+				public Iterable<Answer> getSurveyAnswersForUser(int surveyId, int userId) {
+					
+					return answerDAO.findSurveyAnswersForUser(surveyId, userId);
+				}
+			}
+		\end{lstlisting}
+	\end{itemize}
+	
+	\subsubsection{Repository}
+	\begin{itemize}
 		\item \textbf{Nome}: Repository
-            \item \textbf{Classificazione}: Data
-            \item \textbf{Applicabilità}: I Repository permettono di fare da intermediario tra l'accesso ai dati che sia controller o DAO con il resto dell'applicazione
-            \item \textbf{Partecipanti}:
-                \begin{itemize}
-                    \item RispostaRepositoryImpl
-                    \item RispostaControllerImpl
-                    \item UtenteRepositoryImpl
-                    \item UtenteControllerImpl
-                    \item DomandaRepositoryImpl
-                    \item DomandaControllerImpl
-                    \item QuestionarioRepositoryImpl
-                    \item QuestionarioControllerImpl
-                \end{itemize}
-            \item \textbf{Scopo}: Mediare tra la logica di accesso ai dati e il resto dell'applicazione
-            \item \textbf{Codice d'esempio}
-            \begin{lstlisting}
-public interface CategoryRepository {
-
-	/**
-	 * Finds the category identified by id in the database
-	 * @param   id  the id of the category to be found
-	 * @return      an instance of Category if there is a category identified by id, null otherwise
-	 */
-	Category get(int id) throws NotFoundException;
-	
-	/**
-	 * Finds all the categories in the database
-	 * @return      all the instances of Category, null otherwise
-	 */
-	Iterable<Category> getAll() throws NotFoundException;
-}
-
-/**
-* Repository for the Category class. Adds business logic to Category instances before
-* accessing the database via DAO.
-* @author Lorenzo Occhipinti
-* @version 0.4.1
-*/
-@Component("categoryRepository")
-public class CategoryRepositoryImpl implements CategoryRepository, CategoryRepositoryReadOnly {
-	
-	/**
-	* The instance of categoryDAO that will be used to perform actions to the DB
-	*/
-	private final CategoryDAO categoryDAO;
-	
-	@Autowired
-	public CategoryRepositoryImpl(CategoryDAO categoryDAO) {
-		this.categoryDAO = categoryDAO;
-	}
-	
-	/**
-	* Finds the category identified by id in the database
-	* @param   id  the id of the category to be found
-	* @return      an instance of Category if there is a category identified by id, null otherwise
-	* @see CategoryRepository#get(int id)
-	*/
-	@Override
-	public Category get(int id) throws NotFoundException {
-		Optional<Category> category = categoryDAO.findById(id);
-		try {
-			return category.orElseThrow();
-		}catch (NoSuchElementException ex){
-			throw new NotFoundException("The category with id = "+id+" has not been found.");
-		}
-	}
-
-public class CategoryController extends DTOListMapping<Category, CategoryDTO>{
-
-    /**
-     * Instance of CategoryRepository that will be used to access the db.
-     */
-    private final CategoryRepository categoryRepository;
-
-
-    @Autowired
-    public CategoryController(CategoryRepository categoryRepository) {
-
-        super(modelMapper);
-        this.categoryRepository = categoryRepository;
-    }
-
-    /**
-     * Gets the Category associated with the given id.
-     * @param	id	the id of the category
-     * @return		an HTTP response with status 200, 500 otherwise
-     * @throws NotFoundException 
-     */
-    @GetMapping(path = "/findCategory/{id}")
-    public ResponseEntity<CategoryDTO> findCategory(@PathVariable int id) throws NotFoundException {
-        Category category = categoryRepository.get(id);
-        return new ResponseEntity<>(convertToDTO(category), HttpStatus.OK);
-    }
-}
-            \end{lstlisting}
-        \end{itemize}
+		\item \textbf{Classificazione}: Data
+		\item \textbf{Applicabilità}: I Repository permettono di fare da intermediario tra l'accesso ai dati che sia controller o DAO con il resto dell'applicazione
+		\item \textbf{Partecipanti}:
+		\begin{itemize}
+			\item RispostaRepositoryImpl
+			\item RispostaControllerImpl
+			\item UtenteRepositoryImpl
+			\item UtenteControllerImpl
+			\item DomandaRepositoryImpl
+			\item DomandaControllerImpl
+			\item QuestionarioRepositoryImpl
+			\item QuestionarioControllerImpl
+		\end{itemize}
+		\item \textbf{Scopo}: Mediare tra la logica di accesso ai dati e il resto dell'applicazione
+		\item \textbf{Codice d'esempio}
+		\begin{lstlisting}
+			public interface CategoryRepository {
+				
+				/**
+				* Finds the category identified by id in the database
+				* @param   id  the id of the category to be found
+				* @return      an instance of Category if there is a category identified by id, null otherwise
+				*/
+				Category get(int id) throws NotFoundException;
+				
+				/**
+				* Finds all the categories in the database
+				* @return      all the instances of Category, null otherwise
+				*/
+				Iterable<Category> getAll() throws NotFoundException;
+			}
+			
+			/**
+			* Repository for the Category class. Adds business logic to Category instances before
+			* accessing the database via DAO.
+			* @author Lorenzo Occhipinti
+			* @version 0.4.1
+			*/
+			@Component("categoryRepository")
+			public class CategoryRepositoryImpl implements CategoryRepository, CategoryRepositoryReadOnly {
+				
+				/**
+				* The instance of categoryDAO that will be used to perform actions to the DB
+				*/
+				private final CategoryDAO categoryDAO;
+				
+				@Autowired
+				public CategoryRepositoryImpl(CategoryDAO categoryDAO) {
+					this.categoryDAO = categoryDAO;
+				}
+				
+				/**
+				* Finds the category identified by id in the database
+				* @param   id  the id of the category to be found
+				* @return      an instance of Category if there is a category identified by id, null otherwise
+				* @see CategoryRepository#get(int id)
+				*/
+				@Override
+				public Category get(int id) throws NotFoundException {
+					Optional<Category> category = categoryDAO.findById(id);
+					try {
+						return category.orElseThrow();
+					}catch (NoSuchElementException ex){
+						throw new NotFoundException("The category with id = "+id+" has not been found.");
+					}
+				}
+				
+				public class CategoryController extends DTOListMapping<Category, CategoryDTO>{
+					
+					/**
+					* Instance of CategoryRepository that will be used to access the db.
+					*/
+					private final CategoryRepository categoryRepository;
+					
+					
+					@Autowired
+					public CategoryController(CategoryRepository categoryRepository) {
+						
+						super(modelMapper);
+						this.categoryRepository = categoryRepository;
+					}
+					
+					/**
+					* Gets the Category associated with the given id.
+					* @param	id	the id of the category
+					* @return		an HTTP response with status 200, 500 otherwise
+					* @throws NotFoundException 
+					*/
+					@GetMapping(path = "/findCategory/{id}")
+					public ResponseEntity<CategoryDTO> findCategory(@PathVariable int id) throws NotFoundException {
+						Category category = categoryRepository.get(id);
+						return new ResponseEntity<>(convertToDTO(category), HttpStatus.OK);
+					}
+				}
+			\end{lstlisting}
+		\end{itemize}
 		
 		\subsubsection{Façade}
 		\begin{itemize}
-		\item \textbf{Nome}: Façade
-            \item \textbf{Classificazione}: Data
-            \item \textbf{Applicabilità}: Façade permette l'accesso ai vari controller Spring
-            \item \textbf{Scopo}: Rappresenta il sistema complessivo, un oggetto radice, un dispositivo all’interno del quale viene eseguito il software, un punto di accesso al software o un sottosistema principale.
-        \end{itemize}
-	
-\subsubsection{Valet Key}
-    	\begin{itemize}
-            \item \textbf{Nome}: Valet Key
-            \item \textbf{Classificazione}: Security
-            \item \textbf{Applicabilità}: Ogni domanda può contenere un'immagine e, per motivi di performance, è stato affidato al dispositivo client il compito di ottenere o inviare le immagini al service storage. Il valet key si occupa della sicurezza durante l'interazione tra il client e il data storage, \hyperref[sec:valet]{ulteriori informazioni qui}.
-            \item \textbf{Partecipanti}:
-                \begin{itemize}
-                    \item {AWSToken}
-                    \item {AWSTokenImpl}
-                    \item {QuestionController}
-                \end{itemize}
-            \item \textbf{Scopo}: Gestire l'accesso a risorse protette da parte degli endpoint client, autenticati nel sistema, fornendogli il valet key.
-             \item \textbf{Codice d'esempio}
-             \begin{lstlisting}
-public interface AWSToken {
-    Region REGION = Region.getRegion(Regions.EU_CENTRAL_1);
-    String ACCESS_KEY_ID = "ACCESS_KEY_ID_COGNITO";
-    String ACCESS_KEY_VALUE = "SECRET_ACESS_KEY_COGNITO";
-    String IDENTITY_POOL_ID = "eu-central-1:581b95ad-2144-4e38-b112-028abe2bac0a";
-    String LOGIN_PROVIDER = "login.progettoquestionari.dev";
-    String BUCKET_NAME = "questionari-images";
-    /**
-     * Get the User's token from AWS Cognito
-     * @param	idUser the id of the logged user.
-     * @return				GetOpenIdTokenForDeveloperIdentityResult instance
-     */
-    GetOpenIdTokenForDeveloperIdentityResult getToken(int idUser);
-}
-
-public class AWSTokenImpl implements AWSToken {
-
-    /**
-     * Get the User's token from AWS Cognito
-     * @param	idUser the id of the logged user.
-     * @return				GetOpenIdTokenForDeveloperIdentityResult instance
-     */
-    @Override
-    public GetOpenIdTokenForDeveloperIdentityResult getToken(int idUser){
-        AmazonCognitoIdentity identityClient = new AmazonCognitoIdentityClient(
-                new BasicAWSCredentials(ACCESS_KEY_ID, ACCESS_KEY_VALUE)
-        );
-        identityClient.setRegion(REGION);
-        GetOpenIdTokenForDeveloperIdentityRequest request =
-                new GetOpenIdTokenForDeveloperIdentityRequest();
-        request.setIdentityPoolId(IDENTITY_POOL_ID);
-        HashMap<String,String> logins = new HashMap<>();
-        logins.put(LOGIN_PROVIDER, ""+idUser);
-        request.setLogins(logins);
-        request.setTokenDuration(60 * 5L);
-        GetOpenIdTokenForDeveloperIdentityResult response =
-                identityClient.getOpenIdTokenForDeveloperIdentity(request);
-        return response;
-    }
-}
-
-@GetMapping(path = "/getToken/{id}")
-public ResponseEntity<String> getToken(@PathVariable int id){
-	GetOpenIdTokenForDeveloperIdentityResult response = awsToken.getToken(id);
-	return new ResponseEntity<>("{\"token\":\""+response.getToken()+"\"," +
-			"\"identityToken\":\"" + response.getIdentityId() +"\" , " +
-			"\"region\":\""+ AWSToken.REGION+"\", " +
-			"\"identityPoolId\":\""+ AWSToken.IDENTITY_POOL_ID+"\", " +
-			"\"bucketName\":\""+ AWSToken.BUCKET_NAME+"\"}", HttpStatus.CREATED);
-	
-            \end{lstlisting}
-             
-             \end{itemize}
-             
-\subsection{Architettura di deployment}
-\subsubsection{Diagramma di deployment}
-\subsubsection{AWS - Amazon Web Services}
-\begin{figure}[H]
-\includegraphics[scale=0.08, left]{aws-logo.png}
-\end{figure}
-L'intera infrastruttura dell'applicazione si basa sui servizi offerti da AWS (Amazon Web Services). AWS offre servizi di cloud computing, on-demand e pay-per-use, che possono appartenere alle classi IAAS (es. EC2, Load balancer), PAAS (es. Cloud9, Elastic Beanstalk) e SAAS (es. SNS). L'applicazione è raggiungibile al seguente link: \textcolor{blue}{\href{http://unimibquestionari-env.eba-3behr9mi.eu-central-1.elasticbeanstalk.com/}{UNIMIB Modules}}. In questa sezione dell'analisi sono descritti i servizi utilizzati in UNIMIB Modules. 
-\begin{itemize}
-\item \textbf{RDS - Relational Database Service}
-\begin{figure}[H]
-\includegraphics[scale=0.1, left]{rds.png}
-\end{figure}
-RDS è stato utilizzato come database dell'applicazione. Inoltre, per poter garantire la persistenza dei dati è stato attivato il backup automatico. Un estensione dell'utilizzo attuale consiste nell'abilitazione dei replica sets per poter garantire ancora più affidabilità al sistema.
-\item \textbf{Elastic Beanstalk}
-\begin{figure}[H]
-\includegraphics[scale=0.3, left]{elastic.png}
-\end{figure}
-Elastic Beanstalk si trova al centro dell'intera infrastruttura dell'applicazione. Esso è un servizio PAAS che facilita la distribuzione di applicazioni web andando ad astrarre la gestione delle istanze fisiche EC2, un servizio per l'utilizzo di macchine fisiche condivise nel cloud, e il processo stesso di installazione e distribuzione delle versioni applicative. Nel caso di UnimibModules il servizio dispone  un ambiente Java con auto scaling e load balancing. Il load balancing permette di distribuire le richieste su diverse istanze EC2 garantendo la disponibilità  e tolleranza del sistema ad eventuali fault delle macchine fisiche. L'auto scaling interagisce con il load balancing andando ad aggiungere o rimuovere elementi dal pool di istanze EC2 per poter minimizzare l'utilizzo di forza computazionale nei momenti di basso carico  e per poter rispondere al meglio nelle situazioni di carico opposte.
-\item \textbf{S3 - Simple Storage Service}
-\begin{figure}[H]
-\includegraphics[scale=0.2, left]{s3.png}
-\end{figure}
-S3 è un servizio che permette l'archiviazione di oggetti all'interno di buckets, cartelle di un'entità di storage offerte da S3. Gli oggetti possono essere di qualsiasi tipo, ma nel caso di UnimibModules si tratta solamente di immagini riferite alle domande del sistema. S3 garantisce sicurezza negli accessi, disponibilità e persistenza dei dati tramite i backup automatici. Utilizzando questo servizio non è più necessario archiviare le immagini direttamente nel file system dell'istanza che esegue l'applicazione, ma si dividono le entità per migliorare in generale le performance applicative. Il bucket UnimibModules non è pubblico, quindi è protetto da policy di sicurezza AWS.
-\item \textbf{IAM - Identity and Access Management}
-\begin{figure}[H]
-\includegraphics[scale=0.2, left]{iam.png}
-\end{figure}
-Nell'applicazione UnimibModules, IAM è stato utilizzato per poter creare la policy di accesso ad S3, sfruttata dal role associato all'identity pool di Cognito. La policy concede l'accesso al bucket S3 per le operaazioni di PUT, GET e DELETE.
-\item \textbf{Cognito}
-\begin{figure}[H]
-\includegraphics[scale=0.2, left]{cognito.png}
-\end{figure}
-Cognito permette di aggiungere strumenti di registrazione degli utenti, accesso e controllo degli accessi alle app Web e per dispositivi mobili. Tutto questo integrandosi con vari identity provider come google, facebook o cu
-stom. Un'altra sua applicazione riguarda la gestione degli accessi da parte degli utenti e risorse remote. Questo ultimo caso riguarda proprio il campo di utilizzo del servizio in UnimibModules. Per permettere agli utenti di comunicare direttamente con il bucket S3, per poter applicare il valet key, è necessario utilizzare Cognito come access manager. Si definisce quindi la differenza tra user-pool e identity-pool. Il primo è una directory che permette il login e signup degli utenti, come descritto precedentemente. Il secondo è utilizzato per gestire gli accessi  degli user  ai servizi AWS, appartenenti all'applicazione stessa, con credenziali temporanee. L'identity pool, identificato dall'identityPoolID, possiede un IAM role a cui è stata associata la policy precedentemente descritta. Questo ruolo rappresenta una matrice dalla quale andare a generare nuovi utenti temporanei. Per poter ottenere l'accesso diretto a un servizio è necessario eseguire il seguente work-flow:
-\begin{itemize}
-\item \textbf{1.} Autenticazione dello user con il server
-\item \textbf{2.} Il server comunica dell'avvenuto login dello user a Cognito per ottenere l'identity ID e il token di accesso OpenID settandone la durata.
-\item \textbf{3.} Per ottenere le vere e proprie credenziali lo user scambia il token ricevuto(token openID e identityID) con Cognito.
-\item \textbf{4.} Le credenziali sono utilizzate per accedere direttamente ai servizi AWS secondo i termini della policy dell'Identity pool. 
-\end{itemize}
-\begin{figure}[H]
-\includegraphics[scale=0.7, center]{idus.png}
-\caption{Utilizzo combinato di user e identity pool}
-\end{figure}
-\item \textbf{STS - Security Token Service}
-\begin{figure}[H]
-\includegraphics[scale=0.5, left]{sts.png}
-\end{figure}
-STS viene utilizzato per l'effettiva generazione di chiavi di accesso temporanee a servizi AWS. Nel caso specifico viene sfruttato da Cognito per la creazione delle credenziali temporanee di S3.
-
-\end{itemize}
-
-
-\subsubsection{Valet Key - Gestione immagini}
-\label{sec:valet}
-Il Valet Key, introdotto nel capitolo dei pattern architetturali, è strettamente legato ai servizi AWS appena elencati.
-\begin{figure}[H]
-\includegraphics[scale=0.5, left]{diapAWS.png}
-\caption{Valet Key- Flusso operativo}
-\end{figure}
-Il pattern è stato scelto per deresponsabilizzare l'applicazione dal compito di gestire gli stream di dati (upload e download) inerenti alle immagini andando a mantenere la completa sicurezza dello storage remoto, cioè S3.\\
-Viene definito il seguente flusso operativo:
-\begin{itemize}
-\item Login - Lo user deve essere loggato nell'applicazione per poter richiedere il valet key;
-\item Quando il codice client necessita, per esempio, di caricare un'immagine allegata ad una nuova domanda invia la prima richiesta all'API dell'applicazione chiamata GetToken, allegando l'ID utente per dimostrare l'effettivo passaggio dal punto precedente;
-\item Il server elabora la richiesta ed esegue la chiamata al metodo getOpenIdTokenForDeveloperIdentity tramite l'AWS SDK. Il server possiede le credenziali root dell'intero sistema quindi è in grado di avviare quest'ultima funzione passando come parametri l'ID dell'identity pool a cui si fa riferimento, la regione AWS di appartenenza e la durata del token.
-\item Il client ottiene dal server l'identityID (identifica un'istanza di un ruolo Cognito creato in AWS) e il token di accesso.
-\item Il client esegue la richiesta delle effettive credenziali temporanee direttamente a Cognito.
-\item Cognito delega il compito della creazione delle credenziali con policy pre-generata ad AWS STS.
-\item Il client utilizza le credenziali per interagire con il bucket S3.
-\end{itemize}
-\section{Sviluppo}
-\subsection{Piano dello sprint}
-\`{E} adottato un metodo di processo di sviluppo Agile seguendo le direttive dell' Unified Process. Il Product backlog contiene i task, normalmente associati ad un caso d'uso,  da sviluppare nei vari sprint. Ogni sprint prevede le seguenti fasi:
-\begin{itemize}
-\item {\textbf {Sprint meeting}} per la composizione dello sprint backlog;
-\item {\textbf {Analisi e progettazione}}  per aggiornare o creare componenti UML utili al task;
-\item {\textbf {Bulding e testing}}  per lo sviluppo e testing del task;
-\item {\textbf {Review e refactoring}} per la revisione generale del lavoro effettuato e della qualità del codice (architectural smell, code smell ecc...);
-\item {\textbf {Retrospective meeting}} per chiudere con il team lo sprint presentando problemi, modifiche ecc...
-
-\end{itemize}
-
-\subsection{GitHub Projects}
-Per la gestione delle attività abbiamo utilizzato GitHub Projects, che mette a disposizione una kanban board personalizzabile in cui inserire le attività. Queste attività possono essere convertite in issues in modo da poterle assegnare, mantenere uno stato chiuso/aperto, impostare un’etichetta (per esempio miglioramento, bug o documentazione) e associare una pull request.
-
-\subsection{Linguaggi}
-Il back-end è basato sul framework Java Spring. Per quanto riguarda il codice client è stato utilizzato AngularJs come middleware tra il DOM HTML e il server.
-
-\subsection{Best Practices}
-Durante la realizzazione del progetto, per la scrittura del codice sono state applicate diverse best practices per migliorare la qualità del codice e per renderlo più flessibile, riutilizzabile e mantenibile.
-\subsubsection{Lombok}
-Lombok è una libreria Java che sostituisce getter e setter delle classi attraverso l'ausilio di annotazioni. Lombok ci ha permesso di snellire le varie classi implementate.
- \begin{lstlisting}
-public class Question {
-	
-	 /**
-     * The id of the answer.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-	@Getter	@Setter private int id;
-	
-    /**
-     * The image's url of the question.
-     */
-	@Getter	@Setter private String urlImage;
-	
-	/**
-     * The text of the question.
-     */
-	@Getter	@Setter private String text;
-}
-\end{lstlisting}
-
-\subsubsection{Enum al posto delle constanti}
-L'enum è un tipo di dato che permette ad una variabile di poter assumere un valore tra quelli definiti nell'insieme di costanti. Gli enum sono stati usati in 2 casi particolari:
-\begin{itemize}
-    \item \textbf{Question type}: Il sito permette agli utenti registrati di poter creare domande che possono essere aperte, chiuse a scelta singola oppure chiuse a scelta multipla. L'enum, quindi, ha 3 valori: ENUM, MULTIPLECLOSED, MULTIPLEOPEN.
-    \item \textbf{UnitOfWork operation}: L'enum in questione definisce le operazioni della Unit Of Work. Ogni operazione corrisponde ad un valore tra: CREATE, MODIFY, DELETE.
-\end{itemize}
- \begin{lstlisting}
-public enum QuestionType {
-    OPEN,
-    MULTIPLECLOSED,
-    SINGLECLOSED
-}
-
-public enum UnitOfWorkOperations {
-
-	INSERT("INSERT"),
-	DELETE("DELETE"),
-	MODIFY("MODIFY");
-
-	@Getter	private final String value;
-
-	UnitOfWorkOperations(String value) {
-
-		this.value = value;
-	}
-}
-\end{lstlisting}
-
-\subsubsection{Lambdas e Streams}
-Alcune parti del codice sono state implementate attraverso l'utilizzo delle lambda expressions e degli stream. La soluzione è stata adottata per i principali vantaggi che offrono: 
-\begin{itemize}
-    \item Iterare su una sequenza mentre si eseguono operazioni, in una linea
-    \item Filtrare facilmente gli elementi di una sequenza
-\end{itemize}
- \begin{lstlisting}
-public void commitInsert(int surveyId, int userId) {
-
-	if (uofContext.size() == 0 || !uofContext.containsKey(UnitOfWork.INSERT)) {
-		return;
-	}
-
-	List<Answer> answerList = uofContext.get(UnitOfWork.INSERT);
-	answerList.stream()
-			.filter(answer -> answer.getSurvey().getId() == surveyId && answer.getUser().getId() == userId)
-			.collect(Collectors.toList())
-			.forEach(answer -> {
-				add(answer);
-				answerList.remove(answer);
-			});
-}
-\end{lstlisting}
-
-%----------------------------------------------------------------------------------------
-
-
-\end{document}
+			\item \textbf{Nome}: Façade
+			\item \textbf{Classificazione}: Data
+			\item \textbf{Applicabilità}: Façade permette l'accesso ai vari controller Spring
+			\item \textbf{Scopo}: Rappresenta il sistema complessivo, un oggetto radice, un dispositivo all’interno del quale viene eseguito il software, un punto di accesso al software o un sottosistema principale.
+		\end{itemize}
+		
+		\subsubsection{Valet Key}
+		\begin{itemize}
+			\item \textbf{Nome}: Valet Key
+			\item \textbf{Classificazione}: Security
+			\item \textbf{Applicabilità}: Ogni domanda può contenere un'immagine e, per motivi di performance, è stato affidato al dispositivo client il compito di ottenere o inviare le immagini al service storage. Il valet key si occupa della sicurezza durante l'interazione tra il client e il data storage, \hyperref[sec:valet]{ulteriori informazioni qui}.
+			\item \textbf{Partecipanti}:
+			\begin{itemize}
+				\item {AWSToken}
+				\item {AWSTokenImpl}
+				\item {QuestionController}
+			\end{itemize}
+			\item \textbf{Scopo}: Gestire l'accesso a risorse protette da parte degli endpoint client, autenticati nel sistema, fornendogli il valet key.
+			\item \textbf{Codice d'esempio}
+			\begin{lstlisting}
+				public interface AWSToken {
+					Region REGION = Region.getRegion(Regions.EU_CENTRAL_1);
+					String ACCESS_KEY_ID = "ACCESS_KEY_ID_COGNITO";
+					String ACCESS_KEY_VALUE = "SECRET_ACESS_KEY_COGNITO";
+					String IDENTITY_POOL_ID = "eu-central-1:581b95ad-2144-4e38-b112-028abe2bac0a";
+					String LOGIN_PROVIDER = "login.progettoquestionari.dev";
+					String BUCKET_NAME = "questionari-images";
+					/**
+					* Get the User's token from AWS Cognito
+					* @param	idUser the id of the logged user.
+					* @return				GetOpenIdTokenForDeveloperIdentityResult instance
+					*/
+					GetOpenIdTokenForDeveloperIdentityResult getToken(int idUser);
+				}
+				
+				public class AWSTokenImpl implements AWSToken {
+					
+					/**
+					* Get the User's token from AWS Cognito
+					* @param	idUser the id of the logged user.
+					* @return				GetOpenIdTokenForDeveloperIdentityResult instance
+					*/
+					@Override
+					public GetOpenIdTokenForDeveloperIdentityResult getToken(int idUser){
+						AmazonCognitoIdentity identityClient = new AmazonCognitoIdentityClient(
+						new BasicAWSCredentials(ACCESS_KEY_ID, ACCESS_KEY_VALUE)
+						);
+						identityClient.setRegion(REGION);
+						GetOpenIdTokenForDeveloperIdentityRequest request =
+						new GetOpenIdTokenForDeveloperIdentityRequest();
+						request.setIdentityPoolId(IDENTITY_POOL_ID);
+						HashMap<String,String> logins = new HashMap<>();
+						logins.put(LOGIN_PROVIDER, ""+idUser);
+						request.setLogins(logins);
+						request.setTokenDuration(60 * 5L);
+						GetOpenIdTokenForDeveloperIdentityResult response =
+						identityClient.getOpenIdTokenForDeveloperIdentity(request);
+						return response;
+					}
+				}
+				
+				@GetMapping(path = "/getToken/{id}")
+				public ResponseEntity<String> getToken(@PathVariable int id){
+					GetOpenIdTokenForDeveloperIdentityResult response = awsToken.getToken(id);
+					return new ResponseEntity<>("{\"token\":\""+response.getToken()+"\"," +
+						"\"identityToken\":\"" + response.getIdentityId() +"\" , " +
+						"\"region\":\""+ AWSToken.REGION+"\", " +
+						"\"identityPoolId\":\""+ AWSToken.IDENTITY_POOL_ID+"\", " +
+						"\"bucketName\":\""+ AWSToken.BUCKET_NAME+"\"}", HttpStatus.CREATED);
+					
+				\end{lstlisting}
+				
+			\end{itemize}
+			
+			\subsection{Architettura di deployment}
+			\subsubsection{Diagramma di deployment}
+			\subsubsection{AWS - Amazon Web Services}
+			\begin{figure}[H]
+				\includegraphics[scale=0.08, left]{aws-logo.png}
+			\end{figure}
+			L'intera infrastruttura dell'applicazione si basa sui servizi offerti da AWS (Amazon Web Services). AWS offre servizi di cloud computing, on-demand e pay-per-use, che possono appartenere alle classi IAAS (es. EC2, Load balancer), PAAS (es. Cloud9, Elastic Beanstalk) e SAAS (es. SNS). L'applicazione è raggiungibile al seguente link: \textcolor{blue}{\href{http://unimibquestionari-env.eba-3behr9mi.eu-central-1.elasticbeanstalk.com/}{UNIMIB Modules}}. In questa sezione dell'analisi sono descritti i servizi utilizzati in UNIMIB Modules. 
+			\begin{itemize}
+				\item \textbf{RDS - Relational Database Service}
+				\begin{figure}[H]
+					\includegraphics[scale=0.1, left]{rds.png}
+				\end{figure}
+				RDS è stato utilizzato come database dell'applicazione. Inoltre, per poter garantire la persistenza dei dati è stato attivato il backup automatico. Un estensione dell'utilizzo attuale consiste nell'abilitazione dei replica sets per poter garantire ancora più affidabilità al sistema.
+				\item \textbf{Elastic Beanstalk}
+				\begin{figure}[H]
+					\includegraphics[scale=0.3, left]{elastic.png}
+				\end{figure}
+				Elastic Beanstalk si trova al centro dell'intera infrastruttura dell'applicazione. Esso è un servizio PAAS che facilita la distribuzione di applicazioni web andando ad astrarre la gestione delle istanze fisiche EC2, un servizio per l'utilizzo di macchine fisiche condivise nel cloud, e il processo stesso di installazione e distribuzione delle versioni applicative. Nel caso di UnimibModules il servizio dispone  un ambiente Java con auto scaling e load balancing. Il load balancing permette di distribuire le richieste su diverse istanze EC2 garantendo la disponibilità  e tolleranza del sistema ad eventuali fault delle macchine fisiche. L'auto scaling interagisce con il load balancing andando ad aggiungere o rimuovere elementi dal pool di istanze EC2 per poter minimizzare l'utilizzo di forza computazionale nei momenti di basso carico  e per poter rispondere al meglio nelle situazioni di carico opposte.
+				\item \textbf{S3 - Simple Storage Service}
+				\begin{figure}[H]
+					\includegraphics[scale=0.2, left]{s3.png}
+				\end{figure}
+				S3 è un servizio che permette l'archiviazione di oggetti all'interno di buckets, cartelle di un'entità di storage offerte da S3. Gli oggetti possono essere di qualsiasi tipo, ma nel caso di UnimibModules si tratta solamente di immagini riferite alle domande del sistema. S3 garantisce sicurezza negli accessi, disponibilità e persistenza dei dati tramite i backup automatici. Utilizzando questo servizio non è più necessario archiviare le immagini direttamente nel file system dell'istanza che esegue l'applicazione, ma si dividono le entità per migliorare in generale le performance applicative. Il bucket UnimibModules non è pubblico, quindi è protetto da policy di sicurezza AWS.
+				\item \textbf{IAM - Identity and Access Management}
+				\begin{figure}[H]
+					\includegraphics[scale=0.2, left]{iam.png}
+				\end{figure}
+				Nell'applicazione UnimibModules, IAM è stato utilizzato per poter creare la policy di accesso ad S3, sfruttata dal role associato all'identity pool di Cognito. La policy concede l'accesso al bucket S3 per le operaazioni di PUT, GET e DELETE.
+				\item \textbf{Cognito}
+				\begin{figure}[H]
+					\includegraphics[scale=0.2, left]{cognito.png}
+				\end{figure}
+				Cognito permette di aggiungere strumenti di registrazione degli utenti, accesso e controllo degli accessi alle app Web e per dispositivi mobili. Tutto questo integrandosi con vari identity provider come google, facebook o cu
+				stom. Un'altra sua applicazione riguarda la gestione degli accessi da parte degli utenti e risorse remote. Questo ultimo caso riguarda proprio il campo di utilizzo del servizio in UnimibModules. Per permettere agli utenti di comunicare direttamente con il bucket S3, per poter applicare il valet key, è necessario utilizzare Cognito come access manager. Si definisce quindi la differenza tra user-pool e identity-pool. Il primo è una directory che permette il login e signup degli utenti, come descritto precedentemente. Il secondo è utilizzato per gestire gli accessi  degli user  ai servizi AWS, appartenenti all'applicazione stessa, con credenziali temporanee. L'identity pool, identificato dall'identityPoolID, possiede un IAM role a cui è stata associata la policy precedentemente descritta. Questo ruolo rappresenta una matrice dalla quale andare a generare nuovi utenti temporanei. Per poter ottenere l'accesso diretto a un servizio è necessario eseguire il seguente work-flow:
+				\begin{itemize}
+					\item \textbf{1.} Autenticazione dello user con il server
+					\item \textbf{2.} Il server comunica dell'avvenuto login dello user a Cognito per ottenere l'identity ID e il token di accesso OpenID settandone la durata.
+					\item \textbf{3.} Per ottenere le vere e proprie credenziali lo user scambia il token ricevuto(token openID e identityID) con Cognito.
+					\item \textbf{4.} Le credenziali sono utilizzate per accedere direttamente ai servizi AWS secondo i termini della policy dell'Identity pool. 
+				\end{itemize}
+				\begin{figure}[H]
+					\includegraphics[scale=0.7, center]{idus.png}
+					\caption{Utilizzo combinato di user e identity pool}
+				\end{figure}
+				\item \textbf{STS - Security Token Service}
+				\begin{figure}[H]
+					\includegraphics[scale=0.5, left]{sts.png}
+				\end{figure}
+				STS viene utilizzato per l'effettiva generazione di chiavi di accesso temporanee a servizi AWS. Nel caso specifico viene sfruttato da Cognito per la creazione delle credenziali temporanee di S3.
+				
+			\end{itemize}
+			
+			
+			\subsubsection{Valet Key - Gestione immagini}
+			\label{sec:valet}
+			Il Valet Key, introdotto nel capitolo dei pattern architetturali, è strettamente legato ai servizi AWS appena elencati.
+			\begin{figure}[H]
+				\includegraphics[scale=0.5, left]{diapAWS.png}
+				\caption{Valet Key- Flusso operativo}
+			\end{figure}
+			Il pattern è stato scelto per deresponsabilizzare l'applicazione dal compito di gestire gli stream di dati (upload e download) inerenti alle immagini andando a mantenere la completa sicurezza dello storage remoto, cioè S3.\\
+			Viene definito il seguente flusso operativo:
+			\begin{itemize}
+				\item Login - Lo user deve essere loggato nell'applicazione per poter richiedere il valet key;
+				\item Quando il codice client necessita, per esempio, di caricare un'immagine allegata ad una nuova domanda invia la prima richiesta all'API dell'applicazione chiamata GetToken, allegando l'ID utente per dimostrare l'effettivo passaggio dal punto precedente;
+				\item Il server elabora la richiesta ed esegue la chiamata al metodo getOpenIdTokenForDeveloperIdentity tramite l'AWS SDK. Il server possiede le credenziali root dell'intero sistema quindi è in grado di avviare quest'ultima funzione passando come parametri l'ID dell'identity pool a cui si fa riferimento, la regione AWS di appartenenza e la durata del token.
+				\item Il client ottiene dal server l'identityID (identifica un'istanza di un ruolo Cognito creato in AWS) e il token di accesso.
+				\item Il client esegue la richiesta delle effettive credenziali temporanee direttamente a Cognito.
+				\item Cognito delega il compito della creazione delle credenziali con policy pre-generata ad AWS STS.
+				\item Il client utilizza le credenziali per interagire con il bucket S3.
+			\end{itemize}
+			\section{Sviluppo}
+			\subsection{Piano dello sprint}
+			\`{E} adottato un metodo di processo di sviluppo Agile seguendo le direttive dell' Unified Process. Il Product backlog contiene i task, normalmente associati ad un caso d'uso,  da sviluppare nei vari sprint. Ogni sprint prevede le seguenti fasi:
+			\begin{itemize}
+				\item {\textbf {Sprint meeting}} per la composizione dello sprint backlog;
+				\item {\textbf {Analisi e progettazione}}  per aggiornare o creare componenti UML utili al task;
+				\item {\textbf {Bulding e testing}}  per lo sviluppo e testing del task;
+				\item {\textbf {Review e refactoring}} per la revisione generale del lavoro effettuato e della qualità del codice (architectural smell, code smell ecc...);
+				\item {\textbf {Retrospective meeting}} per chiudere con il team lo sprint presentando problemi, modifiche ecc...
+				
+			\end{itemize}
+			
+			\subsection{GitHub Projects}
+			Per la gestione delle attività abbiamo utilizzato GitHub Projects, che mette a disposizione una kanban board personalizzabile in cui inserire le attività. Queste attività possono essere convertite in issues in modo da poterle assegnare, mantenere uno stato chiuso/aperto, impostare un’etichetta (per esempio miglioramento, bug o documentazione) e associare una pull request.
+			
+			\subsection{CI/CD}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.5]{images/Diapositiva1.PNG}
+				\caption{CI/CD Workflow}
+			\end{figure}
+			
+			
+			\subsection{Linguaggi}
+			Il back-end è basato sul framework Java Spring. Per quanto riguarda il codice client è stato utilizzato AngularJs come middleware tra il DOM HTML e il server.
+			
+			\subsection{Best Practices}
+			Durante la realizzazione del progetto, per la scrittura del codice sono state applicate diverse best practices per migliorare la qualità del codice e per renderlo più flessibile, riutilizzabile e mantenibile.
+			\subsubsection{Lombok}
+			Lombok è una libreria Java che sostituisce getter e setter delle classi attraverso l'ausilio di annotazioni. Lombok ci ha permesso di snellire le varie classi implementate.
+			\begin{lstlisting}
+				public class Question {
+					
+					/**
+					* The id of the answer.
+					*/
+					@Id
+					@GeneratedValue(strategy = GenerationType.AUTO)
+					@Getter	@Setter private int id;
+					
+					/**
+					* The image's url of the question.
+					*/
+					@Getter	@Setter private String urlImage;
+					
+					/**
+					* The text of the question.
+					*/
+					@Getter	@Setter private String text;
+				}
+			\end{lstlisting}
+			
+			\subsubsection{Enum al posto delle constanti}
+			L'enum è un tipo di dato che permette ad una variabile di poter assumere un valore tra quelli definiti nell'insieme di costanti. Gli enum sono stati usati in 2 casi particolari:
+			\begin{itemize}
+				\item \textbf{Question type}: Il sito permette agli utenti registrati di poter creare domande che possono essere aperte, chiuse a scelta singola oppure chiuse a scelta multipla. L'enum, quindi, ha 3 valori: ENUM, MULTIPLECLOSED, MULTIPLEOPEN.
+				\item \textbf{UnitOfWork operation}: L'enum in questione definisce le operazioni della Unit Of Work. Ogni operazione corrisponde ad un valore tra: CREATE, MODIFY, DELETE.
+			\end{itemize}
+			\begin{lstlisting}
+				public enum QuestionType {
+					OPEN,
+					MULTIPLECLOSED,
+					SINGLECLOSED
+				}
+				
+				public enum UnitOfWorkOperations {
+					
+					INSERT("INSERT"),
+					DELETE("DELETE"),
+					MODIFY("MODIFY");
+					
+					@Getter	private final String value;
+					
+					UnitOfWorkOperations(String value) {
+						
+						this.value = value;
+					}
+				}
+			\end{lstlisting}
+			
+			\subsubsection{Lambdas e Streams}
+			Alcune parti del codice sono state implementate attraverso l'utilizzo delle lambda expressions e degli stream. La soluzione è stata adottata per i principali vantaggi che offrono: 
+			\begin{itemize}
+				\item Iterare su una sequenza mentre si eseguono operazioni, in una linea
+				\item Filtrare facilmente gli elementi di una sequenza
+			\end{itemize}
+			\begin{lstlisting}
+				public void commitInsert(int surveyId, int userId) {
+					
+					if (uofContext.size() == 0 || !uofContext.containsKey(UnitOfWork.INSERT)) {
+						return;
+					}
+					
+					List<Answer> answerList = uofContext.get(UnitOfWork.INSERT);
+					answerList.stream()
+					.filter(answer -> answer.getSurvey().getId() == surveyId && answer.getUser().getId() == userId)
+					.collect(Collectors.toList())
+					.forEach(answer -> {
+						add(answer);
+						answerList.remove(answer);
+					});
+				}
+			\end{lstlisting}
+			
+			%----------------------------------------------------------------------------------------
+			
+			
+		\end{document}
